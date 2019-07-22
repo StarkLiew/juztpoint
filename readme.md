@@ -1,3 +1,20 @@
+
+## List all process
+$ docker-compose up -d
+
+## List all process
+$ docker ps 
+$ docker-compose exec app php artisan key:generate
+$ docker-compose exec app php artisan config:cache
+$ docker-compose exec app php artisan migrate
+$ docker-compose exec app php artisan db:seed
+
+
+## Incase need to edit environment file
+$ docker-compose exec app nano .env
+
+
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
