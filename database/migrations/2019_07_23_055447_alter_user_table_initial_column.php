@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHynUsersTable extends Migration {
+class AlterUserTableInitialColumn extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -12,8 +12,10 @@ class CreateHynUsersTable extends Migration {
 	 */
 	public function up() {
 		Schema::table('users', function (Blueprint $table) {
-			$table->bigInteger('website_id')->unsigned()->nullable();
-			$table->foreign('website_id')->references('id')->on('websites')->onDelete('set null');
+			$table->string('initial')->nullable();
+			$table->string('api_token')->nullable();
+			$table->string('pin')->nullable();
+			$table->integer('level')->nullable();
 		});
 	}
 
@@ -24,7 +26,10 @@ class CreateHynUsersTable extends Migration {
 	 */
 	public function down() {
 		Schema::dropIfExists('users', function (Blueprint $table) {
-			$table->dropColumn('website_id');
+			$table->dropColumn('initial');
+			$table->dropColumn('api_token');
+			$table->dropColumn('pin');
+			$table->dropColumn('level');
 
 		});
 	}

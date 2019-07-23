@@ -34,6 +34,10 @@ return $request->user();
 //authToken
 
 //});
+
+Route::post('user/login', 'Auth\LoginController@login');
+Route::post('user/register', 'Model\UserController@register');
+
 Route::middleware('auth:api')->group(function () {
 
 	//Owner

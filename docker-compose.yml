@@ -17,7 +17,7 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
-      - ./src:/var/www
+      - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
@@ -31,7 +31,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ./src:/var/www
+      - ./:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
       - app-network
@@ -59,17 +59,20 @@ services:
 
   pma:
     image: phpmyadmin/phpmyadmin
-    container_name: dev_pma
+    container_name: pma
     tty: true
-    links:
-      - db
+    depends_on:
+     - db
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
+      MYSQL_ROOT_PASSWORD: secret 
     restart: always
+    volumes:
+      - ./docker/phpmyadmin/session:/session
     ports:
-      - 8080:8080
+      - 8081:80
     networks:
       - app-network
 

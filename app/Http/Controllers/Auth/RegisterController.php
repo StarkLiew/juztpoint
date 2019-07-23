@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
-use Hyn\Tenancy\Contracts\Repositories\HostnameRepository;
-use Hyn\Tenancy\Contracts\Repositories\WebsiteRepository;
-use Hyn\Tenancy\Models\Hostname;
-use Hyn\Tenancy\Models\Website;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -51,7 +47,6 @@ class RegisterController extends Controller {
 	protected function validator(array $data) {
 		return Validator::make($data, [
 			'name' => ['required', 'string', 'max:255'],
-			'slug' => ['required', 'string', 'max:10'],
 			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 			'password' => ['required', 'string', 'min:8', 'confirmed'],
 		]);
@@ -65,19 +60,11 @@ class RegisterController extends Controller {
 	 */
 	protected function create(array $data) {
 
-		$hostname = new Hostname;
-		$hostname->fqdn = $data['slug'] . '.juxtpoint.jux';
-		$hostname = app(HostnameRepository::class)->create($hostname);
-
-		$website = new Website;
-		$website->uuid = $data['slug'];
-		app(WebsiteRepository::class)->create($website);
-		app(HostnameRepository::class)->attach($hostname, $website);
 		return User::create([
 			'name' => $data['name'],
 			'email' => $data['email'],
 			'password' => Hash::make($data['password']),
-		])->attach($hostname, $website);
+		]);
 
 	}
 }

@@ -40,7 +40,8 @@
         "classmap": [
             "app/Models",
             "database/seeds",
-            "database/factories"
+            "database/factories",
+            "database/tenant/users"
         ]
     },
     "autoload-dev": {
