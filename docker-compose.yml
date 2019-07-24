@@ -38,7 +38,7 @@ services:
 
   #MySQL Service
   db:
-    image: mysql:8.0.16
+    image: mariadb:10.4.6
     container_name: db
     restart: unless-stopped
     tty: true
@@ -46,37 +46,22 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: homestead
-      MYSQL_USER: homestead
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: secret
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      MYSQL_ROOT_PASSWORD: example
     volumes:
       - dbdata:/var/lib/mysql/
-      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mariadb/my.cnf:/etc/mariadb/my.cnf
     networks:
       - app-network
-
-  pma:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    tty: true
-    depends_on:
-     - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-      MYSQL_ROOT_PASSWORD: secret 
+  adminer:
+    image: adminer
+    container_name: adminer
     restart: always
-    volumes:
-      - ./docker/phpmyadmin/session:/session
     ports:
-      - 8081:80
+      - 8080:8080
+    depends_on:
+      - db
     networks:
       - app-network
-
 #Docker Networks
 networks:
   app-network:

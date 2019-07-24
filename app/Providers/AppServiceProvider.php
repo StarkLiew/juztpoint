@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function register() {
-		//
+		Schema::defaultStringLength(191);
 	}
 
 	/**
@@ -26,15 +26,17 @@ class AppServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		Schema::defaultStringLength(191);
 
 		User::observe(new UserObserver);
 
 		Tenanti::connection('tenants', function (User $entity, array $config) {
-			$config['database'] = "user_{$entity->id}";
+			if (!empty($entity['tenant'])) {
+				$config['database'] = "user_{$entity->tenant}";
+			} else {
+				$config['database'] = "user_{$entity->id}";
+			}
 
 			return $config;
 		});
-
 	}
 }

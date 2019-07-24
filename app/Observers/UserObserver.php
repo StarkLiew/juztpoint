@@ -16,7 +16,25 @@ class UserObserver extends Observer {
 	public function created(Model $entity) {
 		$this->createTenantDatabase($entity);
 		parent::created($entity);
+		//if (!empty($entity['tenant'])) {}
+
+		//$this->createTenantTable($entity);
+
 	}
+
+	/**
+	 * Create database for entity.
+	 *
+	 * @param  \Illuminate\Database\Eloquent\Model  $entity
+	 *
+	 * @return mixed
+	 */
+	protected function createTenantTable(Model $entity) {
+
+		Artisan::call('tenanti:migrate', array('user', '--force' => true));
+
+	}
+
 	/**
 	 * Create database for entity.
 	 *
@@ -28,16 +46,18 @@ class UserObserver extends Observer {
 		$connection = $entity->getConnection();
 		$driver = $connection->getDriverName();
 		$id = $entity->getKey();
+
 		switch ($driver) {
 		case 'mysql':
 			$query = "CREATE DATABASE `user_{$id}`";
 			break;
 		case 'pgsql':
-			$query = "CREATE DATABASE user_{$id}";
+			$query = "CREATE DATABASE `user_{$id}`";
 			break;
 		default:
 			throw new InvalidArgumentException("Database Driver [{$driver}] not supported");
 		}
 		return $connection->unprepared($query);
+
 	}
 }

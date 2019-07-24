@@ -28,7 +28,7 @@ return [
 			'paths' => [
 				database_path('tenant/users'),
 			],
-			'shared' => true,
+			'shared' => false,
 		],
 	],
 ];

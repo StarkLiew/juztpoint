@@ -57,6 +57,10 @@ class UserController extends Controller {
 		// $user->id = uniqid();
 		$user->name = $request->input('name');
 		$user->initial = $request->input('initial');
+		if ($request->has('tenant')) {
+			$user->tenant = $request->input('tenant');
+		}
+
 		$user->password = Hash::make($request->input('password'));
 		$user->email = $request->input('email');
 		if ($request->has('pin')) {
