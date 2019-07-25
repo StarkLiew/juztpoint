@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\User;
-use App\Observers\UserObserver;
+// use App\Models\User;
+// use App\Observers\UserObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Orchestra\Support\Facades\Tenanti;
+
+// use Orchestra\Support\Facades\Tenanti;
 
 //NEW: Import Schema
 
@@ -27,16 +28,16 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 
-		User::observe(new UserObserver);
+		/*	User::observe(new UserObserver);
 
-		Tenanti::connection('tenants', function (User $entity, array $config) {
-			if (!empty($entity['tenant'])) {
-				$config['database'] = "user_{$entity->tenant}";
-			} else {
-				$config['database'] = "user_{$entity->id}";
-			}
+			Tenanti::connection('tenants', function (User $entity, array $config) {
+				if (!empty($entity['tenant'])) {
+					$config['database'] = "user_{$entity->tenant}";
+				} else {
+					$config['database'] = "user_{$entity->id}";
+				}
 
-			return $config;
-		});
+				return $config;
+		*/
 	}
 }

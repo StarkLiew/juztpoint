@@ -1,4 +1,6 @@
-<?php namespace App\Observers;
+<?php
+
+namespace App\Observers;
 use Illuminate\Database\Eloquent\Model;
 use Orchestra\Tenanti\Observer;
 
@@ -14,11 +16,12 @@ class UserObserver extends Observer {
 	 * @return bool
 	 */
 	public function created(Model $entity) {
-		$this->createTenantDatabase($entity);
-		parent::created($entity);
-		//if (!empty($entity['tenant'])) {}
+		//$this->createTenantDatabase($entity);
 
-		//$this->createTenantTable($entity);
+		if (!empty($entity['tenant'])) {
+			$this->createTenantTable($entity);
+			parent::created($entity);
+		}
 
 	}
 
