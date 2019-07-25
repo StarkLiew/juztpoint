@@ -1,24 +1,25 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PosCreateMasters extends Migration {
+class UserCreateMasters extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up($id, Model $model) {
 
-		Schema::create('masters', function (Blueprint $table) {
+		Schema::create("user_{$id}_masters", function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('type');
 			$table->string('status');
 			$table->json('data');
-			$table->bigInteger('user_id');
+			$table->bigInteger('user_id')->unsigned();
 			$table->timestamps();
 			$table->softDeletes();
 
@@ -33,7 +34,8 @@ class PosCreateMasters extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
-		Schema::dropIfExists('masters');
+	public function down($id, Model $model) {
+
+		Schema::dropIfExists("user_{$id}_masters");
 	}
 }

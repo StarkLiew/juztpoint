@@ -16,7 +16,7 @@ class User extends Authenticatable {
 	 * @return \Orchestra\Tenanti\Tenantor
 	 */
 	public function asTenantor(): Tenantor {
-		return Tenantor::fromEloquent('pos', $this);
+		return Tenantor::fromEloquent('user', $this);
 	}
 
 	/**
@@ -26,7 +26,7 @@ class User extends Authenticatable {
 	 */
 	public static function makeTenantor($key, $connection = null): Tenantor {
 		return Tenantor::make(
-			'pos', $key, $connection ?: (new static())->getConnectionName()
+			'user', $key, $connection ?: (new static())->getConnectionName()
 		);
 	}
 

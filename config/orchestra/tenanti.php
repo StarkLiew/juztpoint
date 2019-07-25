@@ -26,7 +26,7 @@ return [
 		'user' => [
 			'model' => 'App\Models\User',
 			'paths' => [
-				database_path('tenant/pos'),
+				database_path('tenant/user'),
 			],
 			'shared' => true,
 		],

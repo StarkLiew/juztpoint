@@ -41,7 +41,7 @@
             "app/Models",
             "database/seeds",
             "database/factories",
-            "database/tenant/users"
+            "database/tenant/user"
         ]
     },
     "autoload-dev": {

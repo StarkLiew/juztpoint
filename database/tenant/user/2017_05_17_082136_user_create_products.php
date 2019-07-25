@@ -1,53 +1,59 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PosCreateProducts extends Migration {
+class UserCreateProducts extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up($id, Model $model) {
+		"_masters";
 
-		Schema::create('products', function (Blueprint $table) {
+		Schema::create("user_{$id}_products", function (Blueprint $table) use ($id) {
 			$table->bigIncrements('id');
 			$table->string('name');
-			$table->bigInteger('cat_id')->unsigned()->nullable()->index();
+			$table->string('type')->nullable()->index();
+			$table->string('status')->nullable()->index();
+			$table->bigInteger('cat_id')->unsigned();
 			$table->string('sku')->nullable()->index();
-			$table->integer('tax_id')->unsigned()->nullable();
+			$table->bigInteger('tax_id')->unsigned();
 			$table->boolean('sellable')->default(false);
-			$table->boolean('service')->default(false);
 			$table->boolean('consumable')->default(false);
-			$table->boolean('assistant')->default(false);
+			$table->bigInteger('assistant_id')->unsigned();
 			$table->float('discount')->default(0.0);
-			$table->boolean('stock')->default(false);
+			$table->boolean('stockable')->default(false);
 			$table->json('variants')->nullable();
 			$table->json('composites')->nullable();
-			$table->bigInteger('commission_id')->unsigned()->index();
+			$table->bigInteger('commission_id')->unsigned();
 			$table->json('params')->nullable();
 			$table->longText('note')->nullable();
-			$table->integer('user_id')->unsigned();
+			$table->bigInteger('user_id')->unsigned();
 			$table->timestamps();
 			$table->softDeletes();
 
+			$masters = "user_{$id}_masters";
+
 			$table->foreign('cat_id')
-				->references('id')->on('masters')
+				->references('id')->on($masters)
 				->onUpdate('cascade');
 
 			$table->foreign('commission_id')
-				->references('id')->on('masters')
+				->references('id')->on($masters)
 				->onUpdate('cascade');
 
 			$table->foreign('tax_id')
-				->references('id')->on('masters')
+				->references('id')->on($masters)
 				->onUpdate('cascade');
 
-			$table->foreign('assistant')
+			$table->foreign('assistant_id')
 				->references('id')->on('users')
 				->onUpdate('cascade');
+
 			$table->foreign('user_id')
 				->references('id')->on('users')
 				->onUpdate('cascade');
@@ -59,7 +65,7 @@ class PosCreateProducts extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
-		Schema::dropIfExists('products');
+	public function down($id, Model $model) {
+		Schema::dropIfExists("user_{$id}_products");
 	}
 }

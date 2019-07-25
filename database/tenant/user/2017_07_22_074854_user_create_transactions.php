@@ -1,18 +1,19 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PosCreateTransaction extends Migration {
+class UserCreateTransactions extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up($id, Model $model) {
 
-		Schema::create('transactions', function (Blueprint $table) {
+		Schema::create("user_{$id}_transactions", function (Blueprint $table) use ($id) {
 			$table->increments('id');
 			$table->string('reference', 36)->unique()->index();
 			$table->bigInteger('account_id')->unsigned()->index();
@@ -26,8 +27,9 @@ class PosCreateTransaction extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 
+			$masters = "user_{$id}_masters";
 			$table->foreign('account_id')
-				->references('id')->on('masters')
+				->references('id')->on($masters)
 				->onUpdate('cascade');
 
 			$table->foreign('transact_by')
@@ -42,7 +44,7 @@ class PosCreateTransaction extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
-		Schema::dropIfExists('transactions');
+	public function down($id, Model $model) {
+		Schema::dropIfExists("user_{$id}_transactions");
 	}
 }
