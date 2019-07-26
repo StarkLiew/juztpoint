@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class PaymentType extends Model {
+class Master extends Model {
 
 	use SoftDeletes, Notifiable, UsesTenantConnection;
 
@@ -25,7 +25,7 @@ class PaymentType extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'code', 'note', 'user_id',
+		'name', 'type', 'status', 'data',
 	];
 
 	/**
@@ -36,8 +36,9 @@ class PaymentType extends Model {
 	protected $hidden = [
 
 	];
+
 	public function user() {
-		return $this->belongsTo('App\User', 'user_id');
+		return $this->belongsTo('App\Models\User', 'user_id');
 	}
 
 }

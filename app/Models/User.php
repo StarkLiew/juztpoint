@@ -10,6 +10,9 @@ use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable {
 	use SoftDeletes, Notifiable;
+
+	protected $company_name = '';
+
 	/**
 	 * Convert to tenantor.
 	 *
@@ -37,6 +40,26 @@ class User extends Authenticatable {
 		parent::boot();
 
 		static::observe(new UserObserver);
+	}
+
+	/**
+	 * Set the user's first name.
+	 *
+	 * @param  string  $value
+	 * @return void
+	 */
+	public function getCompanyName() {
+		return $this->company_name;
+	}
+
+	/**
+	 * Set the user's first name.
+	 *
+	 * @param  string  $value
+	 * @return void
+	 */
+	public function setCompanyName($value) {
+		$this->company_name = $value;
 	}
 
 }

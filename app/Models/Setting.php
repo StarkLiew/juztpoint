@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class Point extends Model {
+class Setting extends Model {
 
 	use SoftDeletes, Notifiable, UsesTenantConnection;
 
@@ -25,7 +25,7 @@ class Point extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-
+		'name', 'description', 'type', 'data',
 	];
 
 	/**
@@ -36,8 +36,9 @@ class Point extends Model {
 	protected $hidden = [
 
 	];
+
 	public function user() {
-		return $this->belongsTo('App\User', 'user_id');
+		return $this->belongsTo('App\Models\User', 'user_id');
 	}
 
 }

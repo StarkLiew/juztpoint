@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Model;
+namespace App\Http\Controllers\Logic;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
@@ -54,9 +54,8 @@ class UserController extends Controller {
 		}
 
 		$user = new User;
-		// $user->id = uniqid();
 		$user->name = $request->input('name');
-		$user->initial = $request->input('initial');
+		$user->companyname = $request->input('companyname');
 		if ($request->has('tenant')) {
 			$user->tenant = $request->input('tenant');
 		}
@@ -70,8 +69,7 @@ class UserController extends Controller {
 		$user->api_token = str_random(60);
 		$user->level = 0;
 
-		//$this->save($user, $request);
-		$user->save();
+		$this->save($user, $request);
 
 	}
 
