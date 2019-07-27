@@ -39,5 +39,12 @@ class AppServiceProvider extends ServiceProvider {
 
 				return $config;
 		*/
+		$path = realpath(PLATFORM_PATH . '/resources/views');
+		$this->publishes([
+
+			$path => resource_path('views/custom'),
+		], 'views');
+
+		return $this;
 	}
 }

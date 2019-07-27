@@ -36,7 +36,7 @@ return $request->user();
 //});
 
 Route::post('user/login', 'Auth\LoginController@login');
-Route::post('/user/register', 'Auth\RegisterController@register');
+
 // Route::post('user/register', ['as' => 'user.register', 'uses' => 'Logic\UserController@register']);
 
 Route::middleware('auth:api')->group(function () {

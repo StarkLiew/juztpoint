@@ -38,7 +38,7 @@
             "App\\": "app/"
         },
         "classmap": [
-            "app/Logic",
+            "app/Models",
             "database/seeds",
             "database/factories",
             "database/tenant/user"

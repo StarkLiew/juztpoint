@@ -96,7 +96,7 @@ return [
 	*/
 
 	'template' => [
-		'header' => 'platform::header',
+		'header' => 'app::header',
 		'footer' => 'platform::footer',
 	],
 

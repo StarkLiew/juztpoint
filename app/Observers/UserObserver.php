@@ -21,7 +21,7 @@ class UserObserver extends Observer {
 		//$this->createTenantDatabase($entity);
 
 		if (empty($entity['tenant'])) {
-
+			// Log::debug(json_encode($entity));
 			$this->createTenantTable($entity);
 			parent::created($entity);
 			$this->seed($entity);
@@ -40,8 +40,8 @@ class UserObserver extends Observer {
 
 		$id = $entity->getKey();
 
-		$companyInfo = Array('name' => $entity->getCompanyName());
-		$storeInfo = Array('name' => '');
+		$companyInfo = Array('name' => $entity->company_name);
+		$storeInfo = Array('name' => 'Default');
 		$payments = Array('cash', 'card', 'eWallet', 'other');
 		$taxes = Array(
 			['name' => '', 'code' => '', 'value' => 0],

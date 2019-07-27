@@ -60,17 +60,20 @@ class RegisterController extends Controller {
 	 * @return \App\User
 	 */
 	protected function create(array $data) {
+		$user = new User;
+		$user->company_name = $data['companyname'];
+		$user->name = $data['name'];
+		$user->email = $data['email'];
+		$user->password = Hash::make($data['password']);
+		$user->level = 0;
 
-		$user = User::create([
-			'name' => $data['name'],
-			'email' => $data['email'],
-			'password' => Hash::make($data['password']),
-			'level' => 0,
-		]);
+		$user->permission = ["platform.systems.roles" => false, "platform.systems.users" => false, "platform.systems.attachment" => false, "platform.systems.announcement" => false, "platform.index" => true, "platform.systems" => false, "platform.systems.index" => true];
 
-		$user->setCompanyName($data['companyname']);
+		$user->save();
+		/* $user = User::create([
+
+		]);*/
 
 		return $user;
-
 	}
 }

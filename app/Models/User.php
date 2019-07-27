@@ -11,7 +11,8 @@ use Orchid\Platform\Models\User as Authenticatable;
 class User extends Authenticatable {
 	use SoftDeletes, Notifiable;
 
-	protected $company_name = '';
+	protected $appends = array('company_name');
+	protected $company_name;
 
 	/**
 	 * Convert to tenantor.
@@ -48,7 +49,7 @@ class User extends Authenticatable {
 	 * @param  string  $value
 	 * @return void
 	 */
-	public function getCompanyName() {
+	public function getCompanyNameAttribute() {
 		return $this->company_name;
 	}
 
@@ -58,7 +59,7 @@ class User extends Authenticatable {
 	 * @param  string  $value
 	 * @return void
 	 */
-	public function setCompanyName($value) {
+	public function setCompanyNameAttribute($value) {
 		$this->company_name = $value;
 	}
 
