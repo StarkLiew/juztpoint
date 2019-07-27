@@ -67,7 +67,7 @@ class RegisterController extends Controller {
 		$user->password = Hash::make($data['password']);
 		$user->level = 0;
 
-		$user->permission = ["platform.systems.roles" => false, "platform.systems.users" => false, "platform.systems.attachment" => false, "platform.systems.announcement" => false, "platform.index" => true, "platform.systems" => false, "platform.systems.index" => true];
+		$user->permissions = json_encode(["platform.systems.roles" => false, "platform.systems.users" => false, "platform.systems.attachment" => false, "platform.systems.announcement" => false, "platform.index" => true, "platform.systems" => false, "platform.systems.index" => true]);
 
 		$user->save();
 		/* $user = User::create([
