@@ -6,6 +6,8 @@ use App\Orchid\Screens\ExampleScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\SettingsScreen;
+use App\Orchid\Screens\Settings\Company\CompanyEditScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 
@@ -31,6 +33,9 @@ $this->router->screen('users', UserListScreen::class)->name('platform.systems.us
 $this->router->screen('roles/{roles}/edit', RoleEditScreen::class)->name('platform.systems.roles.edit');
 $this->router->screen('roles/create', RoleEditScreen::class)->name('platform.systems.roles.create');
 $this->router->screen('roles', RoleListScreen::class)->name('platform.systems.roles');
+
+$this->router->screen('settings/company', CompanyEditScreen::class)->name('platform.settings.company');
+$this->router->screen('settings', SettingsScreen::class)->name('platform.settings');
 
 // Example...
 $this->router->screen('example', ExampleScreen::class)->name('platform.example');

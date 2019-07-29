@@ -38,3 +38,11 @@
         </button>
     </div>
 </div>
+
+<div class="row">
+   <label class="form-label w-full">
+
+        <a href="{{ route('platform.password.request') }}" class="small">{{__('Sign Up')}}</a>
+    </label>
+
+</div>

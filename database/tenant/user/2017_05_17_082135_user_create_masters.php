@@ -18,7 +18,7 @@ class UserCreateMasters extends Migration {
 			$table->string('name');
 			$table->string('type');
 			$table->string('status');
-			$table->json('data');
+			$table->json('properties');
 			$table->bigInteger('user_id')->unsigned();
 			$table->timestamps();
 			$table->softDeletes();

@@ -28,6 +28,12 @@ class Master extends Model {
 		'name', 'type', 'status', 'data',
 	];
 
+	public function __construct(array $attributes = []) {
+		$id = Auth::id();
+		$this->table = "user_{$id}_" . $this->getTable();
+		parent::__construct($attributes);
+	}
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *

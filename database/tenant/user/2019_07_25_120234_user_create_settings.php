@@ -18,7 +18,7 @@ class UserCreateSettings extends Migration {
 			$table->string('name');
 			$table->string('description');
 			$table->string('type');
-			$table->json('data');
+			$table->json('properties');
 			$table->timestamps();
 			$table->bigInteger('user_id')->unsigned();
 

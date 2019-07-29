@@ -1,8 +1,6 @@
 <div class="text-center">
     <p class="small m-n">
-      {{ __('The application code is published under the MIT license.') }} 2016 - {{date('Y')}}<br>
-        <a href="http://orchid.software" target="_blank" rel="noopener">
-            {{ __('Currently') }} v{{\Orchid\Platform\Dashboard::VERSION}}
-        </a>
+      {{ __('Copyright Juxt7 App Studio.') }} 2019 - {{date('Y')}}<br>
+      {{ __('Part of this application contain code published under the MIT license.') }}<br>
     </p>
 </div>
