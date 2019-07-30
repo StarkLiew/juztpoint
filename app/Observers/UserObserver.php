@@ -54,25 +54,25 @@ class UserObserver extends Observer {
 			'name' => "Company Setup",
 			'description' => "Setup Company Information",
 			'type' => "company",
-			'data' => json_encode($companyInfo),
+			'properties' => json_encode($companyInfo),
 			'user_id' => $id,
 		], [
 			'name' => "Store Setup",
 			'description' => "Setup Store Information",
 			'type' => "store",
-			'data' => json_encode($storeInfo),
+			'properties' => json_encode($storeInfo),
 			'user_id' => $id,
 		], [
 			'name' => "Payment Type Setup",
 			'description' => "Setup Payment Type",
 			'type' => "payment",
-			'data' => json_encode($payments),
+			'properties' => json_encode($payments),
 			'user_id' => $id,
 		], [
 			'name' => "Tax Setup",
 			'description' => "Setup Tax",
 			'type' => "tax",
-			'data' => json_encode($taxes),
+			'properties' => json_encode($taxes),
 			'user_id' => $id,
 		]);
 		DB::table("user_{$id}_settings")->insert($settings);
