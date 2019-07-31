@@ -32,6 +32,6 @@ class LoginController extends Controller {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->middleware('guest')->except('logout');
+		$this->middleware('guest')->except('platform.switch.logout');
 	}
 }

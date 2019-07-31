@@ -16,12 +16,12 @@ class UserCreateSettings extends Migration {
 		Schema::create("user_{$id}_settings", function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
-			$table->string('description');
+			$table->string('description')->nullable();
 			$table->string('type');
-			$table->json('properties');
+			$table->json('properties')->nullable();
 			$table->timestamps();
 			$table->bigInteger('user_id')->unsigned();
-
+			$table->softDeletes();
 			$table->foreign('user_id')
 				->references('id')->on('users')
 				->onUpdate('cascade');

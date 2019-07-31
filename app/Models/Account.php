@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Hyn\Tenancy\Traits\UsesTenantConnection;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
-class Master extends Model {
+class Account extends Model {
 
-	use SoftDeletes, Notifiable, UsesTenantConnection;
-
+	use SoftDeletes, Notifiable, Filterable, AsSource;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *
@@ -19,6 +19,9 @@ class Master extends Model {
 	protected $dates = ['deleted_at'];
 	protected $primaryKey = 'id'; // or null
 	public $incrementing = true;
+	protected $casts = [
+		'properties' => 'array',
+	];
 	/**
 	 * The attributes that are mass assignable.
 	 *

@@ -7,27 +7,20 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 
 class SettingsScreen extends Screen {
-	/**
-	 * Fish text for the table.
-	 */
-	const TEXT_EXAMPLE = 'Lorem ipsum at sed ad fusce faucibus primis, potenti inceptos ad taciti nisi tristique
-    urna etiam, primis ut lacus habitasse malesuada ut. Lectus aptent malesuada mattis ut etiam fusce nec sed viverra,
-    semper mattis viverra malesuada quam metus vulputate torquent magna, lobortis nec nostra nibh sollicitudin
-    erat in luctus.';
 
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Settings';
+	public $name = 'System Settings';
 
 	/**
 	 * Display header description.
 	 *
 	 * @var string
 	 */
-	public $description = 'Customise to your preferences.';
+	public $description = 'Global preferences';
 
 	/**
 	 * Query data.
@@ -36,6 +29,7 @@ class SettingsScreen extends Screen {
 	 */
 	public function query(): array
 	{
+
 		return [];
 	}
 
@@ -61,7 +55,7 @@ class SettingsScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-
+			Layout::view('orchid.settings'),
 		];
 	}
 

@@ -13,7 +13,8 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "orchestra/tenanti": "^3.8",
-        "orchid/platform": "^5.2"
+        "orchid/platform": "^5.2",
+        "rebing/graphql-laravel": "^1.24"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

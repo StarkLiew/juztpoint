@@ -79,14 +79,14 @@ class CompanyEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function save(Request $request) {
-          $setting = new Setting;
-          $company = $setting->where('type', '=', 'company')->first();
-          $input = $request->get('company');
-          $company->properties = $input['properties'];
-          $company->save();
-      
-	      Alert::info(__('Company was saved'));
-	      return redirect()->route('platform.settings');
+		$setting = new Setting;
+		$company = $setting->where('type', '=', 'company')->first();
+		$input = $request->get('company');
+		$company->properties = $input['properties'];
+		$company->save();
+
+		Alert::info(__('Company was saved'));
+		return redirect()->route('platform.systems.index');
 	}
 
 }

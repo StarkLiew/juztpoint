@@ -9,7 +9,7 @@ use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
-class CompanyEditLayout extends Rows {
+class CustomerEditLayout extends Rows {
 	/**
 	 * Views.
 	 *

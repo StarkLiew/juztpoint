@@ -15,7 +15,7 @@ class PlatformProvider extends ServiceProvider {
 	/**
 	 * Boot the application events.
 	 *
-	 * @param Dashboard $dashboard
+	 * @param Dashboard $dashboar
 	 */
 	public function boot(Dashboard $dashboard) {
 		View::composer('platform::dashboard', MainMenuComposer::class);
@@ -45,7 +45,12 @@ class PlatformProvider extends ServiceProvider {
 	protected function registerPermissionsSystems(): ItemPermission {
 		return ItemPermission::group(__('Systems'))
 			->addPermission('platform.systems.roles', __('Roles'))
-			->addPermission('platform.systems.users', __('Users'));
+			->addPermission('platform.systems.users', __('Users'))
+			->addPermission('platform.systems.company', __('Company'))
+			->addPermission('platform.systems.stores', __('Stores'))
+			->addPermission('platform.systems.taxes', __('Taxes'))
+			->addPermission('platform.systems.payments', __('Payments'))
+			->addPermission('platform.systems.commissions', __('Commissions'));
 	}
 
 }

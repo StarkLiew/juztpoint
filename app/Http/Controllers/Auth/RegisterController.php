@@ -70,9 +70,6 @@ class RegisterController extends Controller {
 		$user->permissions = json_encode(Array('platform.systems.roles' => false, 'platform.systems.users' => false, 'platform.systems.attachment' => false, 'platform.systems.announcement' => false, 'platform.index' => true, 'platform.systems' => false, 'platform.systems.index' => true));
 
 		$user->save();
-		/* $user = User::create([
-
-		]);*/
 
 		return $user;
 	}

@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserCreateMasters extends Migration {
+class UserCreateAccounts extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -13,7 +13,7 @@ class UserCreateMasters extends Migration {
 	 */
 	public function up($id, Model $model) {
 
-		Schema::create("user_{$id}_masters", function (Blueprint $table) {
+		Schema::create("user_{$id}_accounts", function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('type');
@@ -36,6 +36,6 @@ class UserCreateMasters extends Migration {
 	 */
 	public function down($id, Model $model) {
 
-		Schema::dropIfExists("user_{$id}_masters");
+		Schema::dropIfExists("user_{$id}_accounts");
 	}
 }

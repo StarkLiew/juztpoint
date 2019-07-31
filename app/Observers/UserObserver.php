@@ -57,8 +57,8 @@ class UserObserver extends Observer {
 			'properties' => json_encode($companyInfo),
 			'user_id' => $id,
 		], [
-			'name' => "Store Setup",
-			'description' => "Setup Store Information",
+			'name' => "Default Store",
+			'description' => "Default Store",
 			'type' => "store",
 			'properties' => json_encode($storeInfo),
 			'user_id' => $id,

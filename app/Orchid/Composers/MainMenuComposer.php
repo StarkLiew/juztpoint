@@ -73,43 +73,23 @@ class MainMenuComposer {
 					->icon('icon-module')
 			)
 			->add(Menu::MAIN,
-				ItemMenu::label('Master')
-					->slug('master-data')
+				ItemMenu::label('Account')
+					->slug('account-data')
 					->icon('icon-plus')
 					->childs()
 			)
-			->add('master-data',
+			->add('account-data',
 				ItemMenu::label('Customers')
 					->icon('icon-friends')
 			)
-			->add('master-data',
+			->add('account-data',
 				ItemMenu::label('Vendors')
 					->icon('icon-friends')
 			)
 			->add(Menu::MAIN,
 				ItemMenu::label('Settings')
-					->slug('settings')
 					->icon('icon-settings')
-					->route('platform.settings')
-					->childs()
-			)
-			->add('settings',
-				ItemMenu::label('My Company')
-					->route('platform.settings.company')
-					->icon('icon-info')
-
-			)
-			->add('settings',
-				ItemMenu::label('Store')
-					->icon('icon-building')
-			)
-			->add('settings',
-				ItemMenu::label('Tax')
-					->icon('icon-money')
-			)
-			->add('settings',
-				ItemMenu::label('Commission')
-					->icon('icon-money')
+					->route('platform.systems.index')
 			);
 
 	}

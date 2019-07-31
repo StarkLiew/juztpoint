@@ -5,10 +5,12 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Orchid\Filters\Filterable;
+use Orchid\Screen\AsSource;
 
 class Setting extends Model {
 
-	use Notifiable;
+	use Notifiable, Filterable, AsSource;
 
 	/**
 	 * The attributes that should be mutated to dates.
@@ -21,6 +23,12 @@ class Setting extends Model {
 	protected $casts = [
 		'properties' => 'array',
 	];
+
+	/**
+	 * @var
+	 */
+	protected $allowedFilters = ['name'];
+	protected $allowedSorts = ['name'];
 
 	public $incrementing = true;
 
