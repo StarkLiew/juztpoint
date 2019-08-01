@@ -2,11 +2,9 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Layouts\Company;
-use App\Helpers\World;
+namespace App\Orchid\Layouts\Payment;
+
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class CustomerEditLayout extends Rows {
@@ -15,37 +13,24 @@ class CustomerEditLayout extends Rows {
 	 *
 	 * @throws \Throwable|\Orchid\Screen\Exceptions\TypeException
 	 *
-	 * @return arrays
+	 * @return array
 	 */
 	public function fields(): array
 	{
 		return [
-			Input::make('company.properties.name')
+			Input::make('account.name')
 				->type('text')
 				->max(255)
 				->required()
 				->horizontal()
 				->title(__('Name'))
 				->placeholder(__('Name')),
-			TextArea::make('company.properties.address')
+			Input::make('account.description')
 				->type('text')
 				->max(255)
 				->horizontal()
-				->title(__('Address'))
-				->placeholder(__('Address')),
-			Select::make('company.properties.timezone')
-				->options(World::timezones())
-				->empty('No select')
-				->horizontal()
-				->title(__('Timezone'))
-				->placeholder(__('Timezone')),
-			Select::make('company.properties.currency')
-				->options(World::currencies())
-				->empty('No select')
-				->horizontal()
-				->title(__('Currency'))
-				->placeholder(__('Currency')),
+				->title(__('Description'))
+				->placeholder(__('Description')),
 		];
 	}
-
 }

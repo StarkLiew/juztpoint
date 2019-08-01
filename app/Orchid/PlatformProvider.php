@@ -22,8 +22,8 @@ class PlatformProvider extends ServiceProvider {
 		View::composer('platform::systems', SystemMenuComposer::class);
 
 		$dashboard
-		//->registerPermissions($this->registerPermissionsMain())
-		->registerPermissions($this->registerPermissionsSystems());
+			->registerPermissions($this->registerPermissionsMain())
+			->registerPermissions($this->registerPermissionsSystems());
 
 		$dashboard->registerGlobalSearch([
 			//...Models
@@ -36,6 +36,11 @@ class PlatformProvider extends ServiceProvider {
 	protected function registerPermissionsMain(): ItemPermission {
 		return ItemPermission::group(__('Main'))
 			->addPermission('platform.index', __('Main'))
+			->addPermission('platform.customers', __('Customers'))
+			->addPermission('platform.vendors', __('Vendors'))
+			->addPermission('platform.categories', __('Categories'))
+			->addPermission('platform.products', __('Products'))
+			->addPermission('platform.services', __('Services'))
 			->addPermission('platform.systems', __('Systems'));
 	}
 

@@ -2,6 +2,8 @@
 
 declare (strict_types = 1);
 
+use App\Orchid\Screens\Account\CustomerEditScreen;
+use App\Orchid\Screens\Account\CustomerListScreen;
 use App\Orchid\Screens\ExampleScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -67,3 +69,8 @@ $this->router->screen('roles', RoleListScreen::class)->name('platform.systems.ro
 // Example...
 $this->router->screen('example', ExampleScreen::class)->name('platform.example');
 //Route::screen('/dashboard/screen/idea', 'Idea::class','platform.screens.idea');
+
+// Customers...
+$this->router->screen('customers/{accounts}/edit', CustomerEditScreen::class)->name('platform.customers.edit');
+$this->router->screen('customers/create', CustomerEditScreen::class)->name('platform.customers.create');
+$this->router->screen('customers', CustomerListScreen::class)->name('platform.customers');
