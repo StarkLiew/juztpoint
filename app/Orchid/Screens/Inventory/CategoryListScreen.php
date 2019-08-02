@@ -2,11 +2,11 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Account;
+namespace App\Orchid\Screens\Inventory;
 
-use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
-use App\Orchid\Layouts\Account\CustomerListLayout;
+use App\Models\Setting;
+use App\Orchid\Layouts\Inventory\CategoryEditLayout;
+use App\Orchid\Layouts\Inventory\CategoryListLayout;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
@@ -14,25 +14,25 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerListScreen extends Screen {
+class CategoryListScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Category';
 
 	/**
 	 * Display header description.
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered categories';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.categories';
 
 	/**
 	 * Query data.
@@ -43,8 +43,8 @@ class CustomerListScreen extends Screen {
 	{
 
 		return [
-			'accounts' => Account::filters()
-				->where('type', '=', 'customer')
+			'settings' => Setting::filters()
+				->where('type', '=', 'category')
 				->defaultSort('name', 'desc')
 				->paginate(),
 		];
@@ -60,7 +60,7 @@ class CustomerListScreen extends Screen {
 		return [
 			Link::name(__('Add'))
 				->icon('icon-plus')
-				->link(route('platform.customers.create')),
+				->link(route('platform.categories.create')),
 		];
 	}
 
@@ -72,13 +72,13 @@ class CustomerListScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerListLayout::class,
+			CategoryListLayout::class,
 
 			Layout::modals([
 				'oneAsyncModal' => [
-					CustomerEditLayout::class,
+					CategoryEditLayout::class,
 				],
-			])->async('asyncGetCustomer'),
+			])->async('asyncGetCategory'),
 		];
 	}
 
@@ -87,10 +87,10 @@ class CustomerListScreen extends Screen {
 	 *
 	 * @return array
 	 */
-	public function asyncGetCustomer(Account $account): array
+	public function asyncGetCategory(Setting $setting): array
 	{
 		return [
-			'account' => $account,
+			'setting' => $setting,
 		];
 	}
 
@@ -100,12 +100,12 @@ class CustomerListScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function saveAccount(Account $account, Request $request) {
-		$account->fill($request->get('account'));
-		$account->type = 'customer';
+	public function saveCategory(Setting $setting, Request $request) {
+		$account->fill($request->get('setting'));
+		$account->type = 'category';
 		$account->save();
 
-		Alert::info(__('Customer was saved.'));
+		Alert::info(__('Category was saved.'));
 
 		return back();
 	}

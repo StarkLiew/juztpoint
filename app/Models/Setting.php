@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use Orchid\Screen\Builder;
 
 class Setting extends Model {
 
@@ -58,6 +59,34 @@ class Setting extends Model {
 
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');
+	}
+
+	/**
+	 * @param Builder $query
+	 *
+	 * @return Builder
+	 */
+	public function scopeCategory(Builder $query) {
+
+		return $query->where('type', 'category');
+	}
+
+	/**
+	 * @param Builder $query
+	 *
+	 * @return Builder
+	 */
+	public function scopeTax(Builder $query) {
+		return $query->where('type', 'tax');
+	}
+
+	/**
+	 * @param Builder $query
+	 *
+	 * @return Builder
+	 */
+	public function scopeCommission(Builder $query) {
+		return $query->where('type', 'commission');
 	}
 
 }

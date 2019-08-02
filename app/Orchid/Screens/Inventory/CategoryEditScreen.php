@@ -2,10 +2,10 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Account;
+namespace App\Orchid\Screens\Inventory;
 
-use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
+use App\Models\Setting;
+use App\Orchid\Layouts\Inventory\CategoryEditLayout;
 use Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Layout;
@@ -13,13 +13,13 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerEditScreen extends Screen {
+class CategoryEditScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Category';
 
 	/**
 	 * @var bool
@@ -31,27 +31,27 @@ class CustomerEditScreen extends Screen {
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered categories';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.categories';
 
 	/**
 	 * Query data.
 	 *
-	 * @param \App\Models\Account $account
+	 * @param \App\Models\Setting $setting
 	 *
 	 * @return array
 	 */
-	public function query(Account $account): array
+	public function query(Setting $setting): array
 	{
 
-		$this->exist = $account->exists;
+		$this->exist = $setting->exists;
 
 		return [
-			'account' => $account,
+			'setting' => $setting,
 		];
 	}
 
@@ -83,7 +83,7 @@ class CustomerEditScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerEditLayout::class,
+			CategoryEditLayout::class,
 		];
 	}
 
@@ -93,36 +93,31 @@ class CustomerEditScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function save(Account $account, Request $request) {
-		$account->type = 'customer';
-		$account->user_id = Auth::id();
-		$input = $request->get('account');
-		if (array_key_exists('properties', $input)) {
-			$account->properties = $input['properties'];
-		}
-
-		$account
-			->fill($request->get('account'))
+	public function save(Setting $setting, Request $request) {
+		$setting->type = 'category';
+		$setting->user_id = Auth::id();
+		$setting
+			->fill($request->get('setting'))
 			->save();
 
-		Alert::info(__('Customer was saved'));
+		Alert::info(__('Category was saved'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.categories');
 	}
 
 	/**
-	 * @param Account $account
+	 * @param Category $category
 	 *d
 	 * @throws \Exception
 	 *
 	 * @return \Illuminate\Http\RedirectResponsed
 	 */
-	public function remove(Account $account) {
-		$account->delete();
+	public function remove(Setting $setting) {
+		$setting->delete();
 
-		Alert::info(__('Customer was removed'));
+		Alert::info(__('Category was removed'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.categories');
 	}
 
 }

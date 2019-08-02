@@ -5,7 +5,7 @@ declare (strict_types = 1);
 namespace App\Orchid\Screens\Account;
 
 use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
+use App\Orchid\Layouts\Account\VendorEditLayout;
 use Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Layout;
@@ -13,13 +13,13 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerEditScreen extends Screen {
+class VendorEditScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Vendor';
 
 	/**
 	 * @var bool
@@ -31,12 +31,12 @@ class CustomerEditScreen extends Screen {
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered vendors';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.vendors';
 
 	/**
 	 * Query data.
@@ -83,7 +83,7 @@ class CustomerEditScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerEditLayout::class,
+			VendorEditLayout::class,
 		];
 	}
 
@@ -94,7 +94,7 @@ class CustomerEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function save(Account $account, Request $request) {
-		$account->type = 'customer';
+		$account->type = 'vendor';
 		$account->user_id = Auth::id();
 		$input = $request->get('account');
 		if (array_key_exists('properties', $input)) {
@@ -105,9 +105,9 @@ class CustomerEditScreen extends Screen {
 			->fill($request->get('account'))
 			->save();
 
-		Alert::info(__('Customer was saved'));
+		Alert::info(__('Vendor was saved'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.vendors');
 	}
 
 	/**
@@ -120,9 +120,9 @@ class CustomerEditScreen extends Screen {
 	public function remove(Account $account) {
 		$account->delete();
 
-		Alert::info(__('Customer was removed'));
+		Alert::info(__('Vendor was removed'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.vendors');
 	}
 
 }

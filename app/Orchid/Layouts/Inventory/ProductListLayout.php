@@ -2,16 +2,16 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Layouts\Account;
+namespace App\Orchid\Layouts\Inventory;
 
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class CustomerListLayout extends Table {
+class ProductListLayout extends Table {
 	/**
 	 * @var string
 	 */
-	public $data = 'accounts';
+	public $data = 'products';
 
 	/**
 	 * @return array
@@ -23,11 +23,24 @@ class CustomerListLayout extends Table {
 				->align(TD::ALIGN_CENTER)
 				->width('100px')
 				->sort()
-				->link('platform.customers.edit', 'id'),
+				->link('platform.products.edit', 'id'),
 
 			TD::set('name', __('Name'))
 				->sort()
 				->filter(TD::FILTER_TEXT),
+
+			TD::set('sku', __('SKU'))
+				->sort()
+				->filter(TD::FILTER_TEXT),
+
+			TD::set('type', __('Type'))
+				->sort()
+				->filter(TD::FILTER_TEXT),
+
+			TD::set('category', __('Category'))
+				->sort()
+				->filter(TD::FILTER_TEXT),
+
 			TD::set('status', __('Status'))
 				->sort()
 				->filter(TD::FILTER_TEXT),

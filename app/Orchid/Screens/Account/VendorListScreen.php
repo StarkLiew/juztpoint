@@ -5,8 +5,8 @@ declare (strict_types = 1);
 namespace App\Orchid\Screens\Account;
 
 use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
-use App\Orchid\Layouts\Account\CustomerListLayout;
+use App\Orchid\Layouts\Account\VendorEditLayout;
+use App\Orchid\Layouts\Account\VendorListLayout;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
@@ -14,25 +14,25 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerListScreen extends Screen {
+class VendorListScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Vendor';
 
 	/**
 	 * Display header description.
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered vendors';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.vendors';
 
 	/**
 	 * Query data.
@@ -44,7 +44,7 @@ class CustomerListScreen extends Screen {
 
 		return [
 			'accounts' => Account::filters()
-				->where('type', '=', 'customer')
+				->where('type', '=', 'vendor')
 				->defaultSort('name', 'desc')
 				->paginate(),
 		];
@@ -60,7 +60,7 @@ class CustomerListScreen extends Screen {
 		return [
 			Link::name(__('Add'))
 				->icon('icon-plus')
-				->link(route('platform.customers.create')),
+				->link(route('platform.vendors.create')),
 		];
 	}
 
@@ -72,13 +72,13 @@ class CustomerListScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerListLayout::class,
+			VendorListLayout::class,
 
 			Layout::modals([
 				'oneAsyncModal' => [
-					CustomerEditLayout::class,
+					VendorEditLayout::class,
 				],
-			])->async('asyncGetCustomer'),
+			])->async('asyncGetVendor'),
 		];
 	}
 
@@ -87,7 +87,7 @@ class CustomerListScreen extends Screen {
 	 *
 	 * @return array
 	 */
-	public function asyncGetCustomer(Account $account): array
+	public function asyncGetVendor(Account $account): array
 	{
 		return [
 			'account' => $account,
@@ -102,10 +102,10 @@ class CustomerListScreen extends Screen {
 	 */
 	public function saveAccount(Account $account, Request $request) {
 		$account->fill($request->get('account'));
-		$account->type = 'customer';
+		$account->type = 'vendor';
 		$account->save();
 
-		Alert::info(__('Customer was saved.'));
+		Alert::info(__('Vendor was saved.'));
 
 		return back();
 	}

@@ -67,10 +67,12 @@ class MainMenuComposer {
 			->add('inventory',
 				ItemMenu::label('Categories')
 					->icon('icon-organization')
+					->route('platform.categories')
 			)
 			->add('inventory',
 				ItemMenu::label('Products')
 					->icon('icon-module')
+					->route('platform.products')
 			)
 			->add(Menu::MAIN,
 				ItemMenu::label('Account')
@@ -81,10 +83,13 @@ class MainMenuComposer {
 			->add('account-data',
 				ItemMenu::label('Customers')
 					->icon('icon-friends')
+					->route('platform.customers')
 			)
 			->add('account-data',
 				ItemMenu::label('Vendors')
 					->icon('icon-friends')
+					->route('platform.vendors')
+
 			)
 			->add(Menu::MAIN,
 				ItemMenu::label('Settings')

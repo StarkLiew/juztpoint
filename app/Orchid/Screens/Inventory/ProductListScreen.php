@@ -2,37 +2,36 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Account;
+namespace App\Orchid\Screens\Inventory;
 
-use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
-use App\Orchid\Layouts\Account\CustomerListLayout;
+use App\Models\Product;
+use App\Orchid\Layouts\Inventory\ProductEditLayout;
+use App\Orchid\Layouts\Inventory\ProductListLayout;
 use Illuminate\Http\Request;
-use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerListScreen extends Screen {
+class ProductListScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Product';
 
 	/**
 	 * Display header description.
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered products';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.products';
 
 	/**
 	 * Query data.
@@ -43,8 +42,7 @@ class CustomerListScreen extends Screen {
 	{
 
 		return [
-			'accounts' => Account::filters()
-				->where('type', '=', 'customer')
+			'products' => Product::filters()
 				->defaultSort('name', 'desc')
 				->paginate(),
 		];
@@ -60,7 +58,7 @@ class CustomerListScreen extends Screen {
 		return [
 			Link::name(__('Add'))
 				->icon('icon-plus')
-				->link(route('platform.customers.create')),
+				->link(route('platform.products.create')),
 		];
 	}
 
@@ -72,40 +70,39 @@ class CustomerListScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerListLayout::class,
+			ProductListLayout::class,
 
 			Layout::modals([
 				'oneAsyncModal' => [
-					CustomerEditLayout::class,
+					ProductEditLayout::class,
 				],
-			])->async('asyncGetCustomer'),
+			])->async('asyncGetProduct'),
 		];
 	}
 
 	/**
-	 * @param User $user
+	 * @param Product $product
 	 *
 	 * @return array
 	 */
-	public function asyncGetCustomer(Account $account): array
+	public function asyncGetProduct(Product $product): array
 	{
 		return [
-			'account' => $account,
+			'product' => $product,
 		];
 	}
 
 	/**
-	 * @param Account $account
+	 * @param Product $product
 	 * @param Request $request
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function saveAccount(Account $account, Request $request) {
-		$account->fill($request->get('account'));
-		$account->type = 'customer';
-		$account->save();
+	public function saveAccount(Product $product, Request $request) {
+		$product->fill($request->get('product'));
+		$product->save();
 
-		Alert::info(__('Customer was saved.'));
+		Alert::info(__('Product was saved.'));
 
 		return back();
 	}

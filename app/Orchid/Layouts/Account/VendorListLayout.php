@@ -7,7 +7,7 @@ namespace App\Orchid\Layouts\Account;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class CustomerListLayout extends Table {
+class VendorListLayout extends Table {
 	/**
 	 * @var string
 	 */
@@ -23,11 +23,12 @@ class CustomerListLayout extends Table {
 				->align(TD::ALIGN_CENTER)
 				->width('100px')
 				->sort()
-				->link('platform.customers.edit', 'id'),
+				->link('platform.vendors.edit', 'id'),
 
 			TD::set('name', __('Name'))
 				->sort()
 				->filter(TD::FILTER_TEXT),
+
 			TD::set('status', __('Status'))
 				->sort()
 				->filter(TD::FILTER_TEXT),

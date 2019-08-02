@@ -18,7 +18,7 @@ class UserCreateAccounts extends Migration {
 			$table->string('name');
 			$table->string('type');
 			$table->string('status');
-			$table->json('properties');
+			$table->json('properties')->nullable();
 			$table->bigInteger('user_id')->unsigned();
 			$table->timestamps();
 			$table->softDeletes();

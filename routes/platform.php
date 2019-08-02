@@ -4,7 +4,13 @@ declare (strict_types = 1);
 
 use App\Orchid\Screens\Account\CustomerEditScreen;
 use App\Orchid\Screens\Account\CustomerListScreen;
+use App\Orchid\Screens\Account\VendorEditScreen;
+use App\Orchid\Screens\Account\VendorListScreen;
 use App\Orchid\Screens\ExampleScreen;
+use App\Orchid\Screens\Inventory\CategoryEditScreen;
+use App\Orchid\Screens\Inventory\CategoryListScreen;
+use App\Orchid\Screens\Inventory\ProductEditScreen;
+use App\Orchid\Screens\Inventory\ProductListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -74,3 +80,18 @@ $this->router->screen('example', ExampleScreen::class)->name('platform.example')
 $this->router->screen('customers/{accounts}/edit', CustomerEditScreen::class)->name('platform.customers.edit');
 $this->router->screen('customers/create', CustomerEditScreen::class)->name('platform.customers.create');
 $this->router->screen('customers', CustomerListScreen::class)->name('platform.customers');
+
+// Vendors...
+$this->router->screen('vendors/{accounts}/edit', VendorEditScreen::class)->name('platform.vendors.edit');
+$this->router->screen('vendors/create', VendorEditScreen::class)->name('platform.vendors.create');
+$this->router->screen('vendors', VendorListScreen::class)->name('platform.vendors');
+
+// Categories...
+$this->router->screen('categories/{settings}/edit', CategoryEditScreen::class)->name('platform.categories.edit');
+$this->router->screen('categories/create', CategoryEditScreen::class)->name('platform.categories.create');
+$this->router->screen('categories', CategoryListScreen::class)->name('platform.categories');
+
+// Products...
+$this->router->screen('products/{products/edit', ProductEditScreen::class)->name('platform.products.edit');
+$this->router->screen('products/create', ProductEditScreen::class)->name('platform.products.create');
+$this->router->screen('products', ProductListScreen::class)->name('platform.products');

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class Account extends Model {
+class Product extends Model {
 
 	use SoftDeletes, Notifiable, Filterable, AsSource;
 	/**
@@ -29,11 +29,11 @@ class Account extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'status',
+		'name', 'type', 'status', 'sku', 'cat_id', 'tax_id', 'sellable', 'consumable', 'allow_assistant', 'discount', 'stockable', 'variants', 'composites', 'commission_id', 'properties', 'note',
 	];
 
-	protected $allowedFilters = ['name', 'status'];
-	protected $allowedSorts = ['name', 'status'];
+	protected $allowedFilters = ['name', 'type', 'sku', 'category', 'status'];
+	protected $allowedSorts = ['name', 'type', 'sku', 'category', 'status'];
 
 	public function __construct(array $attributes = []) {
 		$id = Auth::id();
@@ -49,6 +49,18 @@ class Account extends Model {
 	protected $hidden = [
 
 	];
+
+	public function tax() {
+		return $this->belongsTo('App\Models\Setting', 'tax_id');
+	}
+
+	public function category() {
+		return $this->belongsTo('App\Models\Setting', 'cat_id');
+	}
+
+	public function commission() {
+		return $this->belongsTo('App\Models\Setting', 'commission_id');
+	}
 
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');

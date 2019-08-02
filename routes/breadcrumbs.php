@@ -149,3 +149,71 @@ Breadcrumbs::for ('platform.systems.payments.edit', function ($trail, $payment) 
 	$trail->parent('platform.systems.payments');
 	$trail->push(__('Payment'), route('platform.systems.payments.edit', $payment));
 });
+
+// Platform > Customers
+Breadcrumbs::for ('platform.customers', function ($trail) {
+	$trail->push(__('Customers'), route('platform.customers'));
+});
+
+// Platform > Customers > Create
+Breadcrumbs::for ('platform.customers.create', function ($trail) {
+	$trail->parent('platform.customers');
+	$trail->push(__('Create'), route('platform.customers.create'));
+});
+
+// Platform > Customers > Store
+Breadcrumbs::for ('platform.customers.edit', function ($trail, $account) {
+	$trail->parent('platform.customers');
+	$trail->push(__('Customer'), route('platform.customers.edit', $account));
+});
+
+// Platform > Vendors
+Breadcrumbs::for ('platform.vendors', function ($trail) {
+	$trail->push(__('Vendors'), route('platform.vendors'));
+});
+
+// Platform > Vendors > Create
+Breadcrumbs::for ('platform.vendors.create', function ($trail) {
+	$trail->parent('platform.vendors');
+	$trail->push(__('Create'), route('platform.vendors.create'));
+});
+
+// Platform > Vendors > Store
+Breadcrumbs::for ('platform.vendors.edit', function ($trail, $account) {
+	$trail->parent('platform.vendors');
+	$trail->push(__('Vendor'), route('platform.vendors.edit', $account));
+});
+
+// Platform > Categories
+Breadcrumbs::for ('platform.categories', function ($trail) {
+	$trail->push(__('Categories'), route('platform.categories'));
+});
+
+// Platform > Categories > Create
+Breadcrumbs::for ('platform.categories.create', function ($trail) {
+	$trail->parent('platform.categories');
+	$trail->push(__('Create'), route('platform.categories.create'));
+});
+
+// Platform > Customers > Store
+Breadcrumbs::for ('platform.categories.edit', function ($trail, $setting) {
+	$trail->parent('platform.categories');
+	$trail->push(__('Category'), route('platform.categories.edit', $setting));
+});
+
+// Platform > Vendors
+Breadcrumbs::for ('platform.products', function ($trail) {
+	$trail->push(__('Products'), route('platform.products'));
+});
+
+// Platform > Vendors > Create
+Breadcrumbs::for ('platform.products.create', function ($trail) {
+	$trail->parent('platform.products');
+	$trail->push(__('Create'), route('platform.products.create'));
+});
+
+// Platform > Vendors > Store
+Breadcrumbs::for ('platform.products.edit', function ($trail, $product) {
+	$trail->parent('platform.products');
+	$trail->push(__('Product'), route('platform.products.edit', $account));
+});

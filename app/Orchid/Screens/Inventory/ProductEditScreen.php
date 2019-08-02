@@ -2,10 +2,11 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Account;
+namespace App\Orchid\Screens\Inventory;
 
-use App\Models\Account;
-use App\Orchid\Layouts\Account\CustomerEditLayout;
+use App\Models\Product;
+use App\Orchid\Layouts\Inventory\ProductEditLayout;
+use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
 use Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Layout;
@@ -13,13 +14,13 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class CustomerEditScreen extends Screen {
+class ProductEditScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Customer';
+	public $name = 'Product';
 
 	/**
 	 * @var bool
@@ -31,27 +32,27 @@ class CustomerEditScreen extends Screen {
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered customers';
+	public $description = 'All registered products';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.customers';
+	public $permission = 'platform.products';
 
 	/**
 	 * Query data.
 	 *
-	 * @param \App\Models\Account $account
+	 * @param \App\Models\Product $product
 	 *
 	 * @return array
 	 */
-	public function query(Account $account): array
+	public function query(Product $product): array
 	{
 
-		$this->exist = $account->exists;
+		$this->exist = $product->exists;
 
 		return [
-			'account' => $account,
+			'product' => $product,
 		];
 	}
 
@@ -83,7 +84,11 @@ class CustomerEditScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			CustomerEditLayout::class,
+			Layout::columns([
+				ProductEditLayout::class,
+				ProductRightEditLayout::class,
+			]),
+
 		];
 	}
 
@@ -93,36 +98,35 @@ class CustomerEditScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function save(Account $account, Request $request) {
-		$account->type = 'customer';
-		$account->user_id = Auth::id();
-		$input = $request->get('account');
+	public function save(Product $product, Request $request) {
+		$product->user_id = Auth::id();
+		$input = $request->get('product');
 		if (array_key_exists('properties', $input)) {
-			$account->properties = $input['properties'];
+			$product->properties = $input['properties'];
 		}
 
-		$account
-			->fill($request->get('account'))
+		$product
+			->fill($request->get('product'))
 			->save();
 
-		Alert::info(__('Customer was saved'));
+		Alert::info(__('Vendor was saved'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.products');
 	}
 
 	/**
-	 * @param Account $account
+	 * @param Product $product
 	 *d
 	 * @throws \Exception
 	 *
 	 * @return \Illuminate\Http\RedirectResponsed
 	 */
-	public function remove(Account $account) {
-		$account->delete();
+	public function remove(Product $product) {
+		$product->delete();
 
-		Alert::info(__('Customer was removed'));
+		Alert::info(__('Product was removed'));
 
-		return redirect()->route('platform.customers');
+		return redirect()->route('platform.products');
 	}
 
 }

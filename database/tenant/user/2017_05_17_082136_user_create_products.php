@@ -24,13 +24,13 @@ class UserCreateProducts extends Migration {
 			$table->bigInteger('tax_id')->unsigned();
 			$table->boolean('sellable')->default(false);
 			$table->boolean('consumable')->default(false);
-			$table->bigInteger('assistant_id')->unsigned();
+			$table->boolean('allow_assitant')->default(false);
 			$table->float('discount')->default(0.0);
 			$table->boolean('stockable')->default(false);
 			$table->json('variants')->nullable();
 			$table->json('composites')->nullable();
 			$table->bigInteger('commission_id')->unsigned();
-			$table->json('params')->nullable();
+			$table->json('properties')->nullable();
 			$table->longText('note')->nullable();
 			$table->bigInteger('user_id')->unsigned();
 			$table->timestamps();
@@ -48,10 +48,6 @@ class UserCreateProducts extends Migration {
 
 			$table->foreign('tax_id')
 				->references('id')->on($masters)
-				->onUpdate('cascade');
-
-			$table->foreign('assistant_id')
-				->references('id')->on('users')
 				->onUpdate('cascade');
 
 			$table->foreign('user_id')
