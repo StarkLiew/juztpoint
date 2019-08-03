@@ -9,6 +9,7 @@ use App\Orchid\Layouts\Inventory\ProductEditLayout;
 use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
 use Auth;
 use Illuminate\Http\Request;
+use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
@@ -73,6 +74,7 @@ class ProductEditScreen extends Screen {
 				->icon('icon-trash')
 				->method('remove')
 				->canSee($this->exist),
+
 		];
 	}
 
@@ -88,6 +90,11 @@ class ProductEditScreen extends Screen {
 				ProductEditLayout::class,
 				ProductRightEditLayout::class,
 			]),
+			Layout::rows([
+				Cropper::make('product.properties.thumbnail')
+					->width(100)
+					->height(100),
+			]),
 
 		];
 	}
@@ -99,19 +106,29 @@ class ProductEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function save(Product $product, Request $request) {
-		$product->user_id = Auth::id();
-		$input = $request->get('product');
-		if (array_key_exists('properties', $input)) {
-			$product->properties = $input['properties'];
+
+		try {
+			$input = $request->get('product');
+
+			$product->user_id = Auth::id();
+
+			if (array_key_exists('properties', $input)) {
+				$product->properties = $input['properties'];
+			}
+
+			$product
+				->fill($request->get('product'))
+				->save();
+
+			Alert::info(__('Vendor was saved'));
+
+			return redirect()->route('platform.products');
+
+		} catch (\Illuminate\Database\QueryException $e) {
+			Alert::info(__($e->errorInfo[2]));
+			return redirect()->back()->withInput();
+
 		}
-
-		$product
-			->fill($request->get('product'))
-			->save();
-
-		Alert::info(__('Vendor was saved'));
-
-		return redirect()->route('platform.products');
 	}
 
 	/**

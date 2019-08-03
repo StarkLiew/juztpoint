@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Auth;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use Orchid\Screen\Builder;
 
 class Setting extends Model {
 
@@ -67,8 +67,7 @@ class Setting extends Model {
 	 * @return Builder
 	 */
 	public function scopeCategory(Builder $query) {
-
-		return $query->where('type', 'category');
+		return $query->where('type', 'category')->get();
 	}
 
 	/**
@@ -77,7 +76,7 @@ class Setting extends Model {
 	 * @return Builder
 	 */
 	public function scopeTax(Builder $query) {
-		return $query->where('type', 'tax');
+		return $query->select('id', 'name')->where('type', 'tax')->get();
 	}
 
 	/**
@@ -86,7 +85,7 @@ class Setting extends Model {
 	 * @return Builder
 	 */
 	public function scopeCommission(Builder $query) {
-		return $query->where('type', 'commission');
+		return $query->where('type', 'commission')->get();
 	}
 
 }

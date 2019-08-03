@@ -8,10 +8,12 @@ use App\Models\Setting;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class ProductRightEditLayout extends Rows {
+
+	protected $stockable = false;
+
 	/**
 	 * Views.
 	 *
@@ -23,7 +25,7 @@ class ProductRightEditLayout extends Rows {
 	{
 		return [
 			CheckBox::make('product.stockable')
-				->value(1)
+				->value(0)
 				->sendTrueOrFalse()
 				->title('Stockable')
 				->help('Allow to kept stock'),
@@ -36,28 +38,43 @@ class ProductRightEditLayout extends Rows {
 					'numericInput' => true,
 					'digitsOptional' => true,
 				])
-				->hr()
 				->title(__('Quantity')),
 
+			Input::make('product.properties.cost')
+				->mask([
+					'alias' => 'decimal',
+					'rightAlign' => false,
+					'radixPoint' => '.',
+					'numericInput' => true,
+					'digitsOptional' => true,
+				])
+				->hr()
+				->title(__('Cost')),
+
+			Input::make('product.properties.price')
+				->mask([
+					'alias' => 'decimal',
+					'rightAlign' => false,
+					'radixPoint' => '.',
+					'numericInput' => true,
+					'digitsOptional' => true,
+				])
+				->hr()
+				->title(__('Selling Price')),
+
 			Relation::make('product.commission_id')
-				->fromModel(Setting::class, 'name')
+				->fromModel(Setting::class, 'name', 'id')
 				->required()
 				->applyScope('commission')
 				->title('Staff Commission'),
 
 			CheckBox::make('allow_assistant')
-				->value(1)
+				->value(0)
 				->sendTrueOrFalse()
 				->title('Allow Assistant')
 				->help('Assistant able to share commission'),
 
-			TextArea::make('product.note')
-				->type('text')
-				->max(255)
-				->rows(5)
-				->title(__('Note'))
-				->placeholder(__('Note')),
-
 		];
 	}
+
 }

@@ -8,6 +8,7 @@ use App\Models\Setting;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class ProductEditLayout extends Rows {
@@ -21,12 +22,21 @@ class ProductEditLayout extends Rows {
 	public function fields(): array
 	{
 		return [
+
 			Input::make('product.name')
 				->type('text')
 				->max(255)
 				->required()
 				->title(__('Name'))
 				->placeholder(__('Name')),
+
+			TextArea::make('product.note')
+				->type('text')
+				->max(255)
+				->rows(5)
+				->title(__('Description'))
+				->placeholder(__('Description')),
+
 			Select::make('product.type')
 				->options([
 					'product' => 'Product',
@@ -35,17 +45,20 @@ class ProductEditLayout extends Rows {
 				->required()
 				->title(__('Type'))
 				->placeholder(__('Type')),
+
 			Input::make('product.sku')
 				->type('text')
 				->max(255)
 				->required()
 				->title(__('SKU/Barcode'))
 				->placeholder(__('SKU/Barcode')),
+
 			Relation::make('product.cat_id')
-				->applyScope('category')
 				->fromModel(Setting::class, 'name', 'id')
+				->applyScope('category')
 				->required()
 				->title('Category'),
+
 			Relation::make('product.tax_id')
 				->fromModel(Setting::class, 'name', 'id')
 				->applyScope('tax')

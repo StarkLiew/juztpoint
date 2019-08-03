@@ -98,7 +98,7 @@ class ProductListScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function saveAccount(Product $product, Request $request) {
+	public function saveProduct(Product $product, Request $request) {
 		$product->fill($request->get('product'));
 		$product->save();
 

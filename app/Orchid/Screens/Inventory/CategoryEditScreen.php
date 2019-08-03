@@ -113,11 +113,17 @@ class CategoryEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponsed
 	 */
 	public function remove(Setting $setting) {
-		$setting->delete();
 
-		Alert::info(__('Category was removed'));
+		try {
+			$setting->delete();
+			Alert::info(__('Category was removed'));
+			return redirect()->route('platform.categories');
 
-		return redirect()->route('platform.categories');
+		} catch (\Illuminate\Database\QueryException $e) {
+			Alert::info(__($e->errorInfo[2]));
+			return redirect()->route('platform.categories');
+		}
+
 	}
 
 }

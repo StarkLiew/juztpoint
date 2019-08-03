@@ -215,5 +215,5 @@ Breadcrumbs::for ('platform.products.create', function ($trail) {
 // Platform > Vendors > Store
 Breadcrumbs::for ('platform.products.edit', function ($trail, $product) {
 	$trail->parent('platform.products');
-	$trail->push(__('Product'), route('platform.products.edit', $account));
+	$trail->push(__('Product'), route('platform.products.edit', $product));
 });

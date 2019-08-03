@@ -92,6 +92,6 @@ $this->router->screen('categories/create', CategoryEditScreen::class)->name('pla
 $this->router->screen('categories', CategoryListScreen::class)->name('platform.categories');
 
 // Products...
-$this->router->screen('products/{products/edit', ProductEditScreen::class)->name('platform.products.edit');
+$this->router->screen('products/{products}/edit', ProductEditScreen::class)->name('platform.products.edit');
 $this->router->screen('products/create', ProductEditScreen::class)->name('platform.products.create');
 $this->router->screen('products', ProductListScreen::class)->name('platform.products');

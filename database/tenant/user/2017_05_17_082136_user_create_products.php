@@ -20,7 +20,7 @@ class UserCreateProducts extends Migration {
 			$table->string('type')->nullable()->index();
 			$table->string('status')->nullable()->index();
 			$table->bigInteger('cat_id')->unsigned();
-			$table->string('sku')->nullable()->index();
+			$table->string('sku')->unique();
 			$table->bigInteger('tax_id')->unsigned();
 			$table->boolean('sellable')->default(false);
 			$table->boolean('consumable')->default(false);
@@ -36,18 +36,18 @@ class UserCreateProducts extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 
-			$masters = "user_{$id}_masters";
+			$settings = "user_{$id}_settings";
 
 			$table->foreign('cat_id')
-				->references('id')->on($masters)
+				->references('id')->on($settings)
 				->onUpdate('cascade');
 
 			$table->foreign('commission_id')
-				->references('id')->on($masters)
+				->references('id')->on($settings)
 				->onUpdate('cascade');
 
 			$table->foreign('tax_id')
-				->references('id')->on($masters)
+				->references('id')->on($settings)
 				->onUpdate('cascade');
 
 			$table->foreign('user_id')
