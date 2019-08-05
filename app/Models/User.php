@@ -5,11 +5,12 @@ namespace App\Models;
 use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use Orchestra\Tenanti\Tenantor;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable {
-	use SoftDeletes, Notifiable;
+	use SoftDeletes, Notifiable, HasApiTokens;
 
 	protected $appends = array('company_name');
 	protected $company_name;

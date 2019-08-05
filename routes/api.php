@@ -35,7 +35,11 @@ return $request->user();
 
 //});
 
-Route::post('user/login', 'Auth\LoginController@login');
+Route::group([
+	'prefix' => 'auth',
+], function () {
+	Route::post('login', 'Auth\AuthController@login');
+});
 
 // Route::post('user/register', ['as' => 'user.register', 'uses' => 'Logic\UserController@register']);
 
