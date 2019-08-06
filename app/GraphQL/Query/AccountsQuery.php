@@ -38,10 +38,6 @@ class AccountsQuery extends Query {
 				'name' => 'status',
 				'type' => Type::string(),
 			],
-			'properties' => [
-				'name' => 'properties',
-				'type' => Type::string(),
-			],
 		];
 	}
 	public function resolve($root, $args, SelectFields $fields) {

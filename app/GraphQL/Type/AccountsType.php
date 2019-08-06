@@ -35,7 +35,7 @@ class AccountsType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'properties' => [
-				'type' => Type::string(),
+				'type' => GraphQL::type('property'),
 				'description' => 'A list of the property',
 				'is_relation' => false,
 			],

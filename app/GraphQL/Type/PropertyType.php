@@ -9,31 +9,67 @@ class PropertyType extends GraphQLType {
 	protected $attributes = [
 		'name' => 'Property',
 		'description' => 'The collection of all Properties',
+
 	];
 	// define field of type
 	public function fields() {
 		return [
-			'id' => [
-				'type' => Type::nonNull(Type::int()),
+			'name' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
+			'address' => [
+				'type' => Type::string(),
 				'description' => 'The id of the user',
 			],
-			'name' => [
+			'contact' => [
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',
 			],
-			'description' => [
+			'mobile' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
+			'phone' => [
+				'type' => Type::string(),
+				'description' => 'The type of setting',
+			],
+			'email' => [
+				'type' => Type::string(),
+				'description' => 'The type of setting',
+			],
+			'timezone' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
+			'currency' => [
 				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
 			'type' => [
 				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
+			'rate' => [
+				'type' => Type::nonNull(Type::float()),
 				'description' => 'The type of setting',
 			],
-			'status' => [
+			'qty' => [
+				'type' => Type::nonNull(Type::float()),
+				'description' => 'The type of setting',
+			],
+			'cost' => [
+				'type' => Type::nonNull(Type::float()),
+				'description' => 'The type of setting',
+			],
+			'price' => [
+				'type' => Type::nonNull(Type::float()),
+				'description' => 'The type of setting',
+			],
+			'thumbnail' => [
 				'type' => Type::string(),
-				'description' => 'The type of setting',
+				'description' => 'Description of the setting',
 			],
-
 		];
 	}
 

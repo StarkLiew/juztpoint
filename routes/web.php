@@ -15,6 +15,7 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 Route::get('/', 'HomeController@welcome')->name('welcome');
+Route::get('/pos', 'HomeController@pos')->name('pos');
 
 Route::middleware('auth:web')->group(function () {
 	Route::get('/home', 'HomeController@index')->name('home');

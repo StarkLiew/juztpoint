@@ -98,6 +98,7 @@ return [
 				'users' => App\GraphQL\Query\UsersQuery::class,
 				'settings' => App\GraphQL\Query\SettingsQuery::class,
 				'accounts' => App\GraphQL\Query\AccountsQuery::class,
+				'products' => App\GraphQL\Query\ProductsQuery::class,
 
 			],
 			'mutation' => [
@@ -123,6 +124,7 @@ return [
 		'users' => App\GraphQL\Type\UsersType::class,
 		'settings' => App\GraphQL\Type\SettingsType::class,
 		'accounts' => App\GraphQL\Type\AccountsType::class,
+		'products' => App\GraphQL\Type\ProductsType::class,
 		'property' => App\GraphQL\Type\PropertyType::class,
 	],
 
