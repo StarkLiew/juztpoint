@@ -14,7 +14,8 @@ export const state = {
  * Mutations
  */
 export const mutations = {
-  [types.SET_USER](state, { user }) {
+  [types.SET_USER](state, { user }) { 
+
     state.user = user
   },
 
@@ -29,7 +30,7 @@ export const mutations = {
     window.localStorage.removeItem('token')
   },
 
-  [types.SET_TOKEN](state, { token }) {
+  [types.SET_TOKEN](state, { token }) { 
     state.token = token
     window.localStorage.setItem('token', token)
   }

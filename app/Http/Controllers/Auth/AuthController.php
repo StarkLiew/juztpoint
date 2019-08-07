@@ -67,7 +67,8 @@ class AuthController extends Controller {
 		$token->save();
 
 		return response()->json([
-			'access_token' => $tokenResult->accessToken,
+			'user' => $user,
+			'token' => $tokenResult->accessToken,
 			'token_type' => 'Bearer',
 			'expires_at' => Carbon::parse(
 				$tokenResult->token->expires_at
@@ -93,6 +94,6 @@ class AuthController extends Controller {
 	 * @return [json] user object
 	 */
 	public function user(Request $request) {
-		return response()->json($request->user());
+		return response()->json(['user' => $request->user()]);
 	}
 }

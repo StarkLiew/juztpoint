@@ -1,8 +1,8 @@
 export default [
   ...applyRules(['guest'], [
-    { path: '', component: require('$comp/auth/AuthWrapper').default, redirect: { name: 'login' }, children:
+    { path: '/pos', component: require('$comp/auth/AuthWrapper').default, redirect: { name: 'login' }, children:
       [
-        { path: '/login', name: 'login', component: require('$comp/auth/login/Login').default },
+        { path: '/pos/login', name: 'login', component: require('$comp/auth/login/Login').default },
         { path: '/register', name: 'register', component: require('$comp/auth/register/Register').default },
         { path: '/password', component: require('$comp/auth/password/PasswordWrapper').default, children:
           [
@@ -14,13 +14,15 @@ export default [
     },
   ]),
   ...applyRules(['auth'], [
-    { path: '', component: require('$comp/admin/AdminWrapper').default, children:
+    { path: '/pos/sales', component: require('$comp/sales/SalesWrapper').default},
+
+    { path: '/pos', component: require('$comp/admin/AdminWrapper').default, children:
       [
-        { path: '', name: 'index', redirect: { name: 'profile' } },
-        { path: 'profile', component: require('$comp/admin/profile/ProfileWrapper').default, children:
+        { path: '/pos', name: 'index', redirect: { name: 'profile' } },
+        { path: '/pos/profile', component: require('$comp/admin/profile/ProfileWrapper').default, children:
           [
-            { path: '', name: 'profile', component: require('$comp/admin/profile/Profile').default },
-            { path: 'edit', name: 'profile-edit', component: require('$comp/admin/profile/edit/ProfileEdit').default }
+            { path: '/pos', name: 'profile', component: require('$comp/admin/profile/Profile').default },
+            { path: '/pos/edit', name: 'profile-edit', component: require('$comp/admin/profile/edit/ProfileEdit').default }
           ]
         }
       ]

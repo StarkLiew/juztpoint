@@ -40,11 +40,11 @@ export const api = Object.assign(new URL(apiUrl), {
   url: '',
 
   login: {
-    url: 'login',
+    url: 'auth/login',
     refresh: 'refresh'
   },
 
-  logout: 'logout',
+  logout: 'auth/logout',
 
   register: 'register',
 
@@ -55,7 +55,7 @@ export const api = Object.assign(new URL(apiUrl), {
   },
 
   me: 'me',
-
+  graphql: 'graphql',
   users: {
     url: 'users',
 

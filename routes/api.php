@@ -44,5 +44,5 @@ Route::group([
 // Route::post('user/register', ['as' => 'user.register', 'uses' => 'Logic\UserController@register']);
 
 Route::middleware('auth:api')->group(function () {
-
+	Route::get('me', 'Auth\AuthController@user');
 });

@@ -22,7 +22,7 @@ export default {
   },
 
   methods: {
-    success(data) {
+    success(data) { 
       this.$store.dispatch('auth/saveToken', data)
       this.$store.dispatch('auth/setUser', data)
       this.$router.push({ name: 'index' })
