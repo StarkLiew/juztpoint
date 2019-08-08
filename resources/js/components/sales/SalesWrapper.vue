@@ -2,7 +2,9 @@
 
 
    <div class="fill-height">
-       <carts @nav-toggle="navToggle"></carts>
+       <carts @nav-toggle="navToggle"> </carts>
+  
+
        <v-content>
          <top-menu :mini="mini"  @nav-toggle="navToggle"></top-menu>
         <v-container fluid>
@@ -18,7 +20,6 @@
 <script>
 
 import TopMenu from './shared/TopMenu'
-import AppFooter from './shared/AppFooter'
 import Carts from './shared/Carts'
 import TouchPanel from './shared/TouchPanel'
 
@@ -29,7 +30,6 @@ export default {
 
   components: {
     TopMenu,
-    AppFooter,
     Carts,
     TouchPanel,
   },

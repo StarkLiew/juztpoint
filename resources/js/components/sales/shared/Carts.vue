@@ -1,9 +1,7 @@
 <template>
 
+ <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" :width="350" right>
 
-
-  <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" :width="300">
- 
       <template v-slot:prepend>
        <v-toolbar dark  dense flat color="secondary">
            <v-btn icon><v-icon>shopping_cart</v-icon></v-btn>
@@ -16,16 +14,63 @@
         <v-btn icon><v-icon>person_add</v-icon></v-btn>
           <v-list-item-content>
             <v-list-item-title>New Customer</v-list-item-title>
-   
           </v-list-item-content>
              <v-btn icon><v-icon>remove</v-icon></v-btn>
+        </v-list-item> 
+
+       <v-divider></v-divider>
+
+
+       </template> 
+       
+
+        <v-list-item two-line       
+         v-for="n in 10"
+              :key="n" >
+        <v-btn icon>1</v-btn>
+          <v-list-item-content>
+            <v-list-item-title>Item A</v-list-item-title>
+          </v-list-item-content>
+             <v-btn icon>2.50</v-btn>
         </v-list-item>
-      </template>
+        <v-divider></v-divider>
 
-      <v-divider></v-divider>
+  
 
+       <v-footer
+          flat
+          dense
+          absolute
+          padless
+        >
+            <v-list-item one-line>
+              <v-list-item-content>
+                <v-list-item-title>Discount</v-list-item-title>
+              </v-list-item-content>
+               <v-btn icon>2.50</v-btn>
+            </v-list-item>
+             <v-list-item one-line>
+              <v-list-item-content>
+                <v-list-item-title>Tax</v-list-item-title>
+              </v-list-item-content>
+               <v-btn icon>2.50</v-btn>
+            </v-list-item>
+             <v-list-item one-line>
+              <v-list-item-content>
+                <v-list-item-title>Service</v-list-item-title>
+              </v-list-item-content>
+               <v-btn icon>2.50</v-btn>
+            </v-list-item>
+            <v-list-item one-line>
+              <v-list-item-content>
+                <v-list-item-title>Total</v-list-item-title>
+              </v-list-item-content>
+               <v-btn icon>2.50</v-btn>
+            </v-list-item>
+        </v-footer>
 
   </v-navigation-drawer>
+
 </template>
 
 <script>
@@ -58,3 +103,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .v-navigation-drawer__content {
+      max-height: calc(100vh - (56px * 4) - 48px);
+  }
+</style>
