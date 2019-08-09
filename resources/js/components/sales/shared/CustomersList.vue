@@ -5,7 +5,7 @@
        max-width="600"
     class="mx-auto"
    >
-
+    
       <v-list dense v-for="(a,i) in alphabets" :key="i">
         <v-subheader>{{a}}</v-subheader>
         <v-list-item-group v-model="customer" color="primary">
@@ -30,8 +30,6 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-
-
   data: () => ({
     alphabets: ['#','A','B','C','D','E','F','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
     customer: null,
@@ -44,7 +42,8 @@ export default {
 
   methods: {
     mapCustomers(alpha) {
-          return this.customers.filter(row => row.toString().toLowerCase().startsWith(alpha.toString().toLowerCase()))
+          let customers = this.$store.getters['account/customers']
+          return customers.filter(row => row.name.toString().toLowerCase().startsWith(alpha.toLowerCase()))
     },
     touched() {
 

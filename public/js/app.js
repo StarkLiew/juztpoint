@@ -3306,8 +3306,9 @@ __webpack_require__.r(__webpack_exports__);
   }),
   methods: {
     mapCustomers: function mapCustomers(alpha) {
-      return this.customers.filter(function (row) {
-        return row.toString().toLowerCase().startsWith(alpha.toString().toLowerCase());
+      var customers = this.$store.getters['account/customers'];
+      return customers.filter(function (row) {
+        return row.name.toString().toLowerCase().startsWith(alpha.toLowerCase());
       });
     },
     touched: function touched() {}
