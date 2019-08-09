@@ -20,11 +20,16 @@ export default {
   components: {
     LoginForm
   },
-
+  
   methods: {
     success(data) { 
       this.$store.dispatch('auth/saveToken', data)
       this.$store.dispatch('auth/setUser', data)
+
+      /* Fetch latest data */
+      this.$store.dispatch('product/fetchProducts', data)
+      this.$store.dispatch('account/fetchCustomers', data)
+      
       this.$router.push({ name: 'index' })
     }
   }

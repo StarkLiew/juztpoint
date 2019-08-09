@@ -11,7 +11,7 @@
         </v-toolbar>
 
         <v-list-item two-line>
-        <v-btn icon><v-icon>person_add</v-icon></v-btn>
+        <v-btn icon @click="customerToggle()"><v-icon>person_add</v-icon></v-btn>
           <v-list-item-content>
             <v-list-item-title>New Customer</v-list-item-title>
           </v-list-item-content>
@@ -90,22 +90,21 @@ export default {
     navToggle() {
       this.$emit('nav-toggle')
     },
-
-  mounted() {
-    this.navigation()
-  },
-
     navigation() {
       this.items = [
        
       ]
+    },
+    customerToggle() {
+      this.$emit('customer-toggle')
     }
+
   }
 }
 </script>
 
 <style>
   .v-navigation-drawer__content {
-      max-height: calc(100vh - (56px * 4) - 48px);
+      max-height: calc(100vh - (56px * 6));
   }
 </style>

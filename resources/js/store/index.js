@@ -1,7 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import localforage from 'localforage';
+import VuexPersistence from 'vuex-persist'
+
 
 Vue.use(Vuex)
+
+
+const vuexLocal = new VuexPersistence({
+  storage: localforage,
+  saveState: (key, state, storage) => Promise.resolve(storage.setItem(key, state)),
+  restoreState: (key, storage) => Promise.resolve(storage.getItem(key))
+});
+
 
 const requireContext = require.context('./modules', false, /.*\.js$/)
 
@@ -17,6 +28,9 @@ const modules = requireContext.keys()
     return { ...modules, [name]: module }
   }, {})
 
+
+
 export default new Vuex.Store({
-  modules
+  modules,
+  plugins: [vuexLocal.plugin]
 })

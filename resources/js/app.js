@@ -7,6 +7,7 @@ import App from '$comp/App'
 import '~/plugins/index'
 import vuetify from '~/plugins/vuetify'
 
+
 export const app = new Vue({
   router,
   store,

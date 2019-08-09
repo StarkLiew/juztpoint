@@ -14,7 +14,7 @@ export default [
     },
   ]),
   ...applyRules(['auth'], [
-    { path: '/pos/sales', component: require('$comp/sales/SalesWrapper').default},
+    { path: '/pos/sales',  name: 'sales', component: require('$comp/sales/SalesWrapper').default},
 
     { path: '/pos', component: require('$comp/admin/AdminWrapper').default, children:
       [

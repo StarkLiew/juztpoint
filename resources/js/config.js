@@ -35,6 +35,9 @@ class URL {
     return url
   }
 }
+export const graphql = Object.assign(new URL(''), {
+   query: 'graphql',
+})
 
 export const api = Object.assign(new URL(apiUrl), {
   url: '',
@@ -53,9 +56,7 @@ export const api = Object.assign(new URL(apiUrl), {
     forgot: 'email',
     reset: 'reset'
   },
-
   me: 'me',
-  graphql: 'graphql',
   users: {
     url: 'users',
 
