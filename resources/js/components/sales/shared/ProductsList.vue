@@ -8,6 +8,7 @@
               xs2
               d-flex
               child-flex
+              @click="selected(product)"
             >
               <v-card flat tile class="d-flex">
                 <v-img
@@ -58,8 +59,8 @@ export default {
   }),
 
   methods: {
-    touched() {
-
+    selected(product) {
+       this.$emit('selected', product)
     }
   }
 }

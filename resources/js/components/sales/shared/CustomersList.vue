@@ -12,6 +12,7 @@
           <v-list-item
             v-for="(customer, i) in mapCustomers(a)"
             :key="i"
+            @click="selected(customer)"
           >
             <v-list-item-icon>
               <v-icon v-text="'people'"></v-icon>
@@ -45,7 +46,8 @@ export default {
           let customers = this.$store.getters['account/customers']
           return customers.filter(row => row.name.toString().toLowerCase().startsWith(alpha.toLowerCase()))
     },
-    touched() {
+    selected(customer) {
+        this.$emit('selected', customer)
 
     }
   }

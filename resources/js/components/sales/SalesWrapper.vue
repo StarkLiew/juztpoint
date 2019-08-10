@@ -5,6 +5,10 @@
        <carts 
           @nav-toggle="navToggle"
           @customer-toggle="customerToggle" 
+          @item-added="itemAdded"
+          @edit-item="editProductToggle"
+          :customer="customer" 
+          :product.sync="product" 
        > </carts>
           <top-menu :mini="mini"  @nav-toggle="navToggle"></top-menu>
  
@@ -16,8 +20,9 @@
               max-height="calc(100vh - 48px)"
               color="transparent"
             >           
-                <touch-panel v-if="panel === 'product'"></touch-panel>
-                <customers-list v-if="panel === 'customer'"></customers-list>
+                <products-list @selected="selectedProduct" v-if="panel === 'product'"></products-list>
+                <product-edit :item.sync="item" v-if="panel === 'edit-product'"></product-edit>
+                <customers-list @selected="selectedCustomer" v-if="panel === 'customer'"></customers-list>
              </v-sheet>
         </v-content>
     
@@ -31,20 +36,25 @@
 
 import TopMenu from './shared/TopMenu'
 import Carts from './shared/Carts'
-import TouchPanel from './shared/TouchPanel'
+import ProductsList from './shared/ProductsList'
+import ProductEdit from './shared/ProductEdit'
 import CustomersList from './shared/CustomersList'
 
 export default {
   data: () => ({
     mini: false,
     panel: 'product',
+    customer: null,
+    product: null,
+    item: null,
 
   }),
 
   components: {
     TopMenu,
     Carts,
-    TouchPanel,
+    ProductsList,
+    ProductEdit,
     CustomersList,
   },
 
@@ -57,7 +67,22 @@ export default {
     },
     productToggle() {
        this.panel = 'product'
-    }
+    },
+    editProductToggle(product) {
+       this.item = product
+
+       this.panel = 'edit-product'
+    },
+    itemAdded() {
+       this.product = null
+    },
+    selectedCustomer(customer) {
+       this.customer = customer
+       this.productToggle()
+    },
+    selectedProduct(product) {
+       this.product = product
+    },
 
   }
 }

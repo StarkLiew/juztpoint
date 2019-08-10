@@ -40,19 +40,71 @@ class UserObserver extends Observer {
 
 		$id = $entity->getKey();
 
-		$companyInfo = Array('name' => $entity->company_name);
-		$storeInfo = Array('name' => 'Default');
-		$payments = Array('cash', 'card', 'eWallet', 'other');
-		$taxes = Array(
-			['name' => '', 'code' => '', 'value' => 0],
-			['name' => 'SST', 'code' => 'SST', 'value' => 10],
-			['name' => 'GST', 'code' => 'SR', 'value' => 6],
-			['name' => 'GST', 'code' => 'ZR', 'value' => 0],
+		$companyInfo = Array(
+			'address' => null,
+			'timezone' => "Asia\/Kuala_Lumpur",
+			'currency' => "MYR",
+		);
+		$storeInfo = Array(
+			'timezone' => "Asia\/Kuala_Lumpur",
+			'currency' => "TWD",
+		);
+
+		$tax1 = Array(
+			'name' => 'No Tax',
+			'description' => 'No Tax',
+			'type' => 'tax',
+			'properties' => json_encode(Array("code" => "", "rate" => 0.00)),
+		);
+		$tax2 = Array(
+			'name' => 'SST',
+			'description' => 'Sale & Service Tax',
+			'type' => 'tax',
+			'properties' => json_encode(Array("code" => "SST", "rate" => 10.00)),
+		);
+		$tax3 = Array(
+			'name' => 'GST SR',
+			'description' => 'Good & Service Tax Standard Rate',
+			'type' => 'tax',
+			'properties' => json_encode(Array("code" => "SR", "rate" => 6.00)),
+		);
+		$tax4 = Array(
+			'name' => 'GST ZR',
+			'description' => 'Good & Service Tax Zero Rate',
+			'type' => 'tax',
+			'properties' => json_encode(Array("code" => "ZR", "rate" => 0.00)),
+		);
+
+		$commission = Array(
+			'name' => 'Default',
+			'description' => 'Default 10% commission rate',
+			'type' => 'commission',
+			'properties' => json_encode(Array("rate" => 10.00, "type" => 0)),
+		);
+
+		$category = Array(
+			'name' => 'Default',
+			'description' => null,
+			'type' => 'category',
+			'properties' => null,
+		);
+
+		$payment1 = Array(
+			'name' => 'Cash',
+			'description' => null,
+			'type' => 'payment',
+			'properties' => null,
+		);
+		$payment2 = Array(
+			'name' => 'Card',
+			'description' => null,
+			'type' => 'payment',
+			'properties' => null,
 		);
 
 		$settings = Array([
-			'name' => "Company Setup",
-			'description' => "Setup Company Information",
+			'name' => $entity->company_name,
+			'description' => "About my awesome company.",
 			'type' => "company",
 			'properties' => json_encode($companyInfo),
 			'user_id' => $id,
@@ -62,7 +114,9 @@ class UserObserver extends Observer {
 			'type' => "store",
 			'properties' => json_encode($storeInfo),
 			'user_id' => $id,
-		]);
+		],
+			$tax1, $tax2, $tax3, $tax4, $payment1, $payment2, $category, $commission,
+		);
 
 		DB::table("user_{$id}_settings")->insert($settings);
 	}
