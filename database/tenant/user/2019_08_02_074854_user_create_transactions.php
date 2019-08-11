@@ -27,9 +27,9 @@ class UserCreateTransactions extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 
-			$masters = "user_{$id}_masters";
+			$accounts = "user_{$id}_accounts";
 			$table->foreign('account_id')
-				->references('id')->on($masters)
+				->references('id')->on($accounts)
 				->onUpdate('cascade');
 
 			$table->foreign('transact_by')

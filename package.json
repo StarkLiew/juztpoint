@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.5.5",
-    "@mdi/font": "^3.8.95",
+    "@mdi/font": "^3.8.96",
     "axios": "^0.19",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26",

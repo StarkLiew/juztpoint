@@ -4,8 +4,8 @@
 
 @font-face {
   font-family: "Material Design Icons";
-  src: url(/fonts/vendor/@mdi/materialdesignicons-webfont.eot?a61f66f7245219d4128c3c3cda7a678a);
-  src: url(/fonts/vendor/@mdi/materialdesignicons-webfont.eot?a61f66f7245219d4128c3c3cda7a678a) format("embedded-opentype"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.woff2?b638ca4fe3b0b3ad5b1ed9e30fb9a45d) format("woff2"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.woff?9c50e775733db7ad81374b353cd172c7) format("woff"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.ttf?c3cbf1d478100b910df15faa83ba14f8) format("truetype");
+  src: url(/fonts/vendor/@mdi/materialdesignicons-webfont.eot?541e65fb46e44ecdf7a9da8a9b881446);
+  src: url(/fonts/vendor/@mdi/materialdesignicons-webfont.eot?541e65fb46e44ecdf7a9da8a9b881446) format("embedded-opentype"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.woff2?c61b9c12f68ee1ba045a4b49dba29ca5) format("woff2"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.woff?ff13d121c1a1cf74d8e06bd39e1746c3) format("woff"), url(/fonts/vendor/@mdi/materialdesignicons-webfont.ttf?fc03f7f15facede623faa7666c7d1f5a) format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -4503,6 +4503,14 @@
 
 .mdi-coffee::before {
   content: "\F176";
+}
+
+.mdi-coffee-off::before {
+  content: "\FFCA";
+}
+
+.mdi-coffee-off-outline::before {
+  content: "\FFCB";
 }
 
 .mdi-coffee-outline::before {

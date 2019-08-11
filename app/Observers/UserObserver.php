@@ -55,24 +55,28 @@ class UserObserver extends Observer {
 			'description' => 'No Tax',
 			'type' => 'tax',
 			'properties' => json_encode(Array("code" => "", "rate" => 0.00)),
+				'user_id' => $id,
 		);
 		$tax2 = Array(
 			'name' => 'SST',
 			'description' => 'Sale & Service Tax',
 			'type' => 'tax',
 			'properties' => json_encode(Array("code" => "SST", "rate" => 10.00)),
+				'user_id' => $id,
 		);
 		$tax3 = Array(
 			'name' => 'GST SR',
 			'description' => 'Good & Service Tax Standard Rate',
 			'type' => 'tax',
 			'properties' => json_encode(Array("code" => "SR", "rate" => 6.00)),
+				'user_id' => $id,
 		);
 		$tax4 = Array(
 			'name' => 'GST ZR',
 			'description' => 'Good & Service Tax Zero Rate',
 			'type' => 'tax',
 			'properties' => json_encode(Array("code" => "ZR", "rate" => 0.00)),
+				'user_id' => $id,
 		);
 
 		$commission = Array(
@@ -80,6 +84,7 @@ class UserObserver extends Observer {
 			'description' => 'Default 10% commission rate',
 			'type' => 'commission',
 			'properties' => json_encode(Array("rate" => 10.00, "type" => 0)),
+				'user_id' => $id,
 		);
 
 		$category = Array(
@@ -87,6 +92,7 @@ class UserObserver extends Observer {
 			'description' => null,
 			'type' => 'category',
 			'properties' => null,
+				'user_id' => $id,
 		);
 
 		$payment1 = Array(
@@ -94,12 +100,14 @@ class UserObserver extends Observer {
 			'description' => null,
 			'type' => 'payment',
 			'properties' => null,
+				'user_id' => $id,
 		);
 		$payment2 = Array(
 			'name' => 'Card',
 			'description' => null,
 			'type' => 'payment',
 			'properties' => null,
+			'user_id' => $id,	
 		);
 
 		$settings = Array([
@@ -114,8 +122,7 @@ class UserObserver extends Observer {
 			'type' => "store",
 			'properties' => json_encode($storeInfo),
 			'user_id' => $id,
-		],
-			$tax1, $tax2, $tax3, $tax4, $payment1, $payment2, $category, $commission,
+		], $tax1, $tax2, $tax3, $tax4, $payment1, $payment2, $category, $commission,
 		);
 
 		DB::table("user_{$id}_settings")->insert($settings);

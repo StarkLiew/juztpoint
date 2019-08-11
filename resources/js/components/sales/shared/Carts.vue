@@ -91,8 +91,8 @@ export default {
     product: function(newVal, oldVal) {
       this.allowRemoveItem = false
       if(newVal) {
-        const item = {...newVal}
-        item.qty = 1 
+        const defaultItem = {qty: 1, price: 0.00, discount: 0.00}
+        const item = {...defaultItem, ...newVal}
         this.items.push(item)  
         this.$emit('item-added')
         let container = this.$el.querySelector(".v-navigation-drawer__content");
@@ -123,7 +123,7 @@ export default {
        this.items.splice(index, 1)
     },
     editItem(item) {
-       this.$emit('edit-item', item)
+       this.$emit('edit-item', {...item})
     },
 
   }

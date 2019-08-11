@@ -12,7 +12,7 @@
        > </carts>
           <top-menu :mini="mini"  @nav-toggle="navToggle"></top-menu>
  
-        <v-content>
+        <v-content style="margin-top: 5px">
    
            <v-sheet
               id="scrolling-techniques-7"
@@ -21,7 +21,7 @@
               color="transparent"
             >           
                 <products-list @selected="selectedProduct" v-if="panel === 'product'"></products-list>
-                <product-edit :item.sync="item" v-if="panel === 'edit-product'"></product-edit>
+                <product-edit :item="item" v-if="panel === 'edit-product'" @cancel="cancelProductEdit" @done="doneProductEdit"></product-edit>
                 <customers-list @selected="selectedCustomer" v-if="panel === 'customer'"></customers-list>
              </v-sheet>
         </v-content>
@@ -83,7 +83,13 @@ export default {
     selectedProduct(product) {
        this.product = product
     },
+    cancelProductEdit() {
+       this.productToggle() 
+    },
+    doneProductEdit(item) {
 
+       this.productToggle() 
+    },
   }
 }
 </script>
