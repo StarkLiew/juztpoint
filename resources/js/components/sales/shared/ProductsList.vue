@@ -41,6 +41,7 @@
               </v-card>
             </v-flex>
           </v-layout>
+          
         </v-container>
    </div>
 </template>
@@ -60,7 +61,14 @@ export default {
 
   methods: {
     selected(product) {
-       this.$emit('selected', product)
+       const defaultItem = {
+                             qty: 1,
+                             price: 0.00,
+                             discount: 0.0,
+                             saleBy: null,
+                          }
+       const item = {...defaultItem, ...product}
+       this.$emit('selected', item)
     }
   }
 }

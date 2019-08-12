@@ -21,10 +21,18 @@
               color="transparent"
             >           
                 <products-list @selected="selectedProduct" v-if="panel === 'product'"></products-list>
-                <product-edit :item="item" v-if="panel === 'edit-product'" @cancel="cancelProductEdit" @done="doneProductEdit"></product-edit>
+
+                <item-add v-if="item" @showKeyboard="showKeyboard = true" :item="item" :show="showEdit" @done="addedProduct"></item-add>
+                
                 <customers-list @selected="selectedCustomer" v-if="panel === 'customer'"></customers-list>
+
              </v-sheet>
+         
+
+
         </v-content>
+
+
     
  </div>
 
@@ -37,7 +45,7 @@
 import TopMenu from './shared/TopMenu'
 import Carts from './shared/Carts'
 import ProductsList from './shared/ProductsList'
-import ProductEdit from './shared/ProductEdit'
+import ItemAdd from './shared/ItemAdd'
 import CustomersList from './shared/CustomersList'
 
 export default {
@@ -46,6 +54,7 @@ export default {
     panel: 'product',
     customer: null,
     product: null,
+    showEdit: false,
     item: null,
 
   }),
@@ -54,8 +63,9 @@ export default {
     TopMenu,
     Carts,
     ProductsList,
-    ProductEdit,
+    ItemAdd,
     CustomersList,
+
   },
 
   methods: {
@@ -80,8 +90,13 @@ export default {
        this.customer = customer
        this.productToggle()
     },
-    selectedProduct(product) {
-       this.product = product
+    selectedProduct(item) {
+       this.showEdit = true
+       this.item = item
+    },
+    addedProduct(item) {
+        this.showEdit = false
+       this.product = item
     },
     cancelProductEdit() {
        this.productToggle() 
@@ -90,6 +105,7 @@ export default {
 
        this.productToggle() 
     },
+
   }
 }
 </script>

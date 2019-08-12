@@ -64,17 +64,16 @@
                                <v-icon>add</v-icon>
                             </v-btn>
                              <v-text-field
-                                label=""
-                                placeholder="0"
-                                outlined
-                                reverse
-                                disabled
-                                v-model="item.qty"
+                                 label=""
+                                 placeholder="0"
+                                 outlined
+                                 reverse
+                                 disabled
+                                 v-model="item.qty"
                               ></v-text-field>
                           <v-btn color="success" fab medium dark @click="inc(-1, 'qty')">
                                <v-icon>remove</v-icon>
-                            </v-btn>
-
+                          </v-btn
                      </v-layout>
                   </v-container>
                 
