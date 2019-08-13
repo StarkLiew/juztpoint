@@ -1,43 +1,37 @@
 <template>
-
- 
       <v-card>
-        <v-toolbar flat dark color="primary">
-          <v-btn icon dark @click="cancel()">
-            <v-icon>close</v-icon>
-          </v-btn>
-           <v-spacer></v-spacer>
-          <v-toolbar-title>{{item.name}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-     
-            <v-btn icon dark text @click="done()">
-                 Done
-            </v-btn>
-            
-      
-        </v-toolbar>
-        <v-toolbar flat>
-
-               <v-btn  color="success"  large dark @click="inc(1, 'qty')">
-                    <v-icon>add</v-icon>
-               </v-btn>
-               <v-spacer></v-spacer>
-               <v-toolbar-title class="display-1" >{{ qty }}</v-toolbar-title>
-              <v-spacer></v-spacer>
-               <v-btn  color="success" large dark @click="inc(-1, 'qty')">
-                    <v-icon>remove</v-icon>
-               </v-btn>       
-        </v-toolbar>
+             <v-toolbar flat dark color="primary">
+                    <v-btn icon dark @click="cancel()">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+                     <v-spacer></v-spacer>
+                    <v-toolbar-title>{{item.name}}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark text @click="done()">
+                        Done
+                    </v-btn>
+              </v-toolbar>
+              <v-toolbar flat>
+                     <v-btn  color="success"  large dark @click="inc(1, 'qty')">
+                          <v-icon>add</v-icon>
+                     </v-btn>
+                     <v-spacer></v-spacer>
+                     <v-toolbar-title class="display-1" >{{ qty }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                     <v-btn  color="success" large dark @click="inc(-1, 'qty')">
+                          <v-icon>remove</v-icon>
+                     </v-btn>       
+              </v-toolbar>
         <v-divider></v-divider>
         <v-toolbar flat>
                   <v-spacer></v-spacer> 
                   <v-flex class="subheader">
-                     <v-icon>label</v-icon>   Discount
+                     <v-icon>label</v-icon>Discount
                   </v-flex>
-                  <v-flex class="display-1">
-                         {{discountRate}}
+                  <v-flex class="display-1" @click="showKeyboard = true">
+                         {{discountRate | currency({fractionCount: decimal})}}
                   </v-flex>
-                  <v-btn-toggle v-model="discountType">
+                  <v-btn-toggle v-model="discountType" @change="(val) => { decimal = val + 1 }">
                       <v-btn large text>
                            %
                       </v-btn>
@@ -82,16 +76,21 @@
           </template>
         </v-combobox>
       </v-layout>
-
-              
-
+         <keyboard 
+            @done="showKeyboard = false"
+            @clear="discountRate = 0.0"
+            @change="discountRateChange"
+            @close="closedKeyboard"
+            :decimal="decimal"  
+            :show="showKeyboard">
+        </keyboard>
       </v-card>
 
 
 </template>
 
 <script>
-
+import Keyboard from '../../ui/Keyboard'
 export default {
   data: () => ({
      valid: false,
@@ -99,17 +98,30 @@ export default {
      discountFixed: false, 
      value: '0',
      qty: 1,
+     showKeyboard: false,
      discountRate: 0.0,
-     discountType: 'percentage',
+     decimal: 1,
+     discountType: 0,
      tab: 'tab-1', 
   }),
+  components: {
+    Keyboard,
+  },
   props: ['item', 'index', 'show'],
+  mounted() {
+      this.qty = this.item.qty
+      if(this.item.discount) {
+         this.discountType = this.parseDiscountType(this.item.discount.discountType)
+         this.discountRate = this.item.discount.rate
+      }
+      
+  },
   watch: {
-     show(newVal) {
-       if(newVal) {
-          this.qty = this.item.qty
-       }
-
+     item: {
+        handler(val){
+            this.qty = val.qty
+        },
+        deep: true
      }
   },
   methods: {
@@ -118,13 +130,38 @@ export default {
           if(val > 0) this.qty = val
       },
       done() {
-         this.item.qty = this.qty
-         this.$emit('done', this.item)
-      
+        const {qty, discountRate, discountType} = this
+         this.item.qty = qty
+         this.item.discount = {rate: discountRate, type: this.parseDiscountType(discountType)}
+         this.$emit('done', this.item, this.index)
       },
       cancel() {
-          this.$emit('cancel', this.item)
+         this.$emit('cancel')
       },
+      discountRateChange(val) {
+         this.discountRate = val
+      },
+      parseDiscountType(discountType) {
+
+            if(discountType === 0) {
+                return 'percent'
+            } 
+
+            if(discountType === 1) {
+                return 'fix'
+            } 
+
+            if(discountType === 'fix') {
+                return 1
+            } 
+
+            return 0
+
+      },
+      closedKeyboard() {
+          alert('closed')
+          showKeyboard = false
+      }
   }
 }
 </script>

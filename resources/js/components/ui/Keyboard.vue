@@ -1,10 +1,10 @@
 <template>
- <v-bottom-sheet v-model="show" :hide-overlay="true">
-   <v-layout  justify-center>                  
-    <v-flex xs12 sm4>
+ <v-bottom-sheet  v-model="showDialog" @close="close" :hide-overlay="true" persistent>
+   <v-layout justify-center>                  
+    <v-flex xs8 sm3>
         <v-container fluid grid-list-sm>
                 <v-layout wrap>
-                  <v-flex v-for="(key, i) in keys" :key="i" xs4  @click="touched(key)">
+                  <v-flex v-for="(key, i) in keys" :key="i" xs4 @click="touched(key)">
                     <v-img
                         :src="``"
                         :lazy-src="``"
@@ -45,68 +45,54 @@ export default {
   data: () => ({
      valid: false,
      lazy: false,
-     discountFixed: false, 
-     value: '0',
      tab: 'tab-1', 
-     keys: ['1','2','3','4','5','6','7','8','9','clear','0','done'],
+     val: '0',
+     showDialog: false,
+     keys: ['1','2','3','4','5','6','7','8','9','clear','0','done',],
   }),
-  props: ['item', 'show'],
+  mounted() {
+   this.showDialog = this.show
+  },
+  props: [
+     'decimal',
+     'show',
+  ],
+  watch: {
+     show(val) {
+         this.showDialog = val
+     }
+  },
   methods: {
       touched(key) {
-          let deci = false
-
-          let prop = ''
-          if(this.tab == 'tab-1') {
-             prop = 'qty'
-          } 
-          if(this.tab == 'tab-2') {
-              prop = 'discount' 
-              deci = true
-          }
-          if(this.tab == 'tab-3') {
-             prop = 'price'
-            deci = true
-          }
-
-          if(key=='clear') {
-              this.value = '0'
-              this.item[prop] = ''
-              if(this.tab == 'tab-1') this.item[prop] = '1'  
-              return
+       
+         if(key=='clear') {
+             this.val = '0'
+            this.$emit('clear') 
+            return
           }
           if(key=='done') {
+            this.val = '0'
             this.$emit('done')
             return
           }
+          let val = this.val
 
-          let val = this.value
+          val = val.toString().replace('.', '')
 
-       
-          if(deci) {
-  
-            val = val.toString().replace('.', '')
-            val = val.toString() + key
-  
-            val = parseFloat(Math.round(val) / 100).toFixed(2);
-          } else {
-            val += key
-            val = parseInt(val)
-          }
-          this.value = val
-          this.item[prop] = val
+          
+          val = val.toString() + key.toString()
 
+          val = parseFloat(parseInt(val) / Math.pow(10, this.decimal)).toFixed(this.decimal)
+
+          this.val = val
+          this.$emit('change', val)
 
       },
-      inc(neg, prop) {
-          let val = parseFloat(this.item[prop]) + neg
-          if(val > 0) this.item[prop] = val
-      },
-      done() {
-           this.$emit('done', this.item)
-      },
-      cancel() {
-           this.$emit('cancel') 
-      },
+      close() {
+        this.$emit('close')
+      }
+
+
   }
 }
 </script>

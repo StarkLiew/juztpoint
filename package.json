@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "localforage": "^1.7.3",
+    "vue-currency-filter": "^3.4.2",
     "vuex-persist": "^2.0.1"
   }
 }

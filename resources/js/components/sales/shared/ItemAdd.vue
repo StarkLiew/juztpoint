@@ -1,7 +1,7 @@
 <template>
-  <v-layout justify-center>
+  <v-layout justify-center top>
     <v-dialog v-model="show" persistent max-width="350" >
-      <v-card style="height:90vh;">
+      <v-card style="height:100vh;">
         <v-toolbar flat dark color="primary">
           <v-btn icon dark @click="cancel()">
             <v-icon>close</v-icon>
@@ -68,12 +68,12 @@
 
       </v-card>
     </v-dialog>
-     <keyboard :show="showKeyboard"></keyboard>
+
   </v-layout>
 </template>
 
 <script>
-import Keyboard from '../../ui/Keyboard'
+
 export default {
   data: () => ({
      showKeyboard: false,
@@ -84,9 +84,7 @@ export default {
      tab: 'tab-1', 
      keys: ['1','2','3','4','5','6','7','8','9','clear','0','done'],
   }),
-  components: {
-    Keyboard,
-  },
+
   props: ['item', 'show'],
   methods: {
       inc(neg, prop) {
@@ -99,8 +97,10 @@ export default {
           
       },
       cancel() {
-           this.show = false
+           
+          this.$emit('close', this.item)
       },
+
 
   }
 }

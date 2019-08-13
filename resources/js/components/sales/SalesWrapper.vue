@@ -3,14 +3,16 @@
 
    <div class="fill-height">
        <carts 
-          @nav-toggle="navToggle"
-          @customer-toggle="customerToggle" 
+          @cart-toggle="cartToggle"
+          @customer-toggle="showCustomerDialog = true"
+          @customer-remove="customer = null"
           @item-added="itemAdded"
           @edit-item="editProductToggle"
+          :show="showCart"
           :customer="customer" 
           :product.sync="product" 
        > </carts>
-          <top-menu :mini="mini"  @nav-toggle="navToggle"></top-menu>
+          <top-menu  @cart-toggle="cartToggle"></top-menu>
  
         <v-content style="margin-top: 5px">
    
@@ -21,10 +23,8 @@
               color="transparent"
             >           
                 <products-list @selected="selectedProduct" v-if="panel === 'product'"></products-list>
-
-                <item-add v-if="item" @showKeyboard="showKeyboard = true" :item="item" :show="showEdit" @done="addedProduct"></item-add>
-                
-                <customers-list @selected="selectedCustomer" v-if="panel === 'customer'"></customers-list>
+                <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
+                <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
              </v-sheet>
          
@@ -50,12 +50,13 @@ import CustomersList from './shared/CustomersList'
 
 export default {
   data: () => ({
-    mini: false,
     panel: 'product',
     customer: null,
     product: null,
     showEdit: false,
+    showCart: false,
     item: null,
+    showCustomerDialog: false,
 
   }),
 
@@ -66,11 +67,12 @@ export default {
     ItemAdd,
     CustomersList,
 
+
   },
 
   methods: {
-    navToggle() {
-        this.mini = !this.mini
+    cartToggle() {
+        this.showCart = !this.showCart
     },
     customerToggle() {
        this.panel = 'customer'
@@ -86,16 +88,19 @@ export default {
     itemAdded() {
        this.product = null
     },
+    editProductToggle() {
+       this.showCart = !this.showCart
+    },
     selectedCustomer(customer) {
        this.customer = customer
-       this.productToggle()
+       this.showCustomerDialog = false
     },
     selectedProduct(item) {
        this.showEdit = true
        this.item = item
     },
     addedProduct(item) {
-        this.showEdit = false
+       this.showEdit = false
        this.product = item
     },
     cancelProductEdit() {

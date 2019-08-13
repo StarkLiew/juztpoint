@@ -5,7 +5,7 @@
             <v-flex
               v-for="(product, index) in products"
               :key="index"
-              xs2
+              xs4 sm2 md2
               d-flex
               child-flex
               @click="selected(product)"
