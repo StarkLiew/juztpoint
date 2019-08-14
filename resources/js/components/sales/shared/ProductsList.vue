@@ -12,28 +12,29 @@
             >
               <v-card flat tile class="d-flex">
                 <v-img
-                  :src="`https://picsum.photos/500/300?image=${index * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${index * 5 + 10}`"
+                  :src="product.properties.thumbnail || ``"
                   aspect-ratio="1"
                   v-ripple
-                  class="grey lighten-2 v-btn"
+                  :gradient="`linear-gradient(#e66465, #9198e5)`"
+                  class="blue v-btn"
                 >
-                  <template v-slot:placeholder>
+                  <!-- <template v-slot:placeholder>
                     <v-layout
                       fill-height
                       align-center
                       justify-center
+
                       ma-0>
       
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular> 
                     </v-layout>
-                  </template>
+                  </template> -->
 
                   <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                     <v-spacer></v-spacer>
                     <v-flex shrink>
                       <div class="subheading text-wrap">{{ product.name }}</div>
-                      <div class="body-1">{{ product.properties.price }}</div>
+                    
                     </v-flex>
                   </v-layout>
 

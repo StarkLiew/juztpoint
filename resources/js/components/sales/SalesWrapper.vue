@@ -12,7 +12,7 @@
           :customer="customer" 
           :product.sync="product" 
        > </carts>
-          <top-menu  @cart-toggle="cartToggle"></top-menu>
+          <top-menu @overlay="overlayShow" @cart-toggle="cartToggle"></top-menu>
  
         <v-content style="margin-top: 5px">
    
@@ -26,9 +26,14 @@
                 <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
                 <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
+
+
+
              </v-sheet>
          
-
+         <v-overlay :value="overlay" >
+              <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
 
         </v-content>
 
@@ -48,6 +53,7 @@ import ProductsList from './shared/ProductsList'
 import ItemAdd from './shared/ItemAdd'
 import CustomersList from './shared/CustomersList'
 
+
 export default {
   data: () => ({
     panel: 'product',
@@ -56,6 +62,7 @@ export default {
     showEdit: false,
     showCart: false,
     item: null,
+    overlay: false,
     showCustomerDialog: false,
 
   }),
@@ -79,6 +86,9 @@ export default {
     },
     productToggle() {
        this.panel = 'product'
+    },
+    overlayShow(show) {
+      this.overlay = show
     },
     editProductToggle(product) {
        this.item = product

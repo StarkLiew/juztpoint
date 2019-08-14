@@ -26,6 +26,10 @@ class UsersType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'The name of the user',
 			],
+			'pin' => [
+				'type' => Type::string(),
+				'description' => 'The name of the user',
+			],
 		];
 	}
 	protected function resolveEmailField($root, $args) {

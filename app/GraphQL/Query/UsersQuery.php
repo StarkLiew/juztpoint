@@ -1,6 +1,7 @@
 <?php
 namespace App\GraphQL\Query;
 use App\Models\User;
+use Auth;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
@@ -37,10 +38,16 @@ class UsersQuery extends Query {
 				$query->where('email', $args['email']);
 			}
 		};
+
+		$id = Auth::id();
+
 		$results = User::with(array_keys($fields->getRelations()))
+			->where('tenant', '=', $id)
+			->orWhere('id', '=', $id)
 			->where($where)
 			->select($fields->getSelect())
 			->get();
+
 		return $results;
 	}
 }

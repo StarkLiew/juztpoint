@@ -5,6 +5,8 @@
       <template v-slot:prepend>
        <v-toolbar dark  dense flat color="secondary">
            <v-btn icon v-if="show"><v-icon>close</v-icon></v-btn>
+            <v-spacer></v-spacer>
+        
            <v-toolbar-title class="white--text">{{count}}</v-toolbar-title>   
            <v-spacer></v-spacer>
           <v-btn icon @click="enableRemoveItem()"><v-icon>delete</v-icon></v-btn>
@@ -45,7 +47,22 @@
             </v-menu>
               
             <v-list-item-content>
-              <v-list-item-title>{{item.name}}</v-list-item-title>
+  
+               <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                      <div>
+                        <v-list-item-title v-on="on">{{item.name}}</v-list-item-title>
+                        <span class="caption" v-if="item.saleBy">
+                              <v-avatar class="accent white--text" left size="16">
+                                     {{ item.saleBy.name.slice(0, 1).toUpperCase() }}
+                              </v-avatar>
+                               {{item.saleBy.name}}
+                        </span>
+                      </div>
+                  </template>
+                  <span>{{item.note}}</span>
+                </v-tooltip>
+
             </v-list-item-content>
             <v-btn icon>{{item.amount | currency}}</v-btn>
             <v-btn icon v-if="allowRemoveItem" @click="removeItem(index)"><v-icon>remove</v-icon></v-btn>
@@ -64,7 +81,26 @@
               <v-list-item-content>
                 <v-list-item-title>Discount</v-list-item-title>
               </v-list-item-content>
-               <v-btn icon>{{ footer.discount.amount | currency}}</v-btn>
+
+          <v-menu
+                absolute
+                v-model="editDiscountFooter"
+                :close-on-content-click="false"
+                :close-on-click="false"
+                :min-width="380"
+                :nudge-left="30"
+                offset-x
+                left
+              >
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on">{{ footer.discount.amount | currency}}</v-btn>
+                </template>
+
+                <discount-add :discount="footer.discount" @done="updateDiscountFooter" @cancel="editDiscountFooter = false"></discount-add>
+            </v-menu>
+
+
+       
             </v-list-item>
              <v-list-item one-line>
               <v-list-item-content>
@@ -85,8 +121,10 @@
               </v-list-item-content>
                 <v-btn icon>{{ footer.charge | currency}}</v-btn>
             </v-list-item>
-        </v-footer>
 
+        </v-footer>
+        
+   
   </v-navigation-drawer>
 
 </template>
@@ -94,17 +132,20 @@
 <script>
 import { mapGetters } from 'vuex'
 import ItemEdit from './ItemEdit'
+import DiscountAdd from './DiscountAdd'
 
 export default {
   data: () => ({
       items: [],
       allowRemoveItem: false,
+      editDiscountFooter: false,
       editItem: [],
       footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
    }),
   props: ['show', 'customer', 'product'],
   components: {
     ItemEdit,
+    DiscountAdd,
   },
   mounted() {
 
@@ -134,6 +175,13 @@ export default {
 
   },
   methods: {
+
+    updateDiscountFooter(discount) {
+    
+        this.footer.discount = discount
+        this.sumTotal()
+        this.editDiscountFooter = false
+    },
     navToggle() {
       this.$emit('nav-toggle')
     },
@@ -157,7 +205,6 @@ export default {
     },
     sumAmount(item) {
 
-
         if(item.properties && !item.properties.price) {
              item.price = item.properties.price = 0.00
         }
@@ -174,15 +221,30 @@ export default {
              item.amount =  item.amount - item.discount.amount
           }
         }
+
+
            
         return item
     },
     sumTotal() {
         let total = 0
+        let taxTotal = 0
+        let discountAmount = 0
+
         this.items.forEach((item) => {
             total += item.amount
+            taxTotal += item.amount * item.tax.properties.rate / 100
         })
-        this.footer.charge = total
+        
+        if(this.footer.discount.type == "percent") {
+            this.footer.discount.amount = total * this.footer.discount.rate /100
+        }
+        if(this.footer.discount.type == "fix") {
+            this.footer.discount.amount = this.footer.discount.rate
+        }
+
+        this.footer.charge = (total - this.footer.discount.amount) + taxTotal
+        this.footer.tax = taxTotal
         
     },
 

@@ -27,8 +27,9 @@ export default {
       this.$store.dispatch('auth/setUser', data)
 
       /* Fetch latest data */
-      this.$store.dispatch('product/fetchProducts', data)
-      this.$store.dispatch('account/fetchCustomers', data)
+      this.$store.dispatch('user/fetchUsers')
+      this.$store.dispatch('product/fetchProducts')
+      this.$store.dispatch('account/fetchCustomers')
       
       this.$router.push({ name: 'index' })
     }

@@ -47,19 +47,34 @@
                   auto-grow
                   label="Note"
                   rows="2"
+                  v-model="note"
                   row-height="30"
                   shaped
             ></v-textarea>
         </v-layout>
            
       <v-layout px-10>
-        <v-combobox
+          <v-combobox
           v-model="item.saleBy"
-          :items="['def','abc']"
+          :items="users"
           chips
           label="Sale Person"
+          required
         >
+
+          <template v-slot:item="{ index, item }">
+            <v-list-item-content>
+                <v-chip>
+                 <v-avatar class="accent white--text" left>
+                    {{ item.name.slice(0, 1).toUpperCase() }}
+                  </v-avatar>
+                  {{ item.name }}
+                </v-chip>
+            </v-list-item-content>
+          </template>
+
           <template v-slot:selection="data">
+             
             <v-chip
               :key="JSON.stringify(data.item)"
               v-bind="data.attrs"
@@ -69,9 +84,9 @@
               @click:close="data.parent.selectItem(data.item)"
             >
               <v-avatar class="accent white--text" left>
-                {{ data.item.slice(0, 1).toUpperCase() }}
+                {{ data.item.name.slice(0, 1).toUpperCase() }}
               </v-avatar>
-              {{ data.item }}
+              {{ data.item.name }}
             </v-chip>
           </template>
         </v-combobox>
@@ -91,6 +106,8 @@
 
 <script>
 import Keyboard from '../../ui/Keyboard'
+import { mapGetters } from 'vuex'
+
 export default {
   data: () => ({
      valid: false,
@@ -98,6 +115,7 @@ export default {
      discountFixed: false, 
      value: '0',
      qty: 1,
+     note: '',
      showKeyboard: false,
      discountRate: 0.0,
      decimal: 1,
@@ -107,31 +125,40 @@ export default {
   components: {
     Keyboard,
   },
+  computed: mapGetters({
+    users: 'user/users',
+  }),
   props: ['item', 'index', 'show'],
   mounted() {
-      this.qty = this.item.qty
-      if(this.item.discount) {
-         this.discountType = this.parseDiscountType(this.item.discount.discountType)
-         this.discountRate = this.item.discount.rate
-      }
-      
+        this.update()
   },
   watch: {
-     item: {
+     show: {
         handler(val){
-            this.qty = val.qty
+            this.update()
         },
         deep: true
      }
   },
   methods: {
+      update() {
+          this.qty = this.item.qty
+          if(this.item.discount) {
+             this.discountType = this.parseDiscountType(this.item.discount.discountType)
+             this.discountRate = this.item.discount.rate
+          }
+          if(this.item.note) { 
+             this.note = this.item.note
+          }
+      },
       inc(neg, prop) {
           let val = parseFloat(this.qty) + neg
           if(val > 0) this.qty = val
       },
       done() {
-        const {qty, discountRate, discountType} = this
+        const {qty, discountRate, discountType, note} = this
          this.item.qty = qty
+         this.item.note = note
          this.item.discount = {rate: discountRate, type: this.parseDiscountType(discountType)}
          this.$emit('done', this.item, this.index)
       },
@@ -142,7 +169,6 @@ export default {
          this.discountRate = val
       },
       parseDiscountType(discountType) {
-
             if(discountType === 0) {
                 return 'percent'
             } 
@@ -154,12 +180,11 @@ export default {
             if(discountType === 'fix') {
                 return 1
             } 
-
+            
             return 0
-
       },
       closedKeyboard() {
-          alert('closed')
+
           showKeyboard = false
       }
   }

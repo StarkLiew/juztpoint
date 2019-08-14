@@ -20,3 +20,9 @@ export const SET_CUSTOMER = 'SET_CUSTOMER'
 export const ADD_CUSTOMER = 'SET_CUSTOMERS'
 export const FILL_CUSTOMERS = 'FILL_CUSTOMERS'
 export const FETCH_CUSTOMER_FAILURE = 'FETCH_CUSTOMER_FAILURE'
+
+/**
+ * user.js
+ */
+export const FILL_USERS = 'FILL_USERS'
+export const FETCH_USERS_FAILURE = 'FETCH_USER_FAILURE'

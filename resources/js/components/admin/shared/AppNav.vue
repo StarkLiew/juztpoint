@@ -73,6 +73,11 @@
         </v-list-item>
       </template>
     </v-list>
+
+   <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+
   </v-navigation-drawer>
 </template>
 
@@ -82,7 +87,8 @@ import { mapGetters } from 'vuex'
 export default {
   data: () => ({
       items: [],
-      name: null
+      name: null,
+      overlay: false,
   }),
 
   props: ['mini'],
@@ -115,6 +121,20 @@ export default {
       this.$toast.info('You are logged out.')
       this.$router.push({ name: 'login' })
     },
+    refresh() {
+        this.overlay = true
+
+        setTimeout(() => {
+          this.overlay = false
+         /* Fetch latest data */
+          this.$store.dispatch('user/fetchUsers')
+          this.$store.dispatch('product/fetchProducts')
+          this.$store.dispatch('account/fetchCustomers')
+        }, 3000)
+ 
+
+
+    },
 
     navigation() {
       this.items = [
@@ -132,6 +152,9 @@ export default {
         ],
         [
           { title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
+        ],
+        [
+          { title: 'Refresh', icon: 'refresh', action: this.refresh }
         ],
         [
           { title: 'Logout', icon: 'power_settings_new', action: this.logout }
