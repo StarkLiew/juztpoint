@@ -10,6 +10,7 @@ use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
 use Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Fields\Cropper;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
@@ -91,7 +92,24 @@ class ProductEditScreen extends Screen {
 				ProductRightEditLayout::class,
 			]),
 			Layout::rows([
+				Select::make('product.properties.color')
+					->options([
+						'blue' => 'Blue',
+						'red' => 'Red',
+						'pink' => 'Pink',
+						'green' => 'Green',
+						'purple' => 'Purple',
+						'indigo' => 'Indigo',
+						'orange' => 'Orange',
+					])
+					->empty('blue')
+					->title('Color')
+					->help('Point-of-Sale Button Color'),
+			]),
+
+			Layout::rows([
 				Cropper::make('product.properties.thumbnail')
+					->storage('backoffice')
 					->width(100)
 					->height(100),
 			]),
@@ -120,7 +138,7 @@ class ProductEditScreen extends Screen {
 				->fill($request->get('product'))
 				->save();
 
-			Alert::info(__('Vendor was saved'));
+			Alert::info(__('Product was saved'));
 
 			return redirect()->route('platform.products');
 

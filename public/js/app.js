@@ -27438,11 +27438,17 @@ var render = function() {
                         "v-img",
                         {
                           directives: [{ name: "ripple", rawName: "v-ripple" }],
-                          staticClass: "blue v-btn",
+                          staticClass: "v-btn",
+                          class: [
+                            product.properties.color
+                              ? product.properties.color
+                              : "blue"
+                          ],
                           attrs: {
-                            src: product.properties.thumbnail || "",
-                            "aspect-ratio": "1",
-                            gradient: "linear-gradient(#e66465, #9198e5)"
+                            src: product.properties.thumbnail
+                              ? product.properties.thumbnai
+                              : "",
+                            "aspect-ratio": "1"
                           }
                         },
                         [
@@ -84175,7 +84181,7 @@ var actions = {
               _context.next = 4;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_config__WEBPACK_IMPORTED_MODULE_2__["graphql"].path('query'), {
                 params: {
-                  query: '{products{ id,   name, category{name}, tax{name, properties{rate}}, properties{qty, price, thumbnail}}}'
+                  query: '{products{ id,   name, category{name}, tax{name, properties{rate}}, properties{qty, price, thumbnail, color}}}'
                 }
               });
 

@@ -12,11 +12,11 @@
             >
               <v-card flat tile class="d-flex">
                 <v-img
-                  :src="product.properties.thumbnail || ``"
+                  :src="product.properties.thumbnail ? product.properties.thumbnai :  ``"
                   aspect-ratio="1"
                   v-ripple
-                  :gradient="`linear-gradient(#e66465, #9198e5)`"
-                  class="blue v-btn"
+                  class="v-btn"
+                  :class="[product.properties.color ? product.properties.color : 'blue']"
                 >
                   <!-- <template v-slot:placeholder>
                     <v-layout
@@ -34,7 +34,7 @@
                     <v-spacer></v-spacer>
                     <v-flex shrink>
                       <div class="subheading text-wrap">{{ product.name }}</div>
-                    
+                      
                     </v-flex>
                   </v-layout>
 
