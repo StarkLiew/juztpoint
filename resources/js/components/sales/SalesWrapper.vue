@@ -8,6 +8,8 @@
           @customer-remove="customer = null"
           @item-added="itemAdded"
           @edit-item="editProductToggle"
+          @payment="goPayment"
+          :is-product-entry="panel === 'product'"
           :show="showCart"
           :customer="customer" 
           :product.sync="product" 
@@ -26,7 +28,7 @@
                 <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
                 <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
-
+                <payment :trxn="trxn" @back="cancelPayment" v-if="panel === 'payment'" ></payment>
 
 
              </v-sheet>
@@ -52,6 +54,7 @@ import Carts from './shared/Carts'
 import ProductsList from './shared/ProductsList'
 import ItemAdd from './shared/ItemAdd'
 import CustomersList from './shared/CustomersList'
+import Payment from './shared/Payment'
 
 
 export default {
@@ -64,17 +67,15 @@ export default {
     item: null,
     overlay: false,
     showCustomerDialog: false,
-
+    trxn: null,
   }),
-
   components: {
     TopMenu,
     Carts,
     ProductsList,
     ItemAdd,
     CustomersList,
-
-
+    Payment,
   },
 
   methods: {
@@ -119,6 +120,14 @@ export default {
     doneProductEdit(item) {
 
        this.productToggle() 
+    },
+    cancelPayment() {
+       this.trxn = null
+       this.panel = "product"
+    },
+    goPayment(trxn) {
+        this.trxn = trxn
+        this.panel = 'payment'
     },
 
   }

@@ -1,6 +1,6 @@
 <template>
 
- <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" :value="show" :width="350" right>
+ <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" :value="show" :width="350" :right="isEntry">
 
       <template v-slot:prepend>
        <v-toolbar dark  dense flat color="secondary">
@@ -114,16 +114,21 @@
               </v-list-item-content>
               <v-btn icon>{{ footer.tax | currency}}</v-btn>
             </v-list-item>
-     
-            <v-list-item one-line>
-              <v-list-item-content>
-                <v-list-item-title>Charge</v-list-item-title>
-              </v-list-item-content>
-                <v-btn icon>{{ footer.charge | currency}}</v-btn>
-            </v-list-item>
+
+                <v-list-item one-line >
+                  <v-list-item-content>
+                    <v-list-item-title>Charge</v-list-item-title>
+                  </v-list-item-content>
+                    <v-btn color="error" @click="payment()" large class="display-1">{{ footer.charge | currency}}</v-btn>
+                </v-list-item>
+      
 
         </v-footer>
-        
+         <v-overlay
+          absolute
+          :value="!isEntry"
+          opacity="0"
+        ></v-overlay>
    
   </v-navigation-drawer>
 
@@ -134,23 +139,28 @@ import { mapGetters } from 'vuex'
 import ItemEdit from './ItemEdit'
 import DiscountAdd from './DiscountAdd'
 
+
 export default {
   data: () => ({
       items: [],
+      isEntry: true,
       allowRemoveItem: false,
       editDiscountFooter: false,
       editItem: [],
       footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
    }),
-  props: ['show', 'customer', 'product'],
+  props: ['show', 'customer', 'product', 'isProductEntry'],
   components: {
     ItemEdit,
     DiscountAdd,
   },
   mounted() {
-
+     
   },
   watch: { 
+    isProductEntry: function(val) {
+        this.isEntry = val
+    },
     product: function(newVal, oldVal) {
       this.allowRemoveItem = false
       if(newVal) {
@@ -175,7 +185,12 @@ export default {
 
   },
   methods: {
+    payment() {
+         const {items, footer} = this
 
+         this.isEntry = false
+         this.$emit('payment', {items, footer})
+    },
     updateDiscountFooter(discount) {
     
         this.footer.discount = discount
