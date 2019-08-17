@@ -65,4 +65,7 @@
             </div>
         </div>
     </div>
+<script>
+</script>
+
 @endcomponent

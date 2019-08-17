@@ -9,6 +9,7 @@ use App\Orchid\Layouts\Inventory\ProductEditLayout;
 use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layout;
@@ -109,9 +110,8 @@ class ProductEditScreen extends Screen {
 
 			Layout::rows([
 				Cropper::make('product.properties.thumbnail')
-					->storage('backoffice')
-					->width(100)
-					->height(100),
+					->width(500)
+					->height(500),
 			]),
 
 		];
@@ -131,7 +131,14 @@ class ProductEditScreen extends Screen {
 			$product->user_id = Auth::id();
 
 			if (array_key_exists('properties', $input)) {
-				$product->properties = $input['properties'];
+
+				$properties = $input['properties'];
+
+				if (array_key_exists('thumbnail', $properties)) {
+					$image = $properties['thumbnail'];
+					$properties['thumbnail'] = base64_encode(Storage::url($image));
+				}
+
 			}
 
 			$product
