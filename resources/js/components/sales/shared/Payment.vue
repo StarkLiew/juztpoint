@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-container>
+        <v-container v-if="!paid">
        
               <v-toolbar>
                    <v-btn icon @click="back()">
@@ -18,11 +18,13 @@
 
     tile
   >
-    <v-card-title class="display-4 text-center">
+    <v-card-title class="display-4 ">
         <v-spacer></v-spacer>
-         {{trxn.footer.charge | currency}}
+         <div >{{trxn.footer.charge | currency}} 
+         </div>
           <v-spacer></v-spacer>
    </v-card-title>
+
     <v-list shaped>
     
       <v-list-item-group color="primary" large>
@@ -34,37 +36,111 @@
           <v-list-item-content>
             <v-list-item-title>Cash</v-list-item-title>
           </v-list-item-content>
-          <v-icon>add</v-icon> <span>{{ cash.amount | currency }}</span>
+           <span>{{ cash.amount | currency }}</span>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item>
+        <v-list-item @click="editCard()">
           <v-list-item-icon>
             <v-icon>payment</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Card</v-list-item-title>
           </v-list-item-content>
-          <v-icon>add</v-icon>
+           <span>{{ card.amount | currency }}</span>
         </v-list-item>
 
       </v-list-item-group>
     </v-list>
-
-          <v-card-actions>
-              <v-spacer></v-spacer>
-
-              <v-btn dark large fab color="teal">
-                <v-icon>arrow_forward</v-icon>
-              </v-btn>
-
+ 
+          <v-list>
+              <v-list-item>
+                  <v-spacer></v-spacer>
+                   <v-list-item-content class="title">
+                       Received {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}} 
+                   </v-list-item-content>
+                 
+                  <v-btn dark large fab color="teal" @click="paid = true">
+      
+                    <v-icon>arrow_forward</v-icon>
+                  </v-btn>
+              </v-list-item>
      
-            </v-card-actions>
+            </v-list>
   </v-card>
 
 
 
           
         </v-container>
+
+
+
+       <v-container v-if="paid">
+
+       
+              <v-toolbar>
+                   <v-btn icon @click="backToReceive()">
+                      <v-icon>arrow_back</v-icon>
+                    </v-btn>
+
+                  <v-spacer></v-spacer>
+                  <span> Thank You </span>
+                  <v-toolbar-items>
+                  </v-toolbar-items>
+              </v-toolbar>
+
+  <v-card
+    class="mx-auto"
+
+    tile
+  >
+
+    
+
+          <v-list>
+                 <v-list-item>
+                  <v-spacer></v-spacer>
+                   <v-list-item-content class="title">
+                       Charge  
+                   </v-list-item-content>
+                 
+                  <v-btn large>
+      
+                  {{ parseFloat(trxn.footer.charge) | currency}}
+                  </v-btn>
+              </v-list-item>
+              <v-list-item>
+                  <v-spacer></v-spacer>
+                   <v-list-item-content class="title">
+                       Received  
+                   </v-list-item-content>
+                 
+                  <v-btn large>
+      
+                   {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}}
+                  </v-btn>
+              </v-list-item>
+
+           <v-list-item>
+                  <v-spacer></v-spacer>
+                   <v-list-item-content class="title">
+                       Change  
+                   </v-list-item-content>
+                 
+                  <v-btn large class="display-1" color="error">{{ trxn.footer.change | currency}}
+                  </v-btn>
+              </v-list-item>
+     
+            </v-list>
+    
+
+  </v-card>
+
+
+
+          
+        </v-container>
+
 
           <keyboard 
             @done="showKeyboard = false"
@@ -98,6 +174,7 @@ export default {
       ewallet: {amount: 0.00, ref: ''},
       transfer: {amount: 0.00, ref: ''},
       target: null,
+      paid: false,
   }),
   components: {
       Keyboard,
@@ -109,6 +186,9 @@ export default {
       back() {
          this.$emit('back')
       },
+      backToReceive() {
+          this.paid = false
+      },
       change(val) {
          this.target.amount = val
       },
@@ -118,7 +198,10 @@ export default {
       editCash() {
          this.showKeyboard = true
          this.target = this.cash
-
+      },
+      editCard() {
+         this.showKeyboard = true
+         this.target = this.card
       },
   }
 }

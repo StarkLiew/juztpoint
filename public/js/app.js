@@ -5030,6 +5030,82 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5052,7 +5128,8 @@ __webpack_require__.r(__webpack_exports__);
         amount: 0.00,
         ref: ''
       },
-      target: null
+      target: null,
+      paid: false
     };
   },
   components: {
@@ -5063,6 +5140,9 @@ __webpack_require__.r(__webpack_exports__);
     back: function back() {
       this.$emit('back');
     },
+    backToReceive: function backToReceive() {
+      this.paid = false;
+    },
     change: function change(val) {
       this.target.amount = val;
     },
@@ -5072,6 +5152,10 @@ __webpack_require__.r(__webpack_exports__);
     editCash: function editCash() {
       this.showKeyboard = true;
       this.target = this.cash;
+    },
+    editCard: function editCard() {
+      this.showKeyboard = true;
+      this.target = this.card;
     }
   }
 });
@@ -27602,111 +27686,175 @@ var render = function() {
   return _c(
     "div",
     [
-      _c(
-        "v-container",
-        [
-          _c(
-            "v-toolbar",
+      !_vm.paid
+        ? _c(
+            "v-container",
             [
               _c(
-                "v-btn",
-                {
-                  attrs: { icon: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.back()
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("arrow_back")])],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
-              _c("v-toolbar-items")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-card",
-            { staticClass: "mx-auto", attrs: { tile: "" } },
-            [
-              _c(
-                "v-card-title",
-                { staticClass: "display-4 text-center" },
+                "v-toolbar",
                 [
-                  _c("v-spacer"),
-                  _vm._v(
-                    "\n       " +
-                      _vm._s(_vm._f("currency")(_vm.trxn.footer.charge)) +
-                      "\n        "
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.back()
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("arrow_back")])],
+                    1
                   ),
-                  _c("v-spacer")
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("v-toolbar-items")
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
-                "v-list",
-                { attrs: { shaped: "" } },
+                "v-card",
+                { staticClass: "mx-auto", attrs: { tile: "" } },
                 [
                   _c(
-                    "v-list-item-group",
-                    { attrs: { color: "primary", large: "" } },
+                    "v-card-title",
+                    { staticClass: "display-4 " },
                     [
-                      _c("v-divider"),
+                      _c("v-spacer"),
                       _vm._v(" "),
+                      _c("div", [
+                        _vm._v(
+                          _vm._s(_vm._f("currency")(_vm.trxn.footer.charge)) +
+                            " \n       "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("v-spacer")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    { attrs: { shaped: "" } },
+                    [
                       _c(
-                        "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              return _vm.editCash()
-                            }
-                          }
-                        },
+                        "v-list-item-group",
+                        { attrs: { color: "primary", large: "" } },
                         [
+                          _c("v-divider"),
+                          _vm._v(" "),
                           _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("attach_money")])],
+                            "v-list-item",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.editCash()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-icon",
+                                [_c("v-icon", [_vm._v("attach_money")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-item-content",
+                                [_c("v-list-item-title", [_vm._v("Cash")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("span", [
+                                _vm._v(
+                                  _vm._s(_vm._f("currency")(_vm.cash.amount))
+                                )
+                              ])
+                            ],
                             1
                           ),
                           _vm._v(" "),
+                          _c("v-divider"),
+                          _vm._v(" "),
                           _c(
-                            "v-list-item-content",
-                            [_c("v-list-item-title", [_vm._v("Cash")])],
+                            "v-list-item",
+                            {
+                              on: {
+                                click: function($event) {
+                                  return _vm.editCard()
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "v-list-item-icon",
+                                [_c("v-icon", [_vm._v("payment")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-list-item-content",
+                                [_c("v-list-item-title", [_vm._v("Card")])],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("span", [
+                                _vm._v(
+                                  _vm._s(_vm._f("currency")(_vm.card.amount))
+                                )
+                              ])
+                            ],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c("v-icon", [_vm._v("add")]),
-                          _vm._v(" "),
-                          _c("span", [
-                            _vm._v(_vm._s(_vm._f("currency")(_vm.cash.amount)))
-                          ])
+                          )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    [
                       _c(
                         "v-list-item",
                         [
-                          _c(
-                            "v-list-item-icon",
-                            [_c("v-icon", [_vm._v("payment")])],
-                            1
-                          ),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("v-list-item-content", { staticClass: "title" }, [
+                            _vm._v(
+                              "\n                     Received " +
+                                _vm._s(
+                                  _vm._f("currency")(
+                                    parseFloat(_vm.cash.amount) +
+                                      parseFloat(_vm.card.amount)
+                                  )
+                                ) +
+                                " \n                 "
+                            )
+                          ]),
                           _vm._v(" "),
                           _c(
-                            "v-list-item-content",
-                            [_c("v-list-item-title", [_vm._v("Card")])],
+                            "v-btn",
+                            {
+                              attrs: {
+                                dark: "",
+                                large: "",
+                                fab: "",
+                                color: "teal"
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.paid = true
+                                }
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("arrow_forward")])],
                             1
-                          ),
-                          _vm._v(" "),
-                          _c("v-icon", [_vm._v("add")])
+                          )
                         ],
                         1
                       )
@@ -27715,17 +27863,131 @@ var render = function() {
                   )
                 ],
                 1
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.paid
+        ? _c(
+            "v-container",
+            [
+              _c(
+                "v-toolbar",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.backToReceive()
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("arrow_back")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(" Thank You ")]),
+                  _vm._v(" "),
+                  _c("v-toolbar-items")
+                ],
+                1
               ),
               _vm._v(" "),
               _c(
-                "v-card-actions",
+                "v-card",
+                { staticClass: "mx-auto", attrs: { tile: "" } },
                 [
-                  _c("v-spacer"),
-                  _vm._v(" "),
                   _c(
-                    "v-btn",
-                    { attrs: { dark: "", large: "", fab: "", color: "teal" } },
-                    [_c("v-icon", [_vm._v("arrow_forward")])],
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("v-list-item-content", { staticClass: "title" }, [
+                            _vm._v(
+                              "\n                     Charge  \n                 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-btn", { attrs: { large: "" } }, [
+                            _vm._v(
+                              "\n    \n                " +
+                                _vm._s(
+                                  _vm._f("currency")(
+                                    parseFloat(_vm.trxn.footer.charge)
+                                  )
+                                ) +
+                                "\n                "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("v-list-item-content", { staticClass: "title" }, [
+                            _vm._v(
+                              "\n                     Received  \n                 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("v-btn", { attrs: { large: "" } }, [
+                            _vm._v(
+                              "\n    \n                 " +
+                                _vm._s(
+                                  _vm._f("currency")(
+                                    parseFloat(_vm.cash.amount) +
+                                      parseFloat(_vm.card.amount)
+                                  )
+                                ) +
+                                "\n                "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c("v-list-item-content", { staticClass: "title" }, [
+                            _vm._v(
+                              "\n                     Change  \n                 "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "display-1",
+                              attrs: { large: "", color: "error" }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(
+                                  _vm._f("currency")(_vm.trxn.footer.change)
+                                ) + "\n                "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
                     1
                   )
                 ],
@@ -27734,9 +27996,7 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c("keyboard", {
         attrs: { decimal: 2, show: _vm.showKeyboard },
@@ -83163,8 +83423,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 
 
-
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__["VBtn"],VCard: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_5__["VCard"],VCardActions: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_5__["VCardActions"],VCardTitle: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_5__["VCardTitle"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VContainer"],VDivider: vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_7__["VDivider"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_8__["VIcon"],VList: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VList"],VListItem: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItem"],VListItemContent: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemContent"],VListItemGroup: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemGroup"],VListItemIcon: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemIcon"],VListItemTitle: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemTitle"],VOverlay: vuetify_lib_components_VOverlay__WEBPACK_IMPORTED_MODULE_10__["VOverlay"],VSpacer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VSpacer"],VToolbar: vuetify_lib_components_VToolbar__WEBPACK_IMPORTED_MODULE_11__["VToolbar"],VToolbarItems: vuetify_lib_components_VToolbar__WEBPACK_IMPORTED_MODULE_11__["VToolbarItems"]})
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_4__["VBtn"],VCard: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_5__["VCard"],VCardTitle: vuetify_lib_components_VCard__WEBPACK_IMPORTED_MODULE_5__["VCardTitle"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VContainer"],VDivider: vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_7__["VDivider"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_8__["VIcon"],VList: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VList"],VListItem: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItem"],VListItemContent: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemContent"],VListItemGroup: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemGroup"],VListItemIcon: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemIcon"],VListItemTitle: vuetify_lib_components_VList__WEBPACK_IMPORTED_MODULE_9__["VListItemTitle"],VOverlay: vuetify_lib_components_VOverlay__WEBPACK_IMPORTED_MODULE_10__["VOverlay"],VSpacer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["VSpacer"],VToolbar: vuetify_lib_components_VToolbar__WEBPACK_IMPORTED_MODULE_11__["VToolbar"],VToolbarItems: vuetify_lib_components_VToolbar__WEBPACK_IMPORTED_MODULE_11__["VToolbarItems"]})
 
 
 /* hot reload */
