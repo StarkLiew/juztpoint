@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class Account extends Model {
+class Document extends Model {
 
-	use SoftDeletes, Notifiable, Filterable, AsSource;
+	use Notifiable, Filterable, AsSource;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *
@@ -29,11 +28,11 @@ class Account extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'status', 'properties', 'user_id',
+		'reference', 'account_id', 'transact_by', 'date', 'type', 'status', 'discount', 'discount_amount', 'service_charge', 'tax_amount', 'charge', 'received', 'change', 'note',
 	];
 
-	protected $allowedFilters = ['name', 'status'];
-	protected $allowedSorts = ['name', 'status'];
+	protected $allowedFilters = ['reference', 'status'];
+	protected $allowedSorts = ['reference', 'status'];
 
 	public function __construct(array $attributes = []) {
 		$id = Auth::id();
@@ -49,9 +48,12 @@ class Account extends Model {
 	protected $hidden = [
 
 	];
+	public function account() {
+		return $this->belongsTo('App\Models\Account', 'account_id');
+	}
 
 	public function user() {
-		return $this->belongsTo('App\Models\User', 'user_id');
+		return $this->belongsTo('App\Models\User', 'transact_by');
 	}
 
 }

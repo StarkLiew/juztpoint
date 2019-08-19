@@ -33,7 +33,14 @@
                   <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                     <v-spacer></v-spacer>
                     <v-flex shrink>
-                      <div class="subheading text-wrap">{{ product.name }}</div>
+                        <v-overlay
+                                absolute
+                                color="grey darken-3"
+                              >
+                                 <div class="subheading text-wrap">{{ product.name }}</div>
+                              </v-overlay>
+
+                     
                       
                     </v-flex>
                   </v-layout>

@@ -84,63 +84,107 @@
                     </v-btn>
 
                   <v-spacer></v-spacer>
-                  <span> Thank You </span>
+                  <v-text> Thank You </v-text>
+                   <v-spacer></v-spacer>
                   <v-toolbar-items>
                   </v-toolbar-items>
               </v-toolbar>
 
-  <v-card
-    class="mx-auto"
+                <v-card
+                  class="mx-auto"
 
-    tile
-  >
+                  tile
+                >
 
-    
+                  
 
-          <v-list>
-                 <v-list-item>
-                  <v-spacer></v-spacer>
-                   <v-list-item-content class="title">
-                       Charge  
-                   </v-list-item-content>
+                        <v-list>
+                               <v-list-item>
+                      
+                                 <v-list-item-content class="title">
+                                     Charge  
+                                 </v-list-item-content>
+                               
+                                <span>
+                    
+                                {{ parseFloat(trxn.footer.charge) | currency}}
+                                </span>
+                            </v-list-item>
+                            <v-list-item>
                  
-                  <v-btn large>
-      
-                  {{ parseFloat(trxn.footer.charge) | currency}}
-                  </v-btn>
-              </v-list-item>
-              <v-list-item>
-                  <v-spacer></v-spacer>
-                   <v-list-item-content class="title">
-                       Received  
-                   </v-list-item-content>
-                 
-                  <v-btn large>
-      
-                   {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}}
-                  </v-btn>
-              </v-list-item>
+                                 <v-list-item-content class="title">
+                                     Received  
+                                 </v-list-item-content>
+                               
+                                <span>
+                    
+                                 {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}}
+                                </span>
+                            </v-list-item>
+                         <v-divider></v-divider>   
 
-           <v-list-item>
-                  <v-spacer></v-spacer>
-                   <v-list-item-content class="title">
-                       Change  
-                   </v-list-item-content>
-                 
-                  <v-btn large class="display-1" color="error">{{ trxn.footer.change | currency}}
-                  </v-btn>
-              </v-list-item>
-     
-            </v-list>
-    
+                         <v-list-item>
+                               
+                                 <v-list-item-content class="title">
+                                     Change  
+                                 </v-list-item-content>
+                               
+                                <span class="display-3" color="error">{{ trxn.footer.change | currency}}
+                                </span>
+                            </v-list-item>
+                   
+                          </v-list>
+                   
 
-  </v-card>
-
+                </v-card>
 
 
           
         </v-container>
+        <v-container  v-if="paid">
+            <v-card
+              class="mx-auto"
 
+              tile
+            >
+
+              
+
+                    <v-list>
+                           <v-list-item>
+                  
+                             <v-list-item-content class="title">
+                                 Reprint  
+                             </v-list-item-content>
+                             <v-btn >
+                                <v-icon>print</v-icon>
+                             </v-btn>
+                        </v-list-item>
+                        <v-divider></v-divider>
+                        <v-list-item>
+                           <v-list-item-content>
+                        
+                              <v-text-field
+                                    
+                                    label="Email"
+                                    prepend-inner-icon="email"
+                                  ></v-text-field>
+ 
+                            </v-list-item-content>  
+                             <v-btn>
+                                <v-icon>send</v-icon>
+                             </v-btn>
+                        </v-list-item>
+                   </v-list>
+               
+
+            </v-card>
+   
+        </v-container>
+        
+         <v-container v-if="paid"> 
+                 <v-btn rounded block  large color="primary">Done</v-btn> 
+            </v-container>
 
           <keyboard 
             @done="showKeyboard = false"

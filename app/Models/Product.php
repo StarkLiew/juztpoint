@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class Product extends Model {
 
-	use SoftDeletes, Notifiable, Filterable, AsSource;
+	use Notifiable, Filterable, AsSource;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *

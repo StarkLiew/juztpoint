@@ -103,6 +103,7 @@ return [
 			],
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
+				'newAccount' => App\GraphQL\Mutation\NewAccountMutation::class,
 			],
 			'middleware' => [],
 			'method' => ['get', 'post'],

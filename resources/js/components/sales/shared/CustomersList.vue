@@ -68,7 +68,9 @@ export default {
     close() {
        this.$emit('close')
     },
-    saveNewCustomer(customer) {
+    async saveNewCustomer(customer) {
+       customer = await this.$store.dispatch('account/addCustomer', customer)
+       this.$emit('selected', customer)
        this.showAdd = false
     }
   }

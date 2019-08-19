@@ -13,15 +13,16 @@
                 <v-text-field
                   label="Name*"
                   hint="Your new customer name"
+                  v-model="name"
                   persistent-hint
                   required
                 ></v-text-field>
               </v-col>
              <v-col cols="12">
-                <v-text-field label="Phone/Mobile" type="text" required></v-text-field>
+                <v-text-field v-model="mobile" label="Phone/Mobile" type="text" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Email"></v-text-field>
+                <v-text-field v-model="email" label="Email"></v-text-field>
               </v-col>
 
             </v-row>
@@ -50,13 +51,21 @@ export default {
   }),
   props:['show'],
 
+
   methods: {
      close() {
         this.$emit('close')
+          this.reset()
      },
      save() {
-        let {name, email, mobile} = this
-        this.$emit('save', {name, email, mobile})
+        const {name, email, mobile} = this
+        this.$emit('save', {name, email, properties: {mobile}})
+        this.reset()
+     },
+     reset() {
+        this.name = ''
+        this.email = ''
+        this.mobile = ''
      },
   }
 }

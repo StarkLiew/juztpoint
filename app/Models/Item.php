@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class Account extends Model {
+class Item extends Model {
 
-	use SoftDeletes, Notifiable, Filterable, AsSource;
+	use Notifiable, Filterable, AsSource;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *
@@ -29,11 +28,11 @@ class Account extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'status', 'properties', 'user_id',
+		'line', 'type', 'trxn_id', 'item_id', 'discount', 'discount_amount', 'tax_id', 'tax_amount', 'tax_amount', 'total_amount', 'user_id', 'note', 'user_id',
 	];
 
-	protected $allowedFilters = ['name', 'status'];
-	protected $allowedSorts = ['name', 'status'];
+	protected $allowedFilters = ['line'];
+	protected $allowedSorts = ['line'];
 
 	public function __construct(array $attributes = []) {
 		$id = Auth::id();
@@ -49,6 +48,18 @@ class Account extends Model {
 	protected $hidden = [
 
 	];
+	public function product() {
+		return $this->belongsTo('App\Models\Product', 'item_id');
+	}
+	public function commission() {
+		return $this->belongsTo('App\Models\Setting', 'item_id');
+	}
+	public function payment() {
+		return $this->belongsTo('App\Models\Setting', 'item_id');
+	}
+	public function tax() {
+		return $this->belongsTo('App\Models\Setting', 'tax_id');
+	}
 
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');

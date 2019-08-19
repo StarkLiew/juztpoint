@@ -34,7 +34,7 @@
             <v-list-item-content>Save Draft</v-list-item-content>
           </v-list-item> 
 
-         <v-list-item @click="">
+         <v-list-item @click="refresh()">
             <v-list-item-icon>
                 <v-icon>refresh</v-icon>
             </v-list-item-icon>

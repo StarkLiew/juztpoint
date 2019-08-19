@@ -22,7 +22,8 @@ export const mutations = {
     state.customers = accounts
   },
   [types.ADD_CUSTOMER](state, { customer }) { 
-    state.customers.push(customer)
+ 
+     state.customers.push(customer)
   },
   [types.FETCH_CUSTOMER_FAILURE](state) {
     state.customer = null
@@ -36,18 +37,37 @@ export const mutations = {
 export const actions = {
   async fetchCustomers({ commit }) {
     try {
-      const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"customer"){ id, name}}'}})
+      const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"customer"){ id, name, properties{email, mobile}}}'}})
       commit(types.FILL_CUSTOMERS, data.data )
    
     } catch (e) {
       commit(types.FETCH_CUSTOMER_FAILURE)
     }
   },
-  async addCustomers({ commit }, customer) {
+  async addCustomer({ commit }, customer) {
     try {
-       commit(types.ADD_CUSTOMER, customer)
+
+       const {name, properties} = customer
+       const props = JSON.stringify(properties).replace(/"/g, '\\"')
+
+           
+        const mutation = `mutation accounts{
+                             newAccount(
+                                 name: "${name}",
+                                 status: "active",
+                                 type: "customer",
+                                 properties: "${props}"
+                             ) {id, name, properties{email, mobile}}}`
+
+       const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
+  
+       customer = data.data.newAccount
+
+
+       commit(types.ADD_CUSTOMER, { customer })
+       return customer
     } catch (e) {
-       
+        
     }
   },
 }

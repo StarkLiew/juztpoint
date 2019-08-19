@@ -20,7 +20,7 @@ class CompanyEditLayout extends Rows {
 	public function fields(): array
 	{
 		return [
-			Input::make('company.properties.name')
+			Input::make('company.name')
 				->type('text')
 				->max(255)
 				->required()

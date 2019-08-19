@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserCreateTransactions extends Migration {
+class UserCreateDocuments extends Migration {
 	/**
 	 * Run the migrations.
 	 *
@@ -13,16 +13,21 @@ class UserCreateTransactions extends Migration {
 	 */
 	public function up($id, Model $model) {
 
-		Schema::create("user_{$id}_transactions", function (Blueprint $table) use ($id) {
+		Schema::create("user_{$id}_documents", function (Blueprint $table) use ($id) {
 			$table->increments('id');
 			$table->string('reference', 36)->unique()->index();
-			$table->bigInteger('account_id')->unsigned()->index();
-			$table->bigInteger('transact_by')->unsigned()->index();
+			$table->bigInteger('account_id')->unsigned();
+			$table->bigInteger('transact_by')->unsigned();
 			$table->timestamp('date');
 			$table->string('type');
 			$table->string('status');
-			$table->json('content');
-			$table->float('amount');
+			$table->json('discount');
+			$table->float('discount_amount');
+			$table->float('service_charge');
+			$table->float('tax_amount');
+			$table->float('charge');
+			$table->float('received');
+			$table->float('change');
 			$table->longText('note')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
@@ -45,6 +50,6 @@ class UserCreateTransactions extends Migration {
 	 * @return void
 	 */
 	public function down($id, Model $model) {
-		Schema::dropIfExists("user_{$id}_transactions");
+		Schema::dropIfExists("user_{$id}_documents");
 	}
 }
