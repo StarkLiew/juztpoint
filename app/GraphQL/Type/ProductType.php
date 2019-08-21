@@ -1,18 +1,19 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\Product;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class ProductsType extends GraphQLType {
+class ProductType extends GraphQLType {
 	protected $attributes = [
-		'name' => 'Products',
+		'name' => 'Product',
 		'description' => 'The collection of all Products',
 		'model' => Product::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),
@@ -35,7 +36,7 @@ class ProductsType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'category' => [
-				'type' => GraphQL::type('settings'),
+				'type' => GraphQL::type('setting'),
 				'description' => 'The type of setting',
 				'is_relation' => true,
 			],
@@ -49,7 +50,7 @@ class ProductsType extends GraphQLType {
 
 			],
 			'tax' => [
-				'type' => GraphQL::type('settings'),
+				'type' => GraphQL::type('setting'),
 				'description' => 'The type of setting',
 				'is_relation' => true,
 			],
@@ -78,7 +79,7 @@ class ProductsType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'commission' => [
-				'type' => GraphQL::type('settings'),
+				'type' => GraphQL::type('setting'),
 				'description' => 'The type of setting',
 				'is_relation' => true,
 			],

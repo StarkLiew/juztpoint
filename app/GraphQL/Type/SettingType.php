@@ -1,18 +1,19 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\Setting;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class SettingsType extends GraphQLType {
+class SettingType extends GraphQLType {
 	protected $attributes = [
-		'name' => 'Settings',
+		'name' => 'Setting',
 		'description' => 'The collection of all System Settings and Values',
 		'model' => Setting::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),

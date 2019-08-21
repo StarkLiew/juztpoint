@@ -1,18 +1,19 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\Account;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class AccountsType extends GraphQLType {
+class AccountType extends GraphQLType {
 	protected $attributes = [
-		'name' => 'Accounts',
+		'name' => 'Account',
 		'description' => 'The collection of all Accounts',
 		'model' => Account::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),

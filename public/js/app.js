@@ -4191,13 +4191,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     payment: function payment() {
-      var items = this.items,
+      var customer = this.customer,
+          items = this.items,
           footer = this.footer;
+      var receipt = {
+        customer: customer,
+        footer: footer,
+        items: items
+      };
       this.isEntry = false;
-      this.$emit('payment', {
-        items: items,
-        footer: footer
-      });
+      this.$emit('payment', receipt);
     },
     updateDiscountFooter: function updateDiscountFooter(discount) {
       this.footer.discount = discount;
@@ -4438,6 +4441,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     mapCustomers: function mapCustomers(alpha) {
       var customers = this.$store.getters['account/customers'];
+      if (!customers) return [];
       return customers.filter(function (row) {
         return row.name.toString().toLowerCase().startsWith(alpha.toLowerCase());
       });
@@ -4987,10 +4991,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _ui_Keyboard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Keyboard */ "./resources/js/components/ui/Keyboard.vue");
-//
-//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _ui_Keyboard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Keyboard */ "./resources/js/components/ui/Keyboard.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -5202,8 +5212,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       showKeyboard: false,
       cash: {
-        amount: 0.00,
-        change: 0.00
+        amount: 0.00
       },
       card: {
         amount: 0.00,
@@ -5222,15 +5231,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    Keyboard: _ui_Keyboard__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Keyboard: _ui_Keyboard__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: ['trxn'],
+  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+    auth: 'auth/user'
+  }),
   methods: {
     back: function back() {
       this.$emit('back');
-    },
-    backToReceive: function backToReceive() {
-      this.paid = false;
     },
     change: function change(val) {
       this.target.amount = val;
@@ -5245,7 +5254,106 @@ __webpack_require__.r(__webpack_exports__);
     editCard: function editCard() {
       this.showKeyboard = true;
       this.target = this.card;
-    }
+    },
+    done: function done() {
+      this.target = null;
+      this.paid = false;
+      this.$emit('done');
+    },
+    valid: function valid() {
+      return parseFloat(this.cash.amount) + parseFloat(this.card.amount) < parseFloat(this.trxn.footer.charge);
+    },
+    save: function () {
+      var _save = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var amount_received, amount_change, _this$trxn, customer, footer, items, payments, dateObj, month, day, year, hours, minutes, seconds, user_id, reference, receipt;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount);
+                amount_change = amount_received - parseFloat(this.trxn.footer.charge);
+                _this$trxn = this.trxn, customer = _this$trxn.customer, footer = _this$trxn.footer, items = _this$trxn.items;
+                payments = [];
+
+                if (this.cash.amount > 0) {
+                  payments.push({
+                    item_id: 1,
+                    total_amont: this.cash.amount
+                  });
+                }
+
+                if (this.card.amount > 0) {
+                  payments.push({
+                    item_id: 2,
+                    note: this.cash.ref,
+                    total_amount: this.cash.amount
+                  });
+                }
+
+                dateObj = new Date();
+                month = dateObj.getUTCMonth() + 1; //months from 1-12
+
+                day = dateObj.getUTCDate();
+                year = dateObj.getUTCFullYear();
+                hours = dateObj.getUTCHours();
+                minutes = dateObj.getUTCMinutes();
+                seconds = dateObj.getUTCSeconds();
+                user_id = this.auth.id;
+                user_id = "0" + user_id;
+                user_id = user_id.substr(user_id.length - 2);
+                day = "0" + day;
+                day = day.substr(day.length - 2);
+                month = "0" + month;
+                month = month.substr(month.length - 2);
+                year = year.toString().substr(year.toString().length - 2);
+                hours = "0" + hours;
+                hours = hours.substr(hours.length - 2);
+                minutes = "0" + minutes;
+                minutes = minutes.substr(minutes.length - 2);
+                seconds = "0" + seconds;
+                seconds = seconds.substr(seconds.length - 2);
+                reference = user_id + year + month + day + hours + minutes + seconds;
+                receipt = {
+                  account_id: customer ? customer.id : 0,
+                  date: new Date(),
+                  reference: reference,
+                  transact_by: user_id,
+                  discount: {
+                    rate: footer.discount.rate,
+                    type: footer.discount.type
+                  },
+                  discount_amount: footer.discount.amount,
+                  service_charge: 0,
+                  charge: footer.charge,
+                  received: amount_received,
+                  change: amount_change,
+                  note: "",
+                  items: items,
+                  payments: payments
+                };
+                _context.next = 31;
+                return this.$store.dispatch('receipt/addReceipt', receipt);
+
+              case 31:
+                this.paid = true;
+
+              case 32:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function save() {
+        return _save.apply(this, arguments);
+      }
+
+      return save;
+    }()
   }
 });
 
@@ -26615,7 +26723,11 @@ var render = function() {
                 "v-btn",
                 {
                   staticClass: "display-1",
-                  attrs: { color: "error", large: "" },
+                  attrs: {
+                    disabled: _vm.footer.charge <= 0,
+                    color: "error",
+                    large: ""
+                  },
                   on: {
                     click: function($event) {
                       return _vm.payment()
@@ -27965,11 +28077,12 @@ var render = function() {
                                 dark: "",
                                 large: "",
                                 fab: "",
-                                color: "teal"
+                                color: "teal",
+                                disabled: _vm.valid()
                               },
                               on: {
                                 click: function($event) {
-                                  _vm.paid = true
+                                  return _vm.save()
                                 }
                               }
                             },
@@ -27997,23 +28110,9 @@ var render = function() {
               _c(
                 "v-toolbar",
                 [
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { icon: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.backToReceive()
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("arrow_back")])],
-                    1
-                  ),
-                  _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
-                  _c("v-text", [_vm._v(" Thank You ")]),
+                  _c("span", [_vm._v(" Thank You ")]),
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
@@ -28098,7 +28197,11 @@ var render = function() {
                             [
                               _vm._v(
                                 _vm._s(
-                                  _vm._f("currency")(_vm.trxn.footer.change)
+                                  _vm._f("currency")(
+                                    parseFloat(_vm.cash.amount) +
+                                      parseFloat(_vm.card.amount) -
+                                      _vm.trxn.footer.charge
+                                  )
                                 ) + "\n                              "
                               )
                             ]
@@ -28182,7 +28285,17 @@ var render = function() {
               _c(
                 "v-btn",
                 {
-                  attrs: { rounded: "", block: "", large: "", color: "primary" }
+                  attrs: {
+                    rounded: "",
+                    block: "",
+                    large: "",
+                    color: "primary"
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.done()
+                    }
+                  }
                 },
                 [_vm._v("Done")]
               )
@@ -70911,7 +71024,7 @@ Vuetify.version = "2.0.5";
 /*!*******************************************!*\
   !*** ./node_modules/vuetify/lib/index.js ***!
   \*******************************************/
-/*! exports provided: colors, default, VApp, ClickOutside, Resize, Ripple, Scroll, Touch, VAppBar, VAppBarNavIcon, VAlert, VAutocomplete, VAvatar, VBadge, VBanner, VBottomNavigation, VBottomSheet, VBreadcrumbs, VBreadcrumbsItem, VBreadcrumbsDivider, VBtn, VBtnToggle, VCalendar, VCalendarDaily, VCalendarWeekly, VCalendarMonthly, VCard, VCardTitle, VCardActions, VCardText, VCarousel, VCarouselItem, VCheckbox, VSimpleCheckbox, VChip, VChipGroup, VColorPicker, VColorPickerSwatches, VColorPickerCanvas, VContent, VCombobox, VCounter, VData, VDataIterator, VDataFooter, VDataTable, VEditDialog, VTableOverflow, VDataTableHeader, VSimpleTable, VVirtualTable, VDatePicker, VDatePickerTitle, VDatePickerHeader, VDatePickerDateTable, VDatePickerMonthTable, VDatePickerYears, VDialog, VDivider, VExpansionPanels, VExpansionPanel, VExpansionPanelHeader, VExpansionPanelContent, VFileInput, VFooter, VForm, VContainer, VCol, VRow, VSpacer, VLayout, VFlex, VHover, VIcon, VImg, VInput, VItem, VItemGroup, VLabel, VListItemActionText, VListItemContent, VListItemTitle, VListItemSubtitle, VList, VListGroup, VListItem, VListItemAction, VListItemAvatar, VListItemIcon, VListItemGroup, VMenu, VMessages, VNavigationDrawer, VOverflowBtn, VOverlay, VPagination, VSheet, VParallax, VPicker, VProgressCircular, VProgressLinear, VRadioGroup, VRadio, VRangeSlider, VRating, VResponsive, VSelect, VSlider, VSlideGroup, VSlideItem, VSnackbar, VSparkline, VSpeedDial, VStepper, VStepperContent, VStepperStep, VStepperHeader, VStepperItems, VSubheader, VSwitch, VSystemBar, VTabs, VTab, VTabItem, VTabsItems, VTabsSlider, VTextarea, VTextField, VTimeline, VTimelineItem, VTimePicker, VTimePickerClock, VTimePickerTitle, VToolbar, VToolbarItems, VToolbarTitle, VTooltip, VTreeview, VTreeviewNode, VWindow, VWindowItem, VCarouselTransition, VCarouselReverseTransition, VTabTransition, VTabReverseTransition, VMenuTransition, VFabTransition, VDialogTransition, VDialogBottomTransition, VFadeTransition, VScaleTransition, VScrollXTransition, VScrollXReverseTransition, VScrollYTransition, VScrollYReverseTransition, VSlideXTransition, VSlideXReverseTransition, VSlideYTransition, VSlideYReverseTransition, VExpandTransition, VExpandXTransition */
+/*! exports provided: ClickOutside, Resize, Ripple, Scroll, Touch, colors, default, VApp, VAppBar, VAppBarNavIcon, VAlert, VAutocomplete, VAvatar, VBadge, VBanner, VBottomNavigation, VBottomSheet, VBreadcrumbs, VBreadcrumbsItem, VBreadcrumbsDivider, VBtn, VBtnToggle, VCalendar, VCalendarDaily, VCalendarWeekly, VCalendarMonthly, VCard, VCardTitle, VCardActions, VCardText, VCarousel, VCarouselItem, VCheckbox, VSimpleCheckbox, VChip, VChipGroup, VColorPicker, VColorPickerSwatches, VColorPickerCanvas, VContent, VCombobox, VCounter, VData, VDataIterator, VDataFooter, VDataTable, VEditDialog, VTableOverflow, VDataTableHeader, VSimpleTable, VVirtualTable, VDatePicker, VDatePickerTitle, VDatePickerHeader, VDatePickerDateTable, VDatePickerMonthTable, VDatePickerYears, VDialog, VDivider, VExpansionPanels, VExpansionPanel, VExpansionPanelHeader, VExpansionPanelContent, VFileInput, VFooter, VForm, VContainer, VCol, VRow, VSpacer, VLayout, VFlex, VHover, VIcon, VImg, VInput, VItem, VItemGroup, VLabel, VListItemActionText, VListItemContent, VListItemTitle, VListItemSubtitle, VList, VListGroup, VListItem, VListItemAction, VListItemAvatar, VListItemIcon, VListItemGroup, VMenu, VMessages, VNavigationDrawer, VOverflowBtn, VOverlay, VPagination, VSheet, VParallax, VPicker, VProgressCircular, VProgressLinear, VRadioGroup, VRadio, VRangeSlider, VRating, VResponsive, VSelect, VSlider, VSlideGroup, VSlideItem, VSnackbar, VSparkline, VSpeedDial, VStepper, VStepperContent, VStepperStep, VStepperHeader, VStepperItems, VSubheader, VSwitch, VSystemBar, VTabs, VTab, VTabItem, VTabsItems, VTabsSlider, VTextarea, VTextField, VTimeline, VTimelineItem, VTimePicker, VTimePickerClock, VTimePickerTitle, VToolbar, VToolbarItems, VToolbarTitle, VTooltip, VTreeview, VTreeviewNode, VWindow, VWindowItem, VCarouselTransition, VCarouselReverseTransition, VTabTransition, VTabReverseTransition, VMenuTransition, VFabTransition, VDialogTransition, VDialogBottomTransition, VFadeTransition, VScaleTransition, VScrollXTransition, VScrollXReverseTransition, VScrollYTransition, VScrollYReverseTransition, VSlideXTransition, VSlideXReverseTransition, VSlideYTransition, VSlideYReverseTransition, VExpandTransition, VExpandXTransition */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -84723,6 +84836,7 @@ var map = {
 	"./account.js": "./resources/js/store/modules/account.js",
 	"./auth.js": "./resources/js/store/modules/auth.js",
 	"./product.js": "./resources/js/store/modules/product.js",
+	"./receipt.js": "./resources/js/store/modules/receipt.js",
 	"./user.js": "./resources/js/store/modules/user.js"
 };
 
@@ -85204,6 +85318,273 @@ var getters = {
 
 /***/ }),
 
+/***/ "./resources/js/store/modules/receipt.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store/modules/receipt.js ***!
+  \***********************************************/
+/*! exports provided: state, mutations, actions, getters */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "state", function() { return state; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mutations", function() { return mutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actions", function() { return actions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getters", function() { return getters; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ~/config */ "./resources/js/config.js");
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mutation-types */ "./resources/js/store/mutation-types.js");
+
+
+var _mutations;
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+/**
+ * Initial state
+ */
+
+var state = {
+  receipt: null,
+  receipts: []
+  /**
+   * Mutations
+   */
+
+};
+var mutations = (_mutations = {}, _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["SET_RECEIPT"], function (state, _ref) {
+  var receipt = _ref.receipt;
+  state.receipt = receipt;
+}), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["FILL_RECEIPTS"], function (state, _ref2) {
+  var receipts = _ref2.receipts;
+  state.receipts = receipts;
+}), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["ADD_RECEIPT"], function (state, _ref3) {
+  var receipt = _ref3.receipt;
+  state.receipts.push(receipt);
+}), _defineProperty(_mutations, _mutation_types__WEBPACK_IMPORTED_MODULE_3__["FETCH_RECEIPT_FAILURE"], function (state) {
+  state.receipt = null;
+  state.receipts = [];
+}), _mutations);
+/**
+ * Actions
+ */
+
+var actions = {
+  fetchReceipts: function () {
+    var _fetchReceipts = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(_ref4) {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref4.commit;
+
+              try {
+                // const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"receipt"){ id, name, properties{email, mobile}}}'}})
+                commit(_mutation_types__WEBPACK_IMPORTED_MODULE_3__["FILL_RECEIPTS"], data.data);
+              } catch (e) {
+                commit(_mutation_types__WEBPACK_IMPORTED_MODULE_3__["FETCH_RECEIPT_FAILURE"]);
+              }
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function fetchReceipts(_x) {
+      return _fetchReceipts.apply(this, arguments);
+    }
+
+    return fetchReceipts;
+  }(),
+  addReceipt: function () {
+    var _addReceipt = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref5, receipt) {
+      var commit, _receipt, reference, account_id, transact_by, date, discount, discount_amount, service_charge, charge, received, change, note, items, payments, castItems, castComm, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, line, item, _discount, _discount_amount, tax_id, tax_amount, total_amount, _note, item_id, comm_id, user_id, comm_ammount, cast, comm, castPayments, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value, payment, _item_id, _note2, _cast, mutation, _ref6, _data;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref5.commit;
+              _context2.prev = 1;
+              _receipt = receipt, reference = _receipt.reference, account_id = _receipt.account_id, transact_by = _receipt.transact_by, date = _receipt.date, discount = _receipt.discount, discount_amount = _receipt.discount_amount, service_charge = _receipt.service_charge, charge = _receipt.charge, received = _receipt.received, change = _receipt.change, note = _receipt.note, items = _receipt.items, payments = _receipt.payments;
+              castItems = "";
+              castComm = "";
+              _iteratorNormalCompletion = true;
+              _didIteratorError = false;
+              _iteratorError = undefined;
+              _context2.prev = 8;
+
+              for (_iterator = items.entries()[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                _step$value = _slicedToArray(_step.value, 2), line = _step$value[0], item = _step$value[1];
+                _discount = item.discount, _discount_amount = item.discount_amount, tax_id = item.tax_id, tax_amount = item.tax_amount, total_amount = item.total_amount, _note = item.note;
+                item_id = item.id;
+                comm_id = commission.id;
+                user_id = item.user_id;
+                comm_ammount = commission.type == 'fix' ? commission.rate : total_amount * (commission.rate / 100);
+                cast = "{line: ".concat(line, ", \n                         type: \"item\", \n                         item_id: ").concat(item_id, ",\n                         discount: \"").concat(_discount, "\", \n                         discount_amount: ").concat(_discount_amount, ", \n                         tax_id: ").concat(tax_id, ", \n                         tax_amount: ").concat(tax_amount, ", \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(total_amount, ", \n                         note: \"").concat(_note, "\"},");
+                comm = "{line: ".concat(line, ", \n                         type: \"commission\", \n                         item_id: ").concat(comm_id, ",\n                         discount: \"{}\", \n                         discount_amount:0, \n                         tax_id: 1, \n                         tax_amount: 0, \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(comm_ammount, ", \n                         note: \"\"},");
+                castItems += cast;
+                castComm += comm;
+              }
+
+              _context2.next = 16;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](8);
+              _didIteratorError = true;
+              _iteratorError = _context2.t0;
+
+            case 16:
+              _context2.prev = 16;
+              _context2.prev = 17;
+
+              if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+                _iterator["return"]();
+              }
+
+            case 19:
+              _context2.prev = 19;
+
+              if (!_didIteratorError) {
+                _context2.next = 22;
+                break;
+              }
+
+              throw _iteratorError;
+
+            case 22:
+              return _context2.finish(19);
+
+            case 23:
+              return _context2.finish(16);
+
+            case 24:
+              castPayments = "";
+              _iteratorNormalCompletion2 = true;
+              _didIteratorError2 = false;
+              _iteratorError2 = undefined;
+              _context2.prev = 28;
+
+              for (_iterator2 = payments.entries()[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                _step2$value = _slicedToArray(_step2.value, 2), line = _step2$value[0], payment = _step2$value[1];
+                _item_id = payment.item_id, total_amount = payment.total_amount, _note2 = payment.note;
+                _cast = "{line: ".concat(line, ", \n                         type: \"payment\", \n                         item_id: ").concat(_item_id, ",\n                         discount: \"{}\", \n                         discount_amount:0, \n                         tax_id: 1, \n                         tax_amount: 0, \n                         total_amount: ").concat(total_amount, ", \n                         note: \"").concat(_note2, "\"}, ");
+                castPayments += _cast;
+              }
+
+              _context2.next = 36;
+              break;
+
+            case 32:
+              _context2.prev = 32;
+              _context2.t1 = _context2["catch"](28);
+              _didIteratorError2 = true;
+              _iteratorError2 = _context2.t1;
+
+            case 36:
+              _context2.prev = 36;
+              _context2.prev = 37;
+
+              if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+                _iterator2["return"]();
+              }
+
+            case 39:
+              _context2.prev = 39;
+
+              if (!_didIteratorError2) {
+                _context2.next = 42;
+                break;
+              }
+
+              throw _iteratorError2;
+
+            case 42:
+              return _context2.finish(39);
+
+            case 43:
+              return _context2.finish(36);
+
+            case 44:
+              mutation = "mutation receipts{\n                             newReceipt(\n                                 reference: \"".concat(reference, "\",\n                                 status: \"active\",\n                                 type: \"receipt\",\n                                 account_id: \"").concat(account_id, "\",\n                                 transact_by: \"").concat(transact_by, "\",\n                                 date: \"").concat(date, "\",\n                                 discount: \"").concat(discount, "\",\n                                 discount_amount: ").concat(discount_amount, ",\n                                 service_charge: ").concat(service_charge, ",\n                                 charge: ").concat(charge, ",\n                                 received: ").concat(received, ",\n                                 change: ").concat(change, ",\n                                 note: \"").concat(note, "\",\n                                 items: [").concat(castItems, "],\n                                 payments: [$[castPayments],\n                                 commissions: [$[castComm]\n                             ) {id}}");
+              _context2.next = 47;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_config__WEBPACK_IMPORTED_MODULE_2__["graphql"].path('query'), {
+                params: {
+                  query: mutation
+                }
+              });
+
+            case 47:
+              _ref6 = _context2.sent;
+              _data = _ref6.data;
+              receipt = _data.data.newReceipt;
+              commit(_mutation_types__WEBPACK_IMPORTED_MODULE_3__["ADD_RECEIPT"], {
+                receipt: receipt
+              });
+              return _context2.abrupt("return", receipt);
+
+            case 54:
+              _context2.prev = 54;
+              _context2.t2 = _context2["catch"](1);
+
+            case 56:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 54], [8, 12, 16, 24], [17,, 19, 23], [28, 32, 36, 44], [37,, 39, 43]]);
+    }));
+
+    function addReceipt(_x2, _x3) {
+      return _addReceipt.apply(this, arguments);
+    }
+
+    return addReceipt;
+  }()
+};
+/**
+ * Getters
+ */
+
+var getters = {
+  receipts: function receipts(state) {
+    return state.receipts;
+  },
+  receipt: function receipt(state) {
+    return state.receipt !== null;
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/store/modules/user.js":
 /*!********************************************!*\
   !*** ./resources/js/store/modules/user.js ***!
@@ -85325,7 +85706,7 @@ var getters = {
 /*!**********************************************!*\
   !*** ./resources/js/store/mutation-types.js ***!
   \**********************************************/
-/*! exports provided: SET_USER, LOGOUT, FETCH_USER_FAILURE, SET_TOKEN, SET_PRODUCT, FILL_PRODUCTS, FETCH_PRODUCT_FAILURE, SET_CUSTOMER, ADD_CUSTOMER, FILL_CUSTOMERS, FETCH_CUSTOMER_FAILURE, FILL_USERS, FETCH_USERS_FAILURE */
+/*! exports provided: SET_USER, LOGOUT, FETCH_USER_FAILURE, SET_TOKEN, SET_PRODUCT, FILL_PRODUCTS, FETCH_PRODUCT_FAILURE, SET_CUSTOMER, ADD_CUSTOMER, FILL_CUSTOMERS, FETCH_CUSTOMER_FAILURE, FILL_USERS, FETCH_USERS_FAILURE, SET_RECEIPT, ADD_RECEIPT, FILL_RECEIPTS, FETCH_RECEIPT_FAILURE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -85343,6 +85724,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CUSTOMER_FAILURE", function() { return FETCH_CUSTOMER_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FILL_USERS", function() { return FILL_USERS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_USERS_FAILURE", function() { return FETCH_USERS_FAILURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_RECEIPT", function() { return SET_RECEIPT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_RECEIPT", function() { return ADD_RECEIPT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FILL_RECEIPTS", function() { return FILL_RECEIPTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_RECEIPT_FAILURE", function() { return FETCH_RECEIPT_FAILURE; });
 /**
  * auth.js
  */
@@ -85371,6 +85756,14 @@ var FETCH_CUSTOMER_FAILURE = 'FETCH_CUSTOMER_FAILURE';
 
 var FILL_USERS = 'FILL_USERS';
 var FETCH_USERS_FAILURE = 'FETCH_USER_FAILURE';
+/**
+ * receipt.js
+ */
+
+var SET_RECEIPT = 'SET_RECEIPT';
+var ADD_RECEIPT = 'SET_RECEIPTS';
+var FILL_RECEIPTS = 'FILL_RECEIPTS';
+var FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE';
 
 /***/ }),
 

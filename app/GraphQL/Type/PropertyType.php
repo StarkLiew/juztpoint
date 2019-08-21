@@ -8,11 +8,11 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class PropertyType extends GraphQLType {
 	protected $attributes = [
 		'name' => 'Property',
-		'description' => 'The collection of all Properties',
+		'description' => 'JSON of object property',
 
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'name' => [
 				'type' => Type::string(),

@@ -26,3 +26,11 @@ export const FETCH_CUSTOMER_FAILURE = 'FETCH_CUSTOMER_FAILURE'
  */
 export const FILL_USERS = 'FILL_USERS'
 export const FETCH_USERS_FAILURE = 'FETCH_USER_FAILURE'
+
+/**
+ * receipt.js
+ */
+export const SET_RECEIPT = 'SET_RECEIPT'
+export const ADD_RECEIPT = 'SET_RECEIPTS'
+export const FILL_RECEIPTS = 'FILL_RECEIPTS'
+export const FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE'

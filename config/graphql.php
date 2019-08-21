@@ -1,5 +1,7 @@
 <?php
 
+declare (strict_types = 1);
+
 return [
 
 	// The prefix for routes
@@ -38,7 +40,7 @@ return [
 	'controllers' => \Rebing\GraphQL\GraphQLController::class . '@query',
 
 	// Any middleware for the graphql route group
-	'middleware' => ['auth:api'],
+	'middleware' => [],
 
 	// Additional route group attributes
 	//
@@ -99,13 +101,14 @@ return [
 				'settings' => App\GraphQL\Query\SettingsQuery::class,
 				'accounts' => App\GraphQL\Query\AccountsQuery::class,
 				'products' => App\GraphQL\Query\ProductsQuery::class,
-
+				'receipts' => App\GraphQL\Query\ReceiptsQuery::class,
 			],
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
 				'newAccount' => App\GraphQL\Mutation\NewAccountMutation::class,
+				'newReceipt' => App\GraphQL\Mutation\NewReceiptMutation::class,
 			],
-			'middleware' => [],
+			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],
 		],
 	],
@@ -122,12 +125,22 @@ return [
 	'types' => [
 		// 'example'           => ExampleType::class,
 		// 'relation_example'  => ExampleRelationType::class,
-		'users' => App\GraphQL\Type\UsersType::class,
-		'settings' => App\GraphQL\Type\SettingsType::class,
-		'accounts' => App\GraphQL\Type\AccountsType::class,
-		'products' => App\GraphQL\Type\ProductsType::class,
+		// \Rebing\GraphQL\Support\UploadType::class,
+		'user' => App\GraphQL\Type\UserType::class,
+		'setting' => App\GraphQL\Type\SettingType::class,
+		'account' => App\GraphQL\Type\AccountType::class,
+		'product' => App\GraphQL\Type\ProductType::class,
 		'property' => App\GraphQL\Type\PropertyType::class,
+		'receipt' => App\GraphQL\Type\ReceiptType::class,
+		'item' => App\GraphQL\Type\ItemType::class,
+		'ItemInput' => App\GraphQL\Input\ItemInput::class,
+
 	],
+
+	// The types will be loaded on demand. Default is to load all types on each request
+	// Can increase performance on schemes with many types
+	// Presupposes the config type key to match the type class name property
+	'lazyload_types' => false,
 
 	// This callable will be passed the Error object for each errors GraphQL catch.
 	// The method should return an array representing the error.
@@ -171,7 +184,7 @@ return [
 		     * Config for GraphiQL (see (https://github.com/graphql/graphiql).
 	*/
 	'graphiql' => [
-		'prefix' => '/graphiql/{graphql_schema?}',
+		'prefix' => '/graphiql',
 		'controller' => \Rebing\GraphQL\GraphQLController::class . '@graphiql',
 		'middleware' => [],
 		'view' => 'graphql::graphiql',

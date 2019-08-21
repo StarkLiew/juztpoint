@@ -48,6 +48,17 @@ class Document extends Model {
 	protected $hidden = [
 
 	];
+
+	public function items() {
+		return $this->hasMany('App\Models\Item', 'trxn_id');
+	}
+	public function payments() {
+		return $this->hasMany('App\Models\Item', 'trxn_id');
+	}
+	public function commissions() {
+		return $this->hasMany('App\Models\Item', 'trxn_id');
+	}
+
 	public function account() {
 		return $this->belongsTo('App\Models\Account', 'account_id');
 	}

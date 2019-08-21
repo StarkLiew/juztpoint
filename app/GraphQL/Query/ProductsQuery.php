@@ -1,10 +1,12 @@
 <?php
 namespace App\GraphQL\Query;
+
 use App\Models\Product;
+use Closure;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
 
 class ProductsQuery extends Query {
 	protected $attributes = [
@@ -12,11 +14,11 @@ class ProductsQuery extends Query {
 		'description' => 'A query of products',
 	];
 
-	public function type() {
-		return Type::listOf(GraphQL::type('products'));
+	public function type(): Type {
+		return Type::listOf(GraphQL::type('product'));
 	}
 	// arguments to filter query
-	public function args() {
+	public function args(): array{
 		return [
 			'id' => [
 				'name' => 'id',
@@ -41,7 +43,7 @@ class ProductsQuery extends Query {
 
 		];
 	}
-	public function resolve($root, $args, SelectFields $fields) {
+	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
@@ -56,6 +58,8 @@ class ProductsQuery extends Query {
 				$query->where('sku', $args['sku']);
 			}
 		};
+
+		$fields = $getSelectFields();
 		$results = Product::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())

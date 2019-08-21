@@ -1,18 +1,19 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\User;
+use GraphQL\GraphQL;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class UsersType extends GraphQLType {
+class UserType extends GraphQLType {
 	protected $attributes = [
 		'name' => 'Users',
 		'description' => 'A type',
 		'model' => User::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),

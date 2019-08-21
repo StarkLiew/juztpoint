@@ -1,10 +1,12 @@
 <?php
 namespace App\GraphQL\Query;
+
 use App\Models\Account;
+use Closure;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
 
 class AccountsQuery extends Query {
 	protected $attributes = [
@@ -12,11 +14,11 @@ class AccountsQuery extends Query {
 		'description' => 'A query of accounts',
 	];
 
-	public function type() {
-		return Type::listOf(GraphQL::type('accounts'));
+	public function type(): Type {
+		return Type::listOf(GraphQL::type('account'));
 	}
 	// arguments to filter query
-	public function args() {
+	public function args(): array{
 		return [
 			'id' => [
 				'name' => 'id',
@@ -40,7 +42,7 @@ class AccountsQuery extends Query {
 			],
 		];
 	}
-	public function resolve($root, $args, SelectFields $fields) {
+	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
@@ -52,6 +54,8 @@ class AccountsQuery extends Query {
 				$query->where('status', $args['status']);
 			}
 		};
+
+		$fields = $getSelectFields();
 		$results = Account::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())

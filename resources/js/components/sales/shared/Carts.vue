@@ -119,7 +119,7 @@
                   <v-list-item-content>
                     <v-list-item-title>Charge</v-list-item-title>
                   </v-list-item-content>
-                    <v-btn color="error" @click="payment()" large class="display-1">{{ footer.charge | currency}}</v-btn>
+                    <v-btn :disabled="footer.charge  <= 0" color="error" @click="payment()" large class="display-1">{{ footer.charge | currency}}</v-btn>
                 </v-list-item>
       
 
@@ -186,10 +186,10 @@ export default {
   },
   methods: {
     payment() {
-         const {items, footer} = this
-
+         const {customer, items, footer} = this
+         const receipt = {customer, footer, items} 
          this.isEntry = false
-         this.$emit('payment', {items, footer})
+         this.$emit('payment', receipt)
     },
     updateDiscountFooter(discount) {
     

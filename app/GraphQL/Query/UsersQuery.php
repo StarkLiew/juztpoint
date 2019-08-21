@@ -1,11 +1,13 @@
 <?php
 namespace App\GraphQL\Query;
+
 use App\Models\User;
 use Auth;
+use Closure;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
 
 class UsersQuery extends Query {
 	protected $attributes = [
@@ -13,11 +15,11 @@ class UsersQuery extends Query {
 		'description' => 'A query of users',
 	];
 
-	public function type() {
-		return Type::listOf(GraphQL::type('users'));
+	public function type(): Type {
+		return Type::listOf(GraphQL::type('user'));
 	}
 	// arguments to filter query
-	public function args() {
+	public function args(): array{
 		return [
 			'id' => [
 				'name' => 'id',
@@ -29,7 +31,7 @@ class UsersQuery extends Query {
 			],
 		];
 	}
-	public function resolve($root, $args, SelectFields $fields) {
+	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
@@ -40,6 +42,8 @@ class UsersQuery extends Query {
 		};
 
 		$id = Auth::id();
+
+		$fields = $getSelectFields();
 
 		$results = User::with(array_keys($fields->getRelations()))
 			->where('tenant', '=', $id)

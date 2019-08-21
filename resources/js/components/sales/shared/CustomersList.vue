@@ -59,6 +59,7 @@ export default {
   methods: {
     mapCustomers(alpha) {
           let customers = this.$store.getters['account/customers']
+          if(!customers) return []
           return customers.filter(row => row.name.toString().toLowerCase().startsWith(alpha.toLowerCase()))
     },
     selected(customer) {

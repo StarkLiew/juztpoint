@@ -9,10 +9,10 @@ class UpdateUserMutation extends Mutation {
 	protected $attributes = [
 		'name' => 'UpdateUser',
 	];
-	public function type() {
-		return GraphQL::type('users');
+	public function type(): Type {
+		return GraphQL::type('user');
 	}
-	public function args() {
+	public function args(): array{
 		return [
 			'id' => [
 				'name' => 'id',

@@ -1,10 +1,12 @@
 <?php
 namespace App\GraphQL\Query;
+
 use App\Models\Setting;
+use Closure;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
-use Rebing\GraphQL\Support\SelectFields;
 
 class SettingsQuery extends Query {
 	protected $attributes = [
@@ -12,11 +14,11 @@ class SettingsQuery extends Query {
 		'description' => 'A query of settings',
 	];
 
-	public function type() {
-		return Type::listOf(GraphQL::type('settings'));
+	public function type(): Type {
+		return Type::listOf(GraphQL::type('setting'));
 	}
 	// arguments to filter query
-	public function args() {
+	public function args(): array{
 		return [
 			'id' => [
 				'name' => 'id',
@@ -37,7 +39,7 @@ class SettingsQuery extends Query {
 
 		];
 	}
-	public function resolve($root, $args, SelectFields $fields) {
+	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
@@ -46,6 +48,8 @@ class SettingsQuery extends Query {
 				$query->where('type', $args['type']);
 			}
 		};
+
+		$fields = $getSelectFields();
 		$results = Setting::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())

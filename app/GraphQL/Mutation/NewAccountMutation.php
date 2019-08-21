@@ -10,10 +10,10 @@ class NewAccountMutation extends Mutation {
 	protected $attributes = [
 		'name' => 'NewAccount',
 	];
-	public function type() {
-		return GraphQL::type('accounts');
+	public function type(): Type {
+		return GraphQL::type('account');
 	}
-	public function args() {
+	public function args(): array{
 		return [
 			'name' => [
 				'name' => 'name',

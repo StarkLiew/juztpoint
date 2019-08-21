@@ -48,6 +48,11 @@ class Item extends Model {
 	protected $hidden = [
 
 	];
+
+	public function document() {
+		return $this->belongsTo('App\Models\Document', 'trxn_id');
+	}
+
 	public function product() {
 		return $this->belongsTo('App\Models\Product', 'item_id');
 	}

@@ -1,5 +1,6 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\Item;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -12,7 +13,7 @@ class ItemType extends GraphQLType {
 		'model' => Item::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),
@@ -54,7 +55,7 @@ class ItemType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'discount_amount' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'tax_id' => [
@@ -62,11 +63,11 @@ class ItemType extends GraphQLType {
 				'description' => 'Description of the setting',
 			],
 			'tax_amount' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'total_amount' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'note' => [

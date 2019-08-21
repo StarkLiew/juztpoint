@@ -1,18 +1,19 @@
 <?php
 namespace App\GraphQL\Type;
+
 use App\Models\Document;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class ReceiptsType extends GraphQLType {
+class ReceiptType extends GraphQLType {
 	protected $attributes = [
-		'name' => 'Receipts',
+		'name' => 'Receipt',
 		'description' => 'The collection of all Receipts',
 		'model' => Document::class, // define model for users type
 	];
 	// define field of type
-	public function fields() {
+	public function fields(): array{
 		return [
 			'id' => [
 				'type' => Type::nonNull(Type::int()),
@@ -39,7 +40,7 @@ class ReceiptsType extends GraphQLType {
 				'description' => 'Description of the setting',
 			],
 			'date' => [
-				'type' => Type::nonNull(Type::date()),
+				'type' => Type::nonNull(Type::string()),
 				'description' => 'Description of the setting',
 			],
 			'type' => [
@@ -67,7 +68,7 @@ class ReceiptsType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'payments' => [
-				'type' => Type::listOf(GraphQL::type('items')),
+				'type' => Type::listOf(GraphQL::type('item')),
 				'description' => 'A list of the item',
 				'is_relation' => true,
 			],
