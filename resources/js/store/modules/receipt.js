@@ -48,57 +48,72 @@ export const actions = {
   async addReceipt({ commit }, receipt) {
     try {
 
-       const {reference, account_id,transact_by, date,discount,discount_amount, service_charge, charge,received, change, note,  items, payments} = receipt
-        
+       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, charge,received, change, note,  items, payments} = receipt
 
         let castItems = "" 
         let castComm = "" 
         for(const [line, item] of items.entries() ) {
-           const {discount, discount_amount, tax_id, tax_amount, total_amount, note} = item
+    
+           const item_id = item.id
+           const commission = item.commission.properties
+           const comm_id = item.commission.id
+        
+           const user_id = item.saleBy.id  
+           const terminal_id = item.saleBy.id  
+           const tax_id = item.tax.id
+           const tax_amount = item.tax_amount
+           const total_amount = item.amount
+           const note = item.note
+            
+           const discount_amount = item.discount.amount
+    
 
-           const item_id = item.id  
-           const comm_id = commission.id  
-           const user_id = item.user_id  
-           const comm_ammount = commission.type == 'fix' ? commission.rate : total_amount * (commission.rate /100)
 
+           const comm_ammount = commission.type == 'fix' ? parseFloat(commission.rate) : parseFloat(total_amount) * (parseFloat(commission.rate) /100)
 
-           const cast = `{line: ${line}, 
+    
+       
+           const cast = `{line: ${line + 1}, 
                          type: "item", 
                          item_id: ${item_id},
-                         discount: "${discount}", 
-                         discount_amount: ${discount_amount}, 
+                         discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
+                         discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
-                         tax_amount: ${tax_amount}, 
+                         tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
-                         total_amount: ${total_amount}, 
+                         total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}"},`
 
-          const comm = `{line: ${line}, 
+          const comm = `{line: ${line + 1}, 
                          type: "commission", 
                          item_id: ${comm_id},
                          discount: "{}", 
-                         discount_amount:0, 
+                         discount_amount:0.00, 
                          tax_id: 1, 
-                         tax_amount: 0, 
+                         tax_amount: 0.00, 
                          user_id: ${user_id},
-                         total_amount: ${comm_ammount}, 
+                         total_amount: ${parseFloat(comm_ammount)}, 
                          note: ""},`   
 
            castItems += cast
            castComm  += comm
+
+
         }
+
 
         let castPayments = "" 
         for(const [line, payment] of payments.entries() ) {
            const {item_id, total_amount, note} = payment
-           const cast = `{line: ${line}, 
+           const cast = `{line: ${line + 1}, 
                          type: "payment", 
                          item_id: ${item_id},
                          discount: "{}", 
-                         discount_amount:0, 
+                         discount_amount:0.00, 
                          tax_id: 1, 
-                         tax_amount: 0, 
-                         total_amount: ${total_amount}, 
+                         tax_amount: 0.00, 
+                         user_id: ${transact_by},
+                         total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}"}, `
            castPayments +=  cast
 
@@ -110,19 +125,21 @@ export const actions = {
                                  reference: "${reference}",
                                  status: "active",
                                  type: "receipt",
-                                 account_id: "${account_id}",
-                                 transact_by: "${transact_by}",
+                                 terminal_id: ${transact_by},
+                                 account_id: ${account_id},
+                                 transact_by: ${transact_by},
                                  date: "${date}",
-                                 discount: "${discount}",
-                                 discount_amount: ${discount_amount},
-                                 service_charge: ${service_charge},
-                                 charge: ${charge},
-                                 received: ${received},
-                                 change: ${change},
+                                 discount: "${JSON.stringify(discount).replace(/"/g, '\\"')}",
+                                 discount_amount: ${parseFloat(discount_amount)},
+                                 tax_amount: ${parseFloat(tax_total)},
+                                 service_charge: ${parseFloat(service_charge)},
+                                 charge: ${parseFloat(charge)},
+                                 received: ${parseFloat(received)},
+                                 change: ${parseFloat(change)},
                                  note: "${note}",
                                  items: [${castItems}],
-                                 payments: [$[castPayments],
-                                 commissions: [$[castComm]
+                                 payments: [${castPayments}],
+                                 commissions: [${castComm}]
                              ) {id}}`
 
 

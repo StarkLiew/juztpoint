@@ -19,6 +19,10 @@ class NewReceiptMutation extends Mutation {
 				'name' => 'reference',
 				'type' => Type::nonNull(Type::string()),
 			],
+			'terminal_id' => [
+				'name' => 'terminal_id',
+				'type' => Type::nonNull(Type::int()),
+			],
 			'account_id' => [
 				'name' => 'account_id',
 				'type' => Type::nonNull(Type::int()),

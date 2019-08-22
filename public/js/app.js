@@ -4173,6 +4173,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (newVal) {
         //const defaultItem = {qty: 1, price: 0.00, discount: 0.00}
         var item = this.sumAmount(_objectSpread({}, newVal));
+        item.note = "";
         this.items.push(item);
         setTimeout(function () {
           _this.sumTotal();
@@ -4243,6 +4244,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           item.discount.amount = item.amount * item.discount.rate / 100;
           item.amount = item.amount - item.discount.amount;
         }
+      } else {
+        item.discount = {
+          type: 'percent',
+          rate: 0,
+          amount: 0
+        };
       }
 
       return item;
@@ -4253,7 +4260,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var discountAmount = 0;
       this.items.forEach(function (item) {
         total += item.amount;
-        taxTotal += item.amount * item.tax.properties.rate / 100;
+        item.tax_amount = item.amount * item.tax.properties.rate / 100;
+        taxTotal += item.tax_amount;
       });
 
       if (this.footer.discount.type == "percent") {
@@ -4951,7 +4959,7 @@ __webpack_require__.r(__webpack_exports__);
         rate: discountRate,
         type: this.parseDiscountType(discountType)
       };
-      this.$emit('done', this.item, this.index);
+      this.item.discount_amount = this.$emit('done', this.item, this.index);
     },
     cancel: function cancel() {
       this.$emit('cancel');
@@ -5267,7 +5275,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _save = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var amount_received, amount_change, _this$trxn, customer, footer, items, payments, dateObj, month, day, year, hours, minutes, seconds, user_id, reference, receipt;
+        var amount_received, amount_change, _this$trxn, customer, footer, items, payments, dateObj, month, day, year, hours, minutes, seconds, user_id, cast_user_id, sqlYear, now, reference, receipt;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
@@ -5281,15 +5289,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (this.cash.amount > 0) {
                   payments.push({
                     item_id: 1,
-                    total_amont: this.cash.amount
+                    total_amount: this.cash.amount,
+                    note: ''
                   });
                 }
 
                 if (this.card.amount > 0) {
                   payments.push({
                     item_id: 2,
-                    note: this.cash.ref,
-                    total_amount: this.cash.amount
+                    note: this.card.ref,
+                    total_amount: this.card.amount
                   });
                 }
 
@@ -5302,12 +5311,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getUTCSeconds();
                 user_id = this.auth.id;
-                user_id = "0" + user_id;
-                user_id = user_id.substr(user_id.length - 2);
+                cast_user_id = "0" + user_id;
+                cast_user_id = cast_user_id.substr(cast_user_id.length - 2);
                 day = "0" + day;
                 day = day.substr(day.length - 2);
                 month = "0" + month;
                 month = month.substr(month.length - 2);
+                sqlYear = year;
                 year = year.toString().substr(year.toString().length - 2);
                 hours = "0" + hours;
                 hours = hours.substr(hours.length - 2);
@@ -5315,10 +5325,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 minutes = minutes.substr(minutes.length - 2);
                 seconds = "0" + seconds;
                 seconds = seconds.substr(seconds.length - 2);
-                reference = user_id + year + month + day + hours + minutes + seconds;
+                now = "".concat(sqlYear, "-").concat(month, "-").concat(day, " ").concat(hours, ":").concat(minutes, ":").concat(seconds);
+                reference = cast_user_id + year + month + day + hours + minutes + seconds;
                 receipt = {
                   account_id: customer ? customer.id : 0,
-                  date: new Date(),
+                  date: now,
                   reference: reference,
                   transact_by: user_id,
                   discount: {
@@ -5326,6 +5337,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     type: footer.discount.type
                   },
                   discount_amount: footer.discount.amount,
+                  tax_total: footer.tax,
                   service_charge: 0,
                   charge: footer.charge,
                   received: amount_received,
@@ -5334,13 +5346,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   items: items,
                   payments: payments
                 };
-                _context.next = 31;
+                _context.next = 33;
                 return this.$store.dispatch('receipt/addReceipt', receipt);
 
-              case 31:
+              case 33:
                 this.paid = true;
 
-              case 32:
+              case 34:
               case "end":
                 return _context.stop();
             }
@@ -85272,7 +85284,7 @@ var actions = {
               _context.next = 4;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_config__WEBPACK_IMPORTED_MODULE_2__["graphql"].path('query'), {
                 params: {
-                  query: '{products{ id,   name, category{name}, tax{name, properties{rate}}, properties{qty, price, thumbnail, color}}}'
+                  query: '{products{ id,   name, category{name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate}}, properties{qty, price, thumbnail, color}}}'
                 }
               });
 
@@ -85424,7 +85436,7 @@ var actions = {
     var _addReceipt = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref5, receipt) {
-      var commit, _receipt, reference, account_id, transact_by, date, discount, discount_amount, service_charge, charge, received, change, note, items, payments, castItems, castComm, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, line, item, _discount, _discount_amount, tax_id, tax_amount, total_amount, _note, item_id, comm_id, user_id, comm_ammount, cast, comm, castPayments, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value, payment, _item_id, _note2, _cast, mutation, _ref6, _data;
+      var commit, _receipt, reference, account_id, transact_by, date, discount, discount_amount, tax_total, service_charge, charge, received, change, note, items, payments, castItems, castComm, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, line, item, item_id, commission, comm_id, user_id, terminal_id, tax_id, tax_amount, total_amount, _note, _discount_amount, comm_ammount, cast, comm, castPayments, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value, payment, _item_id, _total_amount, _note2, _cast, mutation, _ref6, _data;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
         while (1) {
@@ -85432,7 +85444,7 @@ var actions = {
             case 0:
               commit = _ref5.commit;
               _context2.prev = 1;
-              _receipt = receipt, reference = _receipt.reference, account_id = _receipt.account_id, transact_by = _receipt.transact_by, date = _receipt.date, discount = _receipt.discount, discount_amount = _receipt.discount_amount, service_charge = _receipt.service_charge, charge = _receipt.charge, received = _receipt.received, change = _receipt.change, note = _receipt.note, items = _receipt.items, payments = _receipt.payments;
+              _receipt = receipt, reference = _receipt.reference, account_id = _receipt.account_id, transact_by = _receipt.transact_by, date = _receipt.date, discount = _receipt.discount, discount_amount = _receipt.discount_amount, tax_total = _receipt.tax_total, service_charge = _receipt.service_charge, charge = _receipt.charge, received = _receipt.received, change = _receipt.change, note = _receipt.note, items = _receipt.items, payments = _receipt.payments;
               castItems = "";
               castComm = "";
               _iteratorNormalCompletion = true;
@@ -85442,13 +85454,19 @@ var actions = {
 
               for (_iterator = items.entries()[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 _step$value = _slicedToArray(_step.value, 2), line = _step$value[0], item = _step$value[1];
-                _discount = item.discount, _discount_amount = item.discount_amount, tax_id = item.tax_id, tax_amount = item.tax_amount, total_amount = item.total_amount, _note = item.note;
                 item_id = item.id;
-                comm_id = commission.id;
-                user_id = item.user_id;
-                comm_ammount = commission.type == 'fix' ? commission.rate : total_amount * (commission.rate / 100);
-                cast = "{line: ".concat(line, ", \n                         type: \"item\", \n                         item_id: ").concat(item_id, ",\n                         discount: \"").concat(_discount, "\", \n                         discount_amount: ").concat(_discount_amount, ", \n                         tax_id: ").concat(tax_id, ", \n                         tax_amount: ").concat(tax_amount, ", \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(total_amount, ", \n                         note: \"").concat(_note, "\"},");
-                comm = "{line: ".concat(line, ", \n                         type: \"commission\", \n                         item_id: ").concat(comm_id, ",\n                         discount: \"{}\", \n                         discount_amount:0, \n                         tax_id: 1, \n                         tax_amount: 0, \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(comm_ammount, ", \n                         note: \"\"},");
+                commission = item.commission.properties;
+                comm_id = item.commission.id;
+                user_id = item.saleBy.id;
+                terminal_id = item.saleBy.id;
+                tax_id = item.tax.id;
+                tax_amount = item.tax_amount;
+                total_amount = item.amount;
+                _note = item.note;
+                _discount_amount = item.discount.amount;
+                comm_ammount = commission.type == 'fix' ? parseFloat(commission.rate) : parseFloat(total_amount) * (parseFloat(commission.rate) / 100);
+                cast = "{line: ".concat(line + 1, ", \n                         type: \"item\", \n                         item_id: ").concat(item_id, ",\n                         discount: \"").concat(JSON.stringify(item.discount).replace(/"/g, '\\"'), "\", \n                         discount_amount: ").concat(parseFloat(_discount_amount), ", \n                         tax_id: ").concat(tax_id, ", \n                         tax_amount: ").concat(parseFloat(tax_amount), ", \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(parseFloat(total_amount), ", \n                         note: \"").concat(_note, "\"},");
+                comm = "{line: ".concat(line + 1, ", \n                         type: \"commission\", \n                         item_id: ").concat(comm_id, ",\n                         discount: \"{}\", \n                         discount_amount:0.00, \n                         tax_id: 1, \n                         tax_amount: 0.00, \n                         user_id: ").concat(user_id, ",\n                         total_amount: ").concat(parseFloat(comm_ammount), ", \n                         note: \"\"},");
                 castItems += cast;
                 castComm += comm;
               }
@@ -85495,8 +85513,8 @@ var actions = {
 
               for (_iterator2 = payments.entries()[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                 _step2$value = _slicedToArray(_step2.value, 2), line = _step2$value[0], payment = _step2$value[1];
-                _item_id = payment.item_id, total_amount = payment.total_amount, _note2 = payment.note;
-                _cast = "{line: ".concat(line, ", \n                         type: \"payment\", \n                         item_id: ").concat(_item_id, ",\n                         discount: \"{}\", \n                         discount_amount:0, \n                         tax_id: 1, \n                         tax_amount: 0, \n                         total_amount: ").concat(total_amount, ", \n                         note: \"").concat(_note2, "\"}, ");
+                _item_id = payment.item_id, _total_amount = payment.total_amount, _note2 = payment.note;
+                _cast = "{line: ".concat(line + 1, ", \n                         type: \"payment\", \n                         item_id: ").concat(_item_id, ",\n                         discount: \"{}\", \n                         discount_amount:0.00, \n                         tax_id: 1, \n                         tax_amount: 0.00, \n                         user_id: ").concat(transact_by, ",\n                         total_amount: ").concat(parseFloat(_total_amount), ", \n                         note: \"").concat(_note2, "\"}, ");
                 castPayments += _cast;
               }
 
@@ -85534,7 +85552,7 @@ var actions = {
               return _context2.finish(36);
 
             case 44:
-              mutation = "mutation receipts{\n                             newReceipt(\n                                 reference: \"".concat(reference, "\",\n                                 status: \"active\",\n                                 type: \"receipt\",\n                                 account_id: \"").concat(account_id, "\",\n                                 transact_by: \"").concat(transact_by, "\",\n                                 date: \"").concat(date, "\",\n                                 discount: \"").concat(discount, "\",\n                                 discount_amount: ").concat(discount_amount, ",\n                                 service_charge: ").concat(service_charge, ",\n                                 charge: ").concat(charge, ",\n                                 received: ").concat(received, ",\n                                 change: ").concat(change, ",\n                                 note: \"").concat(note, "\",\n                                 items: [").concat(castItems, "],\n                                 payments: [$[castPayments],\n                                 commissions: [$[castComm]\n                             ) {id}}");
+              mutation = "mutation receipts{\n                             newReceipt(\n                                 reference: \"".concat(reference, "\",\n                                 status: \"active\",\n                                 type: \"receipt\",\n                                 terminal_id: ").concat(transact_by, ",\n                                 account_id: ").concat(account_id, ",\n                                 transact_by: ").concat(transact_by, ",\n                                 date: \"").concat(date, "\",\n                                 discount: \"").concat(JSON.stringify(discount).replace(/"/g, '\\"'), "\",\n                                 discount_amount: ").concat(parseFloat(discount_amount), ",\n                                 tax_amount: ").concat(parseFloat(tax_total), ",\n                                 service_charge: ").concat(parseFloat(service_charge), ",\n                                 charge: ").concat(parseFloat(charge), ",\n                                 received: ").concat(parseFloat(received), ",\n                                 change: ").concat(parseFloat(change), ",\n                                 note: \"").concat(note, "\",\n                                 items: [").concat(castItems, "],\n                                 payments: [").concat(castPayments, "],\n                                 commissions: [").concat(castComm, "]\n                             ) {id}}");
               _context2.next = 47;
               return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(_config__WEBPACK_IMPORTED_MODULE_2__["graphql"].path('query'), {
                 params: {

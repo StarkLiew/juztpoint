@@ -146,10 +146,10 @@ export default {
           if(this.item.discount) {
              this.discountType = this.parseDiscountType(this.item.discount.discountType)
              this.discountRate = this.item.discount.rate
-          }
+          } 
           if(this.item.note) { 
              this.note = this.item.note
-          }
+          } 
       },
       inc(neg, prop) {
           let val = parseFloat(this.qty) + neg
@@ -160,6 +160,7 @@ export default {
          this.item.qty = qty
          this.item.note = note
          this.item.discount = {rate: discountRate, type: this.parseDiscountType(discountType)}
+         this.item.discount_amount = 
          this.$emit('done', this.item, this.index)
       },
       cancel() {

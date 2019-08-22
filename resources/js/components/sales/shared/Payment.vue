@@ -262,10 +262,10 @@ export default {
          let payments = []
 
          if(this.cash.amount > 0) {
-            payments.push({item_id: 1, total_amont: this.cash.amount })
+            payments.push({item_id: 1, total_amount: this.cash.amount, note: ''})
          }
          if(this.card.amount > 0) {
-              payments.push({item_id: 2, note: this.cash.ref , total_amount: this.cash.amount })
+              payments.push({item_id: 2, note: this.card.ref , total_amount: this.card.amount })
          }
 
           const dateObj = new Date()
@@ -279,29 +279,34 @@ export default {
           let user_id = this.auth.id
 
 
-            user_id = ("0" + user_id)
-            user_id =  user_id.substr(user_id.length - 2)
+            let cast_user_id = ("0" + user_id)
+            cast_user_id =  cast_user_id.substr(cast_user_id.length - 2)
             day = ("0" + day)
             day =  day.substr(day.length - 2)
             month = ("0" + month)
             month =  month.substr(month.length - 2)
+
+            const sqlYear = year
             year = year.toString().substr(year.toString().length-2)
+
             hours = ("0" + hours)
             hours =  hours.substr(hours.length - 2)
             minutes = ("0" + minutes)
             minutes =  minutes.substr(minutes.length - 2)
             seconds = ("0" + seconds)
             seconds =  seconds.substr(seconds.length - 2)
+         
+         const now = `${sqlYear}-${month}-${day} ${hours}:${minutes}:${seconds}`
 
-
-         const reference = user_id + year + month + day + hours + minutes + seconds 
+         const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
                account_id: customer ? customer.id : 0,
-               date: new Date(),
+               date: now,
                reference: reference,
                transact_by: user_id,
                discount: {rate: footer.discount.rate, type: footer.discount.type}, 
                discount_amount: footer.discount.amount,
+               tax_total: footer.tax,
                service_charge: 0,
                charge: footer.charge,
                received:  amount_received,
@@ -311,9 +316,7 @@ export default {
                payments: payments,
 
          }
-         
-
-
+    
          await this.$store.dispatch('receipt/addReceipt', receipt)
          this.paid = true
       },

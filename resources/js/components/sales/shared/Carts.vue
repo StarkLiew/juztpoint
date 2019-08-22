@@ -166,8 +166,12 @@ export default {
       if(newVal) {
         //const defaultItem = {qty: 1, price: 0.00, discount: 0.00}
 
-        const item = this.sumAmount({...newVal})
-      
+        
+        let item = this.sumAmount({...newVal})
+    
+        item.note = ""
+
+
         this.items.push(item)  
         setTimeout(() => {
                this.sumTotal()
@@ -219,13 +223,13 @@ export default {
       this.editItem = []
     },
     sumAmount(item) {
-
+          
         if(item.properties && !item.properties.price) {
              item.price = item.properties.price = 0.00
         }
 
         item.amount = item.qty * item.properties.price
-        
+
         if(item.discount) {
      
           if(item.discount.type === 'fix') {
@@ -235,9 +239,11 @@ export default {
              item.discount.amount = item.amount * item.discount.rate / 100
              item.amount =  item.amount - item.discount.amount
           }
+
+        } else {
+             item.discount =  {type: 'percent', rate: 0, amount: 0}
         }
-
-
+   
            
         return item
     },
@@ -248,7 +254,8 @@ export default {
 
         this.items.forEach((item) => {
             total += item.amount
-            taxTotal += item.amount * item.tax.properties.rate / 100
+            item.tax_amount =  item.amount * item.tax.properties.rate / 100
+            taxTotal += item.tax_amount
         })
         
         if(this.footer.discount.type == "percent") {
@@ -257,6 +264,7 @@ export default {
         if(this.footer.discount.type == "fix") {
             this.footer.discount.amount = this.footer.discount.rate
         }
+
 
         this.footer.charge = (total - this.footer.discount.amount) + taxTotal
         this.footer.tax = taxTotal

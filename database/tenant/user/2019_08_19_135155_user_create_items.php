@@ -32,11 +32,6 @@ class UserCreateItems extends Migration {
 			$products = "user_{$id}_products";
 			$settings = "user_{$id}_settings";
 
-			$table->foreign('item_id')
-				->references('id')->on($settings)
-				->references('id')->on($products)
-				->onUpdate('cascade');
-
 			$table->foreign('user_id')
 				->references('id')->on('users')
 				->onUpdate('cascade');

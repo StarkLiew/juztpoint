@@ -52,6 +52,10 @@ class ItemInput extends InputType {
 				'type' => Type::string(),
 				'name' => 'note',
 			],
+			'user_id' => [
+				'type' => Type::nonNull(Type::int()),
+				'name' => 'user_id',
+			],
 
 		];
 	}

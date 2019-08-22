@@ -34,9 +34,6 @@ class UserCreateDocuments extends Migration {
 			$table->softDeletes();
 
 			$accounts = "user_{$id}_accounts";
-			$table->foreign('account_id')
-				->references('id')->on($accounts)
-				->onUpdate('cascade');
 
 			$table->foreign('transact_by')
 				->references('id')->on('users')
