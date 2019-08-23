@@ -29,6 +29,7 @@ class UserCreateDocuments extends Migration {
 			$table->float('charge');
 			$table->float('received');
 			$table->float('change');
+			$table->float('refund');
 			$table->longText('note')->nullable();
 			$table->timestamps();
 			$table->softDeletes();

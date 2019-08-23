@@ -152,10 +152,11 @@
                            <v-list-item>
                   
                              <v-list-item-content class="title">
-                                 Reprint  
+                                 Print  
                              </v-list-item-content>
-                             <v-btn >
+                             <v-btn @click="print()">
                                 <v-icon>print</v-icon>
+
                              </v-btn>
                         </v-list-item>
                         <v-divider></v-divider>
@@ -174,12 +175,17 @@
                              </v-btn>
                         </v-list-item>
                    </v-list>
-               
+                       <vue-easy-print tableShow :show="false" ref="easyPrint">
+                                  <template slot-scope="func">
+                                      <receipt v-model="receipt"></receipt>
+                                  </template>
+                               </vue-easy-print>
+
 
             </v-card>
    
         </v-container>
-        
+         
          <v-container v-if="paid"> 
                  <v-btn rounded block  large color="primary" @click="done()">Done</v-btn> 
             </v-container>
@@ -199,12 +205,15 @@
         >
         </v-overlay>
 
+
    </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Keyboard from '../../ui/Keyboard'
+import vueEasyPrint from 'vue-easy-print'
+import receipt from "./ReceiptTemplate"
 
 export default {
 
@@ -217,9 +226,12 @@ export default {
       transfer: {amount: 0.00, ref: ''},
       target: null,
       paid: false,
+      receipt: null,
   }),
   components: {
       Keyboard,
+      vueEasyPrint,
+      receipt,
   },
   props: ['trxn'],
   computed: mapGetters({
@@ -301,9 +313,11 @@ export default {
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
                account_id: customer ? customer.id : 0,
+               customer: customer,
                date: now,
                reference: reference,
                transact_by: user_id,
+               teller: this.auth,
                discount: {rate: footer.discount.rate, type: footer.discount.type}, 
                discount_amount: footer.discount.amount,
                tax_total: footer.tax,
@@ -319,6 +333,10 @@ export default {
     
          await this.$store.dispatch('receipt/addReceipt', receipt)
          this.paid = true
+         this.receipt = receipt
+      },
+      print(){
+            this.$refs.easyPrint.print()
       },
 
   }

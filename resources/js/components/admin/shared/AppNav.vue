@@ -130,6 +130,7 @@ export default {
           this.$store.dispatch('user/fetchUsers')
           this.$store.dispatch('product/fetchProducts')
           this.$store.dispatch('account/fetchCustomers')
+          this.$store.dispatch('system/fetchSystem')
         }, 3000)
  
 

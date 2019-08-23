@@ -34,3 +34,9 @@ export const SET_RECEIPT = 'SET_RECEIPT'
 export const ADD_RECEIPT = 'SET_RECEIPTS'
 export const FILL_RECEIPTS = 'FILL_RECEIPTS'
 export const FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE'
+
+/**
+ * system.js
+ */
+export const FILL_SYSTEM = 'FILL_RECEIPTS'
+export const FETCH_SYSTEM_FAILURE = 'FETCH_RECEIPT_FAILURE'

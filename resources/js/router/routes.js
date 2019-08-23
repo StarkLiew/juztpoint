@@ -15,7 +15,7 @@ export default [
   ]),
   ...applyRules(['auth'], [
     { path: '/pos/sales',  name: 'sales', component: require('$comp/sales/SalesWrapper').default},
-
+    { path: '/pos/receipt', name: 'receipts', component: require('$comp/admin/receipt/ReceiptWrapper').default },
     { path: '/pos', component: require('$comp/admin/AdminWrapper').default, children:
       [
         { path: '/pos', name: 'index', redirect: { name: 'profile' } },
@@ -24,7 +24,8 @@ export default [
             { path: '/pos', name: 'profile', component: require('$comp/admin/profile/Profile').default },
             { path: '/pos/edit', name: 'profile-edit', component: require('$comp/admin/profile/edit/ProfileEdit').default }
           ]
-        }
+        },
+
       ]
     },
   ]),

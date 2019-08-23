@@ -145,7 +145,7 @@ export const actions = {
 
        const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
   
-       receipt = data.data.newReceipt
+       receipt.id = data.data.newReceipt.id
 
 
        commit(types.ADD_RECEIPT, { receipt })
