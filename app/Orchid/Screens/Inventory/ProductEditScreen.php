@@ -135,14 +135,20 @@ class ProductEditScreen extends Screen {
 				$properties = $input['properties'];
 
 				if (array_key_exists('thumbnail', $properties)) {
+
 					$image = $properties['thumbnail'];
-					$properties['thumbnail'] = base64_encode(Storage::url($image));
+					if (!is_null($image)) {
+						$ext = substr($image, -3);
+						$input['properties']['thumbnail'] = 'data:image/' . $ext . ';base64, ' . base64_encode(Storage::get($image));
+						Storage::delete($image);
+					}
+
 				}
 
 			}
 
 			$product
-				->fill($request->get('product'))
+				->fill($input)
 				->save();
 
 			Alert::info(__('Product was saved'));
