@@ -11,6 +11,7 @@
               @click="selected(product)"
             >
               <v-card flat tile class="d-flex">
+
                 <v-img
                   :src="product.properties.thumbnail ? product.properties.thumbnail :  ``"
                   aspect-ratio="1"
