@@ -8,7 +8,7 @@
     	<div class="title">Receipt/Tax Invoice</div>
     	<br />
     	<br />
-    	<div class="caption" v-if="value.account_id > 0">{{ value.customer.name }}</div>
+    	<div class="caption" v-if="value.customer">{{ value.customer.name }}</div>
         <table>
     		 <tbody>
     		 	 <tr>

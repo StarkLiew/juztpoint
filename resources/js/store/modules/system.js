@@ -36,7 +36,7 @@ export const mutations = {
 export const actions = {
   async fetchSystem({ commit }) {
     try {
-      const company = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "company"){ id, name, properties{email, mobile}}}'}})
+      const company = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "company"){ id, name, properties{address, timezone, email, mobile}}}'}})
       const payments = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "payment"){ id, name, properties{email, mobile}}}'}})
       const users = await axios.get(graphql.path('query'), {params: { query: '{users{ id, name, pin}}'}})
       const system = {company: company.data.data.settings[0],payments: payments.data.data.settings, users: users.data.data.settings }

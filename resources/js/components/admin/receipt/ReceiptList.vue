@@ -18,7 +18,7 @@
         <v-list-item two-line @click="select(item)">
             
             <v-list-item-content>
-                  <v-list-item-title v-on="on">{{item.date + 'Z' | moment('timezone','Malaysia/Kuala_Lumpur','hh:mmA')  }}</v-list-item-title>
+                  <v-list-item-title v-on="on">{{item.date + 'Z' | moment('timezone',company.timezone,'hh:mmA')  }}</v-list-item-title>
                  <span>{{item.reference}}</span>
             </v-list-item-content>
             <v-btn icon>{{item.charge | currency}}</v-btn>
@@ -47,6 +47,7 @@ export default {
   },
   computed: mapGetters({
     receipts: 'receipt/receipts',
+      company: 'system/company',
   }),
   watch: { 
   

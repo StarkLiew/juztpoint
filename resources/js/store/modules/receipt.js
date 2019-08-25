@@ -48,7 +48,7 @@ export const actions = {
   async addReceipt({ commit }, receipt) {
     try {
 
-       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, charge,received, change, note,  items, payments} = receipt
+       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, charge,received, change, note,  refund, items, payments} = receipt
 
         let castItems = "" 
         let castComm = "" 
@@ -136,6 +136,7 @@ export const actions = {
                                  charge: ${parseFloat(charge)},
                                  received: ${parseFloat(received)},
                                  change: ${parseFloat(change)},
+                                 refund: ${parseFloat(refund)},
                                  note: "${note}",
                                  items: [${castItems}],
                                  payments: [${castPayments}],
@@ -149,7 +150,7 @@ export const actions = {
 
 
        commit(types.ADD_RECEIPT, { receipt })
-       return receipt
+      
     } catch (e) {
         
     }

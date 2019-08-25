@@ -71,6 +71,10 @@ class NewReceiptMutation extends Mutation {
 				'name' => 'change',
 				'type' => Type::float(),
 			],
+		    'refund' => [
+				'name' => 'refund',
+				'type' => Type::float(),
+			],
 			'note' => [
 				'name' => 'note',
 				'type' => Type::string(),

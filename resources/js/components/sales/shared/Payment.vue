@@ -313,7 +313,7 @@ export default {
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
                account_id: customer ? customer.id : 0,
-               customer: customer,
+               customer: customer ? customer.id : null,
                date: now,
                reference: reference,
                transact_by: user_id,
@@ -326,6 +326,7 @@ export default {
                received:  amount_received,
                change:  amount_change,
                note:"",
+               refund: 0,
                items: items,
                payments: payments,
 

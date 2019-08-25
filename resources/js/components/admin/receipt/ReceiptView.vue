@@ -54,7 +54,7 @@
 
 							            </v-list-item-content>
 							            <v-btn icon>{{item.amount | currency}}</v-btn>
-							            <v-btn icon v-if="allowRemoveItem" @click="removeItem(index)"><v-icon>remove</v-icon></v-btn>
+							      
 							          </v-list-item>
 							          <v-divider></v-divider>
 							       </div>

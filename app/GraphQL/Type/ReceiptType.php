@@ -88,6 +88,10 @@ class ReceiptType extends GraphQLType {
 				'type' => Type::int(),
 				'description' => 'The type of setting',
 			],
+			'refund' => [
+				'type' => Type::int(),
+				'description' => 'The type of setting',
+			],
 			'note' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',
