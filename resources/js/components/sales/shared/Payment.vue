@@ -175,9 +175,9 @@
                              </v-btn>
                         </v-list-item>
                    </v-list>
-                       <vue-easy-print tableShow :show="false" ref="easyPrint">
+                       <vue-easy-print tableShow style="display: none" ref="easyPrint">
                                   <template slot-scope="func">
-                                      <receipt v-model="receipt"></receipt>
+                                      <receipt v-model="receipt" :header="company"></receipt>
                                   </template>
                                </vue-easy-print>
 
@@ -235,7 +235,8 @@ export default {
   },
   props: ['trxn'],
   computed: mapGetters({
-    auth: 'auth/user'
+    auth: 'auth/user',
+    company: 'system/company',
   }),
   methods: {
       back() {
@@ -257,9 +258,12 @@ export default {
          this.target = this.card
       },
       done() {
-        this.target = null
+        /* this.target = null
         this.paid = false
-        this.$emit('done')
+        this.receipt = null */
+
+        this.$emit('done') 
+  
       },
       valid() {
      
@@ -313,7 +317,7 @@ export default {
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
                account_id: customer ? customer.id : 0,
-               customer: customer ? customer.id : null,
+               customer: customer ? customer : null,
                date: now,
                reference: reference,
                transact_by: user_id,
@@ -332,9 +336,10 @@ export default {
 
          }
     
-         await this.$store.dispatch('receipt/addReceipt', receipt)
+         this.receipt = await this.$store.dispatch('receipt/addReceipt', receipt)
+
          this.paid = true
-         this.receipt = receipt
+
       },
       print(){
             this.$refs.easyPrint.print()

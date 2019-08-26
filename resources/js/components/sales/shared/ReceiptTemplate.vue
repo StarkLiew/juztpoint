@@ -9,6 +9,7 @@
     	<br />
     	<br />
     	<div class="caption" v-if="value.customer">{{ value.customer.name }}</div>
+    	<br />
         <table>
     		 <tbody>
     		 	 <tr>
@@ -16,6 +17,9 @@
     		 	 </tr>
     		 	 <tr>
     		 	 	<td>Reference:</td><td  class="left">{{ value.reference }}</td>
+    		 	 </tr>
+    		 	 <tr>
+    		 	 	<td>Cashier:</td><td  class="left">{{ value.teller.name }}</td>
     		 	 </tr>
     		 </tbody>
     	</table>
@@ -29,6 +33,7 @@
 		        <th>Discount</th>
 		        <th>Qty</th>
 		        <th>Subtotal</th>
+		        <th></th>
 		      </tr>
 		    </thead>
 		    <tbody>
@@ -40,6 +45,7 @@
 				     	<td>{{ item.discount.amount | currency }}</td>
 				     	<td>{{ item.qty  }}</td>
 				     	<td>{{ item.amount | currency }}</td>
+				     	<td>{{ item.tax.properties.code }}</td>
 				     </tr>
 		      </div>
 		      <div>	
@@ -115,8 +121,17 @@
    }
 </script>
 <style>
+
+	@page {
+	  size: 80mm auto;
+	  margin: 5mm;
+	}
+
 	@media print {
+
 		    * {
+		    	width: 70mm;
+		    	height: auto;
 			    padding: 0;
 			    margin: 0;
 			    list-style-type: none;

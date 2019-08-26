@@ -60,15 +60,15 @@ class ReceiptType extends GraphQLType {
 				'description' => 'The type of setting',
 			],
 			'discount_amount' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'service_charge' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'tax_amount' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'payments' => [
@@ -77,19 +77,19 @@ class ReceiptType extends GraphQLType {
 				'is_relation' => true,
 			],
 			'charge' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'received' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'change' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'refund' => [
-				'type' => Type::int(),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'note' => [

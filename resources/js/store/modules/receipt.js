@@ -7,7 +7,8 @@ import * as types from '../mutation-types'
  */
 export const state = {
   receipt: null,
-  receipts: []
+  receipts: [],
+  autoincrement: 0, 
 }
 
 /**
@@ -22,12 +23,11 @@ export const mutations = {
     state.receipts = receipts
   },
   [types.ADD_RECEIPT](state, { receipt }) { 
- 
+     state.autoincrement += 1      
      state.receipts.push(receipt)
   },
   [types.FETCH_RECEIPT_FAILURE](state) {
-    state.receipt = null
-    state.receipts = []
+   
   },
 }
 
@@ -45,9 +45,13 @@ export const actions = {
       commit(types.FETCH_RECEIPT_FAILURE)
     }
   },
-  async addReceipt({ commit }, receipt) {
+  async addReceipt({ commit, getters }, receipt) {
     try {
 
+       let number = '00000' + (getters['autoincrement'] + 1)
+       number =  number.substr(number.length - 6)
+
+       receipt.reference = receipt.reference + number
        const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, charge,received, change, note,  refund, items, payments} = receipt
 
         let castItems = "" 
@@ -148,12 +152,19 @@ export const actions = {
   
        receipt.id = data.data.newReceipt.id
 
-
        commit(types.ADD_RECEIPT, { receipt })
+       
+       return receipt
       
     } catch (e) {
-        
+
+     
+       receipt.status = 'offline'
+       commit(types.ADD_RECEIPT, { receipt })
+
+       return receipt
     }
+    return receipt
   },
 }
 
@@ -163,4 +174,5 @@ export const actions = {
 export const getters = {
   receipts: state => state.receipts,
   receipt: state => state.receipt !== null,
+  autoincrement: state => state.autoincrement,
 }

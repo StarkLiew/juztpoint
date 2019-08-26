@@ -5,11 +5,11 @@
         <v-card v-if="selected" >
 
 				  <v-sheet
-				      id="scroll-area-2"
+				      id="scroll-receipt-content"
 				      class="overflow-y-auto"
-				      max-height="100vh"
+
 				    >
-				      <v-container style="height: calc(100vh - 54px);" class="text-center">
+				      <v-container class="text-center">
 		                  <h1 class="display-2">{{selected.charge | currency}}</h1>
 		               	  <p class="caption">Reference: {{ selected.reference }}</p>
 		               	  <p class="caption">Teller: {{ selected.transact_by }}</p>
@@ -67,18 +67,28 @@
 
 
 				      </v-container>
-				    </v-sheet>  
 
-				           <vue-easy-print tableShow style="display: none" ref="receipt">
+	           <vue-easy-print tableShow style="display: none" ref="receipt">
                                   <template slot-scope="func">
                                       <receipt v-model="selected" :header="company"></receipt>
                                   </template>
                                </vue-easy-print>
 
-                   <v-footer
+                
+
+
+				    </v-sheet>  
+
+			
+
+
+
+
+        </v-card>
+
+        <v-footer v-if="selected" 
 						          flat
 						          dense
-						          absolute
 						          padless
 						        >
 						            <v-list-item one-line>
@@ -144,9 +154,6 @@
 
 
 
-
-        </v-card>
-
          <v-card v-if="!selected">
         </v-card>
 
@@ -178,6 +185,14 @@
 			print(){
 			    this.$refs.receipt.print()
 			},
+			editedItem() {
+				
+			},
         },
     }
  </script> 	
+<style>
+  #scroll-receipt-content {
+      max-height: calc(100vh - (54px + (56px * 6)) );
+  }
+</style>

@@ -28,7 +28,7 @@
                 <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
                 <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
-                <payment :trxn="trxn" @back="cancelPayment" v-if="panel === 'payment'" ></payment>
+                <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'" ></payment>
 
 
              </v-sheet>
@@ -124,6 +124,12 @@ export default {
     cancelPayment() {
        this.trxn = null
        this.panel = "product"
+    },
+    newTrxn() {
+       // this.customer = null
+       // this.trxn = null
+       // this.panel = "product"
+       window.location.reload()
     },
     goPayment(trxn) {
         this.trxn = trxn

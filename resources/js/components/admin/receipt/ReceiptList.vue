@@ -18,8 +18,15 @@
         <v-list-item two-line @click="select(item)">
             
             <v-list-item-content>
-                  <v-list-item-title v-on="on">{{item.date + 'Z' | moment('timezone',company.timezone,'hh:mmA')  }}</v-list-item-title>
-                 <span>{{item.reference}}</span>
+                  <v-list-item-title>{{item.date + 'Z' | moment('timezone',company.timezone,'hh:mmA')  }}
+                       <v-chip v-if="item.status === 'offline'" class="ma-2" small color="grey" >
+                          {{ item.status }}
+                       </v-chip>
+                      <v-chip v-if="item.status === 'active'" class="ma-2" small color="green" >
+                          {{ item.status }}
+                        </v-chip>
+                  </v-list-item-title>
+                 <span class="overline">{{item.reference}}</span>
             </v-list-item-content>
             <v-btn icon>{{item.charge | currency}}</v-btn>
 

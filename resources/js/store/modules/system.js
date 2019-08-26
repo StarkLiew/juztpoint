@@ -8,7 +8,8 @@ import * as types from '../mutation-types'
 export const state = {
   company: null,
   payments: [],
-  users: [],    
+  users: [],   
+  autoincrement: 0, 
 }
 
 /**
@@ -22,6 +23,9 @@ export const mutations = {
     state.payments = system.payments
     state.users = system.payments
   },
+  [types.AUTO_INCREMENT](state, { system }) { 
+        state.autoincrement += 1
+  },
 
   [types.FETCH_SYSTEM_FAILURE](state) {
     state.company = null
@@ -34,6 +38,11 @@ export const mutations = {
  * Actions
  */
 export const actions = {
+  async increment({state}) {
+      commit(AUTO_INCREMENT)
+      return state.autoincrement
+  },
+
   async fetchSystem({ commit }) {
     try {
       const company = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "company"){ id, name, properties{address, timezone, email, mobile}}}'}})

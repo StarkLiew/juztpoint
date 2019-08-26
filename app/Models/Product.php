@@ -5,12 +5,13 @@ namespace App\Models;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class Product extends Model {
 
-	use Notifiable, Filterable, AsSource;
+	use Attachable, Notifiable, Filterable, AsSource;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *

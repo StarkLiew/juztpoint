@@ -8,7 +8,7 @@
        > </receipt-list>
        <receipt-tool @overlay="overlayShow"></receipt-tool>
  
-        <v-content style="margin-top: 5px">
+        <v-content style="margin-top: 5px;">
    
       
                 <receipt-view :selected="selectedItem"></receipt-view>

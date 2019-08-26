@@ -4,6 +4,7 @@ declare (strict_types = 1);
 
 namespace App\Orchid\Screens\Inventory;
 
+use App\Models\Item;
 use App\Models\Product;
 use App\Orchid\Layouts\Inventory\ProductEditLayout;
 use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
@@ -144,6 +145,7 @@ class ProductEditScreen extends Screen {
 
 						$content = File::get(public_path() . $image);
 						$input['properties']['thumbnail'] = 'data:image/' . $ext . ';base64, ' . base64_encode($content);
+						$product->attachment()->delete();
 						File::delete(public_path() . $image);
 					}
 
@@ -161,7 +163,7 @@ class ProductEditScreen extends Screen {
 
 		} catch (\Illuminate\Database\QueryException $e) {
 			Alert::info(__($e->errorInfo[2]));
-			return redirect()->back()->withInput();
+			return redirect()->back();
 
 		}
 	}
@@ -174,6 +176,13 @@ class ProductEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponsed
 	 */
 	public function remove(Product $product) {
+
+		$found = Item::where('item_id', $product->id)->first();
+
+		if ($found) {
+			Alert::info(__('Product cannot be remove'));
+			return redirect()->back();
+		}
 		$product->delete();
 
 		Alert::info(__('Product was removed'));
