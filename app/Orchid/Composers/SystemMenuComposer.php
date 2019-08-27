@@ -69,7 +69,7 @@ class SystemMenuComposer {
 			)
 			->add('Auth',
 				ItemMenu::label(__('Payment'))
-					->icon('icon-money')
+					->icon('icon-wallet')
 					->route('platform.systems.payments')
 					->sort(1000)
 					->title(__('All registered payments'))
@@ -80,6 +80,21 @@ class SystemMenuComposer {
 					->route('platform.systems.commissions')
 					->sort(1000)
 					->title(__('All registered commissions'))
+			)
+			->add('Auth',
+				ItemMenu::label(__('Terminal'))
+					->icon('icon-screen-desktop')
+					->route('platform.systems.terminals')
+					->sort(1000)
+					->title(__('All registered terminals'))
+			)
+			->add('Auth',
+				ItemMenu::label(__('Roles'))
+					->icon('icon-lock')
+					->route('platform.systems.terminals')
+					->permission('platform.systems.terminals')
+					->sort(1000)
+					->title(__('Manage all POS Terminal'))
 			)
 			->add('Auth',
 				ItemMenu::label(__('Roles'))

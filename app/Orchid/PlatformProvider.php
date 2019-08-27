@@ -55,7 +55,8 @@ class PlatformProvider extends ServiceProvider {
 			->addPermission('platform.systems.stores', __('Stores'))
 			->addPermission('platform.systems.taxes', __('Taxes'))
 			->addPermission('platform.systems.payments', __('Payments'))
-			->addPermission('platform.systems.commissions', __('Commissions'));
+			->addPermission('platform.systems.commissions', __('Commissions'))
+			->addPermission('platform.systems.terminals', __('Terminals'));
 	}
 
 }

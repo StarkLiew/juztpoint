@@ -23,6 +23,8 @@ use App\Orchid\Screens\Settings\Store\StoreEditScreen;
 use App\Orchid\Screens\Settings\Store\StoreListScreen;
 use App\Orchid\Screens\Settings\Tax\TaxEditScreen;
 use App\Orchid\Screens\Settings\Tax\TaxListScreen;
+use App\Orchid\Screens\Settings\Terminal\TerminalEditScreen;
+use App\Orchid\Screens\Settings\Terminal\TerminalListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 
@@ -52,6 +54,11 @@ $this->router->screen('stores', StoreListScreen::class)->name('platform.systems.
 $this->router->screen('taxes/{stores}/edit', TaxEditScreen::class)->name('platform.systems.taxes.edit');
 $this->router->screen('taxes/create', TaxEditScreen::class)->name('platform.systems.taxes.create');
 $this->router->screen('taxes', TaxListScreen::class)->name('platform.systems.taxes');
+
+// Stores...
+$this->router->screen('terminals/{terminals}/edit', TerminalEditScreen::class)->name('platform.systems.terminals.edit');
+$this->router->screen('terminals/create', TerminalEditScreen::class)->name('platform.systems.terminals.create');
+$this->router->screen('terminals', TerminalListScreen::class)->name('platform.systems.terminals');
 
 // Stores...
 $this->router->screen('commissions/{stores}/edit', CommissionEditScreen::class)->name('platform.systems.commissions.edit');

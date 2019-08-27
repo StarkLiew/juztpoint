@@ -4,7 +4,10 @@ declare (strict_types = 1);
 
 namespace App\Orchid\Layouts\Terminal;
 
+use App\Models\Setting;
+use App\Orchid\Fields\QRCode;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Rows;
 
 class TerminalEditLayout extends Rows {
@@ -31,11 +34,15 @@ class TerminalEditLayout extends Rows {
 				->horizontal()
 				->title(__('Description'))
 				->placeholder(__('Description')),
-			Input::make('terminal.properties.store_id')
+			Select::make('terminal.properties.store_id')
+				->fromQuery(Setting::where('type', '=', 'store'), 'name', 'id')
 				->required()
 				->horizontal()
 				->title(__('Store'))
-				->placeholder(__('Store')),
+				->empty('No select'),
+			QRCode::make('terminal.properties.device_id')
+				->title(__('To register terminal on new device, scan this code')),
+
 		];
 	}
 }

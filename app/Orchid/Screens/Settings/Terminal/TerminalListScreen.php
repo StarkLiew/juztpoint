@@ -2,11 +2,11 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Settings\Tax;
+namespace App\Orchid\Screens\Settings\Terminal;
 
 use App\Models\Setting;
-use App\Orchid\Layouts\Tax\TaxEditLayout;
-use App\Orchid\Layouts\Tax\TaxListLayout;
+use App\Orchid\Layouts\Terminal\TerminalEditLayout;
+use App\Orchid\Layouts\Terminal\TerminalListLayout;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
@@ -14,25 +14,25 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class TaxListScreen extends Screen {
+class TerminalListScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Tax';
+	public $name = 'Terminal';
 
 	/**
 	 * Display header description.
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered taxes';
+	public $description = 'All registered terminals';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.taxes';
+	public $permission = 'platform.systems.terminals';
 
 	/**
 	 * Query data.
@@ -43,8 +43,8 @@ class TaxListScreen extends Screen {
 	{
 
 		return [
-			'taxes' => Setting::filters()
-				->where('type', '=', 'tax')
+			'terminals' => Setting::filters()
+				->where('type', '=', 'terminal')
 				->defaultSort('id', 'desc')
 				->paginate(),
 		];
@@ -60,7 +60,7 @@ class TaxListScreen extends Screen {
 		return [
 			Link::name(__('Add'))
 				->icon('icon-plus')
-				->link(route('platform.systems.taxes.create')),
+				->link(route('platform.systems.terminals.create')),
 		];
 	}
 
@@ -72,13 +72,13 @@ class TaxListScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			TaxListLayout::class,
+			TerminalListLayout::class,
 
 			Layout::modals([
 				'oneAsyncModal' => [
-					TaxEditLayout::class,
+					TerminalEditLayout::class,
 				],
-			])->async('asyncGetTax'),
+			])->async('asyncGetTerminal'),
 		];
 	}
 
@@ -87,10 +87,10 @@ class TaxListScreen extends Screen {
 	 *
 	 * @return array
 	 */
-	public function asyncGetTax(Setting $tax): array
+	public function asyncGetTerminal(Setting $terminal): array
 	{
 		return [
-			'tax' => $tax,
+			'terminal' => $terminal,
 		];
 	}
 

@@ -88,4 +88,13 @@ class Setting extends Model {
 		return $query->where('type', 'commission')->get();
 	}
 
+	/**
+	 * @param Builder $query
+	 *
+	 * @return Builder
+	 */
+	public function scopeStore(Builder $query) {
+		return $query->where('type', 'store')->get();
+	}
+
 }

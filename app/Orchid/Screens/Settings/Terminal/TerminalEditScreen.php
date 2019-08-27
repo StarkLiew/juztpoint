@@ -2,10 +2,10 @@
 
 declare (strict_types = 1);
 
-namespace App\Orchid\Screens\Settings\Tax;
+namespace App\Orchid\Screens\Settings\Terminal;
 
 use App\Models\Setting;
-use App\Orchid\Layouts\Tax\TaxEditLayout;
+use App\Orchid\Layouts\Terminal\TerminalEditLayout;
 use Auth;
 use Illuminate\Http\Request;
 use Orchid\Screen\Layout;
@@ -13,13 +13,13 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class TaxEditScreen extends Screen {
+class TerminalEditScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
 	 * @var string
 	 */
-	public $name = 'Tax';
+	public $name = 'Terminal';
 
 	/**
 	 * @var bool
@@ -31,12 +31,12 @@ class TaxEditScreen extends Screen {
 	 *
 	 * @var string
 	 */
-	public $description = 'All registered taxes';
+	public $description = 'All registered terminals';
 
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.taxes';
+	public $permission = 'platform.systems.terminals';
 
 	/**
 	 * Query data.
@@ -45,13 +45,13 @@ class TaxEditScreen extends Screen {
 	 *
 	 * @return array
 	 */
-	public function query(Setting $tax): array
+	public function query(Setting $terminal): array
 	{
 
-		$this->exist = $tax->exists;
+		$this->exist = $terminal->exists;
 
 		return [
-			'tax' => $tax,
+			'terminal' => $terminal,
 		];
 	}
 
@@ -83,7 +83,7 @@ class TaxEditScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-			TaxEditLayout::class,
+			TerminalEditLayout::class,
 		];
 	}
 
@@ -93,18 +93,26 @@ class TaxEditScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function save(Setting $tax, Request $request) {
-		$tax->type = 'tax';
-		$tax->user_id = Auth::id();
-		$input = $request->get('tax');
-		$tax->properties = $input['properties'];
-		$tax
-			->fill($request->get('tax'))
+	public function save(Setting $setting, Request $request) {
+		$setting->type = 'terminal';
+		$setting->user_id = Auth::id();
+		$input = $request->get('terminal');
+
+		if (!array_key_exists('device_id', $input['properties'])) {
+
+			$input['properties']['device_id'] = uniqid();
+
+		}
+
+		$setting->properties = $input['properties'];
+
+		$setting
+			->fill($input)
 			->save();
 
-		Alert::info(__('Tax was saved'));
+		Alert::info(__('Terminal was saved'));
 
-		return redirect()->route('platform.systems.taxes');
+		return redirect()->route('platform.systems.terminals');
 	}
 
 	/**
@@ -114,12 +122,12 @@ class TaxEditScreen extends Screen {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function remove(Setting $tax) {
+	public function remove(Setting $terminal) {
 		$tax->delete();
 
-		Alert::info(__('Tax was removed'));
+		Alert::info(__('Terminal was removed'));
 
-		return redirect()->route('platform.systems.taxes');
+		return redirect()->route('platform.systems.terminals');
 	}
 
 }

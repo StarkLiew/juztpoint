@@ -16,7 +16,8 @@
         "noh4ck/graphiql": "^1.0",
         "orchestra/tenanti": "^3.8",
         "orchid/platform": "^5.2",
-        "rebing/graphql-laravel": "^2.0"
+        "rebing/graphql-laravel": "^2.0",
+        "simplesoftwareio/simple-qrcode": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
