@@ -22,6 +22,19 @@
       prepend-icon="lock"
     ></v-text-field>
 
+    <v-text-field
+      :label="labels.device_id"
+      v-model="form.device_id"
+      :append-icon="passwordHidden ? 'visibility_off' : 'visibility'"
+      @click:append="() => (device_idHidden = !device_idHidden)"
+      :type="device_idHidden ? 'device_id' : 'text'"
+      :error-messages="errors.device_id"
+      :disabled="loading"
+      :rules="[rules.required('device_id')]"
+      prepend-icon="tv"
+    ></v-text-field>
+
+
     <v-layout class="mt-4 mx-0">
       <v-spacer></v-spacer>
 
@@ -57,10 +70,12 @@ export default {
 
   data: () => ({
     passwordHidden: true,
-
+    device_idHidden: true,
     form: {
       email: null,
-      password: null
+      password: null,
+      device_id: null,
+      fingerprint: null,
     }
   }),
 
@@ -69,23 +84,45 @@ export default {
   },
 
   methods: {
-    submit() {
+    async submit() {
       if (this.$refs.form.validate()) {
         this.loading = true
 
-        axios.post(api.path('login'), this.form)
-          .then(res => {
-            this.$toast.success('Welcome back!')
-            this.$emit('success', res.data)
-          })
-          .catch(err => {
-            this.handleErrors(err.response.data.errors)
-          })
-          .then(() => {
-            this.loading = false
-          })
-      }
+
+      
+        //Collect fingerprint
+    
+
+
+
+            this.form.fingerprint = JSON.stringify(await this.scanFingerprint())
+       
+            await axios.post(api.path('login'), this.form)
+                .then(res => {
+                  this.$toast.success('Welcome back!')
+                  this.$emit('success', res.data)
+                })
+                .catch(err => {
+                  this.handleErrors(err.response.data.errors)
+                })
+                .then(() => {
+                  this.loading = false
+                })
+
+   
+      }       
     },
+    scanFingerprint() {
+        return new Promise((resolve, reject) => {
+            setTimeout(function () {
+               Fingerprint2.get(function (components) {
+                   resolve(components)
+               })
+            }, 500)  
+        });
+
+    }
+
   }
 }
 </script>

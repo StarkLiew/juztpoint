@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,6 +35,119 @@ class AuthController extends Controller {
 		return response()->json([
 			'message' => 'Successfully created user!',
 		], 201);
+	}
+
+	/**
+	 * Login user and create token
+	 *
+	 * @param  [string] email
+	 * @param  [string] password
+	 * @param  [boolean] remember_me
+	 * @return [string] access_token
+	 * @return [string] token_type
+	 * @return [string] expires_at
+	 */
+	public function machine(Request $request) {
+		$request->validate([
+			'email' => 'required|string|email',
+			'password' => 'required|string',
+			'device_id' => 'required|string',
+			'fingerprint' => 'required|string',
+		]);
+		$credentials = request(['email', 'password']);
+		$device = request(['device_id', 'fingerprint']);
+
+		if (!Auth::attempt($credentials)) {
+			return response()->json([
+				'message' => 'Unauthorized',
+			], 401);
+		}
+
+		$terminal = Setting::where('type', 'terminal')->whereJsonContains('properties->device_id', $device['device_id'])->first();
+		$store = Setting::where('id', $terminal['properties']['store_id'])->first();
+		if (!$terminal) {
+			return response()->json([
+				'message' => 'Unauthorized. Invalid device id',
+			], 401);
+		} else {
+
+			if (array_key_exists('fingerprint', $terminal['properties'])) {
+				// compare fingerprint
+				$result = [];
+				$fingerprinted = json_decode($device['fingerprint']);
+				$existfingerprint = $terminal['properties']['fingerprint'];
+
+				foreach ((array) $fingerprinted as $value) {
+					$hasKey = false;
+					foreach ((array) $existfingerprint as $rvalue) {
+						$value = (array) $value;
+						$rvalue = (array) $rvalue;
+
+						if ($value['key'] === $rvalue['key']) {
+							$hasKey = true;
+							if ($value['value'] !== $rvalue['value']) {
+								$result[$value['key']] = $value['value'];
+							}
+
+						}
+					}
+					if (!$hasKey) {
+						$result[$value['key']] = null;
+					}
+
+				}
+
+				foreach ((array) $existfingerprint as $value) {
+					$hasKey = false;
+					foreach ((array) $fingerprinted as $rvalue) {
+						$value = (array) $value;
+						$rvalue = (array) $rvalue;
+						if ($value['key'] === $rvalue['key']) {
+							$hasKey = true;
+							if ($value['value'] !== $rvalue['value']) {
+								$result[$value['key']] = $value['value'];
+							}
+						}
+
+					}
+					if (!$hasKey) {
+						$result[$value['key']] = null;
+					}
+				}
+				$existfingerprintCount = count($existfingerprint);
+				$resultCount = count($result);
+				$score = ($existfingerprintCount - $resultCount) / $existfingerprintCount * 100;
+
+				if ($score > 89) {
+
+					return response()->json([
+						'message' => 'Unauthorized. Device not regonized',
+					], 401);
+				}
+
+			} else {
+				$properties = $terminal['properties'];
+				$properties['fingerprint'] = json_decode($device['fingerprint']);
+				$terminal['properties'] = $properties;
+				$terminal->save();
+			}
+		}
+
+		$user = $request->user();
+		$tokenResult = $user->createToken('Personal Access Token');
+		$token = $tokenResult->token;
+		$token->save();
+
+		return response()->json([
+			'user' => $user,
+			'terminal' => $terminal,
+			'store' => $store,
+			'token' => $tokenResult->accessToken,
+			'token_type' => 'Bearer',
+			'expires_at' => Carbon::parse(
+				$tokenResult->token->expires_at
+			)->toDateTimeString(),
+		]);
 	}
 
 	/**

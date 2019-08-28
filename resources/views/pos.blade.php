@@ -23,5 +23,17 @@
         <div id="app"></div>
 
         <script src="{{ mix('/js/app.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+        <script>
+            (function() {
+                  if('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('/service-worker.js')
+                  }
+
+
+                })();
+
+
+        </script>
     </body>
 </html>

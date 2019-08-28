@@ -22,18 +22,20 @@ export default {
   },
   
   methods: {
-    success(data) { 
-      this.$store.dispatch('auth/saveToken', data)
-      this.$store.dispatch('auth/setUser', data)
+    async success(data) { 
+           
+      await this.$store.dispatch('auth/saveToken', data)
+      await this.$store.dispatch('auth/setUser', data)
 
       /* Fetch latest data */
-      this.$store.dispatch('user/fetchUsers')
-      this.$store.dispatch('product/fetchProducts')
-      this.$store.dispatch('account/fetchCustomers')
-      this.$store.dispatch('system/fetchSystem')
-      
+      await this.$store.dispatch('user/fetchUsers')
+      await this.$store.dispatch('product/fetchProducts')
+      await this.$store.dispatch('account/fetchCustomers')
+      await this.$store.dispatch('system/fetchSystem')
+
       this.$router.push({ name: 'index' })
     }
   }
 }
 </script>
+

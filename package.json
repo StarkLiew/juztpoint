@@ -5,7 +5,7 @@
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch-poll": "npm run watch -- --watch-poll",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=/node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
@@ -22,6 +22,7 @@
     "resolve-url-loader": "2.3.1",
     "sass": "^1.22.9",
     "sass-loader": "^7.1.0",
+    "sw-precache-webpack-plugin": "^0.11.5",
     "vue": "^2.6.10",
     "vue-router": "^3.0",
     "vue-template-compiler": "^2.6.10",
@@ -33,6 +34,8 @@
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.1",
     "fingerprintjs2": "^2.1.0",
+    "idle-vue": "^2.0.5",
+    "js-cookie": "^2.2.1",
     "localforage": "^1.7.3",
     "moment-timezone": "^0.5.26",
     "vue-currency-filter": "^3.4.2",
