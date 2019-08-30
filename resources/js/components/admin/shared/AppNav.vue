@@ -9,7 +9,9 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>{{ name }}</v-list-item-title>
+          <v-list-item-title>{{ store.name }}</v-list-item-title>
+          <v-list-item-title class="caption">{{ terminal.name }}</v-list-item-title>
+
         </v-list-item-content>
 
         <v-list-item-icon>
@@ -74,9 +76,6 @@
       </template>
     </v-list>
 
-   <v-overlay :value="overlay">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
 
   </v-navigation-drawer>
 </template>
@@ -88,13 +87,14 @@ export default {
   data: () => ({
       items: [],
       name: null,
-      overlay: false,
   }),
 
   props: ['mini'],
 
   computed: mapGetters({
-    auth: 'auth/user'
+    auth: 'auth/user',
+    store: 'auth/store',
+    terminal: 'auth/terminal',
   }),
 
   watch: {
@@ -121,16 +121,18 @@ export default {
       this.$toast.info('You are logged out.')
       this.$router.push({ name: 'login' })
     },
-    refresh() {
-        this.overlay = true
+    async refresh() {
+    
+        this.$emit('overlay', true)
 
-        setTimeout(() => {
-          this.overlay = false
+        await setTimeout(async () => {
+        
          /* Fetch latest data */
-          this.$store.dispatch('user/fetchUsers')
-          this.$store.dispatch('product/fetchProducts')
-          this.$store.dispatch('account/fetchCustomers')
-          this.$store.dispatch('system/fetchSystem')
+          await this.$store.dispatch('user/fetchUsers')
+          await this.$store.dispatch('product/fetchProducts')
+          await this.$store.dispatch('account/fetchCustomers')
+          await this.$store.dispatch('system/fetchSystem')
+          this.$emit('overlay', false)
         }, 3000)
  
 

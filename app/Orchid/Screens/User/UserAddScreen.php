@@ -6,6 +6,7 @@ namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Orchid\Access\UserSwitch;
@@ -16,7 +17,7 @@ use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class UserEditScreen extends Screen {
+class UserAddScreen extends Screen {
 	/**
 	 * Display header name.
 	 *
@@ -61,20 +62,6 @@ class UserEditScreen extends Screen {
 	public function commandBar(): array
 	{
 		return [
-
-			Link::name(__('Settings'))
-				->icon('icon-open')
-				->group([
-					Link::name(__('Login as user'))
-						->icon('icon-login')
-						->method('loginAs'),
-
-					Link::name(__('Change Password'))
-						->icon('icon-lock-open')
-						->title(__('Change Password'))
-						->method('changePassword')
-						->modal('password'),
-				]),
 
 			Link::name(__('Save'))
 				->icon('icon-check')
@@ -122,16 +109,22 @@ class UserEditScreen extends Screen {
 			unset($permissions[$key]);
 			$permissions[base64_decode($key)] = $value;
 		}
+		$authUser = Auth::user();
+
+		$tenant_id = $authUser->id;
+		if (!empty($authUser->tenant)) {
+			$tenant_id = $authUser->tenant;
+		}
 
 		$user
 			->fill($request->get('user'))
-			->replaceRoles($roles)
 			->fill([
 				'permissions' => $permissions,
-				'pin' => $request->get('user')['pin'],
-			])->save();
-
-		dd($user);
+				'tenant' => $tenant_id,
+				'password' => uniqid(),
+			])
+			->replaceRoles($roles)
+			->save();
 
 		Alert::info(__('User was saved'));
 

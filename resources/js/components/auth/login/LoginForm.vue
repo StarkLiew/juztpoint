@@ -90,11 +90,7 @@ export default {
 
 
       
-        //Collect fingerprint
-    
-
-
-
+            //Collect fingerprint
             this.form.fingerprint = JSON.stringify(await this.scanFingerprint())
        
             await axios.post(api.path('login'), this.form)

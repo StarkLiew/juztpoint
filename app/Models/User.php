@@ -15,6 +15,10 @@ class User extends Authenticatable {
 	protected $appends = array('company_name');
 	protected $company_name;
 
+	protected $fillable = [
+		'name', 'password', 'pin', 'email', 'initial', 'tenant',
+	];
+
 	/**
 	 * Convert to tenantor.
 	 *

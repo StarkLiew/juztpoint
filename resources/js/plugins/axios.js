@@ -3,11 +3,14 @@ import store from '~/store/index'
 import router from '~/router/index'
 import { api } from '~/config'
 import { app } from '~/app'
+import VueCookies from 'vue-cookies'
 
 axios.interceptors.request.use(config => {
   config.headers['X-Requested-With'] = 'XMLHttpRequest'
 
-  const token = store.getters['auth/token']
+  // const token = store.getters['auth/token']
+  const token =  VueCookies.get('JXPT')
+
   if (token) {
     config.headers['Authorization'] = 'Bearer ' + token
   }

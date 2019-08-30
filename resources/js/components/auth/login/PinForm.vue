@@ -1,7 +1,15 @@
-<template>
- <v-bottom-sheet  v-model="showDialog" @close="close" :hide-overlay="false" persistent>
-   <v-layout justify-center>                  
-    <v-flex xs8 sm3>
+ <template>
+ <v-layout justify-center>                  
+    <v-flex xs8 sm6>
+       <v-layout justify-center mb-10>
+          <h1 class="display-3">JuxtPoint</h1>
+      </v-layout>
+       <v-layout justify-center mb-5>
+           <v-icon :color="val.length >= 1 ? 'red' : 'dark'">fiber_manual_record</v-icon>
+           <v-icon :color="val.length >= 2 ? 'red' : 'dark'">fiber_manual_record</v-icon>
+           <v-icon :color="val.length >= 3 ? 'red' : 'dark'">fiber_manual_record</v-icon>
+           <v-icon :color="val.length >= 4 ? 'red' : 'dark'">fiber_manual_record</v-icon>
+        </v-layout >
         <v-container fluid grid-list-sm>
                 <v-layout wrap>
                   <v-flex v-for="(key, i) in keys" :key="i" xs4 @click="touched(key)">
@@ -24,7 +32,7 @@
                         <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                           <v-spacer></v-spacer>
                           <v-flex shrink>
-                            <div class="subheading text-wrap">{{ key }}</div>
+                            <div class="subheading text-wrap" v-if="key.length < 2">{{ key }}</div>
                              <v-icon color="white">{{key}}</v-icon>
                             
                           </v-flex>
@@ -36,63 +44,55 @@
          </v-container>
        </v-flex>
       </v-layout> 
-    </v-bottom-sheet>   
-</template>
 
+</template>
 <script>
 
+import { mapGetters } from 'vuex'
+
 export default {
+
   data: () => ({
-     valid: false,
-     lazy: false,
-     tab: 'tab-1', 
-     val: '0',
-     showDialog: false,
-     keys: ['1','2','3','4','5','6','7','8','9','clear','0','done',],
+     keys: ['1','2','3','4','5','6','7','8','9','clear','0','lock_open',],
+     val: '',
   }),
-  mounted() {
-   this.showDialog = this.show
-  },
-  props: [
-     'decimal',
-     'show',
-  ],
-  watch: {
-     show(val) {
-         this.showDialog = val
-     }
-  },
+  computed: mapGetters({
+      users: 'user/users'
+  }),
   methods: {
-      touched(key) {
+     async touched(key) {
        
          if(key=='clear') {
-             this.val = '0'
+             this.val = ''
             this.$emit('clear') 
             return
           }
-          if(key=='done') {
-            this.val = '0'
-            this.$emit('done')
+          if(key=='lock_open') {
+
+            const user = this.users.find(user => user.pin === this.val)
+
+            if(!user) {
+                this.val = ''
+                return
+            }
+            await this.$store.dispatch('auth/setUser', { user })
+
+            this.$router.push({ name: 'index' })
             return
+     
           }
           let val = this.val
-
-          val = val.toString().replace('.', '')
-
-          
+          if(val.length  === 4) return
           val = val.toString() + key.toString()
-
-          val = parseFloat(parseInt(val) / Math.pow(10, this.decimal)).toFixed(this.decimal)
-
           this.val = val
+
           this.$emit('change', val)
 
       },
       close() {
         this.$emit('close')
       }
-
-
   }
 }
 </script>
+

@@ -11,6 +11,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
+use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
@@ -52,7 +53,6 @@ class UserListScreen extends Screen {
 				->paginate(),
 		];
 	}
-
 	/**
 	 * Button commands.
 	 *
@@ -60,7 +60,11 @@ class UserListScreen extends Screen {
 	 */
 	public function commandBar(): array
 	{
-		return [];
+		return [
+			Link::name(__('Add'))
+				->icon('icon-plus')
+				->link(route('platform.systems.users.create')),
+		];
 	}
 
 	/**
@@ -101,7 +105,13 @@ class UserListScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function saveUser(User $user, Request $request) {
-		$user->fill($request->get('user'))
+		$input = $request->get('user');
+		$auth = Auth::user();
+
+		$input['tenant'] = $auth->id;
+		$input['password'] = uniqid();
+
+		$user->fill($input)
 			->save();
 
 		Alert::info(__('User was saved.'));

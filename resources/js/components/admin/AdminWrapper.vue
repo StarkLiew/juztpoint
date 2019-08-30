@@ -1,6 +1,6 @@
 <template>
   <div class="fill-height">
-    <app-nav :mini="mini" @nav-toggle="navToggle"></app-nav>
+    <app-nav  @overlay="onOverlay" :mini="mini" @nav-toggle="navToggle"></app-nav>
     <top-menu @nav-toggle="navToggle"></top-menu>
 
     <v-content >
@@ -12,6 +12,11 @@
     </v-content>
 
     <app-footer></app-footer>
+
+       <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+
   </div>
 </template>
 
@@ -22,7 +27,8 @@ import AppFooter from './shared/AppFooter'
 
 export default {
   data: () => ({
-    mini: false
+    mini: false,
+    overlay: false
   }),
 
   components: {
@@ -34,7 +40,11 @@ export default {
   methods: {
     navToggle() {
       this.mini = !this.mini
+    },
+    onOverlay(status) {
+       this.overlay = status
     }
+
   }
 }
 </script>

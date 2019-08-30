@@ -25,6 +25,7 @@ use App\Orchid\Screens\Settings\Tax\TaxEditScreen;
 use App\Orchid\Screens\Settings\Tax\TaxListScreen;
 use App\Orchid\Screens\Settings\Terminal\TerminalEditScreen;
 use App\Orchid\Screens\Settings\Terminal\TerminalListScreen;
+use App\Orchid\Screens\User\UserAddScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 
@@ -72,6 +73,7 @@ $this->router->screen('payments', PaymentListScreen::class)->name('platform.syst
 
 // Users...
 $this->router->screen('users/{users}/edit', UserEditScreen::class)->name('platform.systems.users.edit');
+$this->router->screen('users/create', UserAddScreen::class)->name('platform.systems.users.create');
 $this->router->screen('users', UserListScreen::class)->name('platform.systems.users');
 
 // Roles...

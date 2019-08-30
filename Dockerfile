@@ -57,5 +57,6 @@ COPY --chown=www:www . /var/www
 USER www
 
 # Expose port 9000 and start php-fpm server
+EXPOSE 3306
 EXPOSE 9000
 CMD ["php-fpm"]

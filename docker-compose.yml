@@ -16,6 +16,8 @@ services:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     working_dir: /var/www
+    depends_on:
+      - db
     volumes:
       - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
@@ -29,7 +31,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "8888:8888"
+      - "80:80"
     volumes:
       - ./:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/

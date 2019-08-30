@@ -1,15 +1,18 @@
 import axios from 'axios'
 import { api } from '~/config'
 import * as types from '../mutation-types'
-import Cookies from 'js-cookie'
+import VueCookies from 'vue-cookies'
 
 /**
  * Initial state
  */
 export const state = {
   user: null,
+  access: false,
+  terminal: null,
+  store: null,
   //token: window.localStorage.getItem('token')
-  token: Cookies.get('jxp_token')
+  token:  VueCookies.get('JXPT'),
 }
 
 /**
@@ -17,38 +20,40 @@ export const state = {
  */
 export const mutations = {
   [types.SET_USER](state, { user }) { 
-    
+    state.access = true
     state.user = user
   },
 
   [types.LOGOUT](state) {
+    state.access = false
+    state.user = null
+  },
+
+  [types.DEREGISTER](state) {
+    state.access = false
     state.user = null
     state.store = null
     state.terminal = null
     // state.token = null
     //window.localStorage.removeItem('token')
-     Cookies.remove('JXPT')
+     VueCookies.remove('JXPT')
   },
+
 
   [types.FETCH_USER_FAILURE](state) {
     state.user = null
     state.store = null
     state.terminal = null
-    Cookies.remove('JXPT')
+    VueCookies.remove('JXPT')
   },
 
   [types.SET_TOKEN](state, { token, expires_at, store, terminal }) { 
     // state.token = token
     // window.localStorage.setItem('token', token)
     const expire = new Date(expires_at)
-
     state.store = store
     state.terminal = terminal
-
-    
-    document.cookie = Cookies.set('JXPT', token, { expires: expire, secure: true })
- 
-
+    VueCookies.set('JXPT',token, expire, true)
 
   }
 }
@@ -70,13 +75,19 @@ export const actions = {
     }
   },
 
+
   setUser({ commit }, payload) {
     commit(types.SET_USER, payload)
   },
 
-  async logout({ commit }) {
+
+  async logout({ commit }, payload) {
+       commit(types.LOGOUT)
+  },
+
+  async deregister({ commit }) {
     /* await axios.post(api.path('logout')) */
-    commit(types.LOGOUT)
+    commit(types.DEREGISTER)
   },
 
   destroy({ commit }) {
@@ -89,6 +100,9 @@ export const actions = {
  */
 export const getters = {
   user: state => state.user,
-  check: state => state.user !== null,
-  token: state => state.token
+  check: state => state.access,
+  registered: state => state.user !== null,
+  token: state => state.token,
+  terminal: state => state.terminal,
+  store: state => state.store,
 }

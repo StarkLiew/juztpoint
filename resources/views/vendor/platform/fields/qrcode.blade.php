@@ -1,7 +1,7 @@
 @component($typeForm,get_defined_vars())
 
-
- {!! QrCode::size(250)->generate($attributes['value']) !!}
-
+  @if(!empty($attributes['value']))
+   {!! QrCode::size(250)->generate($attributes['value']) !!}
+  @endif
 
 @endcomponent
