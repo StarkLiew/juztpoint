@@ -12,13 +12,22 @@
  */
 // Registration Routes...
 
-Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
-
-Route::get('/', 'HomeController@welcome')->name('welcome');
-
-Route::middleware('auth:web')->group(function () {
-	Route::get('/home', 'HomeController@index')->name('home');
+// Static subdomain
+Route::domain('pos.juxtpoint.com')->group(function ($router) {
+	Route::get('/', 'HomeController@app')->name('welcome');
 });
 
-Route::get('/pos/{vue_capture?}', 'HomeController@pos')->name('pos')->where('vue_capture', '[\/\w\.-]*');
+// Wildcard subdomain
+Route::domain('www.juxtpoint.com')->group(function ($router) {
+	Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+	Route::post('register', 'Auth\RegisterController@register');
+
+	Route::get('/', 'HomeController@welcome')->name('welcome');
+
+	Route::middleware('auth:web')->group(function () {
+		Route::get('/home', 'HomeController@index')->name('home');
+	});
+
+	Route::get('/pos/{vue_capture?}', 'HomeController@pos')->name('pos')->where('vue_capture', '[\/\w\.-]*');
+
+});

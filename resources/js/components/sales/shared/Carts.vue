@@ -139,17 +139,18 @@ import { mapGetters } from 'vuex'
 import ItemEdit from './ItemEdit'
 import DiscountAdd from './DiscountAdd'
 
-
-export default {
-  data: () => ({
+  const initialState = ({
       items: [],
       isEntry: true,
       allowRemoveItem: false,
       editDiscountFooter: false,
       editItem: [],
       footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
-   }),
-  props: ['show', 'customer', 'product', 'isProductEntry'],
+   })
+
+export default {
+  data: () => initialState(),
+  props: ['show', 'customer', 'product', 'isProductEntry', 'reset'],
   components: {
     ItemEdit,
     DiscountAdd,
@@ -158,10 +159,15 @@ export default {
      
   },
   watch: { 
-    isProductEntry: function(val) {
+    isProductEntry: (val) => {
         this.isEntry = val
     },
-    product: function(newVal, oldVal) {
+    reset: (val) => {
+       if(val){  
+         Object.assign(this.$data, initialState())
+       }
+    },
+    product: (newVal, oldVal) => {
       this.allowRemoveItem = false
       if(newVal) {
         //const defaultItem = {qty: 1, price: 0.00, discount: 0.00}

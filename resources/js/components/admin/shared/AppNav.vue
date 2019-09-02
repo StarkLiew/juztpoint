@@ -11,7 +11,7 @@
         <v-list-item-content>
           <v-list-item-title>{{ store.name }}</v-list-item-title>
           <v-list-item-title class="caption">{{ terminal.name }}</v-list-item-title>
-
+          <v-list-item-title class="caption">Version 1.0.1</v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-icon>
@@ -138,6 +138,9 @@ export default {
 
 
     },
+    update() {
+        window.location.reload()
+    },
 
     navigation() {
       this.items = [
@@ -156,6 +159,10 @@ export default {
         [
           { title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
         ],
+        [
+          { title: 'Update', icon: 'update', action: this.update }
+        ],
+
         [
           { title: 'Refresh', icon: 'refresh', action: this.refresh }
         ],

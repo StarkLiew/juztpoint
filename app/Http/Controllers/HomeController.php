@@ -34,6 +34,15 @@ class HomeController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\Support\Renderable
 	 */
+	public function app() {
+		return view('pos');
+	}
+
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
 	public function pos() {
 		return view('pos');
 	}

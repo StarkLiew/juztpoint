@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -14,10 +15,6 @@ class User extends Authenticatable {
 
 	protected $appends = array('company_name');
 	protected $company_name;
-
-	protected $fillable = [
-		'name', 'password', 'pin', 'email', 'initial', 'tenant',
-	];
 
 	/**
 	 * Convert to tenantor.

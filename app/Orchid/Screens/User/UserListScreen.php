@@ -7,9 +7,9 @@ namespace App\Orchid\Screens\User;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserFiltersLayout;
 use App\Orchid\Layouts\User\UserListLayout;
+use App\Orchid\Models\User;
 use Auth;
 use Illuminate\Http\Request;
-use Orchid\Platform\Models\User;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Link;
 use Orchid\Screen\Screen;
@@ -42,12 +42,19 @@ class UserListScreen extends Screen {
 	 */
 	public function query(): array
 	{
-		$id = Auth::id();
+		$authUser = Auth::user();
+
+		$tenant_id = $authUser->id;
+
+		if (!empty($authUser->tenant)) {
+			$tenant_id = $authUser->tenant;
+		}
+
 		return [
 			'users' => User::with('roles')
 				->filters()
-				->where('tenant', '=', $id)
-				->orWhere('id', '=', $id)
+				->where('tenant', '=', $tenant_id)
+				->orWhere('id', '=', $tenant_id)
 				->filtersApplySelection(UserFiltersLayout::class)
 				->defaultSort('id', 'desc')
 				->paginate(),

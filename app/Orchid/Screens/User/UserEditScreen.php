@@ -6,10 +6,11 @@ namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
+use App\Orchid\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Orchid\Access\UserSwitch;
-use Orchid\Platform\Models\User;
 use Orchid\Screen\Fields\Password;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Link;
@@ -115,6 +116,25 @@ class UserEditScreen extends Screen {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function save(User $user, Request $request) {
+
+		$authUser = Auth::user();
+
+		$tenant_id = $authUser->id;
+		if (!empty($authUser->tenant)) {
+			$tenant_id = $authUser->tenant;
+		}
+
+		$input = $request->get('user');
+
+		$hasPin = User::where('pin', $input['pin'])->where('id', '<>', $user->id)->where(function ($query) use ($tenant_id) {
+			$query->where('tenant', $tenant_id)
+				->orWhere('id', $tenant_id);
+		})->count();
+		if ($hasPin > 0) {
+			Alert::info(__('User pin exist. Try diffirent pin.'));
+			return back();
+		}
+
 		$permissions = $request->get('permissions', []);
 		$roles = $request->input('user.roles', []);
 
@@ -128,10 +148,7 @@ class UserEditScreen extends Screen {
 			->replaceRoles($roles)
 			->fill([
 				'permissions' => $permissions,
-				'pin' => $request->get('user')['pin'],
 			])->save();
-
-		dd($user);
 
 		Alert::info(__('User was saved'));
 

@@ -36,6 +36,7 @@ class UserEditLayout extends Rows {
 			Input::make('user.pin')
 				->type('text')
 				->required()
+				->length(4)
 				->horizontal()
 				->title(__('Pin'))
 				->placeholder(__('Pin')),

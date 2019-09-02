@@ -272,7 +272,8 @@ export default {
       },
       async save() {
          const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount)
-         const amount_change = amount_received - parseFloat(this.trxn.footer.charge)
+         const rounded =  Math.ceil(parseFloat(this.trxn.footer.charge) * 20)/20
+         const amount_change = amount_received - rounded
 
          const {customer, footer, items} = this.trxn 
          let payments = []
@@ -326,8 +327,8 @@ export default {
                discount_amount: footer.discount.amount,
                tax_total: footer.tax,
                service_charge: 0,
-               charge: footer.charge,
-               received:  amount_received,
+               charge: rounded,
+               received: amount_received,
                change:  amount_change,
                note:"",
                refund: 0,

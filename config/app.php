@@ -184,6 +184,8 @@ return [
 
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
+		Barryvdh\Cors\ServiceProvider::class,
+
 	],
 
 	/*

@@ -1,8 +1,8 @@
 export default [
   ...applyRules(['guest'], [
-    { path: '/pos', component: require('$comp/auth/AuthWrapper').default, redirect: { name: 'login' }, children:
+    { path: '/', component: require('$comp/auth/AuthWrapper').default, redirect: { name: 'login' }, children:
       [
-        { path: '/pos/login', name: 'login', component: require('$comp/auth/login/Login').default },
+        { path: '/login', name: 'login', component: require('$comp/auth/login/Login').default },
         { path: '/register', name: 'register', component: require('$comp/auth/register/Register').default },
         { path: '/password', component: require('$comp/auth/password/PasswordWrapper').default, children:
           [
@@ -14,15 +14,15 @@ export default [
     },
   ]),
   ...applyRules(['auth'], [
-    { path: '/pos/sales',  name: 'sales', component: require('$comp/sales/SalesWrapper').default},
-    { path: '/pos/receipt', name: 'receipts', component: require('$comp/admin/receipt/ReceiptWrapper').default },
-    { path: '/pos', component: require('$comp/admin/AdminWrapper').default, children:
+    { path: '/sales',  name: 'sales', component: require('$comp/sales/SalesWrapper').default},
+    { path: '/receipt', name: 'receipts', component: require('$comp/admin/receipt/ReceiptWrapper').default },
+    { path: '/', component: require('$comp/admin/AdminWrapper').default, children:
       [
-        { path: '/pos', name: 'index', redirect: { name: 'profile' } },
-        { path: '/pos/profile', component: require('$comp/admin/profile/ProfileWrapper').default, children:
+        { path: '/', name: 'index', redirect: { name: 'profile' } },
+        { path: '/profile', component: require('$comp/admin/profile/ProfileWrapper').default, children:
           [
-            { path: '/pos', name: 'profile', component: require('$comp/admin/profile/Profile').default },
-            { path: '/pos/edit', name: 'profile-edit', component: require('$comp/admin/profile/edit/ProfileEdit').default }
+            { path: '/', name: 'profile', component: require('$comp/admin/profile/Profile').default },
+            { path: '/edit', name: 'profile-edit', component: require('$comp/admin/profile/edit/ProfileEdit').default }
           ]
         },
 

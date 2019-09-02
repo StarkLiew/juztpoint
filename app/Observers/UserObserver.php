@@ -42,11 +42,11 @@ class UserObserver extends Observer {
 
 		$companyInfo = Array(
 			'address' => null,
-			'timezone' => "Asia\/Kuala_Lumpur",
+			'timezone' => "Malaysia\/Kuala_Lumpur",
 			'currency' => "MYR",
 		);
 		$storeInfo = Array(
-			'timezone' => "Asia\/Kuala_Lumpur",
+			'timezone' => "Malaysia\/Kuala_Lumpur",
 			'currency' => "TWD",
 		);
 

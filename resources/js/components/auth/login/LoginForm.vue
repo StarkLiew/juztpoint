@@ -100,6 +100,7 @@ export default {
                 })
                 .catch(err => {
                   this.handleErrors(err.response.data.errors)
+               
                 })
                 .then(() => {
                   this.loading = false

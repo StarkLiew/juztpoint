@@ -9,6 +9,8 @@
           @item-added="itemAdded"
           @edit-item="editProductToggle"
           @payment="goPayment"
+          @reset-done="resetDone"
+          :reset="reset"
           :is-product-entry="panel === 'product'"
           :show="showCart"
           :customer="customer" 
@@ -63,6 +65,7 @@ export default {
     customer: null,
     product: null,
     showEdit: false,
+    reset: false,
     showCart: false,
     item: null,
     overlay: false,
@@ -126,10 +129,14 @@ export default {
        this.panel = "product"
     },
     newTrxn() {
-       // this.customer = null
-       // this.trxn = null
-       // this.panel = "product"
-       window.location.reload()
+        this.customer = null
+        this.trxn = null
+        this.panel = "product"
+        this.reset = true
+       // window.location.reload()
+    },
+    resetDone() {
+       this.reset = false
     },
     goPayment(trxn) {
         this.trxn = trxn
