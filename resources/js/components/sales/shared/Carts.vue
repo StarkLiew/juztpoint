@@ -139,17 +139,16 @@ import { mapGetters } from 'vuex'
 import ItemEdit from './ItemEdit'
 import DiscountAdd from './DiscountAdd'
 
-  const initialState = ({
-      items: [],
-      isEntry: true,
-      allowRemoveItem: false,
-      editDiscountFooter: false,
-      editItem: [],
-      footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
-   })
-
 export default {
-  data: () => initialState(),
+  
+  data: () => ({
+        items: [],
+        isEntry: true,
+        allowRemoveItem: false,
+        editDiscountFooter: false,
+        editItem: [],
+        footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
+  }),
   props: ['show', 'customer', 'product', 'isProductEntry', 'reset'],
   components: {
     ItemEdit,
@@ -159,24 +158,24 @@ export default {
      
   },
   watch: { 
-    isProductEntry: (val) => {
+    isProductEntry(val) {
         this.isEntry = val
     },
-    reset: (val) => {
+    reset(val) {
        if(val){  
-         Object.assign(this.$data, initialState())
+           Object.assign(this.$data, this.$options.data.call(this))
+           this.$emit('reset-done')
        }
     },
-    product: (newVal, oldVal) => {
+    product(newVal, oldVal) {
+      
       this.allowRemoveItem = false
-      if(newVal) {
-        //const defaultItem = {qty: 1, price: 0.00, discount: 0.00}
 
-        
+      if(newVal) {
+                
         let item = this.sumAmount({...newVal})
     
         item.note = ""
-
 
         this.items.push(item)  
         setTimeout(() => {

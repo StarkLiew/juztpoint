@@ -28,8 +28,9 @@ router.beforeEach(async (to, from, next) => {
 })
 
 const rules = {
-  guest: { fail: 'index', check: () => (!store.getters['auth/check']) },
-  auth: { fail: 'login', check: () => (store.getters['auth/check']) }
+  guest: { fail: 'index', check: () => (!store.getters['auth/registered']) },
+  auth: { fail: 'login', check: () => (store.getters['auth/registered']) },
+  pin: { fail: 'pin', check: () => (store.getters['auth/check']) }
 }
 
 function reroute(to) {
@@ -66,3 +67,4 @@ function reroute(to) {
 }
 
 export default router
+

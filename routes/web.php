@@ -15,6 +15,7 @@
 // Static subdomain
 Route::domain('pos.juxtpoint.com')->group(function ($router) {
 	Route::get('/', 'HomeController@app')->name('welcome');
+	Route::get('/{any}', 'HomeController@app')->name('welcome');
 });
 
 // Wildcard subdomain
@@ -30,4 +31,10 @@ Route::domain('www.juxtpoint.com')->group(function ($router) {
 
 	Route::get('/pos/{vue_capture?}', 'HomeController@pos')->name('pos')->where('vue_capture', '[\/\w\.-]*');
 
+});
+
+// Dev Static subdomain
+Route::domain('localhost')->group(function ($router) {
+	Route::get('/', 'HomeController@app')->name('welcome');
+	Route::get('/{any}', 'HomeController@app')->name('welcome');
 });

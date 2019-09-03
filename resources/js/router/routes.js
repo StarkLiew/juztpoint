@@ -3,6 +3,7 @@ export default [
     { path: '/', component: require('$comp/auth/AuthWrapper').default, redirect: { name: 'login' }, children:
       [
         { path: '/login', name: 'login', component: require('$comp/auth/login/Login').default },
+        { path: '/pin', name: 'pin', component: require('$comp/auth/login/Pin').default },
         { path: '/register', name: 'register', component: require('$comp/auth/register/Register').default },
         { path: '/password', component: require('$comp/auth/password/PasswordWrapper').default, children:
           [

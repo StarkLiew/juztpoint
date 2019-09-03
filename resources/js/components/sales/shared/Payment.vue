@@ -330,6 +330,7 @@ export default {
                charge: rounded,
                received: amount_received,
                change:  amount_change,
+               rounding: rounded - footer.charge,
                note:"",
                refund: 0,
                items: items,

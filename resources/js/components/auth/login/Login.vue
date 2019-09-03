@@ -1,4 +1,4 @@
-<template>
+ <template>
 
   <v-flex sm8 md6 lg4 >
     <v-card v-if="!hasToken()" >
@@ -22,14 +22,12 @@
 
 import { mapGetters } from 'vuex'
 import LoginForm from './LoginForm'
-import PinForm from './PinForm'
 import VueCookies from 'vue-cookies'
 
 
 export default {
   components: {
     LoginForm,
-    PinForm
   },
   data: () => ({
      showPin: false,
@@ -38,6 +36,11 @@ export default {
   computed: mapGetters({
     registered: 'auth/registered',
   }),
+  beforeMount() {
+      if(registered) {
+         this.$router.push({ name: 'pin' })
+      }
+  },
   methods: {
     hasToken(){
 
@@ -51,14 +54,18 @@ export default {
            
       await this.$store.dispatch('auth/saveToken', data)
       // await this.$store.dispatch('auth/setUser', data)
-            /* Fetch latest data */
+      
+      /* Fetch latest data */
+      await this.$store.dispatch('user/fetchUsers')
       await this.$store.dispatch('product/fetchProducts')
       await this.$store.dispatch('account/fetchCustomers')
       await this.$store.dispatch('system/fetchSystem')
-      await this.$store.dispatch('user/fetchUsers')
+
+      this.$router.push({ name: 'pin' })
+  
 
 
-      this.showPin = true
+    
     
    
  

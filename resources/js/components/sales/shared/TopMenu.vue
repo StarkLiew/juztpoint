@@ -46,13 +46,10 @@
       </v-list>
     </v-menu>
 
-
-    
+     
+       <span><v-icon>perm_identity</v-icon>{{auth.name}}</span>
        <v-btn icon><v-icon>search</v-icon></v-btn>
- 
-     <v-spacer></v-spacer>
-
-  
+        <v-spacer></v-spacer>
   </v-app-bar>
   
 
@@ -60,7 +57,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import { settings } from '~/config'
 
 export default {
@@ -68,7 +65,9 @@ export default {
 		siteName: settings.siteName,
     overlay: false,
 	}),
-
+ computed: mapGetters({
+     auth: 'auth/user'
+  }),
 	methods: {
     refresh() {
         this.$emit('overlay', true)

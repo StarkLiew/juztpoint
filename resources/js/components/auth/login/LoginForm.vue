@@ -95,6 +95,8 @@ export default {
        
             await axios.post(api.path('login'), this.form)
                 .then(res => {
+
+                  
                   this.$toast.success('Welcome back!')
                   this.$emit('success', res.data)
                 })

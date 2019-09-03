@@ -13,7 +13,7 @@ return [
 	*/
 
 	'supportsCredentials' => false,
-	'allowedOrigins' => ['*.juxtpoint.com', 'localhost'],
+	'allowedOrigins' => ['*.juxtpoint.com', '*'],
 	'allowedOriginsPatterns' => [],
 	'allowedHeaders' => ['*'],
 	'allowedMethods' => ['*'],
