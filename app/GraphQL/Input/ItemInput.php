@@ -44,6 +44,10 @@ class ItemInput extends InputType {
 				'type' => Type::float(),
 				'name' => 'tax_amount',
 			],
+			'refund_amount' => [
+				'type' => Type::float(),
+				'name' => 'refund_amount',
+			],
 			'total_amount' => [
 				'type' => Type::float(),
 				'name' => 'total_amount',

@@ -23,8 +23,17 @@ export const mutations = {
     state.receipts = receipts
   },
   [types.ADD_RECEIPT](state, { receipt }) { 
-     state.autoincrement += 1      
-     state.receipts.push(receipt)
+
+           const index = state.receipts.findIndex(r => r.reference === receipt.reference)
+           if(index > -1) {
+               state.receipts[index] = receipt
+           } else {
+
+              state.autoincrement += 1      
+              state.receipts.push(receipt)
+           }
+
+
   },
   [types.FETCH_RECEIPT_FAILURE](state) {
    
@@ -48,11 +57,14 @@ export const actions = {
   async addReceipt({ commit, getters }, receipt) {
     try {
 
-       let number = '00000' + (getters['autoincrement'] + 1)
-       number =  number.substr(number.length - 6)
 
-       receipt.reference = receipt.reference + number
-       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, charge,received, change, note,  refund, items, payments} = receipt
+       
+       if(!receipt.status) {
+          let number = '00000' + (getters['autoincrement'] + 1)
+          number =  number.substr(number.length - 6)
+          receipt.reference = receipt.reference + number
+       }
+       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
 
         let castItems = "" 
         let castComm = "" 
@@ -83,6 +95,7 @@ export const actions = {
                          discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
+                         refund_amount: 0.00,
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
                          total_amount: ${parseFloat(total_amount)}, 
@@ -94,6 +107,7 @@ export const actions = {
                          discount: "{}", 
                          discount_amount:0.00, 
                          tax_id: 1, 
+                         refund_amount: 0.00,
                          tax_amount: 0.00, 
                          user_id: ${user_id},
                          total_amount: ${parseFloat(comm_ammount)}, 
@@ -114,6 +128,7 @@ export const actions = {
                          item_id: ${item_id},
                          discount: "{}", 
                          discount_amount:0.00, 
+                         refund_amount: 0.00,
                          tax_id: 1, 
                          tax_amount: 0.00, 
                          user_id: ${transact_by},
@@ -137,6 +152,7 @@ export const actions = {
                                  discount_amount: ${parseFloat(discount_amount)},
                                  tax_amount: ${parseFloat(tax_total)},
                                  service_charge: ${parseFloat(service_charge)},
+                                 rounding: ${parseFloat(rounding)},
                                  charge: ${parseFloat(charge)},
                                  received: ${parseFloat(received)},
                                  change: ${parseFloat(change)},
@@ -147,12 +163,18 @@ export const actions = {
                                  commissions: [${castComm}]
                              ) {id}}`
 
+                      
+
 
        const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
   
        receipt.id = data.data.newReceipt.id
+       receipt.status = 'active'
+
+
 
        commit(types.ADD_RECEIPT, { receipt })
+       
        
        return receipt
       

@@ -1,12 +1,19 @@
 FROM php:7.3.7-fpm
 
 
+
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
 
+# COPY init-letsencrypt /var/www/
+
+# chmod +x init-letsencrypt.sh
+# sudo init-letsencrypt.sh
+
+# RUN init-letsencrypt init-letsencrypt 
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \

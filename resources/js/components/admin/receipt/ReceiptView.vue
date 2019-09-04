@@ -70,7 +70,7 @@
 
 	           <vue-easy-print tableShow style="display: none" ref="receipt">
                                   <template slot-scope="func">
-                                      <receipt v-model="selected" :header="company"></receipt>
+                                      <receipt v-model="selected" :header="{company, store}"></receipt>
                                   </template>
                                </vue-easy-print>
 
@@ -180,6 +180,7 @@
         props:['selected'],
         computed: mapGetters({
 		    company: 'system/company',
+		    store: 'auth/store',
 		}),
         methods: {
 			print(){

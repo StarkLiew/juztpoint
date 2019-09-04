@@ -26,6 +26,7 @@ class UserCreateDocuments extends Migration {
 			$table->float('discount_amount');
 			$table->float('service_charge');
 			$table->float('tax_amount');
+			$table->float('rounding');
 			$table->float('charge');
 			$table->float('received');
 			$table->float('change');

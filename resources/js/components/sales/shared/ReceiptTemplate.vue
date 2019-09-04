@@ -1,8 +1,8 @@
 <template>
     <div>
 
-    	<div class="title">{{ header.name }}</div>
-    	<div class="title">{{ header.properties.address }}</div>
+    	<div class="title">{{ header.company.name }}</div>
+    	<div class="title">{{ header.company.properties.address }}</div>
     	<br />
     	<br />
     	<div class="title">Receipt/Tax Invoice</div>
@@ -13,7 +13,7 @@
         <table>
     		 <tbody>
     		 	 <tr>
-    		 	 	<td>Date:</td><td  class="left">{{ value.date + 'Z'| moment('timezone', header.properties.timezone, 'DD/MM/YYYY hh:mmA') }}</td>
+    		 	 	<td>Date:</td><td  class="left">{{ value.date + 'Z'| moment('timezone', header.store.properties.timezone.replace(/\\/g, ''), 'DD/MM/YYYY hh:mmA') }}</td>
     		 	 </tr>
     		 	 <tr>
     		 	 	<td>Reference:</td><td  class="left">{{ value.reference }}</td>

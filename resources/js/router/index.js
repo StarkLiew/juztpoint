@@ -12,11 +12,11 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (store.getters['auth/token'] && !store.getters['auth/check']) {
+ /* if (store.getters['auth/token'] && !store.getters['auth/check']) {
     try {
       await store.dispatch('auth/fetchUser')
     } catch (e) {}
-  }
+  } */
 
   let route = reroute(to)
   if (route) {
@@ -28,9 +28,11 @@ router.beforeEach(async (to, from, next) => {
 })
 
 const rules = {
-  guest: { fail: 'index', check: () => (!store.getters['auth/registered']) },
+ // guest: { fail: 'index', check: () => (!store.getters['auth/check']) },
+  guest: { fail: 'pin', check: () => (!store.getters['auth/registered']) },
   auth: { fail: 'login', check: () => (store.getters['auth/registered']) },
-  pin: { fail: 'pin', check: () => (store.getters['auth/check']) }
+  pin: { fail: 'pin', check: () => (store.getters['auth/check']) },
+ // pin: { fail: 'pin', check: () => (store.getters['auth/check']) }
 }
 
 function reroute(to) {

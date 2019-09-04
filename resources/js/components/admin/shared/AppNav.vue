@@ -126,12 +126,22 @@ export default {
         this.$emit('overlay', true)
 
         await setTimeout(async () => {
-        
+
+          /* Upload all offline transaction */
+
+          const offline_receipts = this.$store.getters['receipt/receipts'].filter(r => r.status === 'offline')
+
+          for(const r of offline_receipts) {
+               await this.$store.dispatch('receipt/addReceipt', r)
+          }
          /* Fetch latest data */
           await this.$store.dispatch('user/fetchUsers')
           await this.$store.dispatch('product/fetchProducts')
           await this.$store.dispatch('account/fetchCustomers')
           await this.$store.dispatch('system/fetchSystem')
+
+          
+
           this.$emit('overlay', false)
         }, 3000)
  
@@ -152,9 +162,6 @@ export default {
         ],
         [
           { title: 'Settings', icon: 'settings', to: {name: 'settings'}, exact: true }
-        ],
-        [
-          { title: 'Back office', icon: 'bar_chart', to: {name: 'backoffice'}, exact: true }
         ],
         [
           { title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }

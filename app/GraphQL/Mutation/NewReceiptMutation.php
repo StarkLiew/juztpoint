@@ -67,11 +67,15 @@ class NewReceiptMutation extends Mutation {
 				'name' => 'received',
 				'type' => Type::float(),
 			],
+			'rounding' => [
+				'name' => 'rounding',
+				'type' => Type::float(),
+			],
 			'change' => [
 				'name' => 'change',
 				'type' => Type::float(),
 			],
-		    'refund' => [
+			'refund' => [
 				'name' => 'refund',
 				'type' => Type::float(),
 			],

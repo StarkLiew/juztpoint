@@ -66,6 +66,10 @@ class ItemType extends GraphQLType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'refund_amount' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'total_amount' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',

@@ -20,7 +20,7 @@
   >
     <v-card-title class="display-4 ">
         <v-spacer></v-spacer>
-         <div >{{trxn.footer.charge | currency}} 
+         <div >{{ rounding(trxn.footer.charge) | currency}} 
          </div>
           <v-spacer></v-spacer>
    </v-card-title>
@@ -105,7 +105,7 @@
                                
                                 <span>
                     
-                                {{ parseFloat(trxn.footer.charge) | currency}}
+                                {{ rounding(parseFloat(trxn.footer.charge)) | currency}}
                                 </span>
                             </v-list-item>
                             <v-list-item>
@@ -127,7 +127,7 @@
                                      Change  
                                  </v-list-item-content>
                                
-                                <span class="display-3" color="error">{{  parseFloat(cash.amount) + parseFloat(card.amount) - trxn.footer.charge | currency}}
+                                <span class="display-3" color="error">{{  parseFloat(cash.amount) + parseFloat(card.amount) - rounding(trxn.footer.charge) | currency}}
                                 </span>
                             </v-list-item>
                    
@@ -177,7 +177,7 @@
                    </v-list>
                        <vue-easy-print tableShow style="display: none" ref="easyPrint">
                                   <template slot-scope="func">
-                                      <receipt v-model="receipt" :header="company"></receipt>
+                                      <receipt v-model="receipt" :header="{company, store}"></receipt>
                                   </template>
                                </vue-easy-print>
 
@@ -237,6 +237,7 @@ export default {
   computed: mapGetters({
     auth: 'auth/user',
     company: 'system/company',
+    store: 'auth/store',
   }),
   methods: {
       back() {
@@ -270,9 +271,15 @@ export default {
             return (parseFloat(this.cash.amount) + parseFloat(this.card.amount)) < parseFloat(this.trxn.footer.charge)
 
       },
+      rounding(amount) {
+        
+         return Math.round(parseFloat(amount) * 20)/20
+         
+
+      },
       async save() {
          const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount)
-         const rounded =  Math.ceil(parseFloat(this.trxn.footer.charge) * 20)/20
+         const rounded =  this.rounding(this.trxn.footer.charge)
          const amount_change = amount_received - rounded
 
          const {customer, footer, items} = this.trxn 

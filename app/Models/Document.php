@@ -28,7 +28,7 @@ class Document extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'reference', 'account_id', 'terminal_id', 'transact_by', 'date', 'type', 'status', 'discount', 'discount_amount', 'service_charge', 'tax_amount', 'charge', 'refund', 'received', 'change', 'note',
+		'reference', 'account_id', 'terminal_id', 'transact_by', 'date', 'type', 'status', 'discount', 'discount_amount', 'service_charge', 'tax_amount', 'rounding', 'charge', 'refund', 'received', 'change', 'note',
 	];
 
 	protected $allowedFilters = ['reference', 'status'];

@@ -10,7 +10,7 @@
       </v-card-text>
     </v-card>
 
-      <pin-form v-if="hasToken() || showPin"></pin-form>
+
   </v-flex>
 
 
@@ -33,14 +33,7 @@ export default {
      showPin: false,
      
   }),
-  computed: mapGetters({
-    registered: 'auth/registered',
-  }),
-  beforeMount() {
-      if(registered) {
-         this.$router.push({ name: 'pin' })
-      }
-  },
+
   methods: {
     hasToken(){
 
@@ -51,23 +44,8 @@ export default {
     
     },
     async success(data) { 
-           
-      await this.$store.dispatch('auth/saveToken', data)
-      // await this.$store.dispatch('auth/setUser', data)
-      
-      /* Fetch latest data */
-      await this.$store.dispatch('user/fetchUsers')
-      await this.$store.dispatch('product/fetchProducts')
-      await this.$store.dispatch('account/fetchCustomers')
-      await this.$store.dispatch('system/fetchSystem')
 
       this.$router.push({ name: 'pin' })
-  
-
-
-    
-    
-   
  
     }
   }

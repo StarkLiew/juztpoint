@@ -34,7 +34,7 @@ Route::domain('www.juxtpoint.com')->group(function ($router) {
 });
 
 // Dev Static subdomain
-Route::domain('localhost')->group(function ($router) {
+Route::domain('localhost:3000')->group(function ($router) {
 	Route::get('/', 'HomeController@app')->name('welcome');
 	Route::get('/{any}', 'HomeController@app')->name('welcome');
 });

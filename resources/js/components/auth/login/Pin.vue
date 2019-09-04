@@ -46,6 +46,9 @@
            </v-container>
          </v-flex>
         </v-layout> 
+       <v-overlay :value="overlay">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
 
   </v-flex>
 </template>
@@ -56,12 +59,14 @@ import { mapGetters } from 'vuex'
 export default {
 
   data: () => ({
-     keys: ['1','2','3','4','5','6','7','8','9','clear','0','lock_open',],
+     keys: ['1','2','3','4','5','6','7','8','9','clear','0','backspace',],
      val: '',
+     overlay: false,
   }),
   computed: mapGetters({
       users: 'user/users'
   }),
+  
   methods: {
      async touched(key) {
        
@@ -70,26 +75,40 @@ export default {
             this.$emit('clear') 
             return
           }
-          if(key=='lock_open') {
-
-            const user = this.users.find(user => user.pin === this.val)
-
-            if(!user) {
-                this.val = ''
-                return
-            }
-            await this.$store.dispatch('auth/setUser', { user })
-
-            this.$router.push({ name: 'index' })
-            return
-     
+          if(key=='backspace') {
+              this.val = this.val.slice(0, -(this.val.length - 1))
+              return 
           }
           let val = this.val
-          if(val.length  === 4) return
+
           val = val.toString() + key.toString()
-          this.val = val
+          
+              this.val = val
 
           this.$emit('change', val)
+
+          if(val.length === 4) {
+            this.overlay = true
+             await setTimeout(async () => {
+      
+                const user = this.users.find(user => user.pin === this.val)
+
+                if(!user) {
+                    this.val = ''
+                     this.overlay = false
+                    return
+                }
+                await this.$store.dispatch('auth/setUser', { user })
+          
+                this.$router.push({ name: 'index' })
+                this.overlay = false
+                return
+            }, 1000)
+
+          }
+
+
+    
 
       },
       close() {

@@ -76,6 +76,10 @@ class ReceiptType extends GraphQLType {
 				'description' => 'A list of the item',
 				'is_relation' => true,
 			],
+			'rounding' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'charge' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',

@@ -14,11 +14,11 @@
 
        </template> 
        
-       <div v-for="(item, index) in receipts" :key="index" >
+       <div v-for="(item, index) in receipts.reverse()" :key="index" >
         <v-list-item two-line @click="select(item)">
             
             <v-list-item-content>
-                  <v-list-item-title>{{item.date + 'Z' | moment('timezone',company.timezone,'hh:mmA')  }}
+                  <v-list-item-title>{{item.date + 'Z' | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'hh:mmA')  }}
                        <v-chip v-if="item.status === 'offline'" class="ma-2" small color="grey" >
                           {{ item.status }}
                        </v-chip>
@@ -53,8 +53,9 @@ export default {
      
   },
   computed: mapGetters({
-    receipts: 'receipt/receipts',
+      receipts: 'receipt/receipts',
       company: 'system/company',
+      store: 'auth/store',
   }),
   watch: { 
   

@@ -94,7 +94,17 @@ export default {
             this.form.fingerprint = JSON.stringify(await this.scanFingerprint())
        
             await axios.post(api.path('login'), this.form)
-                .then(res => {
+                .then(async res => {
+                  
+                  const data = res.data
+                  await this.$store.dispatch('auth/saveToken', data)
+                  // await this.$store.dispatch('auth/setUser', data)
+                  
+                  /* Fetch latest data */
+                  await this.$store.dispatch('user/fetchUsers')
+                  await this.$store.dispatch('product/fetchProducts')
+                  await this.$store.dispatch('account/fetchCustomers')
+                  await this.$store.dispatch('system/fetchSystem')
 
                   
                   this.$toast.success('Welcome back!')
