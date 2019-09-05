@@ -15,6 +15,13 @@ export const FILL_PRODUCTS = 'FILL_PRODUCTS'
 export const FETCH_PRODUCT_FAILURE = 'FETCH_PRODUCT_FAILURE'
 
 /**
+ * service.js
+ */
+export const SET_SERVICE = 'SET_SERVICE'
+export const FILL_SERVICES = 'FILL_SERVICES'
+export const FETCH_SERVICE_FAILURE = 'FETCH_SERVICE_FAILURE'
+
+/**
  * account.js
  */
 export const SET_CUSTOMER = 'SET_CUSTOMER'

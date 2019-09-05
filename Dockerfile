@@ -16,7 +16,7 @@ WORKDIR /var/www
 # RUN init-letsencrypt init-letsencrypt 
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+ RUN apt-get update && apt-get install -y \
     build-essential \
     mariadb-client \
     libzip-dev \
@@ -40,7 +40,7 @@ RUN docker-php-source extract; \
   rm /tmp/freetype.patch
 
 # Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+ RUN apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
 # Install extensions
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl

@@ -15,6 +15,7 @@
           :show="showCart"
           :customer="customer" 
           :product.sync="product" 
+          :set-appointment="setAppointment"
        > </carts>
           <top-menu @overlay="overlayShow" @cart-toggle="cartToggle"></top-menu>
  
@@ -26,7 +27,7 @@
               max-height="calc(100vh - 48px)"
               color="transparent"
             >           
-                <products-list @selected="selectedProduct" v-if="panel === 'product'"></products-list>
+                <products-list @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
                 <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
                 <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
@@ -68,6 +69,7 @@ export default {
     reset: false,
     showCart: false,
     item: null,
+    setAppointment: false,
     overlay: false,
     showCustomerDialog: false,
     trxn: null,
@@ -98,6 +100,9 @@ export default {
        this.item = product
 
        this.panel = 'edit-product'
+    },
+    goAppointment(status) {
+     this.setAppointment = status
     },
     itemAdded() {
        this.product = null

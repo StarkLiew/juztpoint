@@ -8,7 +8,8 @@ import * as types from '../mutation-types'
 export const state = {
   company: null,
   payments: [],
-  users: [],   
+  users: [],  
+  categories: [], 
   autoincrement: 0, 
 }
 
@@ -20,6 +21,7 @@ export const mutations = {
   [types.FILL_SYSTEM](state, { system }) { 
  
     state.company = system.company
+    state.categories = system.categories
     state.payments = system.payments
     state.users = system.payments
   },
@@ -30,6 +32,7 @@ export const mutations = {
   [types.FETCH_SYSTEM_FAILURE](state) {
     state.company = null
     state.payments = []
+    state.categories = []
     state.users = []
   },
 }
@@ -47,8 +50,9 @@ export const actions = {
     try {
       const company = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "company"){ id, name, properties{address, timezone, email, mobile}}}'}})
       const payments = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "payment"){ id, name, properties{email, mobile}}}'}})
+      const categories = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "category"){ id, name}}'}})
       const users = await axios.get(graphql.path('query'), {params: { query: '{users{ id, name, pin}}'}})
-      const system = {company: company.data.data.settings[0],payments: payments.data.data.settings, users: users.data.data.settings }
+      const system = {company: company.data.data.settings[0],payments: payments.data.data.settings, users: users.data.data.settings, categories: categories.data.data.settings }
       commit(types.FILL_SYSTEM, {system})
    
     } catch (e) {
@@ -64,4 +68,5 @@ export const getters = {
   company: state => state.company,
   payments: state => state.payments,
   users: state => state.users,
+  categories: state => state.categories, 
 }

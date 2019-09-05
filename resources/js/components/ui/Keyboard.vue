@@ -2,6 +2,12 @@
  <v-bottom-sheet  v-model="showDialog" @close="close" :hide-overlay="false" persistent>
    <v-layout justify-center>                  
     <v-flex xs8 sm3>
+        <v-toolbar>
+            <v-spacer></v-spacer>
+            <span class="display-2">{{val}}</span>
+            <v-spacer></v-spacer>
+
+        </v-toolbar>
         <v-container fluid grid-list-sm>
                 <v-layout wrap>
                   <v-flex v-for="(key, i) in keys" :key="i" xs4 @click="touched(key)">
