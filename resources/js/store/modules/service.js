@@ -24,7 +24,7 @@ export const mutations = {
 
   [types.FETCH_SERVICE_FAILURE](state) {
     state.service = null
-    state.services = []
+
   },
 }
 

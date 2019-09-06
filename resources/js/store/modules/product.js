@@ -24,7 +24,7 @@ export const mutations = {
 
   [types.FETCH_PRODUCT_FAILURE](state) {
     state.product = null
-    state.products = []
+
   },
 }
 

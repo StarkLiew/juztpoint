@@ -96,6 +96,7 @@ class VendorEditScreen extends Screen {
 	public function save(Account $account, Request $request) {
 		$account->type = 'vendor';
 		$account->user_id = Auth::id();
+		$account->uid = 'sys' . uniqid();
 		$input = $request->get('account');
 		if (array_key_exists('properties', $input)) {
 			$account->properties = $input['properties'];

@@ -29,7 +29,7 @@ class Account extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'status', 'properties', 'user_id',
+		'uid', 'name', 'type', 'status', 'properties', 'user_id',
 	];
 
 	protected $allowedFilters = ['name', 'status'];

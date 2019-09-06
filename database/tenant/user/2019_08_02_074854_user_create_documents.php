@@ -16,7 +16,7 @@ class UserCreateDocuments extends Migration {
 		Schema::create("user_{$id}_documents", function (Blueprint $table) use ($id) {
 			$table->increments('id');
 			$table->string('reference', 36)->unique()->index();
-			$table->bigInteger('account_id')->unsigned();
+			$table->string('account_id')->nullable();
 			$table->bigInteger('transact_by')->unsigned();
 			$table->bigInteger('terminal_id')->unsigned();
 			$table->timestamp('date');

@@ -24,7 +24,7 @@ class ReceiptType extends GraphQLType {
 				'description' => 'The name or value of the setting',
 			],
 			'account_id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
 			'terminal_id' => [

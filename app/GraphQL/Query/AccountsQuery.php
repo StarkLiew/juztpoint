@@ -24,6 +24,10 @@ class AccountsQuery extends Query {
 				'name' => 'id',
 				'type' => Type::int(),
 			],
+			'uid' => [
+				'name' => 'uid',
+				'type' => Type::string(),
+			],
 			'name' => [
 				'name' => 'name',
 				'type' => Type::string(),

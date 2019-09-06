@@ -64,7 +64,7 @@ export const actions = {
           number =  number.substr(number.length - 6)
           receipt.reference = receipt.reference + number
        }
-       const {reference, account_id,transact_by, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
+       const {reference, account_id, terminal_id, transact_by, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
 
         let castItems = "" 
         let castComm = "" 
@@ -144,8 +144,8 @@ export const actions = {
                                  reference: "${reference}",
                                  status: "active",
                                  type: "receipt",
-                                 terminal_id: ${transact_by},
-                                 account_id: ${account_id},
+                                 terminal_id: ${terminal_id},
+                                 account_id: "${account_id}",
                                  transact_by: ${transact_by},
                                  date: "${date}",
                                  discount: "${JSON.stringify(discount).replace(/"/g, '\\"')}",

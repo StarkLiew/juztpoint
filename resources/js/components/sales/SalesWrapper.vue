@@ -15,7 +15,7 @@
           :show="showCart"
           :customer="customer" 
           :product.sync="product" 
-          :set-appointment="setAppointment"
+          :calmode="setAppointment"
        > </carts>
           <top-menu @overlay="overlayShow" @cart-toggle="cartToggle"></top-menu>
  

@@ -30,10 +30,7 @@ export const mutations = {
   },
 
   [types.FETCH_SYSTEM_FAILURE](state) {
-    state.company = null
-    state.payments = []
-    state.categories = []
-    state.users = []
+
   },
 }
 

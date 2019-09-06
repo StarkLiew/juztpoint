@@ -19,6 +19,10 @@ class NewAccountMutation extends Mutation {
 				'name' => 'name',
 				'type' => Type::nonNull(Type::string()),
 			],
+			'uid' => [
+				'name' => 'uid',
+				'type' => Type::nonNull(Type::string()),
+			],
 			'type' => [
 				'name' => 'type',
 				'type' => Type::nonNull(Type::string()),

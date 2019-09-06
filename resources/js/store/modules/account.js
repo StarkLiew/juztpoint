@@ -15,19 +15,28 @@ export const state = {
  */
 export const mutations = {
   [types.SET_CUSTOMER](state, { customer }) { 
+
     state.customer = customer
+
+
   },
   [types.FILL_CUSTOMERS](state, { accounts }) { 
  
     state.customers = accounts
   },
   [types.ADD_CUSTOMER](state, { customer }) { 
- 
-     state.customers.push(customer)
+
+           const index = state.customers.findIndex(c => c.uid === customer.uid)
+           if(index > -1) {
+               state.customers[index] = customer
+           } else {  
+               state.customers.push(customer)
+           }
+
+
   },
   [types.FETCH_CUSTOMER_FAILURE](state) {
     state.customer = null
-    state.customers = []
   },
 }
 
@@ -37,7 +46,7 @@ export const mutations = {
 export const actions = {
   async fetchCustomers({ commit }) {
     try {
-      const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"customer"){ id, name, properties{email, mobile}}}'}})
+      const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"customer"){ id, uid, name, status, properties{email, mobile}}}'}})
       commit(types.FILL_CUSTOMERS, data.data )
    
     } catch (e) {
@@ -47,27 +56,44 @@ export const actions = {
   async addCustomer({ commit }, customer) {
     try {
 
-       const {name, properties} = customer
-       const props = JSON.stringify(properties).replace(/"/g, '\\"')
+     
+      
+        // uniqid
 
+        if(customer.status !== 'offline') {
+            var ts = String(new Date().getTime()), i = 0, uniqid = ''
+            for(i=0;i<ts.length;i+=2) {        
+               uniqid+=Number(ts.substr(i, 2)).toString(36)
+            }
+           customer.uid =   'T' + customer.uid  + '-' + uniqid
+         }
+
+        const {name, uid, properties} = customer
+        const props = JSON.stringify(properties).replace(/"/g, '\\"')
            
         const mutation = `mutation accounts{
                              newAccount(
                                  name: "${name}",
+                                 uid: "${uid}",
                                  status: "active",
                                  type: "customer",
                                  properties: "${props}"
-                             ) {id, name, properties{email, mobile}}}`
+                             ) {id, name, status, properties{email, mobile}}}`
 
        const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
   
+          
+
        customer = data.data.newAccount
 
 
        commit(types.ADD_CUSTOMER, { customer })
        return customer
     } catch (e) {
-        
+
+        customer.status = 'offline'
+        commit(types.ADD_CUSTOMER, { customer })
+         return customer
     }
   },
 }

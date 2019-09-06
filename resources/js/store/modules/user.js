@@ -20,7 +20,7 @@ export const mutations = {
   },
   [types.FETCH_USERS_FAILURE](state) {
     state.user = null
-    state.users = []
+
   },
 }
 

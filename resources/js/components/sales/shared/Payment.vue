@@ -54,6 +54,104 @@
  
           <v-list>
               <v-list-item>
+
+
+ <v-dialog
+        ref="dialog"
+        v-model="modalDateTime"
+        persistent
+        width="500"
+
+      >
+        <template v-slot:activator="{ on }">
+
+             <v-btn dark :disabled="!trxn.customer" large fab color="green"  v-on="on">
+                   <v-icon>schedule</v-icon>
+             </v-btn>
+        </template>
+       <v-stepper v-model="appStep" vertical>
+ 
+
+          <v-stepper-step :complete="appStep > 1" step="1">
+            Date
+            <small>Set Appointment Date</small>
+          </v-stepper-step>
+
+          <v-stepper-items>
+            <v-stepper-content step="1">
+              <v-row justify="center">
+                <v-date-picker v-model="appDate">
+                  
+                    <div class="flex-grow-1"></div>
+                     <v-btn text color="primary" @click="modalDateTime = false">Cancel</v-btn>
+                     <v-btn text color="primary" :disabled="!appDate"  @click="appStep = 2">Next</v-btn>
+                </v-date-picker>
+              </v-row>
+            </v-stepper-content>
+
+
+          <v-stepper-step :complete="appStep > 2" step="2">
+            Time
+            <small>Set Appointment Time</small>
+          </v-stepper-step>
+
+            <v-stepper-content step="2">
+               <v-row justify="center">
+               <v-time-picker
+                  v-model="appTime"
+                  
+                >
+                  
+                    <div class="flex-grow-1"></div>
+                     <v-btn text color="primary" @click="modalDateTime = false">Cancel</v-btn>
+                     <v-btn text color="primary" :disabled="!appTime"  @click="appStep = 3">Next</v-btn>
+
+                </v-time-picker>
+               </v-row>
+            </v-stepper-content>
+
+          <v-stepper-step  step="3">
+            Confirm?
+            <small>Confirm Appointment</small>
+          </v-stepper-step>
+
+            <v-stepper-content step="3">
+              <v-row justify="center">
+
+
+                   <v-card class="mx-auto">
+                      <v-list-item two-line>
+                        <v-list-item-content>
+                          <v-list-item-title class="headline">{{!trxn.customer ? '' : trxn.customer.name}}</v-list-item-title>
+                          <v-list-item-subtitle>
+                                  
+                                  {{appDate + ' ' + appTime + ':00Z'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'dddd, DD/MM/YYYY hh:mmA') }}
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                       </v-list-item two-line>
+                      <v-card-actions>
+                         <v-spacer></v-spacer>
+                        <v-btn large color="primary" @click="saveAppointment()">Confirm</v-btn>
+                        <v-btn large @click="modalDateTime = false">Cancel</v-btn>
+                      </v-card-actions>
+                    </v-card>
+
+
+
+                </v-row>    
+
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
+
+
+
+
+      </v-dialog>
+
+
+            
+
                   <v-spacer></v-spacer>
                    <v-list-item-content class="title">
                        Received {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}} 
@@ -227,6 +325,11 @@ export default {
       target: null,
       paid: false,
       receipt: null,
+      appDate: null,
+      appTime: null,
+      appStep: 1,
+      modalDateTime: false,
+
   }),
   components: {
       Keyboard,
@@ -238,6 +341,7 @@ export default {
     auth: 'auth/user',
     company: 'system/company',
     store: 'auth/store',
+    terminal: 'auth/terminal',
   }),
   methods: {
       back() {
@@ -324,7 +428,8 @@ export default {
 
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
-               account_id: customer ? customer.id : 0,
+               account_id: customer ? customer.uid : '',
+               terminal_id: this.terminal.id,
                customer: customer ? customer : null,
                date: now,
                reference: reference,
@@ -349,6 +454,10 @@ export default {
 
          this.paid = true
 
+      },
+      saveAppointment() {
+        this.done()
+         
       },
       print(){
             this.$refs.easyPrint.print()

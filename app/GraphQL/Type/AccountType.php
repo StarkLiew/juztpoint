@@ -19,6 +19,10 @@ class AccountType extends GraphQLType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'The id of the user',
 			],
+			'uid' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
 			'name' => [
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',

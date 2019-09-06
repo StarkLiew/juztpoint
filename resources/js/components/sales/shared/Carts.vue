@@ -119,8 +119,8 @@
                   <v-list-item-content>
                     <v-list-item-title>Charge</v-list-item-title>
                   </v-list-item-content>
-                    <v-btn icon v-if="footer.charge  <= 0 && customer && setAppointment" color="error" @click="payment()" large  class="display-1"><v-icon>schedule</v-icon></v-btn>
-                    <v-btn :disabled="footer.charge  <= 0 || setAppointment" color="error" @click="payment()" large class="display-1">{{ footer.charge | currency}}</v-btn>
+
+                    <v-btn :disabled="footer.charge  <= 0 || calmode" color="error" @click="payment()" large class="display-1">{{ footer.charge | currency}}</v-btn>
 
                 </v-list-item>
       
@@ -151,7 +151,7 @@ export default {
         editItem: [],
         footer: {charge: 0.00, discount: {rate: 0.00, type: 'percent', amount: 0.00}, tax: 0.00, service: {rate: 0.00, type: 'percent', amount: 0.00}}
   }),
-  props: ['show', 'customer', 'product', 'isProductEntry', 'reset','setAppointment'],
+  props: ['show', 'customer', 'product', 'isProductEntry', 'reset','calmode'],
   components: {
     ItemEdit,
     DiscountAdd,

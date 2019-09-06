@@ -15,6 +15,7 @@ class UserCreateAccounts extends Migration {
 
 		Schema::create("user_{$id}_accounts", function (Blueprint $table) {
 			$table->bigIncrements('id');
+			$table->string('uid')->unique()->index();
 			$table->string('name');
 			$table->string('type');
 			$table->string('status');

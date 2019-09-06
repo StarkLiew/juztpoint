@@ -58,7 +58,9 @@
           @click:more="viewDay"
           @click:date="viewDay"
           @change="updateRange"
-        ></v-calendar>
+        >
+
+        </v-calendar>
         <v-menu
           v-model="selectedOpen"
           :close-on-content-click="false"
@@ -111,7 +113,7 @@
     data: () => ({
       today: '2019-01-08',
       focus: '2019-01-08',
-      type: 'month',
+      type: 'day',
       typeToLabel: {
         month: 'Month',
         week: 'Week',

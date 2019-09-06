@@ -53,6 +53,7 @@ export default {
   },
   computed: mapGetters({
     customers: 'account/customers',
+    terminal: 'auth/terminal',
     
   }),
 
@@ -70,6 +71,7 @@ export default {
        this.$emit('close')
     },
     async saveNewCustomer(customer) {
+       customer.uid = this.terminal.id
        customer = await this.$store.dispatch('account/addCustomer', customer)
        this.$emit('selected', customer)
        this.showAdd = false
