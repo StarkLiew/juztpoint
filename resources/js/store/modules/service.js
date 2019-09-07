@@ -34,7 +34,7 @@ export const mutations = {
 export const actions = {
   async fetchServices({ commit }) {
     try {
-      const { data } = await axios.get(graphql.path('query'), {params: { query: '{products(type: "service"){ id,   name, category{id, name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate, code}}, properties{qty, price, thumbnail, color}}}'}})
+      const { data } = await axios.get(graphql.path('query'), {params: { query: '{products(type: "service"){ id,   name, sku, category{id, name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate, code}}, properties{qty, price, thumbnail, color}}}'}})
       commit(types.FILL_SERVICES, data.data)
     } catch (e) {
       commit(types.FETCH_SERVICE_FAILURE)

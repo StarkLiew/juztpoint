@@ -83,7 +83,7 @@
                 <v-date-picker v-model="appDate">
                   
                     <div class="flex-grow-1"></div>
-                     <v-btn text color="primary" @click="modalDateTime = false">Cancel</v-btn>
+                     <v-btn text color="primary"  @click="cancelAppointment()">Cancel</v-btn>
                      <v-btn text color="primary" :disabled="!appDate"  @click="appStep = 2">Next</v-btn>
                 </v-date-picker>
               </v-row>
@@ -103,7 +103,7 @@
                 >
                   
                     <div class="flex-grow-1"></div>
-                     <v-btn text color="primary" @click="modalDateTime = false">Cancel</v-btn>
+                     <v-btn text color="primary"  @click="cancelAppointment()">Cancel</v-btn>
                      <v-btn text color="primary" :disabled="!appTime"  @click="appStep = 3">Next</v-btn>
 
                 </v-time-picker>
@@ -122,17 +122,17 @@
                    <v-card class="mx-auto">
                       <v-list-item two-line>
                         <v-list-item-content>
-                          <v-list-item-title class="headline">{{!trxn.customer ? '' : trxn.customer.name}}</v-list-item-title>
-                          <v-list-item-subtitle>
-                                  
-                                  {{appDate + ' ' + appTime + ':00Z'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'dddd, DD/MM/YYYY hh:mmA') }}
+                          <v-list-item-title class="headline"> {{appDate + ' ' + appTime + ':00'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'dddd, D/M/YYYY h:mmA') }}</v-list-item-title>
+                          <v-list-item-subtitle class="headline">
+                                  {{!trxn.customer ? '' : trxn.customer.name}}
+                                 
                           </v-list-item-subtitle>
                         </v-list-item-content>
                        </v-list-item two-line>
                       <v-card-actions>
                          <v-spacer></v-spacer>
-                        <v-btn large color="primary" @click="saveAppointment()">Confirm</v-btn>
-                        <v-btn large @click="modalDateTime = false">Cancel</v-btn>
+                        <v-btn large color="primary" @click="save('appointment')">Confirm</v-btn>
+                        <v-btn large @click="cancelAppointment()">Cancel</v-btn>
                       </v-card-actions>
                     </v-card>
 
@@ -381,7 +381,7 @@ export default {
          
 
       },
-      async save() {
+      async save(type = 'receipt') {
          const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount)
          const rounded =  this.rounding(this.trxn.footer.charge)
          const amount_change = amount_received - rounded
@@ -424,7 +424,9 @@ export default {
             seconds = ("0" + seconds)
             seconds =  seconds.substr(seconds.length - 2)
          
-         const now = `${sqlYear}-${month}-${day} ${hours}:${minutes}:${seconds}`
+         let now = `${sqlYear}-${month}-${day} ${hours}:${minutes}:${seconds}`
+         if(type === 'appointment') now = this.appDate + ' ' + this.appTime + ':00'
+
 
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
          const receipt = {
@@ -432,6 +434,7 @@ export default {
                terminal_id: this.terminal.id,
                customer: customer ? customer : null,
                date: now,
+               type: type,
                reference: reference,
                transact_by: user_id,
                teller: this.auth,
@@ -449,15 +452,24 @@ export default {
                payments: payments,
 
          }
+
     
          this.receipt = await this.$store.dispatch('receipt/addReceipt', receipt)
-
+          
+         if(type === 'appointment') return this.done()
          this.paid = true
 
       },
       saveAppointment() {
         this.done()
          
+      },
+
+      cancelAppointment() {
+        this.appDate = null
+        this.appTime = null
+        this.appStep = 1
+        this.modalDateTime = false
       },
       print(){
             this.$refs.easyPrint.print()

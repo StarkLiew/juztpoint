@@ -17,7 +17,7 @@
           :product.sync="product" 
           :calmode="setAppointment"
        > </carts>
-          <top-menu @overlay="overlayShow" @cart-toggle="cartToggle"></top-menu>
+          <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
  
         <v-content style="margin-top: 5px">
    
@@ -27,7 +27,7 @@
               max-height="calc(100vh - 48px)"
               color="transparent"
             >           
-                <products-list @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
+                <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
                 <item-add  @close="showEdit = false"  v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
                 <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
 
@@ -73,6 +73,7 @@ export default {
     overlay: false,
     showCustomerDialog: false,
     trxn: null,
+    searchText: '',
   }),
   components: {
     TopMenu,
@@ -138,7 +139,11 @@ export default {
         this.trxn = null
         this.panel = "product"
         this.reset = true
+        this.searchText = ''
        // window.location.reload()
+    },
+    search(text){
+      this.searchText = text
     },
     resetDone() {
        this.reset = false

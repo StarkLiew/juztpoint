@@ -131,7 +131,7 @@
 
 
             <v-flex v-if="show === 'product' && !filter"
-              v-for="(product, index) in products"
+              v-for="(product, index) in filterProducts(search)"
               :key="index"
               xs4 sm2 md2
               d-flex
@@ -168,7 +168,7 @@
 
 
             <v-flex v-if="show === 'service' && !filter"
-              v-for="(service, index) in services"
+              v-for="(service, index) in filterServices(search)"
               :key="index"
               xs4 sm2 md2
               d-flex
@@ -327,6 +327,7 @@ export default {
   components: {
      Calendar: Calendar
   },
+  props: ['search'],
   computed: { 
 
     ...mapGetters({
@@ -335,7 +336,7 @@ export default {
       categories: 'system/categories'
     })
   },
-
+  
   methods: {
     selected(product) {
        const defaultItem = {
@@ -371,6 +372,19 @@ export default {
         }
         return []
     },
+    filterProducts(text) {
+         if(!text) return this.products
+           console.log(text)
+          return this.products.filter(p =>  p.name.toLowerCase().includes(text.toLowerCase()) || p.sku.toLowerCase().includes(text.toLowerCase()) )
+      
+    },
+
+    filterServices(text) {
+         if(!text) return this.services
+          
+          return this.services.filter(p =>  p.name.toLowerCase().includes(text.toLowerCase()) || p.sku.toLowerCase().includes(text.toLowerCase()) )
+      
+    }
 
 
   }

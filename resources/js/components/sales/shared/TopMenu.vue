@@ -13,12 +13,19 @@
       </template>
 
       <v-list>
-          <v-list-item @click="">
-            <v-list-item-icon>
-                <v-icon>add</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>New Transaction</v-list-item-content>
-          </v-list-item> 
+
+
+                                        
+                        <v-list-item @click="resetDialog = true">
+                          <v-list-item-icon>
+                              <v-icon>add</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>New Transaction</v-list-item-content>
+                        </v-list-item> 
+      
+    
+
+
 
           <v-list-item @click="">
             <v-list-item-icon>
@@ -45,11 +52,36 @@
           </v-list-item> 
       </v-list>
     </v-menu>
+    <v-text-field
+        hide-details
+        v-model="searchText"
+        prepend-icon="search"
+        @change="search()"
+        single-line
+      ></v-text-field>
+    
 
-     
+
+         
        <span><v-icon>perm_identity</v-icon>{{auth.name}}</span>
-       <v-btn icon><v-icon>search</v-icon></v-btn>
+   
+
         <v-spacer></v-spacer>
+
+        <v-dialog v-model="resetDialog" persistent max-width="290">
+
+                <v-card>
+                  <v-card-title class="headline">Proceed?</v-card-title>
+                  <v-card-text>Are you sure to proceed with new transaction? Current entry will be lost.</v-card-text>
+                  <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn color="green darken-1" text @click="resetDialog = false">No</v-btn>
+                    <v-btn color="blue darken-1" text @click="resetData()">Yes</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+
   </v-app-bar>
   
 
@@ -64,6 +96,8 @@ export default {
 	data: () => ({
 		siteName: settings.siteName,
     overlay: false,
+    resetDialog: false,
+    searchText: '',
 	}),
  computed: mapGetters({
      auth: 'auth/user'
@@ -84,7 +118,14 @@ export default {
 
 
     },
-
+    resetData() {
+       this.$emit('reset')
+       this.searchText = ''
+       this.resetDialog = false
+    },
+    search() {
+       this.$emit('search', this.searchText)
+    },
     cartToggle() {
       this.$emit('cart-toggle')
     }

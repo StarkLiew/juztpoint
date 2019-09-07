@@ -135,6 +135,13 @@ export default {
                await this.$store.dispatch('receipt/addReceipt', r)
           }
 
+          const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
+
+          for(const a of offline_appointments) {
+               await this.$store.dispatch('receipt/addReceipt', a)
+          }
+
+
           const offline_customers = this.$store.getters['account/customers'].filter(c => c.status === 'offline')
          
           for(const c of offline_customers) {
