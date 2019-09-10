@@ -1,6 +1,6 @@
 <template>
 
-  <v-flex sm8 md6 lg4 >
+  <v-flex sm8 md6 lg4 :class="{shake: isShake}">
     <v-layout justify-center>                  
       <v-flex xs8 sm6>
          <v-layout justify-center mb-10>
@@ -62,6 +62,7 @@ export default {
      keys: ['1','2','3','4','5','6','7','8','9','clear','0','backspace',],
      val: '',
      overlay: false,
+     isShake: false,
   }),
   computed: mapGetters({
       users: 'user/users'
@@ -89,13 +90,15 @@ export default {
 
           if(val.length === 4) {
             this.overlay = true
+            this.isShake = false
              await setTimeout(async () => {
-      
+                
                 const user = this.users.find(user => user.pin === this.val)
 
                 if(!user) {
                     this.val = ''
                      this.overlay = false
+                     this.isShake = true
                     return
                 }
                 await this.$store.dispatch('auth/setUser', { user })
@@ -117,4 +120,32 @@ export default {
   }
 }
 </script>
+<style>
+
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+</style>
 

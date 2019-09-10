@@ -43,6 +43,7 @@ class ProductListScreen extends Screen {
 
 		return [
 			'products' => Product::filters()
+				->where('type', '=', 'product')
 				->defaultSort('name', 'desc')
 				->paginate(),
 		];

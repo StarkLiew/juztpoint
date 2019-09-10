@@ -9,11 +9,13 @@
           <v-btn fab text small @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
           </v-btn>
+
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
+          <div class="flex-grow-1"></div>
           <v-btn fab text small @click="next">
             <v-icon small>mdi-chevron-right</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ title }}</v-toolbar-title>
-          <div class="flex-grow-1"></div>
+          
           <v-menu bottom right>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -49,8 +51,11 @@
           ref="calendar"
           v-model="focus"
           color="primary"
-          :events= "[{name: 'Haircut', details: 'Men Haircut',start: '2019-09-07 10:00',end: '2019-09-07 10:30', color: 'blue'}]"
+          :events= "events"
+          :event-start="'date'"
+          :event-end="'date'"
           :event-margin-bottom="3"
+          :event-name="getEventName"
           :now="today"
           :type="type"
           @click:event="showEvent"
@@ -111,8 +116,8 @@ import { mapGetters } from 'vuex'
 
   export default {
     data: () => ({
-      today: '2019-01-08',
-      focus: '2019-01-08',
+      today: '2019-09-10',
+      focus: '2019-09-10',
       type: 'day',
       typeToLabel: {
         month: 'Month',
@@ -213,16 +218,16 @@ import { mapGetters } from 'vuex'
         return '#4285F4'
       },
       getEventName (event) {
-
-        return event.customer.name
+      
+        return event.input.customer.name
       },
       getEventStartDate (event) {
   
-        return '2019-7-9 10:00'
+        return new Date()
       },
       getEventEndDate (event) {
         
-         return '2019-7-9 10:00'
+         return new Date()
       },
     },
   }

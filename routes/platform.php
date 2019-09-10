@@ -11,6 +11,8 @@ use App\Orchid\Screens\Inventory\CategoryEditScreen;
 use App\Orchid\Screens\Inventory\CategoryListScreen;
 use App\Orchid\Screens\Inventory\ProductEditScreen;
 use App\Orchid\Screens\Inventory\ProductListScreen;
+use App\Orchid\Screens\Inventory\ServiceEditScreen;
+use App\Orchid\Screens\Inventory\ServiceListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -104,3 +106,8 @@ $this->router->screen('categories', CategoryListScreen::class)->name('platform.c
 $this->router->screen('products/{products}/edit', ProductEditScreen::class)->name('platform.products.edit');
 $this->router->screen('products/create', ProductEditScreen::class)->name('platform.products.create');
 $this->router->screen('products', ProductListScreen::class)->name('platform.products');
+
+// Services...
+$this->router->screen('services/{services}/edit', ServiceEditScreen::class)->name('platform.services.edit');
+$this->router->screen('services/create', ServiceEditScreen::class)->name('platform.services.create');
+$this->router->screen('services', ServiceListScreen::class)->name('platform.services');

@@ -111,8 +111,8 @@ class ProductEditScreen extends Screen {
 
 			Layout::rows([
 				Cropper::make('product.properties.thumbnail')
-					->width(500)
-					->height(500)
+					->width(180)
+					->height(180)
 					->target('relativeUrl'),
 			]),
 
@@ -155,6 +155,7 @@ class ProductEditScreen extends Screen {
 
 			$product
 				->fill($input)
+				->fill(['type' => 'product'])
 				->save();
 
 			Alert::info(__('Product was saved'));

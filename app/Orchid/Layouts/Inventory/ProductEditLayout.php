@@ -37,15 +37,6 @@ class ProductEditLayout extends Rows {
 				->title(__('Description'))
 				->placeholder(__('Description')),
 
-			Select::make('product.type')
-				->options([
-					'product' => 'Product',
-					'service' => 'Service',
-				])
-				->required()
-				->title(__('Type'))
-				->placeholder(__('Type')),
-
 			Input::make('product.sku')
 				->type('text')
 				->max(255)

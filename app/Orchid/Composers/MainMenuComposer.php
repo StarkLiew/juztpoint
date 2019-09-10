@@ -75,6 +75,11 @@ class MainMenuComposer {
 					->route('platform.products')
 			)
 			->add(Menu::MAIN,
+				ItemMenu::label('Services')
+					->icon('icon-module')
+					->route('platform.services')
+			)
+			->add(Menu::MAIN,
 				ItemMenu::label('Account')
 					->slug('account-data')
 					->icon('icon-plus')

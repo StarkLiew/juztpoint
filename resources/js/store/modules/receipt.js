@@ -210,8 +210,8 @@ export const actions = {
        receipt.status = 'active'
 
 
-       if(receipt.type == 'receipt') commit(types.ADD_RECEIPT, { receipt })
-       if(receipt.type == 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
+       if(receipt.type === 'receipt') commit(types.ADD_RECEIPT, { receipt })
+       if(receipt.type === 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
        
        
        return receipt
@@ -220,8 +220,8 @@ export const actions = {
 
      
        receipt.status = 'offline'
-       if(receipt.type == 'receipt') commit(types.ADD_RECEIPT, { receipt })
-       if(receipt.type == 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
+       if(receipt.type === 'receipt') commit(types.ADD_RECEIPT, { receipt })
+       if(receipt.type === 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
 
        return receipt
     }

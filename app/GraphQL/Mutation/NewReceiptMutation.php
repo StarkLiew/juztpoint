@@ -95,6 +95,10 @@ class NewReceiptMutation extends Mutation {
 				'name' => 'commissions',
 				'type' => Type::listOf(GraphQL::type('ItemInput')),
 			],
+			'properties' => [
+				'name' => 'properties',
+				'type' => Type::string(),
+			],
 
 		];
 	}

@@ -31,6 +31,7 @@ class UserCreateDocuments extends Migration {
 			$table->float('received');
 			$table->float('change');
 			$table->float('refund');
+			$table->json('properties')->nullable();
 			$table->longText('note')->nullable();
 			$table->timestamps();
 			$table->softDeletes();

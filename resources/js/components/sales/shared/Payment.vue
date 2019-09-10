@@ -80,8 +80,7 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <v-row justify="center">
-                <v-date-picker v-model="appDate">
-                  
+                <v-date-picker v-model="appDate" :min="$moment().format('YYYY-MM-DD')">                  
                     <div class="flex-grow-1"></div>
                      <v-btn text color="primary"  @click="cancelAppointment()">Cancel</v-btn>
                      <v-btn text color="primary" :disabled="!appDate"  @click="appStep = 2">Next</v-btn>
@@ -99,7 +98,6 @@
                <v-row justify="center">
                <v-time-picker
                   v-model="appTime"
-                  
                 >
                   
                     <div class="flex-grow-1"></div>
@@ -122,11 +120,17 @@
                    <v-card class="mx-auto">
                       <v-list-item two-line>
                         <v-list-item-content>
-                          <v-list-item-title class="headline"> {{appDate + ' ' + appTime + ':00'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'dddd, D/M/YYYY h:mmA') }}</v-list-item-title>
-                          <v-list-item-subtitle class="headline">
-                                  {{!trxn.customer ? '' : trxn.customer.name}}
-                                 
+                            <v-list-item-title class="headline">
+                                Customer {{!trxn.customer ? '' : trxn.customer.name}}
+                               
+                          </v-list-item-title>
+                          <v-list-item-title class="headline"> on {{appDate + ' ' + appTime + ':00'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'dddd, D/M/YYYY') }}</v-list-item-title>
+                           <v-list-item-subtitle class="headline">
+                              at {{appDate + ' ' + appTime + ':00'| moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'h:mmA') }} - {{ estEndTime() | moment('timezone', store.properties.timezone.replace(/\\/g, ''), 'h:mmA') }}
+                           
                           </v-list-item-subtitle>
+
+
                         </v-list-item-content>
                        </v-list-item two-line>
                       <v-card-actions>
@@ -327,6 +331,7 @@ export default {
       receipt: null,
       appDate: null,
       appTime: null,
+      endEvent: null,
       appStep: 1,
       modalDateTime: false,
 
@@ -381,6 +386,21 @@ export default {
          
 
       },
+      estEndTime() {
+            
+            const now = this.appDate + ' ' + this.appTime + ':00'
+       
+            let durations = 0
+            for(let item of this.trxn.items){
+
+                  if(item.type === 'service') {
+
+                      durations += item.properties.duration
+                  }
+            }
+           return new Date((new Date(now)).getTime() + durations * 60000)
+
+      },
       async save(type = 'receipt') {
          const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount)
          const rounded =  this.rounding(this.trxn.footer.charge)
@@ -425,11 +445,18 @@ export default {
             seconds =  seconds.substr(seconds.length - 2)
          
          let now = `${sqlYear}-${month}-${day} ${hours}:${minutes}:${seconds}`
-         if(type === 'appointment') now = this.appDate + ' ' + this.appTime + ':00'
+         let end = ''
+
+         if(type === 'appointment') {
+               now = this.appDate + ' ' + this.appTime + ':00'
+               end = this.estEndTime()
+
+         }
 
 
          const reference = cast_user_id + year + month + day + hours + minutes + seconds 
-         const receipt = {
+
+         let receipt = {
                account_id: customer ? customer.uid : '',
                terminal_id: this.terminal.id,
                customer: customer ? customer : null,
@@ -450,9 +477,22 @@ export default {
                refund: 0,
                items: items,
                payments: payments,
+               properties: {
+                    start: type === 'appointment' ? now : '',
+                    end: type === 'appointment' ? end : '',
+               }
 
          }
 
+         if(type === 'appointment'){
+            // check any appointment clash
+            const appointments = this.$store.getters['receipt/appointments']
+            const results = appointments.filter((any) => {
+                      return any.date.getTime() >= fromDate.getTime() &&
+                             any.date.getTime() <= toDate.getTime();
+            })
+         }
+      
     
          this.receipt = await this.$store.dispatch('receipt/addReceipt', receipt)
           

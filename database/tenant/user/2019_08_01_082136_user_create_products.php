@@ -24,7 +24,7 @@ class UserCreateProducts extends Migration {
 			$table->bigInteger('tax_id')->unsigned();
 			$table->boolean('sellable')->default(false);
 			$table->boolean('consumable')->default(false);
-			$table->boolean('allow_assitant')->default(false);
+			$table->boolean('allow_assistant')->default(false);
 			$table->float('discount')->default(0.0);
 			$table->boolean('stockable')->default(false);
 			$table->json('variants')->nullable();

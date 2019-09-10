@@ -28,7 +28,7 @@ class Item extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'line', 'type', 'trxn_id', 'item_id', 'discount', 'discount_amount', 'refund_amount', 'tax_id', 'tax_amount', 'tax_amount', 'total_amount', 'user_id', 'note', 'user_id',
+		'line', 'type', 'trxn_id', 'item_id', 'discount', 'discount_amount', 'refund_amount', 'tax_id', 'tax_amount', 'tax_amount', 'total_amount', 'user_id', 'note', 'properties', 'user_id',
 	];
 
 	protected $allowedFilters = ['line'];

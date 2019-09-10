@@ -152,6 +152,7 @@ export default {
          /* Fetch latest data */
           await this.$store.dispatch('user/fetchUsers')
           await this.$store.dispatch('product/fetchProducts')
+          await this.$store.dispatch('service/fetchServices')
           await this.$store.dispatch('account/fetchCustomers')
           await this.$store.dispatch('system/fetchSystem')
 

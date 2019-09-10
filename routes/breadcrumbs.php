@@ -201,19 +201,36 @@ Breadcrumbs::for ('platform.categories.edit', function ($trail, $setting) {
 	$trail->push(__('Category'), route('platform.categories.edit', $setting));
 });
 
-// Platform > Vendors
+// Platform > Products
 Breadcrumbs::for ('platform.products', function ($trail) {
 	$trail->push(__('Products'), route('platform.products'));
 });
 
-// Platform > Vendors > Create
+// Platform > Products > Create
 Breadcrumbs::for ('platform.products.create', function ($trail) {
 	$trail->parent('platform.products');
 	$trail->push(__('Create'), route('platform.products.create'));
 });
 
-// Platform > Vendors > Store
+// Platform > Products > Store
 Breadcrumbs::for ('platform.products.edit', function ($trail, $product) {
 	$trail->parent('platform.products');
 	$trail->push(__('Product'), route('platform.products.edit', $product));
+});
+
+// Platform > Services
+Breadcrumbs::for ('platform.services', function ($trail) {
+	$trail->push(__('Services'), route('platform.services'));
+});
+
+// Platform > Services > Create
+Breadcrumbs::for ('platform.services.create', function ($trail) {
+	$trail->parent('platform.services');
+	$trail->push(__('Create'), route('platform.services.create'));
+});
+
+// Platform > Services > Store
+Breadcrumbs::for ('platform.services.edit', function ($trail, $service) {
+	$trail->parent('platform.services');
+	$trail->push(__('Service'), route('platform.services.edit', $service));
 });

@@ -68,12 +68,6 @@ class ProductRightEditLayout extends Rows {
 				->applyScope('commission')
 				->title('Staff Commission'),
 
-			CheckBox::make('allow_assistant')
-				->value(0)
-				->sendTrueOrFalse()
-				->title('Allow Assistant')
-				->help('Assistant able to share commission'),
-
 		];
 	}
 
