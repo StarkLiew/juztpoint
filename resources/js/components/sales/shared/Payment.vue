@@ -479,18 +479,46 @@ export default {
                payments: payments,
                properties: {
                     start: type === 'appointment' ? now : '',
-                    end: type === 'appointment' ? end : '',
+                    end: type === 'appointment' ? this.$moment(end).format('YYYY-MM-DD HH:mm') : '',
                }
 
          }
 
          if(type === 'appointment'){
             // check any appointment clash
+
+           const bStart = new Date(now)
+           const bEnd = new Date(end)
+           const current = new Date()
+
+           if (bStart.getTime() <= current.getTime()) { 
+                   this.$toast.success('Invalid appointment time')
+                   return
+           }
+
             const appointments = this.$store.getters['receipt/appointments']
+             console.log(appointments)
             const results = appointments.filter((any) => {
-                      return any.date.getTime() >= fromDate.getTime() &&
-                             any.date.getTime() <= toDate.getTime();
+                      const aStart = new Date(any.properties.start)
+                      const aEnd = new Date(any.properties.end)
+                      
+                      if (bStart.getTime() >= aStart.getTime() && bStart.getTime() <= aEnd.getTime()) {
+                             return true
+                    
+                      }
+
+                      if (bEnd.getTime() >= aStart.getTime() && bEnd.getTime() <= aEnd.getTime()) {
+
+                               return true
+                       }
+
+                       return false
             })
+           
+            if(results.length > 0) {
+                    this.$toast.success('Time crash with another appointment')
+                    return
+            }
          }
       
     

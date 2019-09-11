@@ -52,12 +52,16 @@
           v-model="focus"
           color="primary"
           :events= "events"
-          :event-start="'date'"
-          :event-end="'date'"
+          :event-color="getEventColor"
           :event-margin-bottom="3"
-          :event-name="getEventName"
           :now="today"
-          :type="type"
+          :type="'4day'"
+          :first-interval="24"
+          :interval-minutes="30"
+          :interval-count="20"
+          :interval-height="40"
+
+
           @click:event="showEvent"
           @click:more="viewDay"
           @click:date="viewDay"
@@ -132,6 +136,7 @@ import { mapGetters } from 'vuex'
       selectedOpen: false,
     }),
     computed: {
+
       title () {
         const { start, end } = this
         if (!start || !end) {
@@ -160,13 +165,35 @@ import { mapGetters } from 'vuex'
         }
         return ''
       },
+      events () {
+          return (this.$store.getters['receipt/appointments']).map(ev => {
+                    
+                   let detail = ''  
+
+                   for(const item of ev.items) {
+                        detail = `<p>${item.name}</p>
+                         <p>${item.saleBy.name}</p>
+                        `
+                   }
+                   
+                   return {
+                         start: ev.properties.start,
+                         end: ev.properties.end,
+                         name: ev.customer.name + detail,
+                                     
+                         appoitnment: ev
+                    }
+          })
+
+      },
       monthFormatter () {
         return this.$refs.calendar.getFormatter({
           timeZone: 'UTC', month: 'long',
         })
       },
+
       ...mapGetters({
-            events: 'receipt/appointments',
+            appointments: 'receipt/appointments',
       }),
     },
     methods: {

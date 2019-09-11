@@ -237,4 +237,5 @@ export const getters = {
   appointments: state => state.appointments,
   receipt: state => state.receipt !== null,
   autoincrement: state => state.autoincrement,
+  
 }
