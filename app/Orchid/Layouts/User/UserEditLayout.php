@@ -4,7 +4,9 @@ declare (strict_types = 1);
 
 namespace App\Orchid\Layouts\User;
 
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Rows;
 
 class UserEditLayout extends Rows {
@@ -33,6 +35,15 @@ class UserEditLayout extends Rows {
 				->title(__('Email'))
 				->placeholder(__('Email')),
 
+			Select::make('user.properties.role')
+				->options([
+					'MGR' => 'Manager',
+					'CSH' => 'Cashier',
+				])
+				->required()
+				->title(__('Role'))
+				->horizontal(),
+
 			Input::make('user.pin')
 				->type('text')
 				->required()
@@ -40,6 +51,13 @@ class UserEditLayout extends Rows {
 				->horizontal()
 				->title(__('Pin'))
 				->placeholder(__('Pin')),
+
+			CheckBox::make('user.properties.backoffice')
+				->sendTrueOrFalse()
+				->title(__(''))
+				->horizontal()
+				->placeholder(__('Allow access to Back Office')),
+
 		];
 	}
 }

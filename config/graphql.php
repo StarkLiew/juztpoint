@@ -102,11 +102,13 @@ return [
 				'accounts' => App\GraphQL\Query\AccountsQuery::class,
 				'products' => App\GraphQL\Query\ProductsQuery::class,
 				'receipts' => App\GraphQL\Query\ReceiptsQuery::class,
+				'appointments' => App\GraphQL\Query\AppointmentsQuery::class,
 			],
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
 				'newAccount' => App\GraphQL\Mutation\NewAccountMutation::class,
 				'newReceipt' => App\GraphQL\Mutation\NewReceiptMutation::class,
+				'newAppointment' => App\GraphQL\Mutation\NewAppointmentMutation::class,
 			],
 			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],

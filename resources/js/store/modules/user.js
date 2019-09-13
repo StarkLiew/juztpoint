@@ -30,8 +30,7 @@ export const mutations = {
 export const actions = {
   async fetchUsers({ commit }) {
     try {
-      const { data } = await axios.get(graphql.path('query'), {params: { query: '{users{ id, name, pin}}'}})
-     
+      const { data } = await axios.get(graphql.path('query'), {params: { query: '{users{ id, name, pin, properties{role}}}'}})
       commit(types.FILL_USERS, data.data )
    
     } catch (e) {

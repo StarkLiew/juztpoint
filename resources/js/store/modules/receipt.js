@@ -24,19 +24,6 @@ export const mutations = {
  
     state.receipts = receipts
   },
-  [types.ADD_APPOINTMENT](state, { receipt }) { 
-
-           const index = state.appointments.findIndex(r => r.reference === receipt.reference)
-           if(index > -1) {
-               state.receipts[index] = receipt
-           } else {
-
-              state.appinc += 1      
-              state.appointments.push(receipt)
-           }
-
-
-  },
 
   [types.ADD_RECEIPT](state, { receipt }) { 
 
@@ -70,16 +57,6 @@ export const actions = {
       commit(types.FETCH_RECEIPT_FAILURE)
     }
   },
-    async fetchAppointments({ commit }) {
-    try {
-      // const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"receipt"){ id, name, properties{email, mobile}}}'}})
-
-      commit(types.FILL_RECEIPTS, data.data )
-   
-    } catch (e) {
-      commit(types.FETCH_RECEIPT_FAILURE)
-    }
-  },
 
   async addReceipt({ commit, getters }, receipt) {
     try {
@@ -90,12 +67,6 @@ export const actions = {
           let number = '00000' + (getters['autoincrement'] + 1)
           number =  number.substr(number.length - 6)
           receipt.reference = receipt.reference + number
-       }
-       
-       if(!receipt.status && receipt.type == 'appointment') {
-          let number = '00000' + (getters['appinc'] + 1)
-          number =  number.substr(number.length - 6)
-          receipt.reference = 'APP' + receipt.reference + number
        }
 
        const {reference, account_id, terminal_id, type, transact_by, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
@@ -203,29 +174,19 @@ export const actions = {
 
                       
 
-
        const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
-  
        receipt.id = data.data.newReceipt.id
        receipt.status = 'active'
-
-
-       if(receipt.type === 'receipt') commit(types.ADD_RECEIPT, { receipt })
-       if(receipt.type === 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
-       
-       
+       commit(types.ADD_RECEIPT, { receipt })
        return receipt
       
-    } catch (e) {
+    }catch (e) {
 
-     
        receipt.status = 'offline'
-       if(receipt.type === 'receipt') commit(types.ADD_RECEIPT, { receipt })
-       if(receipt.type === 'appointment') commit(types.ADD_APPOINTMENT, { receipt })
-
+       commit(types.ADD_RECEIPT, { receipt })
        return receipt
     }
-    return receipt
+
   },
 }
 

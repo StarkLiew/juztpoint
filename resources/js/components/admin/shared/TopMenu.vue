@@ -4,7 +4,7 @@
 
     <v-toolbar-title class="white--text">{{ siteName }}</v-toolbar-title>
     <v-spacer></v-spacer> 
-    <v-toolbar-title class="white--text"><v-icon>perm_identity</v-icon>{{ auth.name }}</v-toolbar-title>
+    <v-toolbar-title class="white--text" v-if="auth"><v-icon>perm_identity</v-icon>{{ auth.name }}</v-toolbar-title>
   </v-app-bar>
 </template>
 

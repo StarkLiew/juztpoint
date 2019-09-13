@@ -39,6 +39,7 @@ class User extends Authenticatable implements UserInterface {
 		'initial',
 		'last_login',
 		'permissions',
+		'properties',
 	];
 
 	/**
@@ -58,6 +59,7 @@ class User extends Authenticatable implements UserInterface {
 		'permissions' => 'array',
 		'email_verified_at' => 'datetime',
 		'last_login' => 'datetime',
+		'properties' => 'array',
 	];
 
 	/**

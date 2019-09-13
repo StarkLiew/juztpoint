@@ -5,7 +5,6 @@ declare (strict_types = 1);
 namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\UserEditLayout;
-use App\Orchid\Layouts\User\UserRoleLayout;
 use App\Orchid\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -82,7 +81,7 @@ class UserAddScreen extends Screen {
 	{
 		return [
 			UserEditLayout::class,
-			UserRoleLayout::class,
+			// UserRoleLayout::class,
 
 			Layout::modal('password', [
 				Layout::rows([
@@ -111,6 +110,7 @@ class UserAddScreen extends Screen {
 		}
 
 		$input = $request->get('user');
+
 		$hasPin = User::where('pin', $input['pin'])->where(function ($query) use ($tenant_id) {
 			$query->where('tenant', $tenant_id)
 				->orWhere('id', $tenant_id);
@@ -121,7 +121,15 @@ class UserAddScreen extends Screen {
 			return back()->withInput();
 		}
 
-		$permissions = $request->get('permissions', []);
+		$permissions = [];
+
+		if (array_key_exists('backoffice', $input['properties'])) {
+
+			$permissions = json_decode('{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1"}');
+
+		}
+
+		// $permissions = $request->get('permissions', []);
 		$roles = $request->input('user.roles', []);
 
 		foreach ($permissions as $key => $value) {

@@ -17,6 +17,13 @@ class User extends Authenticatable {
 	protected $company_name;
 
 	/**
+	 * @var array
+	 */
+	protected $casts = [
+		'properties' => 'array',
+	];
+
+	/**
 	 * Convert to tenantor.
 	 *
 	 * @return \Orchestra\Tenanti\Tenantor

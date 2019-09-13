@@ -102,8 +102,10 @@ export default {
                     return
                 }
                 await this.$store.dispatch('auth/setUser', { user })
-          
-                this.$router.push({ name: 'index' })
+ 
+                if(user.properties.role === 'MGR') this.$router.push({ name: 'index' })
+                else this.$router.push({ name: 'sales' })
+
                 this.overlay = false
                 return
             }, 1000)

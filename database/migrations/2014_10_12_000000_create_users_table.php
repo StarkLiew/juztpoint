@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration {
 			$table->string('pin')->nullable();
 			$table->integer('level')->nullable();
 			$table->integer('tenant')->nullable();
+			$table->json('properties')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
 			$table->softDeletes();

@@ -7,11 +7,13 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class ProductType extends GraphQLType {
+
 	protected $attributes = [
 		'name' => 'Product',
 		'description' => 'The collection of all Products',
 		'model' => Product::class, // define model for users type
 	];
+
 	// define field of type
 	public function fields(): array{
 		return [

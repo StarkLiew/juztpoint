@@ -41,6 +41,7 @@
           <v-list-item
             v-for="subItem in item.items"
             :key="subItem.title"
+   
             @click="subItem.action ? subItem.action() : false"
             :to="subItem.to"
             ripple
@@ -59,6 +60,7 @@
         <v-list-item
           v-else
           @click.native="item.action ? item.action() : false"
+          :disabled="item.role && auth && item.role !== auth.properties.role"
           href="javascript:void(0)"
           :to="item.to"
           ripple
@@ -117,7 +119,6 @@ export default {
 
     async logout() {
       await this.$store.dispatch('auth/logout')
-
       this.$toast.info('You are logged out.')
       this.$router.push({ name: 'login' })
     },
@@ -174,20 +175,20 @@ export default {
           { title: 'Sales', icon: 'shopping_cart', to: {name: 'sales'}, exact: true }
         ],
         [
-          { title: 'Receipts', icon: 'receipt', to: {name: 'receipts'}, exact: true }
+          { title: 'Receipts', icon: 'receipt', to: {name: 'receipts'}, role:'MGR', exact: true }
         ],
         [
-          { title: 'Settings', icon: 'settings', to: {name: 'settings'}, exact: true }
+          { title: 'Settings', icon: 'settings', to: {name: 'settings'}, role:'MGR',  exact: true }
         ],
         [
           { title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
         ],
         [
-          { title: 'Update', icon: 'update', action: this.update }
+          { title: 'Update', icon: 'update', action: this.update, role:'MGR' }
         ],
 
         [
-          { title: 'Refresh', icon: 'refresh', action: this.refresh }
+          { title: 'Refresh', icon: 'refresh', action: this.refresh, role:'MGR' }
         ],
         [
           { title: 'Logout', icon: 'power_settings_new', action: this.logout }

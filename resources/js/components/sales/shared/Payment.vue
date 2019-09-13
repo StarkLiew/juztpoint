@@ -65,7 +65,7 @@
       >
         <template v-slot:activator="{ on }">
 
-             <v-btn dark :disabled="!trxn.customer" large fab color="green"  v-on="on">
+             <v-btn v-if="false" dark :disabled="!trxn.customer" large fab color="green"  v-on="on">
                    <v-icon>schedule</v-icon>
              </v-btn>
         </template>

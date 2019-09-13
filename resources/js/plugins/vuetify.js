@@ -6,6 +6,8 @@ import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
 
 
+
+
 Vue.use(VueCurrencyFilter, {
   symbol : '',
   thousandsSeparator: ',',
@@ -25,5 +27,6 @@ Vue.use(Vuetify, {
   }
 })
 Vue.use(VuetifyToast)
+ 
 
 export default new Vuetify()

@@ -20,28 +20,12 @@
                           <v-list-item-icon>
                               <v-icon>add</v-icon>
                           </v-list-item-icon>
-                          <v-list-item-content>New Transaction</v-list-item-content>
+                          <v-list-item-content>New Sale</v-list-item-content>
                         </v-list-item> 
       
     
 
 
-
-          <v-list-item @click="">
-            <v-list-item-icon>
-                <v-icon>folder</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>Open Draft</v-list-item-content>
-          </v-list-item> 
-
-          <v-list-item @click="">
-            <v-list-item-icon>
-                <v-icon>folder</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>Save Draft</v-list-item-content>
-          </v-list-item> 
-
- 
 
 
           <v-list-item to="{name: 'pos'}">
