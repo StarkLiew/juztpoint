@@ -181,14 +181,14 @@ export default {
           { title: 'Settings', icon: 'settings', to: {name: 'settings'}, role:'MGR',  exact: true }
         ],
         [
-          { title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
+          //{ title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
         ],
         [
-          { title: 'Update', icon: 'update', action: this.update, role:'MGR' }
+          // { title: 'Update', icon: 'update', action: this.update, role:'MGR' }
         ],
 
         [
-          { title: 'Refresh', icon: 'refresh', action: this.refresh, role:'MGR' }
+          // { title: 'Refresh', icon: 'refresh', action: this.refresh, role:'MGR' }
         ],
         [
           { title: 'Logout', icon: 'power_settings_new', action: this.logout }

@@ -49,6 +49,7 @@ export const FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE'
 export const FILL_SYSTEM = 'FILL_RECEIPTS'
 export const FETCH_SYSTEM_FAILURE = 'FETCH_RECEIPT_FAILURE'
 export const AUTO_INCREMENT = 'AUTO_INCREMENT'
+export const SET_OFFLINE = 'SET_OFFLINE'
 
 /**
  * appointment.js

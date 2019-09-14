@@ -24,9 +24,11 @@ export default [
   ...applyRules(['pin'], [
     { path: '/sales',  name: 'sales', component: require('$comp/sales/SalesWrapper').default},
     { path: '/receipt', name: 'receipts', component: require('$comp/admin/receipt/ReceiptWrapper').default },
+
     { path: '/', component: require('$comp/admin/AdminWrapper').default, children:
       [
         { path: '/', name: 'index', redirect: { name: 'profile' } },
+        { path: '/setting', name: 'settings', component: require('$comp/admin/setting/SettingWrapper').default },
         { path: '/profile', component: require('$comp/admin/profile/ProfileWrapper').default, children:
           [
             { path: '/', name: 'profile', component: require('$comp/admin/profile/Profile').default },

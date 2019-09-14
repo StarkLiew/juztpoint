@@ -14,7 +14,7 @@
 
        </template> 
        
-       <div v-for="(item, index) in receipts.reverse()" :key="index" >
+       <div v-for="(item, index) in receipts" :key="index" >
         <v-list-item two-line @click="select(item)">
             
             <v-list-item-content>

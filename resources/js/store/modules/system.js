@@ -10,7 +10,7 @@ export const state = {
   payments: [],
   users: [],  
   categories: [], 
-  autoincrement: 0, 
+  offline: false,
 }
 
 /**
@@ -28,6 +28,9 @@ export const mutations = {
   [types.AUTO_INCREMENT](state, { system }) { 
         state.autoincrement += 1
   },
+  [types.SET_OFFLINE](state, {status}) {
+         state.offline = status
+  },
 
   [types.FETCH_SYSTEM_FAILURE](state) {
 
@@ -38,9 +41,11 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-  async increment({state}) {
-      commit(AUTO_INCREMENT)
-      return state.autoincrement
+
+   async setOffline({commit}, status ) {
+      
+      commit(types.SET_OFFLINE, status)
+
   },
 
   async fetchSystem({ commit }) {
@@ -66,4 +71,5 @@ export const getters = {
   payments: state => state.payments,
   users: state => state.users,
   categories: state => state.categories, 
+  offline: state => state.offline, 
 }

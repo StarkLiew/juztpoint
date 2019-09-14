@@ -5,6 +5,13 @@
       <template v-slot:prepend>
        <v-toolbar dark  dense flat color="secondary">
            <v-btn icon v-if="show"><v-icon>close</v-icon></v-btn>
+
+          <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon :color="offline ? 'grey' : 'green'" dark v-on="on">{{ offline ? 'wifi_off' : 'wifi'}}</v-icon>
+              </template>
+              <span>{{ offline ? 'Offline Mode' : 'Online Mode'}}</span>
+            </v-tooltip>
             <v-spacer></v-spacer>
         
            <v-toolbar-title class="white--text">{{count}}</v-toolbar-title>   
@@ -193,6 +200,9 @@ export default {
     count() {
        return this.items.length
     },
+    offline() {
+        return this.$store.getters['system/offline']
+    }
 
   },
   methods: {
