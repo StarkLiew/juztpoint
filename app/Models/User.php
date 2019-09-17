@@ -21,6 +21,20 @@ class User extends Authenticatable {
 	 */
 	protected $casts = [
 		'properties' => 'array',
+		'permissions' => 'array',
+	];
+
+	protected $fillable = [
+		'name',
+		'email',
+		'password',
+		'pin',
+		'level',
+		'tenant',
+		'initial',
+		'last_login',
+		'permissions',
+		'properties',
 	];
 
 	/**

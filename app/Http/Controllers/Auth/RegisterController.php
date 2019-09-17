@@ -60,6 +60,7 @@ class RegisterController extends Controller {
 	 * @return \App\User
 	 */
 	protected function create(array $data) {
+
 		$user = new User;
 		$user->company_name = $data['companyname'];
 		$user->name = $data['name'];
@@ -67,9 +68,9 @@ class RegisterController extends Controller {
 		$user->password = Hash::make($data['password']);
 		$user->level = 0;
 
-		/* $user->permissions = json_encode(Array('platform.systems.roles' => false, 'platform.systems.users' => false, 'platform.systems.attachment' => false, 'platform.systems.announcement' => false, 'platform.index' => true, 'platform.systems' => false, 'platform.systems.index' => true)); */
-
 		$user->permissions = json_decode('{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1"}');
+
+		$user->properties = json_decode('{"role":"MGR","backoffice":"1"}');
 
 		$user->save();
 
