@@ -87,7 +87,7 @@ export default {
   },
   computed: mapGetters({
       offline: 'system/offline',
-
+      payment_method: 'system/paymentMethod',
   }),
   watch: { 
   
@@ -102,6 +102,23 @@ export default {
          }
     
      },
+     async setPaymentMethod(option) {
+          return await this.$store.dispatch('system/setPaymentMethod',{option})
+     },
+     async setCash(value) {
+         await this.setPaymentMethod({name:'cash' , value})
+     },
+    async setCard(value) {
+         await this.setPaymentMethod({name:'card' , value})
+     },
+
+     async setTransfer(value) {
+         await this.setPaymentMethod({name:'transfer' , value})
+     },
+     async setBoost(value) {
+         await this.setPaymentMethod({name:'boost' , value})
+     },
+
      settings() {
        this.items = [
         { icon: 'wifi_off', iconClass: 'grey lighten-1 white--text', title: 'Offline', subtitle: 'Allow receive cash as payment', input: {type: 'switch', model: this.offline, change: this.setOffline} },
@@ -109,11 +126,11 @@ export default {
       ]
 
     this.payments = [
-        { icon: 'attach_money', iconClass: 'grey lighten-1 white--text', title: 'Cash', subtitle: 'Allow receive debit or credit card as payment', input: {type: 'switch', model: this.offline, change: this.setOffline} },
-        { icon: 'credit_card', iconClass: 'grey lighten-1 white--text', title: 'Debit or Credit Card', subtitle: 'Allow payment with Debit/Credit card transaction', input: {type: 'switch', model: this.offline, change: this.setOffline} },
-        { icon: 'account_balance', iconClass: 'grey lighten-1 white--text', title: 'Transfer', subtitle: 'Allow payment via IBG/GIRO Transfer', input: {type: 'switch', model: this.offline, change: this.setOffline} },
-        { icon: 'account_balance_wallet', iconClass: 'grey lighten-1 white--text', title: 'Boost', subtitle: 'Allow use Boost e-Wallet as payment', input: {type: 'switch', model: this.offline, change: this.setOffline} },
-        { icon: 'account_balance_wallet', iconClass: 'grey lighten-1 white--text', title: 'TnG', subtitle: 'Allow use TnG e-Wallet as payment', input: {type: 'switch', model: this.offline, change: this.setOffline} },
+        { icon: 'attach_money', iconClass: 'grey lighten-1 white--text', title: 'Cash', subtitle: 'Allow receive debit or credit card as payment', input: {type: 'switch', model: this.payment_method.cash, change: this.setCash } },
+        { icon: 'credit_card', iconClass: 'grey lighten-1 white--text', title: 'Debit or Credit Card', subtitle: 'Allow payment with Debit/Credit card transaction', input: {type: 'switch', model: this.payment_method.card, change: this.setCard} },
+        { icon: 'account_balance', iconClass: 'grey lighten-1 white--text', title: 'Transfer', subtitle: 'Allow payment via IBG/GIRO Transfer', input: {type: 'switch', model:  this.payment_method.transfer, change: this.setTransfer} },
+        { icon: 'account_balance_wallet', iconClass: 'grey lighten-1 white--text', title: 'Boost', subtitle: 'Allow use Boost e-Wallet as payment', input: {type: 'switch', model:  this.payment_method.boost, change: this.setBoost} },
+
 
       ]
 

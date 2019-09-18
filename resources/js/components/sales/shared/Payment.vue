@@ -29,7 +29,7 @@
     
       <v-list-item-group color="primary" large>
         <v-divider></v-divider>
-        <v-list-item @click="editCash()">
+        <v-list-item @click="editCash()" v-if="payementMethod.cash">
           <v-list-item-icon>
             <v-icon>attach_money</v-icon>
           </v-list-item-icon>
@@ -39,15 +39,36 @@
            <span>{{ cash.amount | currency }}</span>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="editCard()">
+        <v-list-item @click="editCard()" v-if="payementMethod.card">
           <v-list-item-icon>
-            <v-icon>payment</v-icon>
+            <v-icon>credit_card</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Card</v-list-item-title>
           </v-list-item-content>
            <span>{{ card.amount | currency }}</span>
         </v-list-item>
+       <v-divider></v-divider>
+        <v-list-item @click="editTransfer()" v-if="payementMethod.transfer">
+          <v-list-item-icon>
+            <v-icon>account_balance</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Transfer</v-list-item-title>
+          </v-list-item-content>
+           <span>{{ transfer.amount | currency }}</span>
+        </v-list-item>
+         <v-divider></v-divider>
+        <v-list-item @click="editBoost()" v-if="payementMethod.boost">
+          <v-list-item-icon>
+            <v-icon>account_balance_wallet</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Boost</v-list-item-title>
+          </v-list-item-content>
+           <span>{{ boost.amount | currency }}</span>
+        </v-list-item>
+
 
       </v-list-item-group>
     </v-list>
@@ -158,7 +179,7 @@
 
                   <v-spacer></v-spacer>
                    <v-list-item-content class="title">
-                       Received {{ parseFloat(cash.amount) + parseFloat(card.amount) | currency}} 
+                       Received {{ parseFloat(this.cash.amount) + parseFloat(this.card.amount) + parseFloat(this.transfer.amount) + parseFloat(this.boost.amount) | currency}} 
                    </v-list-item-content>
                  
                   <v-btn dark large fab color="teal" @click="save()" :disabled="valid()">
@@ -229,7 +250,7 @@
                                      Change  
                                  </v-list-item-content>
                                
-                                <span class="display-3" color="error">{{  parseFloat(cash.amount) + parseFloat(card.amount) - rounding(trxn.footer.charge) | currency}}
+                                <span class="display-3" color="error">{{  parseFloat(this.cash.amount) + parseFloat(this.card.amount) + parseFloat(this.transfer.amount) + parseFloat(this.boost.amount) - rounding(trxn.footer.charge) | currency}}
                                 </span>
                             </v-list-item>
                    
@@ -324,7 +345,7 @@ export default {
       showKeyboard: false,
       cash: {amount: 0.00},
       card: {amount: 0.00, ref: ''},
-      ewallet: {amount: 0.00, ref: ''},
+      boost: {amount: 0.00, ref: ''},
       transfer: {amount: 0.00, ref: ''},
       target: null,
       paid: false,
@@ -347,6 +368,7 @@ export default {
     company: 'system/company',
     store: 'auth/store',
     terminal: 'auth/terminal',
+    payementMethod: 'system/paymentMethod',
   }),
   methods: {
       back() {
@@ -367,6 +389,15 @@ export default {
          this.showKeyboard = true
          this.target = this.card
       },
+      editTransfer() {
+         this.showKeyboard = true
+         this.target = this.transfer
+      },
+      editBoost() {
+         this.showKeyboard = true
+         this.target = this.boost
+      },
+
       done() {
         /* this.target = null
         this.paid = false
@@ -377,7 +408,7 @@ export default {
       },
       valid() {
      
-            return (parseFloat(this.cash.amount) + parseFloat(this.card.amount)) < parseFloat(this.trxn.footer.charge)
+            return (parseFloat(this.cash.amount) + parseFloat(this.card.amount) + parseFloat(this.transfer.amount) + parseFloat(this.boost.amount)) < parseFloat(this.trxn.footer.charge)
 
       },
       rounding(amount) {
@@ -402,7 +433,7 @@ export default {
 
       },
       async save(type = 'receipt') {
-         const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount)
+         const amount_received = parseFloat(this.cash.amount) + parseFloat(this.card.amount) + parseFloat(this.transfer.amount) + parseFloat(this.boost.amount)
          const rounded =  this.rounding(this.trxn.footer.charge)
          const amount_change = amount_received - rounded
 
@@ -410,10 +441,16 @@ export default {
          let payments = []
 
          if(this.cash.amount > 0) {
-            payments.push({item_id: 1, total_amount: this.cash.amount, note: ''})
+            payments.push({item_id: 1,  name: 'Cash', total_amount: this.cash.amount, note: ''})
          }
          if(this.card.amount > 0) {
-              payments.push({item_id: 2, note: this.card.ref , total_amount: this.card.amount })
+              payments.push({item_id: 2, name: 'Card',note: this.card.ref , total_amount: this.card.amount })
+         }
+         if(this.transfer.amount > 0) {
+              payments.push({item_id: 3, name: 'Transfer', note: this.card.ref, total_amount: this.transfer.amount })
+         }
+         if(this.boost.amount > 0) {
+              payments.push({item_id: 4, name: 'Boost', note: this.card.ref, total_amount: this.boost.amount })
          }
 
           const dateObj = new Date()
@@ -463,7 +500,6 @@ export default {
                date: now,
                type: type,
                reference: reference,
-               transact_by: user_id,
                teller: this.auth,
                discount: {rate: footer.discount.rate, type: footer.discount.type}, 
                discount_amount: footer.discount.amount,

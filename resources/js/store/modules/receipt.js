@@ -58,7 +58,7 @@ export const actions = {
     }
   },
 
-  async addReceipt({ commit, getters }, receipt) {
+  async addReceipt({ commit, getters, rootState }, receipt) {
     try {
 
        
@@ -69,7 +69,7 @@ export const actions = {
           receipt.reference = receipt.reference + number
        }
 
-       const {reference, account_id, terminal_id, type, transact_by, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
+       const {reference, account_id, terminal_id, type, teller, date,discount,discount_amount, tax_total, service_charge, rounding, charge,received, change, note,  refund, items, payments} = receipt
 
         let castItems = "" 
         let castComm = "" 
@@ -138,7 +138,7 @@ export const actions = {
                                refund_amount: 0.00,
                                tax_id: 1, 
                                tax_amount: 0.00, 
-                               user_id: ${transact_by},
+                               user_id: ${teller.id},
                                total_amount: ${parseFloat(total_amount)}, 
                                note: "${note}"}, `
                  castPayments +=  cast
@@ -148,14 +148,14 @@ export const actions = {
 
    
            
-        const mutation = `mutation receipts{
+        const mutation = `{
                              newReceipt(
                                  reference: "${reference}",
                                  status: "active",
                                  type: "${type}",
                                  terminal_id: ${terminal_id},
                                  account_id: "${account_id}",
-                                 transact_by: ${transact_by},
+                                 transact_by: ${teller.id},
                                  date: "${date}",
                                  discount: "${JSON.stringify(discount).replace(/"/g, '\\"')}",
                                  discount_amount: ${parseFloat(discount_amount)},
@@ -172,11 +172,16 @@ export const actions = {
                                  commissions: [${castComm}]
                              ) {id}}`
 
-                      
+       let isOffline = rootState.system.offline
+       if(!isOffline) {
 
-       const { data }  = await axios.get(graphql.path('query'), {params: { query: mutation }})
-       receipt.id = data.data.newReceipt.id
-       receipt.status = 'active'
+         const { data }  = await axios.get(graphql.path('query'), {params: { query: 'mutation receipts' + mutation.replace(/[,]\s+/g, ',') }})
+         receipt.id = data.data.newReceipt.id
+         receipt.status = 'active'
+       } else {
+          receipt.status = 'offline'
+       }
+
        commit(types.ADD_RECEIPT, { receipt })
        return receipt
       
@@ -194,7 +199,13 @@ export const actions = {
  * Getters
  */
 export const getters = {
-  receipts: state => state.receipts,
+  receipts: state => state.receipts.sort((a,b) => { return new Date(b.date) - new Date(a.date) })
+              .reduce((prev, cur) => {
+
+                 if(!acc[curr.account.type]) acc[curr.account.type] = []; //If this type wasn't previously stored
+                acc[curr.account.type].push(curr);
+                return acc;
+               }),
   appointments: state => state.appointments,
   receipt: state => state.receipt !== null,
   autoincrement: state => state.autoincrement,

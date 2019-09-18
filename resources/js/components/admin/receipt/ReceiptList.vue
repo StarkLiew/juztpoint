@@ -15,8 +15,10 @@
        </template> 
        
        <div v-for="(item, index) in receipts" :key="index" >
+
+        <v-subheader>{{ item.date | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'DD/MM/YYYY')  }}</v-subheader>
         <v-list-item two-line @click="select(item)">
-            
+          
             <v-list-item-content>
                   <v-list-item-title>{{item.date + 'Z' | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'hh:mmA')  }}
                        <v-chip v-if="item.status === 'offline'" class="ma-2" small color="grey" >
@@ -62,6 +64,9 @@ export default {
 
   },
   methods: {
+     isSameDate(item, index) {
+          
+     },
      select(item) {
        this.$emit('selected', item)
      }

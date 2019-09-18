@@ -12,7 +12,7 @@
 				      <v-container class="text-center">
 		                  <h1 class="display-2">{{selected.charge | currency}}</h1>
 		               	  <p class="caption">Reference: {{ selected.reference }}</p>
-		               	  <p class="caption">Teller: {{ selected.transact_by }}</p>
+		               	  <p class="caption">Teller: {{ selected.teller.name }}</p>
 
 		               	  <p class="subtitle" v-if="selected.customer">{{ selected.customer.name }}</p>
                          <v-divider></v-divider>
@@ -91,6 +91,13 @@
 						          dense
 						          padless
 						        >
+
+						 	  <v-sheet
+						 	  width="100%"
+				      id="receipt-footer"
+				      class="overflow-y-auto"
+
+				    >       
 						            <v-list-item one-line>
 						              <v-list-item-content>
 						                <v-list-item-title>Discount</v-list-item-title>
@@ -117,6 +124,15 @@
 						                  </v-list-item-content>
 						                    <v-btn  icon class="caption">{{ selected.charge | currency}}</v-btn>
 						                </v-list-item>
+                               
+                                          
+                                        <v-list-item one-line v-for="(payment, index) in selected.payments" :key="index">
+						                  <v-list-item-content>
+						                    <v-list-item-title>Received {{ payment.name }}</v-list-item-title>
+						                  </v-list-item-content>
+						                    <v-btn  icon class="caption">{{ payment.total_amount | currency}}</v-btn>
+						                </v-list-item>
+
                                          <v-list-item one-line >
 
 						                  <v-list-item-content>
@@ -126,7 +142,7 @@
 						                </v-list-item>
                                      
 
-
+                                 </v-sheet>
 						              <v-bottom-navigation
 									         
 					                     horizontal
@@ -149,7 +165,7 @@
 									      <v-icon>cancel</v-icon>
 									    </v-btn>
 									  </v-bottom-navigation>
-
+                                   
 						        </v-footer>
 
 
@@ -195,5 +211,8 @@
 <style>
   #scroll-receipt-content {
       max-height: calc(100vh - (54px + (56px * 6)) );
+  }
+  #receipt-footer {
+  	  max-height: calc(100vh - (54px + (56px * 10)) );
   }
 </style>

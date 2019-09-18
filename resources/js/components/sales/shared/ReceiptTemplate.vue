@@ -87,8 +87,8 @@
 				     <tr  v-for="payment in value.payments" :key="payment.name">
 				     	<td></td>
 				     	<td></td>
-				     	<td>Received</td>
-				     	<td>Cash</td>
+				     	<td></td>
+				     	<td>Received {{ payment.name }}</td>
 				     	<td>{{ payment.total_amount | currency }}</td>
 				     </tr>
 				     <tr>
