@@ -60,10 +60,14 @@ class ProductsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
+
+		$selectedFields = $fields->getSelect();
+
 		$results = Product::with(array_keys($fields->getRelations()))
 			->where($where)
-			->select($fields->getSelect())
+			->select($selectedFields)
 			->get();
+
 		return $results;
 	}
 }

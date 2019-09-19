@@ -80,6 +80,7 @@ export const actions = {
            const comm_id = item.commission.id
         
            const user_id = item.saleBy.id  
+              const qty = item.qty  
            const terminal_id = item.saleBy.id  
            const tax_id = item.tax.id
            const tax_amount = item.tax_amount
@@ -97,6 +98,8 @@ export const actions = {
                                discount: "{}", 
                                discount_amount:0.00, 
                                tax_id: 1, 
+                               qty: 1,
+                               refund_qty: 0.00,
                                refund_amount: 0.00,
                                tax_amount: 0.00, 
                                user_id: ${user_id},
@@ -112,6 +115,8 @@ export const actions = {
                          discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
+                         qty: -${qty},
+                         refund_qty: 0.00,
                          refund_amount: 0.00,
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
@@ -134,7 +139,9 @@ export const actions = {
                                type: "payment", 
                                item_id: ${item_id},
                                discount: "{}", 
-                               discount_amount:0.00, 
+                               discount_amount:0.00
+                               qty: 1,
+                                refund_qty: 0.00,
                                refund_amount: 0.00,
                                tax_id: 1, 
                                tax_amount: 0.00, 
@@ -186,7 +193,7 @@ export const actions = {
        return receipt
       
     }catch (e) {
-
+       
        receipt.status = 'offline'
        commit(types.ADD_RECEIPT, { receipt })
        return receipt
@@ -199,13 +206,7 @@ export const actions = {
  * Getters
  */
 export const getters = {
-  receipts: state => state.receipts.sort((a,b) => { return new Date(b.date) - new Date(a.date) })
-              .reduce((prev, cur) => {
-
-                 if(!acc[curr.account.type]) acc[curr.account.type] = []; //If this type wasn't previously stored
-                acc[curr.account.type].push(curr);
-                return acc;
-               }),
+  receipts: state => state.receipts.sort((a,b) => { return new Date(b.date) - new Date(a.date) }),
   appointments: state => state.appointments,
   receipt: state => state.receipt !== null,
   autoincrement: state => state.autoincrement,

@@ -56,6 +56,16 @@ class ProductType extends GraphQLType {
 				'description' => 'The type of setting',
 				'is_relation' => true,
 			],
+			'items' => [
+				'type' => GraphQL::type('item'),
+				'description' => 'The type of setting',
+				'is_relation' => true,
+			],
+			'qty' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+				'selectable' => false,
+			],
 			'sellable' => [
 				'type' => Type::boolean(),
 				'description' => 'The type of setting',

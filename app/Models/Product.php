@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Item;
 use Auth;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Attachment\Attachable;
@@ -20,6 +22,7 @@ class Product extends Model {
 	protected $dates = ['deleted_at'];
 	protected $primaryKey = 'id'; // or null
 	public $incrementing = true;
+	protected $appends = array('qty');
 	protected $casts = [
 		'properties' => 'array',
 	];
@@ -60,6 +63,14 @@ class Product extends Model {
 
 	public function commission() {
 		return $this->belongsTo('App\Models\Setting', 'commission_id');
+	}
+	public function items() {
+		return $this->hasMany('App\Models\Item', 'item_id');
+	}
+	public function getQtyAttribute() {
+
+		$result = Item::select(DB::raw('SUM(qty) as balance'))->where('item_id', $this->id)->where('type', 'open')->orWhere('type', 'item')->orWhere('type', 'receive')->first();
+		return $result->balance;
 	}
 
 	public function user() {

@@ -67,13 +67,13 @@ class SystemMenuComposer {
 					->sort(1000)
 					->title(__('All registered users'))
 			)
-			->add('Auth',
+		/*->add('Auth',
 				ItemMenu::label(__('Payment'))
 					->icon('icon-wallet')
 					->route('platform.systems.payments')
 					->sort(1000)
 					->title(__('All registered payments'))
-			)
+			)*/
 			->add('Auth',
 				ItemMenu::label(__('Commission'))
 					->icon('icon-money')

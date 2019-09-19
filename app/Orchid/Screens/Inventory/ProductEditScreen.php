@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Orchid\Layouts\Inventory\ProductEditLayout;
 use App\Orchid\Layouts\Inventory\ProductRightEditLayout;
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Orchid\Screen\Fields\Cropper;
@@ -127,6 +128,8 @@ class ProductEditScreen extends Screen {
 	 */
 	public function save(Product $product, Request $request) {
 
+		DB::beginTransaction();
+
 		try {
 			$input = $request->get('product');
 
@@ -139,14 +142,16 @@ class ProductEditScreen extends Screen {
 				if (array_key_exists('thumbnail', $properties)) {
 
 					$image = $properties['thumbnail'];
+					if (!strpos($image, 'base64')) {
+						if (!is_null($image)) {
+							$ext = substr($image, -3);
 
-					if (!is_null($image)) {
-						$ext = substr($image, -3);
+							$content = File::get(public_path() . $image);
+							$input['properties']['thumbnail'] = 'data:image/' . $ext . ';base64, ' . base64_encode($content);
+							$product->attachment()->delete();
+							File::delete(public_path() . $image);
 
-						$content = File::get(public_path() . $image);
-						$input['properties']['thumbnail'] = 'data:image/' . $ext . ';base64, ' . base64_encode($content);
-						$product->attachment()->delete();
-						File::delete(public_path() . $image);
+						}
 					}
 
 				}
@@ -158,11 +163,35 @@ class ProductEditScreen extends Screen {
 				->fill(['type' => 'product'])
 				->save();
 
+			$open = Item::where('item_id', $product->id)->where('type', 'open')->first();
+
+			if (!$open) {
+				$open = new Item();
+			}
+
+			$open->line = 1;
+			$open->item_id = $product->id;
+			$open->qty = $product->properties['qty'];
+			$open->trxn_id = 1;
+			$open->tax_id = 1;
+			$open->type = 'open';
+			$open->discount = '{}';
+			$open->refund_qty = 0;
+			$open->tax_amount = 0.00;
+			$open->discount_amount = 0.00;
+			$open->refund_amount = 0.00;
+			$open->total_amount = 0.00;
+			$open->user_id = $product->user_id;
+			$open->save();
+
+			DB::commit();
+
 			Alert::info(__('Product was saved'));
 
 			return redirect()->route('platform.products');
 
 		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollback();
 			Alert::info(__($e->errorInfo[2]));
 			return redirect()->back();
 

@@ -22,6 +22,8 @@ class UserCreateItems extends Migration {
 			$table->json('discount');
 			$table->float('discount_amount');
 			$table->bigInteger('tax_id');
+			$table->float('qty');
+			$table->float('refund_qty');
 			$table->float('refund_amount');
 			$table->float('tax_amount');
 			$table->float('total_amount');

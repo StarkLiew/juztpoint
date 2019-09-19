@@ -367,6 +367,7 @@ export default {
     auth: 'auth/user',
     company: 'system/company',
     store: 'auth/store',
+    offline: 'system/offline',
     terminal: 'auth/terminal',
     payementMethod: 'system/paymentMethod',
   }),
@@ -559,6 +560,13 @@ export default {
       
     
          this.receipt = await this.$store.dispatch('receipt/addReceipt', receipt)
+
+         if(!this.offline && this.receipt.status === 'offline') {
+             await this.$store.dispatch('system/setOffline',{status: true})
+             this.$toast.success('Connection fail, transaction is saved offline. Get Administrator help to reestablish online mode.')
+         } else {
+            this.$toast.success('Transaction is saved!')
+         }
           
          if(type === 'appointment') return this.done()
          this.paid = true

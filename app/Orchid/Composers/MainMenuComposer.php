@@ -59,6 +59,16 @@ class MainMenuComposer {
 					->icon('icon-bag')
 			)
 			->add(Menu::MAIN,
+				ItemMenu::label('Products')
+					->icon('icon-module')
+					->route('platform.products')
+			)
+			->add(Menu::MAIN,
+				ItemMenu::label('Services')
+					->icon('icon-module')
+					->route('platform.services')
+			)
+			->add(Menu::MAIN,
 				ItemMenu::label('Inventory')
 					->slug('inventory')
 					->icon('icon-plus')
@@ -69,16 +79,7 @@ class MainMenuComposer {
 					->icon('icon-organization')
 					->route('platform.categories')
 			)
-			->add('inventory',
-				ItemMenu::label('Products')
-					->icon('icon-module')
-					->route('platform.products')
-			)
-			->add(Menu::MAIN,
-				ItemMenu::label('Services')
-					->icon('icon-module')
-					->route('platform.services')
-			)
+
 			->add(Menu::MAIN,
 				ItemMenu::label('Account')
 					->slug('account-data')
