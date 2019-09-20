@@ -94,27 +94,30 @@ class ProductEditScreen extends Screen {
 				ProductEditLayout::class,
 				ProductRightEditLayout::class,
 			]),
-			Layout::rows([
-				Select::make('product.properties.color')
-					->options([
-						'blue' => 'Blue',
-						'red' => 'Red',
-						'pink' => 'Pink',
-						'green' => 'Green',
-						'purple' => 'Purple',
-						'indigo' => 'Indigo',
-						'orange' => 'Orange',
-					])
-					->empty('blue')
-					->title('Color')
-					->help('Point-of-Sale Button Color'),
-			]),
 
-			Layout::rows([
-				Cropper::make('product.properties.thumbnail')
-					->width(180)
-					->height(180)
-					->target('relativeUrl'),
+			Layout::columns([
+				Layout::rows([
+					Select::make('product.properties.color')
+						->options([
+							'blue' => 'Blue',
+							'red' => 'Red',
+							'pink' => 'Pink',
+							'green' => 'Green',
+							'purple' => 'Purple',
+							'indigo' => 'Indigo',
+							'orange' => 'Orange',
+						])
+						->empty('blue')
+						->title('Color')
+						->help('Point-of-Sale Button Color'),
+				]),
+
+				Layout::rows([
+					Cropper::make('product.properties.thumbnail')
+						->width(180)
+						->height(180)
+						->target('relativeUrl'),
+				]),
 			]),
 
 		];

@@ -41,7 +41,7 @@
                 absolute
                 v-model="editItem[index]"
                 :close-on-content-click="false"
-                :close-on-click="false"
+                :close-on-click="true"
                 :min-width="380"
                 :nudge-left="30"
                 offset-x

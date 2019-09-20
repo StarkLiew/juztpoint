@@ -74,6 +74,10 @@ class PropertyType extends GraphQLType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'The type of duration',
 			],
+			'contain' => [
+				'type' => Type::listOf(Type::int()),
+				'description' => 'The type of duration',
+			],
 			'rate' => [
 				'type' => Type::nonNull(Type::float()),
 				'description' => 'The type of setting',

@@ -93,27 +93,30 @@ class ServiceEditScreen extends Screen {
 				ServiceEditLayout::class,
 				ServiceRightEditLayout::class,
 			]),
-			Layout::rows([
-				Select::make('service.properties.color')
-					->options([
-						'blue' => 'Blue',
-						'red' => 'Red',
-						'pink' => 'Pink',
-						'green' => 'Green',
-						'purple' => 'Purple',
-						'indigo' => 'Indigo',
-						'orange' => 'Orange',
-					])
-					->empty('blue')
-					->title('Color')
-					->help('Point-of-Sale Button Color'),
-			]),
 
-			Layout::rows([
-				Cropper::make('service.properties.thumbnail')
-					->width(180)
-					->height(180)
-					->target('relativeUrl'),
+			Layout::columns([
+				Layout::rows([
+					Select::make('service.properties.color')
+						->options([
+							'blue' => 'Blue',
+							'red' => 'Red',
+							'pink' => 'Pink',
+							'green' => 'Green',
+							'purple' => 'Purple',
+							'indigo' => 'Indigo',
+							'orange' => 'Orange',
+						])
+						->empty('blue')
+						->title('Color')
+						->help('Point-of-Sale Button Color'),
+				]),
+
+				Layout::rows([
+					Cropper::make('service.properties.thumbnail')
+						->width(180)
+						->height(180)
+						->target('relativeUrl'),
+				]),
 			]),
 
 		];
