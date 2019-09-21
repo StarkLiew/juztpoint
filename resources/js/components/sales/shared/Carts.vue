@@ -43,6 +43,7 @@
                 :close-on-content-click="false"
                 :close-on-click="true"
                 :min-width="380"
+                :max-width="380"
                 :nudge-left="30"
                 offset-x
                 left

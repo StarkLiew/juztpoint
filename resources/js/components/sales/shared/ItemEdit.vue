@@ -53,106 +53,77 @@
             ></v-textarea>
         </v-layout>
            
-      <v-layout px-10>
-          <v-combobox
-          v-model="item.saleBy"
-          :items="users"
-          chips
-          label="Sale Person"
-          required
-        >
+      <v-layout>
 
-          <template v-slot:item="{ index, item }">
-            <v-list-item-content>
-                <v-chip>
-                 <v-avatar class="accent white--text" left>
-                    {{ item.name.slice(0, 1).toUpperCase() }}
-                  </v-avatar>
-                  {{ item.name }}
-                </v-chip>
-            </v-list-item-content>
-          </template>
+              <v-card tile       
+                  class="pa-2"
+                  outlined>
 
-          <template v-slot:selection="data">
-             
-            <v-chip
-              :key="JSON.stringify(data.item)"
-              v-bind="data.attrs"
-              :input-value="data.selected"
-              :disabled="data.disabled"
-              @click.stop="data.parent.selectedIndex = data.index"
-              @click:close="data.parent.selectItem(data.item)"
-            >
-              <v-avatar class="accent white--text" left>
-                {{ data.item.name.slice(0, 1).toUpperCase() }}
-              </v-avatar>
-              {{ data.item.name }}
-            </v-chip>
-          </template>
-        </v-combobox>
+                    <v-select
+                      px-10
+                      :items="users"
+                      item-text="name"
+                      item-value="id"
+                      label="Attended by"
+                      chips
+                      v-model="item.saleBy"
+                      
+                    ></v-select>
+                  
+              </v-card>
+
+              <v-card tile
+                  class="pa-2"
+                  outlined>
+
+                    <v-select
+                      px-10
+                      :items="users"
+                      item-text="name"
+                      item-value="id"
+                      label="Share by"
+                      chips
+                      v-model="item.saleBy"
+                      
+                    ></v-select>
+                  
+            </v-card>
+  
       </v-layout>
 
       <v-divider></v-divider>
-      <v-toolbar flat v-if="item.properties.contain">
+      <v-layout v-if="item.properties.contain">
              <v-sheet
                  class="mx-auto"
-                 max-width="500"
-
+                 max-width="380"
               >
                 <v-slide-group show-arrows>
                   <v-slide-item
                     v-for="(subitem, subindex) in item.properties.contain"
                     :key="subindex"
-                    v-slot:default="{ active, toggle }"
+             
                   >
+                      <v-card tile class="pa-2" outlined>
 
-
-                      <v-combobox
-                              v-model="item.saleBy"
-                              :items="users"
-                              small-chips
-                              solo
-                              label="Sale Person"
-                        
-    
-                            >
-
-                              <template v-slot:item="{ index, item }">
-                                <v-list-item-content>
-                                    <v-chip>
-                                     <v-avatar class="accent white--text" left>
-                                        {{ item.name.slice(0, 1).toUpperCase() }}
-                                      </v-avatar>
-                                      {{ item.name }}
-                                    </v-chip>
-                                </v-list-item-content>
-                              </template>
-
-                              <template v-slot:selection="data">
-                                 
-                                <v-chip
-                                  :key="JSON.stringify(data.item)"
-                                  v-bind="data.attrs"
-                                  :input-value="data.selected"
-                                  :disabled="data.disabled"
-                                  @click.stop="data.parent.selectedIndex = data.index"
-                                  @click:close="data.parent.selectItem(data.item)"
-                                >
-                                  <v-avatar class="accent white--text" left>
-                                    {{ data.item.name.slice(0, 1).toUpperCase() }}
-                                  </v-avatar>
-                                     {{ getItem(subitem).name }} - {{ data.item.name }} 
-                                </v-chip>
-                              </template>
-                            </v-combobox>
-
+                        <v-select
+                          px-10
+                          :items="users"
+                          item-text="name"
+                          item-value="id"
+                          :label="getItem(subitem).name"
+                          
+                          
+                        ></v-select>
+                      
+                       </v-card>
+                      
 
 
                   </v-slide-item>
                 </v-slide-group>
               </v-sheet>
 
-        </v-toolbar>
+        </v-layout>
 
          <keyboard 
             @done="showKeyboard = false"
