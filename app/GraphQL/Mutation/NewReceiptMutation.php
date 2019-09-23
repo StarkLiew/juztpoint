@@ -107,6 +107,34 @@ class NewReceiptMutation extends Mutation {
 		$success = false;
 		$error = null;
 
+		$commissions = [];
+
+		if ($args['type'] === 'receipt') {
+
+			foreach ($args['items'] as $item) {
+				$amount = 0.00;
+				$commission = $item['commission']['properties'];
+
+				$amount = $this->calcCommission($commission);
+
+				if ($item['properties']['share']) {
+					$amount = $amount / 2;
+					$commissions[] = $this->row($item, $commission, $item['sharedBy'], $amount);
+				}
+
+				if ($item['properties']['services']) {
+					foreach ($item['properties']['services'] as $service) {
+						$service_item = Item::with(['commission'])->find($service['id']);
+						$service_amount = $this->calcCommission($commission);
+						$commissions[] = $this->row($service_item, $commission, $service['user_id'], $service_amount);
+						$amount -= $service_amount;
+					}
+				}
+
+				$commissions[] = $this->row($item, $commission, $item['user_id'], $amount);
+
+			}
+		}
 		DB::beginTransaction();
 		try {
 
@@ -114,7 +142,7 @@ class NewReceiptMutation extends Mutation {
 
 			$document->items()->createMany($args['items']);
 			$document->payments()->createMany($args['payments']);
-			$document->commissions()->createMany($args['commissions']);
+			$document->commissions()->createMany($commissions);
 
 			// $document->items()->save($args->items);
 			// $document->payments()->save($args->payments);
@@ -132,5 +160,30 @@ class NewReceiptMutation extends Mutation {
 			return $error;
 		}
 		return $document;
+	}
+
+	protected function row($item, $commission, $user, $amount) {
+		return [
+			'line' => $item['line'],
+			'item_id' => $commission['id'],
+			'discount' => '{}',
+			'discount_amount' => 0.00,
+			'tax_id' => 1,
+			'qty' => 1,
+			'refund_qty' => 0.00,
+			'refund_amount' => 0.00,
+			'tax_amount' => 0.00,
+			'user_id' => $user,
+			'total_amount' => $amount,
+			'note' => '',
+		];
+	}
+
+	protected function calcCommission($commission) {
+		if ($commission['type'] === 'fix') {
+			return $commission['rate'];
+		} else {
+			return $commission['rate'] * $commission['rate'] / 100;
+		}
 	}
 }

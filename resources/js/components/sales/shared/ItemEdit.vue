@@ -52,6 +52,47 @@
                   shaped
             ></v-textarea>
         </v-layout>
+         
+
+
+  
+
+
+             <v-carousel light height="120" hide-delimiters v-if="item.properties.contain">
+                <v-carousel-item 
+                  v-for="(subitem, subindex) in item.properties.contain"
+                              :key="subindex"
+                     >
+                           <v-row
+                              class="fill-height"
+                              align="center"
+                              justify="center"
+                            >
+
+                                 <v-sheet
+                                   
+                                    max-width="250"
+                                  >
+
+                                
+                          
+                                        <v-card class="pa-2" style="width: 100px;" outlined>
+                                              <v-select
+                       
+                                                :items="users"
+                                                item-text="name"
+                                                item-value="id"
+                                                :label="getItem(subitem).name"      
+                                              ></v-select>
+                                          </v-card>
+                         
+                                 </v-sheet>  
+                      </v-row>
+                </v-carousel-item>
+              </v-carousel>
+
+
+
            
       <v-layout>
 
@@ -64,7 +105,7 @@
                       :items="users"
                       item-text="name"
                       item-value="id"
-                      label="Attended by"
+                      label="Sale Attended by"
                       chips
                       v-model="item.saleBy"
                       
@@ -91,39 +132,6 @@
   
       </v-layout>
 
-      <v-divider></v-divider>
-      <v-layout v-if="item.properties.contain">
-             <v-sheet
-                 class="mx-auto"
-                 max-width="380"
-              >
-                <v-slide-group show-arrows>
-                  <v-slide-item
-                    v-for="(subitem, subindex) in item.properties.contain"
-                    :key="subindex"
-             
-                  >
-                      <v-card tile class="pa-2" outlined>
-
-                        <v-select
-                          px-10
-                          :items="users"
-                          item-text="name"
-                          item-value="id"
-                          :label="getItem(subitem).name"
-                          
-                          
-                        ></v-select>
-                      
-                       </v-card>
-                      
-
-
-                  </v-slide-item>
-                </v-slide-group>
-              </v-sheet>
-
-        </v-layout>
 
          <keyboard 
             @done="showKeyboard = false"
