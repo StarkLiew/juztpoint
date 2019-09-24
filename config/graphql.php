@@ -134,6 +134,7 @@ return [
 		'product' => App\GraphQL\Type\ProductType::class,
 		'property' => App\GraphQL\Type\PropertyType::class,
 		'receipt' => App\GraphQL\Type\ReceiptType::class,
+		'services_by' => App\GraphQL\Type\ServicesByType::class,
 		'item' => App\GraphQL\Type\ItemType::class,
 		'ItemInput' => App\GraphQL\Input\ItemInput::class,
 

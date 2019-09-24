@@ -80,7 +80,7 @@ export const actions = {
            const comm_id = item.commission.id
         
            const user_id = item.saleBy.id  
-              const qty = item.qty  
+           const qty = item.qty  
            const terminal_id = item.saleBy.id  
            const tax_id = item.tax.id
            const tax_amount = item.tax_amount
@@ -90,7 +90,7 @@ export const actions = {
            const discount_amount = item.discount.amount
     
 
-           if(type=='receipt') {
+           /* if(type=='receipt') {
                  const comm_ammount = commission.type == 'fix' ? parseFloat(commission.rate) : parseFloat(total_amount) * (parseFloat(commission.rate) /100)
                 const comm = `{line: ${line + 1}, 
                                type: "commission", 
@@ -106,9 +106,32 @@ export const actions = {
                                total_amount: ${parseFloat(comm_ammount)}, 
                                note: ""},`   
                  castComm  += comm
-            }     
-          
-       
+            } */  
+
+           const shareWith = 0
+           if(item.shareWith) {
+              shareWith = receipt.shareWith.id
+           }
+
+           let servicesBy = `` 
+         
+           if(item.servicesBy) {
+
+               for(const subitem of item.properties.contain) {
+    
+                    if(item.servicesBy[subitem]) {
+                        if(servicesBy !== '') servicesBy += ','
+                        servicesBy +=  `\\"${subitem}\\" : ${item.servicesBy[subitem].id}`
+
+                    }
+               }
+           } 
+
+           const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}}`
+     
+
+      
+              
            const cast = `{line: ${line + 1}, 
                          type: "item", 
                          item_id: ${item_id},
@@ -121,7 +144,9 @@ export const actions = {
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
                          total_amount: ${parseFloat(total_amount)}, 
-                         note: "${note}"},`
+                         note: "${note}",
+                         properties:"${props}"
+                         },`
 
 
            castItems += cast
@@ -129,8 +154,7 @@ export const actions = {
 
 
         }
-
-
+ 
         let castPayments = "" 
         if(type=='receipt') {
               for(const [line, payment] of payments.entries() ) {
@@ -153,7 +177,7 @@ export const actions = {
               }
         }
 
-   
+
            
         const mutation = `{
                              newReceipt(
@@ -176,12 +200,17 @@ export const actions = {
                                  note: "${note}",
                                  items: [${castItems}],
                                  payments: [${castPayments}],
-                                 commissions: [${castComm}]
+                                 commissions: [],
                              ) {id}}`
 
-       let isOffline = rootState.system.offline
-       if(!isOffline) {
 
+
+       
+       let isOffline = rootState.system.offline
+
+
+       if(!isOffline) {
+         
          const { data }  = await axios.get(graphql.path('query'), {params: { query: 'mutation receipts' + mutation.replace(/[,]\s+/g, ',') }})
          receipt.id = data.data.newReceipt.id
          receipt.status = 'active'

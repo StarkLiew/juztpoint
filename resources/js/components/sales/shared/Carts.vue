@@ -66,12 +66,31 @@
                               </v-avatar>
                                {{item.saleBy.name}}
                         </span>
+                        <span class="caption" v-if="item.shareWith"> &amp;
+                              <v-avatar class="accent white--text" left size="16">
+                                     {{ item.shareWith.name.slice(0, 1).toUpperCase() }}
+                              </v-avatar>
+                               {{item.shareWith.name}}
+                        </span>
+                         <div v-if="item.servicesBy">
+                           
+                               <v-chip pill v-if="item.servicesBy[subitem]" v-for="subitem in item.properties.contain" :key="subitem">
+                                       {{ getItem(subitem).name }} ({{ item.servicesBy[subitem].name}})
+                              </v-chip>
+                             
+                         </div>
+
+
                       </div>
+
+
+
                   </template>
                   <span>{{item.note}}</span>
                 </v-tooltip>
 
             </v-list-item-content>
+      
             <v-btn icon>{{item.amount | currency}}</v-btn>
             <v-btn icon v-if="allowRemoveItem" @click="removeItem(index)"><v-icon>remove</v-icon></v-btn>
           </v-list-item>
@@ -185,7 +204,10 @@ export default {
                 
         let item = this.sumAmount({...newVal})
     
-        item.note = ""
+        /* item.note = ""
+        item.saleBy = null
+        item.shareWith = null
+        item.properties.servicesBy = [] */
 
         this.items.push(item)  
         setTimeout(() => {
@@ -287,6 +309,9 @@ export default {
         this.footer.charge = (total - this.footer.discount.amount) + taxTotal
         this.footer.tax = taxTotal
         
+    },
+    getItem(id) {
+           return this.$store.getters['service/collection'].find(o => o.id === id)  
     },
 
 

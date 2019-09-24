@@ -144,16 +144,16 @@ export default {
           /* Upload all offline transaction to server */
 
           const offline_receipts = this.$store.getters['receipt/receipts'].filter(r => r.status === 'offline')
-
+        
           for(const r of offline_receipts) {
                await this.$store.dispatch('receipt/addReceipt', r)
           }
 
-          const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
+          /* const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
 
           for(const a of offline_appointments) {
                await this.$store.dispatch('receipt/addReceipt', a)
-          }
+          } */
 
 
           const offline_customers = this.$store.getters['account/customers'].filter(c => c.status === 'offline')

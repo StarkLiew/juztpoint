@@ -86,6 +86,11 @@ class ItemType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'The type of setting',
 			],
+			'properties' => [
+				'type' => GraphQL::type('property'),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
 
 		];
 	}

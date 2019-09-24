@@ -47,7 +47,7 @@
 
 
          
-       <span><v-icon>perm_identity</v-icon>{{auth.name}}</span>
+       <span><v-icon>perm_identity</v-icon>{{ auth ? auth.name : ''}}</span>
    
 
         <v-spacer></v-spacer>

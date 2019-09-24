@@ -1,6 +1,7 @@
 <?php
 namespace App\GraphQL\Mutation;
 use App\Models\Document;
+use App\Models\Product;
 use DB;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -113,27 +114,34 @@ class NewReceiptMutation extends Mutation {
 
 			foreach ($args['items'] as $item) {
 				$amount = 0.00;
-				$commission = $item['commission']['properties'];
+				$castedItem = Product::with(['commission'])->find($item['item_id']);
+				$commission = $castedItem->commission;
 
-				$amount = $this->calcCommission($commission);
+				$amount = $this->calcCommission($item, $commission);
 
-				if ($item['properties']['share']) {
+				$prop = json_decode($item['properties']);
+
+				if ($prop->shareWith) {
 					$amount = $amount / 2;
-					$commissions[] = $this->row($item, $commission, $item['sharedBy'], $amount);
+					$commissions[] = $this->row($item, $commission, $prop->shareWith, $amount);
 				}
 
-				if ($item['properties']['services']) {
-					foreach ($item['properties']['services'] as $service) {
-						$service_item = Item::with(['commission'])->find($service['id']);
-						$service_amount = $this->calcCommission($commission);
-						$commissions[] = $this->row($service_item, $commission, $service['user_id'], $service_amount);
-						$amount -= $service_amount;
+				if ($prop->servicesBy) {
+					foreach ($prop->servicesBy as $key => $emp) {
+						$service = Product::with(['commission'])->find($key);
+						if ($service_item) {
+							$service_amount = $this->calcCommission($item, $service->commission);
+							$commissions[] = $this->row($item, $commission, $emp, $service_amount);
+							$amount -= $service_amount;
+						}
+
 					}
 				}
 
 				$commissions[] = $this->row($item, $commission, $item['user_id'], $amount);
 
 			}
+
 		}
 		DB::beginTransaction();
 		try {
@@ -163,13 +171,15 @@ class NewReceiptMutation extends Mutation {
 	}
 
 	protected function row($item, $commission, $user, $amount) {
+
 		return [
 			'line' => $item['line'],
+			'type' => 'commission',
 			'item_id' => $commission['id'],
 			'discount' => '{}',
 			'discount_amount' => 0.00,
 			'tax_id' => 1,
-			'qty' => 1,
+			'qty' => 1.00,
 			'refund_qty' => 0.00,
 			'refund_amount' => 0.00,
 			'tax_amount' => 0.00,
@@ -179,11 +189,11 @@ class NewReceiptMutation extends Mutation {
 		];
 	}
 
-	protected function calcCommission($commission) {
+	protected function calcCommission($item, $commission) {
 		if ($commission['type'] === 'fix') {
 			return $commission['rate'];
 		} else {
-			return $commission['rate'] * $commission['rate'] / 100;
+			return $item['total_amount'] * $commission['rate'] / 100;
 		}
 	}
 }

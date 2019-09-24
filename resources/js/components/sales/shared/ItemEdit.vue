@@ -53,45 +53,65 @@
             ></v-textarea>
         </v-layout>
          
+<v-sheet v-if="item.properties.contain"
+    class="mx-auto"
+    elevation="8"
+    max-width="380"
+  >
+    <v-slide-group
+      class="pa-4"
+      center-active
+      show-arrows
+    >
+      <v-slide-item
+      v-for="(subitem, subindex) in item.properties.contain"
+       :key="subindex"
+        v-slot:default="{ active, toggle }"
+      >
 
+          <v-row
+            class="fill-height"
+            align="center"
+            justify="center"
+          >
+                    
+               <v-menu offset-y>
+              
+                    <template v-slot:activator="{ on }">
+                       <v-card>
+                         <p class="caption">{{ getItem(subitem).name  }} </p>
+                          <v-btn
+                            color="primary overline"
+                            dark
+                            v-on="on"
+                          >
+                            {{ servicesBy[subitem] ? servicesBy[subitem].name : "" }}
+                          </v-btn>
+                       </v-card>
+                    </template>
+                    <v-list>
+                    <v-list-item
+      
+                        @click="changeUserService(subitem, false)"
+                      >
+                        <v-list-item-title>None</v-list-item-title>
+                      </v-list-item>
 
-  
+                      <v-list-item
+                        v-for="(user, index) in users"
+                        :key="index"
+                        @click="changeUserService(subitem, user)"
+                      >
+                        <v-list-item-title>{{ user.name }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+              
+          </v-row>
 
-
-             <v-carousel light height="120" hide-delimiters v-if="item.properties.contain">
-                <v-carousel-item 
-                  v-for="(subitem, subindex) in item.properties.contain"
-                              :key="subindex"
-                     >
-                           <v-row
-                              class="fill-height"
-                              align="center"
-                              justify="center"
-                            >
-
-                                 <v-sheet
-                                   
-                                    max-width="250"
-                                  >
-
-                                
-                          
-                                        <v-card class="pa-2" style="width: 100px;" outlined>
-                                              <v-select
-                       
-                                                :items="users"
-                                                item-text="name"
-                                                item-value="id"
-                                                :label="getItem(subitem).name"      
-                                              ></v-select>
-                                          </v-card>
-                         
-                                 </v-sheet>  
-                      </v-row>
-                </v-carousel-item>
-              </v-carousel>
-
-
+      </v-slide-item>
+    </v-slide-group>
+  </v-sheet>
 
            
       <v-layout>
@@ -99,17 +119,45 @@
               <v-card tile       
                   class="pa-2"
                   outlined>
+    <v-combobox
+          v-model="saleBy"
+          :items="users"
+          :rules="saleByRules"
+           chips
+          required
+          label="Sale Person"
+        >
 
-                    <v-select
-                      px-10
-                      :items="users"
-                      item-text="name"
-                      item-value="id"
-                      label="Sale Attended by"
-                      chips
-                      v-model="item.saleBy"
-                      
-                    ></v-select>
+          <template v-slot:item="{ index, item }">
+            <v-list-item-content>
+                <v-chip>
+                 <v-avatar class="accent white--text" left>
+                    {{ item.name.slice(0, 1).toUpperCase() }}
+                  </v-avatar>
+                  {{ item.name }}
+                </v-chip>
+            </v-list-item-content>
+          </template>
+
+          <template v-slot:selection="data">
+             
+            <v-chip
+              :key="JSON.stringify(data.item)"
+              v-bind="data.attrs"
+        
+              :input-value="data.selected"
+              :disabled="data.disabled"
+              @click.stop="data.parent.selectedIndex = data.index"
+              @click:close="data.parent.selectItem(data.item)"
+
+            >
+              <v-avatar class="accent white--text" left>
+                {{ data.item.name.slice(0, 1).toUpperCase() }}
+              </v-avatar>
+              {{ data.item.name }}
+            </v-chip>
+          </template>
+        </v-combobox>
                   
               </v-card>
 
@@ -117,16 +165,44 @@
                   class="pa-2"
                   outlined>
 
-                    <v-select
-                      px-10
-                      :items="users"
-                      item-text="name"
-                      item-value="id"
-                      label="Share by"
-                      chips
-                      v-model="item.saleBy"
-                      
-                    ></v-select>
+     <v-combobox
+          v-model="shareWith"
+          :items="users"
+          chips
+          required
+          label="Share with"
+        >
+
+          <template v-slot:item="{ index, item }">
+            <v-list-item-content>
+                <v-chip>
+                 <v-avatar class="accent white--text" left>
+                    {{ item.name.slice(0, 1).toUpperCase() }}
+                  </v-avatar>
+                  {{ item.name }}
+                </v-chip>
+            </v-list-item-content>
+          </template>
+
+         <template v-slot:selection="data">
+             
+            <v-chip
+              :key="JSON.stringify(data.item)"
+              v-bind="data.attrs"
+        
+              :input-value="data.selected"
+              :disabled="data.disabled"
+              @click.stop="data.parent.selectedIndex = data.index"
+              @click:close="data.parent.selectItem(data.item)"
+
+            >
+              <v-avatar class="accent white--text" left>
+                {{ data.item.name.slice(0, 1).toUpperCase() }}
+              </v-avatar>
+              {{ data.item.name }}
+            </v-chip>
+          </template>
+        </v-combobox>
                   
             </v-card>
   
@@ -158,8 +234,14 @@ export default {
      value: '0',
      qty: 1,
      note: '',
+     saleByRules: [
+        v => !!v || 'Sale person is required',
+      ],
      showKeyboard: false,
      discountRate: 0.0,
+     shareWith: null,
+     saleBy: null,
+     servicesBy: [],
      decimal: 1,
      discountType: 0,
      tab: 'tab-1', 
@@ -192,17 +274,34 @@ export default {
           if(this.item.note) { 
              this.note = this.item.note
           } 
+          if(this.item.saleBy) { 
+             this.saleBy = this.item.saleBy
+          } 
+          if(this.item.shareWith) { 
+             this.shareWith = this.item.shareWith
+          } 
+          if(this.item.servicesBy) { 
+             this.servicesBy = this.item.servicesBy
+          } 
+                
+      },
+      changeUserService(subitem, user) {
+          if(!user) this.servicesBy.splice(subitem, 1)
+          else this.servicesBy[subitem] = user
+
       },
       inc(neg, prop) {
           let val = parseFloat(this.qty) + neg
           if(val > 0) this.qty = val
       },
       done() {
-        const {qty, discountRate, discountType, note} = this
+        const {qty, discountRate, discountType, note, servicesBy, shareWith, saleBy} = this
          this.item.qty = qty
          this.item.note = note
          this.item.discount = {rate: discountRate, type: this.parseDiscountType(discountType)}
-         this.item.discount_amount = 
+         this.item.saleBy = saleBy
+         this.item.servicesBy = servicesBy
+         this.item.shareWith = shareWith
          this.$emit('done', this.item, this.index)
       },
       cancel() {

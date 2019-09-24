@@ -3,6 +3,7 @@
 namespace App\GraphQL\Input;
 
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\InputType;
 
 class ItemInput extends InputType {
@@ -46,11 +47,11 @@ class ItemInput extends InputType {
 			],
 			'qty' => [
 				'type' => Type::float(),
-				'name' => 'refund_amount',
+				'name' => 'qty',
 			],
 			'refund_qty' => [
 				'type' => Type::float(),
-				'name' => 'refund_amount',
+				'name' => 'refund_qty',
 			],
 			'refund_amount' => [
 				'type' => Type::float(),
@@ -65,8 +66,8 @@ class ItemInput extends InputType {
 				'name' => 'note',
 			],
 			'properties' => [
-				'name' => 'properties',
 				'type' => Type::string(),
+				'name' => 'properties',
 			],
 			'user_id' => [
 				'type' => Type::nonNull(Type::int()),
