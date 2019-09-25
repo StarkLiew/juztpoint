@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da4ba8192079c586e24aa121c0e88e46",
+    "content-hash": "504f08ddca112626edcf305886ac2a50",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -764,6 +764,58 @@
             "time": "2017-06-27T22:17:23+00:00"
         },
         {
+            "name": "fireguard/report",
+            "version": "v0.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fireguard/report.git",
+                "reference": "b203bdeb39242cc702b88785801ec2a150b59f88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fireguard/report/zipball/b203bdeb39242cc702b88785801ec2a150b59f88",
+                "reference": "b203bdeb39242cc702b88785801ec2a150b59f88",
+                "shasum": ""
+            },
+            "require": {
+                "jakoch/phantomjs-installer": "2.1.1-p06",
+                "php": ">=5.5.9",
+                "symfony/http-foundation": ">=2.7",
+                "symfony/process": ">=2.7"
+            },
+            "require-dev": {
+                "illuminate/support": "~5.1",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fireguard\\Report\\": "src/Report"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ronaldo Meneguite",
+                    "email": "ronaldo@fireguard.com.br"
+                }
+            ],
+            "description": "Report management package in PHP that aims to help you export information in a variety of formats",
+            "keywords": [
+                "html",
+                "image",
+                "laravel",
+                "pdf",
+                "php",
+                "relatório",
+                "report"
+            ],
+            "time": "2018-04-26T13:52:00+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.3.3",
             "source": {
@@ -949,6 +1001,48 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "jakoch/phantomjs-installer",
+            "version": "2.1.1-p06",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jakoch/phantomjs-installer.git",
+                "reference": "26f870052263c00d09103928ad39c935108f51d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/26f870052263c00d09103928ad39c935108f51d4",
+                "reference": "26f870052263c00d09103928ad39c935108f51d4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bz2": "*",
+                "ext-openssl": "*"
+            },
+            "type": "custom-installer",
+            "autoload": {
+                "psr-0": {
+                    "PhantomInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jens-André Koch",
+                    "email": "jakoch@web.de"
+                }
+            ],
+            "description": "A Composer package which installs the PhantomJS binary (Linux, Windows, Mac) into `/bin` of your project.",
+            "keywords": [
+                "binaries",
+                "headless",
+                "phantomjs"
+            ],
+            "time": "2016-08-09T10:14:29+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3084,6 +3178,47 @@
                 "wrapper"
             ],
             "time": "2017-11-26T15:27:12+00:00"
+        },
+        {
+            "name": "staudenmeir/eloquent-json-relations",
+            "version": "v1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/staudenmeir/eloquent-json-relations.git",
+                "reference": "62202b5a9b8a681807940f87b789b406eee3d96d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/staudenmeir/eloquent-json-relations/zipball/62202b5a9b8a681807940f87b789b406eee3d96d",
+                "reference": "62202b5a9b8a681807940f87b789b406eee3d96d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "5.8.*",
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "laravel/homestead": "^8.0",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Staudenmeir\\EloquentJsonRelations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonas Staudenmeir",
+                    "email": "mail@jonas-staudenmeir.de"
+                }
+            ],
+            "description": "Laravel Eloquent relationships with JSON keys",
+            "time": "2019-09-16T15:23:13+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

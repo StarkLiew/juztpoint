@@ -14,6 +14,7 @@ use App\Orchid\Screens\Inventory\ProductListScreen;
 use App\Orchid\Screens\Inventory\ServiceEditScreen;
 use App\Orchid\Screens\Inventory\ServiceListScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\ReportScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Settings\Commission\CommissionEditScreen;
@@ -27,6 +28,7 @@ use App\Orchid\Screens\Settings\Tax\TaxEditScreen;
 use App\Orchid\Screens\Settings\Tax\TaxListScreen;
 use App\Orchid\Screens\Settings\Terminal\TerminalEditScreen;
 use App\Orchid\Screens\Settings\Terminal\TerminalListScreen;
+use App\Orchid\Screens\Transaction\SaleListScreen;
 use App\Orchid\Screens\User\UserAddScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
@@ -111,3 +113,9 @@ $this->router->screen('products', ProductListScreen::class)->name('platform.prod
 $this->router->screen('services/{services}/edit', ServiceEditScreen::class)->name('platform.services.edit');
 $this->router->screen('services/create', ServiceEditScreen::class)->name('platform.services.create');
 $this->router->screen('services', ServiceListScreen::class)->name('platform.services');
+
+// Sales...
+$this->router->screen('sales', SaleListScreen::class)->name('platform.sales');
+
+// Reports...
+$this->router->screen('reports', ReportScreen::class)->name('platform.reports');

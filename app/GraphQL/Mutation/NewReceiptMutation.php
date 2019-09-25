@@ -128,10 +128,10 @@ class NewReceiptMutation extends Mutation {
 
 				if ($prop->servicesBy) {
 					foreach ($prop->servicesBy as $key => $emp) {
-						$service = Product::with(['commission'])->find($key);
+						$service_item = Product::with(['commission'])->find($key);
 						if ($service_item) {
-							$service_amount = $this->calcCommission($item, $service->commission);
-							$commissions[] = $this->row($item, $commission, $emp, $service_amount);
+							$service_amount = $this->calcCommission($item, $service_item->commission);
+							$commissions[] = $this->row($item, $service_item->commission, $emp, $service_amount);
 							$amount -= $service_amount;
 						}
 
@@ -190,10 +190,11 @@ class NewReceiptMutation extends Mutation {
 	}
 
 	protected function calcCommission($item, $commission) {
-		if ($commission['type'] === 'fix') {
-			return $commission['rate'];
+
+		if ($commission['properties']['type'] === "1") {
+			return (float) $commission['properties']['rate'];
 		} else {
-			return $item['total_amount'] * $commission['rate'] / 100;
+			return $item['total_amount'] * ((float) $commission['properties']['rate']) / 100;
 		}
 	}
 }

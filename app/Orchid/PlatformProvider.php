@@ -36,11 +36,13 @@ class PlatformProvider extends ServiceProvider {
 	protected function registerPermissionsMain(): ItemPermission {
 		return ItemPermission::group(__('Main'))
 			->addPermission('platform.index', __('Main'))
+			->addPermission('platform.sales', __('Sales'))
 			->addPermission('platform.customers', __('Customers'))
 			->addPermission('platform.vendors', __('Vendors'))
 			->addPermission('platform.categories', __('Categories'))
 			->addPermission('platform.products', __('Products'))
 			->addPermission('platform.services', __('Services'))
+			->addPermission('platform.reports', __('Reports'))
 			->addPermission('platform.systems', __('Systems'));
 	}
 

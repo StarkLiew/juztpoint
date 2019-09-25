@@ -110,13 +110,13 @@ export const actions = {
 
            const shareWith = 0
            if(item.shareWith) {
-              shareWith = receipt.shareWith.id
+              shareWith = item.shareWith.id
            }
 
            let servicesBy = `` 
          
-           if(item.servicesBy) {
-
+           if(item.servicesBy && item.properties.contain) {
+         
                for(const subitem of item.properties.contain) {
     
                     if(item.servicesBy[subitem]) {
@@ -129,7 +129,7 @@ export const actions = {
 
            const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}}`
      
-
+           
       
               
            const cast = `{line: ${line + 1}, 
@@ -154,10 +154,14 @@ export const actions = {
 
 
         }
- 
+    
         let castPayments = "" 
-        if(type=='receipt') {
+
+
+        if(type=='receipt' && payments) {
+ 
               for(const [line, payment] of payments.entries() ) {
+               
                  const {item_id, total_amount, note} = payment
                  const cast = `{line: ${line + 1}, 
                                type: "payment", 
@@ -165,7 +169,7 @@ export const actions = {
                                discount: "{}", 
                                discount_amount:0.00
                                qty: 1,
-                                refund_qty: 0.00,
+                               refund_qty: 0.00,
                                refund_amount: 0.00,
                                tax_id: 1, 
                                tax_amount: 0.00, 
@@ -173,11 +177,12 @@ export const actions = {
                                total_amount: ${parseFloat(total_amount)}, 
                                note: "${note}"}, `
                  castPayments +=  cast
-
+                   
               }
+
         }
 
-
+   
            
         const mutation = `{
                              newReceipt(
@@ -222,7 +227,8 @@ export const actions = {
        return receipt
       
     }catch (e) {
-       
+       console.log(e)
+
        receipt.status = 'offline'
        commit(types.ADD_RECEIPT, { receipt })
        return receipt

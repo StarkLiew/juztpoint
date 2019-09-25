@@ -59,14 +59,7 @@ class SystemMenuComposer {
 					->sort(1000)
 					->title(__('All registered taxes'))
 			)
-			->add('Auth',
-				ItemMenu::label(__('Employee'))
-					->icon('icon-user')
-					->route('platform.systems.users')
-					->permission('platform.systems.users')
-					->sort(1000)
-					->title(__('All registered users'))
-			)
+
 		/*->add('Auth',
 				ItemMenu::label(__('Payment'))
 					->icon('icon-wallet')

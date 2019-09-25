@@ -185,6 +185,7 @@ return [
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
 		Barryvdh\Cors\ServiceProvider::class,
+		Fireguard\Report\Laravel\ReportServiceProvider::class,
 
 	],
 
@@ -238,6 +239,7 @@ return [
 		'View' => Illuminate\Support\Facades\View::class,
 		'GraphQL' => Rebing\GraphQL\Support\Facades\GraphQL::class,
 		'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
 	],
 
 ];

@@ -53,10 +53,16 @@ class MainMenuComposer {
 			->add('transaction',
 				ItemMenu::label('Sales')
 					->icon('icon-dollar')
+					->route('platform.sales')
 			)
 			->add('transaction',
 				ItemMenu::label('Purchases')
 					->icon('icon-bag')
+			)
+			->add(Menu::MAIN,
+				ItemMenu::label('Customers')
+					->icon('icon-friends')
+					->route('platform.customers')
 			)
 			->add(Menu::MAIN,
 				ItemMenu::label('Products')
@@ -75,27 +81,27 @@ class MainMenuComposer {
 					->childs()
 			)
 			->add('inventory',
+				ItemMenu::label('Vendors')
+					->icon('icon-friends')
+					->route('platform.vendors')
+			)
+			->add('inventory',
 				ItemMenu::label('Categories')
 					->icon('icon-organization')
 					->route('platform.categories')
 			)
 
 			->add(Menu::MAIN,
-				ItemMenu::label('Account')
-					->slug('account-data')
-					->icon('icon-plus')
-					->childs()
+				ItemMenu::label(__('Staff'))
+					->icon('icon-user')
+					->route('platform.systems.users')
+					->permission('platform.systems.users')
+					->sort(1000)
 			)
-			->add('account-data',
-				ItemMenu::label('Customers')
-					->icon('icon-friends')
-					->route('platform.customers')
-			)
-			->add('account-data',
-				ItemMenu::label('Vendors')
-					->icon('icon-friends')
-					->route('platform.vendors')
-
+			->add(Menu::MAIN,
+				ItemMenu::label(__('Report'))
+					->icon('icon-docs')
+					->route('platform.reports')
 			)
 			->add(Menu::MAIN,
 				ItemMenu::label('Settings')

@@ -59,6 +59,10 @@ class Document extends Model {
 		return $this->hasMany('App\Models\Item', 'trxn_id');
 	}
 
+	public function terminal() {
+		return $this->belongsTo('App\Models\Setting', 'terminal_id');
+	}
+
 	public function account() {
 		return $this->belongsTo('App\Models\Account', 'account_id');
 	}

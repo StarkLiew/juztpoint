@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class Setting extends Model {
 
-	use Notifiable, Filterable, AsSource;
+	use Notifiable, Filterable, AsSource, HasJsonRelationships;
 
 	/**
 	 * The attributes that should be mutated to dates.
@@ -59,6 +60,10 @@ class Setting extends Model {
 
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');
+	}
+
+	public function store() {
+		return $this->belongsTo('App\Models\Setting', 'properties->store_id')->where('type', 'store');
 	}
 
 	/**

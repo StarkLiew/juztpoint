@@ -34,6 +34,7 @@ class PlatformScreen extends Screen {
 	{
 		return [
 			'status' => Dashboard::checkUpdate(),
+
 		];
 	}
 
@@ -65,6 +66,7 @@ class PlatformScreen extends Screen {
 		return [
 			Layout::view('platform::partials.update'),
 			Layout::view('platform::partials.welcome'),
+
 		];
 	}
 }

@@ -234,3 +234,8 @@ Breadcrumbs::for ('platform.services.edit', function ($trail, $service) {
 	$trail->parent('platform.services');
 	$trail->push(__('Service'), route('platform.services.edit', $service));
 });
+
+// Platform > Sales
+Breadcrumbs::for ('platform.sales', function ($trail) {
+	$trail->push(__('Sales'), route('platform.sales'));
+});
