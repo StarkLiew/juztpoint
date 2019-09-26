@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\UserObserver;
+use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -64,6 +65,9 @@ class User extends Authenticatable {
 		parent::boot();
 
 		static::observe(new UserObserver);
+
+		static::addGlobalScope(new TenantScope);
+
 	}
 
 	/**

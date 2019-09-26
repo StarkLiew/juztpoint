@@ -73,7 +73,7 @@
                         <a href="{{ route('platform.login') }}">Login</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}">Get Started</a>
                         @endif
                     @endauth
                 </div>
@@ -81,17 +81,19 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    JuxtPoint
+                </div>
+                <div class="subtitle m-b-md">
+                      Malaysia FIRST Point-of-Sale System build with PWA Technology
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://laravel.com/docs">What is PWA</a>
+                    <a href="https://laravel.com/docs">Features</a>
+                    <a href="https://laracasts.com">Business</a>
+                </div>
+               <div class="subtitle m-b-md">
+                    Fast and easy to deploy. Effectively running your Store with less effort.
                 </div>
             </div>
         </div>

@@ -4,11 +4,10 @@ declare (strict_types = 1);
 
 namespace App\Orchid\Screens;
 
-use Orchid\Screen\Action;
-use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Actions\DropDown;
-use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\DateTimer;
+use App\Models\Item;
+use App\Orchid\Layouts\Reports\ReportFiltersLayout;
+use App\Orchid\Layouts\Reports\Staff\CommissionListLayout;
+use DB;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 
@@ -35,8 +34,25 @@ class ReportScreen extends Screen {
 	 */
 	public function query(): array
 	{
-		return [
 
+		$items = Item::with(['user', 'product', 'document'])
+			->filters()
+			->filtersApplySelection(ReportFiltersLayout::class)
+			->select(['user_id', 'item_id', 'trxn_id', DB::raw('SUM(total_amount) as total_amount')])
+			->where('type', '=', 'commission')
+			->groupBy('user_id', 'item_id', 'trxn_id')
+			->defaultSort('user_id', 'desc')
+			->paginate();
+
+		/* $users = User::filters()
+				           ->defaultSort('name');
+
+				   $mapped = array_map(($user, $item)=> {
+			               return [$user->name => $item]
+		*/
+
+		return [
+			'items' => $items,
 		];
 	}
 
@@ -49,18 +65,6 @@ class ReportScreen extends Screen {
 	{
 		return [
 
-			DropDown::make(__('Settings'))
-				->icon('icon-open')
-				->list([
-					Button::make(__('Login as user'))
-						->icon('icon-login')
-						->method('loginAs'),
-					ModalToggle::make(__('Change Password'))
-						->icon('icon-lock-open')
-						->title(__('Change Password'))
-						->method('changePassword')
-						->modal('question'),
-				]),
 		];
 	}
 
@@ -72,18 +76,8 @@ class ReportScreen extends Screen {
 	public function layout(): array
 	{
 		return [
-
-			Layout::view('platform::partials.report'),
-
-			Layout::modals('question', [
-				Layout::rows([
-					DateTimer::make('open')
-						->title('Opening date')
-						->format('Y-m-d'),
-				]),
-
-			],
-			),
+			ReportFiltersLayout::class,
+			CommissionListLayout::class,
 
 		];
 	}

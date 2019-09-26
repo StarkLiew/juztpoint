@@ -123,22 +123,24 @@ class NewReceiptMutation extends Mutation {
 
 				if ($prop->shareWith) {
 					$amount = $amount / 2;
-					$commissions[] = $this->row($item, $commission, $prop->shareWith, $amount);
+					$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $prop->shareWith, $amount);
 				}
 
 				if ($prop->servicesBy) {
 					foreach ($prop->servicesBy as $key => $emp) {
 						$service_item = Product::with(['commission'])->find($key);
-						if ($service_item) {
-							$service_amount = $this->calcCommission($item, $service_item->commission);
-							$commissions[] = $this->row($item, $service_item->commission, $emp, $service_amount);
+
+						if (!empty($service_item)) {
+
+							$service_amount = $this->calcCommission($service_item, $service_item->commission);
+							$commissions[] = $this->row($item['line'], $service_item->id, $service_item->commission, $emp, $service_amount);
 							$amount -= $service_amount;
 						}
 
 					}
 				}
 
-				$commissions[] = $this->row($item, $commission, $item['user_id'], $amount);
+				$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $item['user_id'], $amount);
 
 			}
 
@@ -159,6 +161,7 @@ class NewReceiptMutation extends Mutation {
 			DB::commit();
 			$success = true;
 		} catch (\Exception $e) {
+
 			$success = false;
 			$error = $e;
 			DB::rollback();
@@ -170,12 +173,12 @@ class NewReceiptMutation extends Mutation {
 		return $document;
 	}
 
-	protected function row($item, $commission, $user, $amount) {
+	protected function row($line, $item_id, $commission, $user, $amount) {
 
 		return [
-			'line' => $item['line'],
+			'line' => $line,
 			'type' => 'commission',
-			'item_id' => $commission['id'],
+			'item_id' => $item_id,
 			'discount' => '{}',
 			'discount_amount' => 0.00,
 			'tax_id' => 1,
