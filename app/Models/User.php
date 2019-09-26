@@ -64,9 +64,8 @@ class User extends Authenticatable {
 	protected static function boot() {
 		parent::boot();
 
-		static::observe(new UserObserver);
-
 		static::addGlobalScope(new TenantScope);
+		static::observe(new UserObserver);
 
 	}
 

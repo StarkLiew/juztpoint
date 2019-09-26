@@ -2,10 +2,10 @@
 
 namespace App\Scopes;
 
-use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Auth;
 
 class TenantScope implements Scope {
 	/**
@@ -23,6 +23,7 @@ class TenantScope implements Scope {
 		if (!empty($authUser->tenant)) {
 			$tenant_id = $authUser->tenant;
 		}
+
 		$builder->where('tenant', '=', $tenant_id)->orWhere('id', '=', $tenant_id);
 
 	}
