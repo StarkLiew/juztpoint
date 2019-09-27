@@ -8,11 +8,11 @@ use App\Models\Item;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class CommissionListLayout extends Table {
+class SummaryListLayout extends Table {
 	/**
 	 * @var string
 	 */
-	public $data = 'items';
+	public $data = 'summary';
 
 	/**
 	 * @return array
@@ -21,14 +21,8 @@ class CommissionListLayout extends Table {
 	{
 		return [
 
-			TD::set('document.date', 'Date')
+			TD::set('user.name', 'Name')
 				->width('120px')
-				->sort(),
-			TD::set('user.name', 'Staff Name')
-				->sort(),
-			TD::set('document.reference', 'Reference')
-				->sort(),
-			TD::set('product.name', 'Service/Product')
 				->sort(),
 			TD::set('total_amount', __('Amount'))
 				->render(function (Item $item) {

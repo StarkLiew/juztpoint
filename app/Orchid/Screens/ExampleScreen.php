@@ -17,7 +17,7 @@ use Orchid\Screen\Repository;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert;
 
-class ReportScreen extends Screen {
+class ExampleScreen extends Screen {
 	/**
 	 * Fish text for the table.
 	 */

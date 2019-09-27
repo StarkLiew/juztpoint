@@ -7,7 +7,7 @@ namespace App\Orchid\Screens;
 use Orchid\Screen\Layout;
 use Orchid\Screen\Screen;
 
-class ReportScreen extends Screen {
+class CommissionQueryScreen extends Screen {
 	/**
 	 * Display header name.
 	 *

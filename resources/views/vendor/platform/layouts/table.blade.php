@@ -72,6 +72,8 @@
 
     @endif
 
+
+
     @if($rows instanceof \Illuminate\Contracts\Pagination\Paginator && $rows->total() > 0)
         <footer class="wrapper w-full">
             <div class="row">
@@ -87,6 +89,8 @@
                 <div class="col-sm-7 text-right text-center-xs">
                     {!! $rows->appends(request()->except(['page','_token']))->links('platform::partials.pagination') !!}
                 </div>
+
+
             </div>
         </footer>
     @endif

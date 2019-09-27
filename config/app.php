@@ -185,7 +185,6 @@ return [
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
 		Barryvdh\Cors\ServiceProvider::class,
-		Fireguard\Report\Laravel\ReportServiceProvider::class,
 
 	],
 
