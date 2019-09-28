@@ -53,6 +53,10 @@ services:
       - app-network
 
   #MySQL Service
+  wkhtmltopdf:
+    image: diegovieira/wkhtmltopdf:latest
+    volumes:
+      - .:/data
   db:
     image: mariadb:10.4.6
     container_name: db

@@ -10,8 +10,10 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-cors": "^0.11.4",
+        "barryvdh/laravel-snappy": "^0.4.5",
         "fideloper/proxy": "^4.0",
         "fireguard/report": "^0.2.3",
+        "jimmyjs/laravel-report-generator": "dev-master",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
@@ -22,6 +24,12 @@
         "simplesoftwareio/simple-qrcode": "^2.0",
         "staudenmeir/eloquent-json-relations": "^1.1"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/StarkLiew/laravel-report-generator"
+        }
+    ],
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",

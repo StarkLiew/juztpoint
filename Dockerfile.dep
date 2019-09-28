@@ -39,6 +39,8 @@ RUN docker-php-source extract; \
   patch -p1 -i /tmp/freetype.patch; \
   rm /tmp/freetype.patch
 
+# RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
+
 # Clear cache
  RUN apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
