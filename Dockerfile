@@ -1,3 +1,4 @@
+
 FROM php:7.3.7-fpm
 
 
@@ -15,6 +16,8 @@ WORKDIR /var/www
 
 # RUN init-letsencrypt init-letsencrypt 
 
+USER root
+
 # Install dependencies
  RUN apt-get update && apt-get install -y \
     build-essential \
@@ -31,7 +34,9 @@ WORKDIR /var/www
     vim \
     unzip \
     git \
-    curl
+    curl \
+    libxrender1 \
+    wkhtmltopdf xvfb
 
 ADD https://git.archlinux.org/svntogit/packages.git/plain/trunk/freetype.patch?h=packages/php /tmp/freetype.patch
 RUN docker-php-source extract; \
@@ -39,10 +44,10 @@ RUN docker-php-source extract; \
   patch -p1 -i /tmp/freetype.patch; \
   rm /tmp/freetype.patch
 
-# RUN apt-get update && apt-get install -y wkhtmltopdf xvfb
-
 # Clear cache
- RUN apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# RUN mv wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # Install extensions
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
@@ -53,14 +58,17 @@ RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+
+RUN getent group www || groupadd -g 1000 www
+RUN getent group www || useradd -u 1000 -ms /bin/bash -g www www
+
 
 # Copy existing application directory contents
 COPY . /var/www
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
+
 
 # Change current user to www
 USER www
@@ -69,3 +77,5 @@ USER www
 EXPOSE 3306
 EXPOSE 9000
 CMD ["php-fpm"]
+
+ENTRYPOINT []
