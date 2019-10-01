@@ -90,6 +90,11 @@ class MainMenuComposer {
 					->icon('icon-organization')
 					->route('platform.categories')
 			)
+			->add('inventory',
+				ItemMenu::label('Stock Card')
+					->icon('icon-organization')
+					->route('platform.stockcard')
+			)
 
 			->add(Menu::MAIN,
 				ItemMenu::label(__('Staff'))

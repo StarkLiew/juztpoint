@@ -32,7 +32,7 @@ class VendorListScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.vendors';
+	public $permission = 'platform.inventory';
 
 	/**
 	 * Query data.

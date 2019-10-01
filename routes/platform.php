@@ -13,6 +13,7 @@ use App\Orchid\Screens\Inventory\ProductEditScreen;
 use App\Orchid\Screens\Inventory\ProductListScreen;
 use App\Orchid\Screens\Inventory\ServiceEditScreen;
 use App\Orchid\Screens\Inventory\ServiceListScreen;
+use App\Orchid\Screens\Inventory\StockCardScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\ReportScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -103,6 +104,8 @@ $this->router->screen('vendors', VendorListScreen::class)->name('platform.vendor
 $this->router->screen('categories/{settings}/edit', CategoryEditScreen::class)->name('platform.categories.edit');
 $this->router->screen('categories/create', CategoryEditScreen::class)->name('platform.categories.create');
 $this->router->screen('categories', CategoryListScreen::class)->name('platform.categories');
+
+$this->router->screen('stockcard', StockCardScreen::class)->name('platform.stockcard');
 
 // Products...
 $this->router->screen('products/{products}/edit', ProductEditScreen::class)->name('platform.products.edit');

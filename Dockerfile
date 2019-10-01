@@ -1,8 +1,6 @@
 
 FROM php:7.3.7-fpm
 
-
-
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
 
@@ -35,7 +33,6 @@ USER root
     unzip \
     git \
     curl \
-    libxrender1 \
     wkhtmltopdf xvfb
 
 ADD https://git.archlinux.org/svntogit/packages.git/plain/trunk/freetype.patch?h=packages/php /tmp/freetype.patch

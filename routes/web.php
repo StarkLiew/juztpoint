@@ -29,6 +29,10 @@ Route::domain('www.juxtpoint.com')->group(function ($router) {
 		Route::get('/home', 'HomeController@index')->name('home');
 	});
 
+	Route::middleware('auth:web')->group(function () {
+		Route::get('/report/{report}', 'ReportController@index')->name('report');
+	});
+
 	Route::get('/pos/{vue_capture?}', 'HomeController@pos')->name('pos')->where('vue_capture', '[\/\w\.-]*');
 
 });

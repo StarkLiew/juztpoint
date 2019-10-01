@@ -28,7 +28,7 @@ class AuthController extends Controller {
 			'name' => $request->name,
 			'email' => $request->email,
 			'password' => bcrypt($request->password),
-			'permissions' => '{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1",,"platform.sales":"1",,"platform.receives":"1","platform.reports":"1"}',
+			'permissions' => '{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1",,"platform.sales":"1","platform.inventory":"1","platform.receives":"1","platform.reports":"1"}',
 		]);
 
 		$user->save();

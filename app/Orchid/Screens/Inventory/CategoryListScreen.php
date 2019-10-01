@@ -32,7 +32,7 @@ class CategoryListScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.categories';
+	public $permission = 'platform.inventory';
 
 	/**
 	 * Query data.

@@ -65,7 +65,7 @@ class Product extends Model {
 		return $this->belongsTo('App\Models\Setting', 'commission_id');
 	}
 	public function items() {
-		return $this->hasMany('App\Models\Item', 'item_id');
+		return $this->hasMany('App\Models\Item', 'item_id')->where('type', 'open')->orWhere('type', 'item')->orWhere('type', 'receive');
 	}
 	public function getQtyAttribute() {
 
