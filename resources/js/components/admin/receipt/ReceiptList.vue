@@ -13,15 +13,18 @@
         </v-toolbar>
 
        </template> 
-       
-       <div v-for="(item, index) in receipts" :key="index" >
+    <div v-for="(items, key) in receipts" :key="key" >
 
-        <v-subheader>{{ item.date | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'DD/MM/YYYY')  }}</v-subheader>
-        <v-list-item two-line @click="select(item)">
+        <v-subheader>{{ key | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'DD/MM/YYYY')  }}</v-subheader>
+
+        <v-list-item two-line @click="select(item)" v-for="(item, index) in items" :key="index" :disabled="item.status === 'void' ? true : false">
           
             <v-list-item-content>
                   <v-list-item-title>{{item.date + 'Z' | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'hh:mmA')  }}
                        <v-chip v-if="item.status === 'offline'" class="ma-2" small color="grey" >
+                          {{ item.status }}
+                       </v-chip>
+                       <v-chip v-if="item.status === 'void'" class="ma-2" small color="dark" >
                           {{ item.status }}
                        </v-chip>
                       <v-chip v-if="item.status === 'active'" class="ma-2" small color="green" >
@@ -55,13 +58,13 @@ export default {
      
   },
   computed: mapGetters({
-      receipts: 'receipt/receipts',
+      receipts: 'receipt/groupDates',
       company: 'system/company',
       store: 'auth/store',
   }),
   watch: { 
   
-
+   
   },
   methods: {
      isSameDate(item, index) {

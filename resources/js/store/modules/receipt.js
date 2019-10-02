@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { graphql } from '~/config'
 import * as types from '../mutation-types'
+import moment from 'moment'
+import _ from 'lodash'
 
 /**
  * Initial state
@@ -38,6 +40,14 @@ export const mutations = {
 
 
   },
+  [types.VOID_RECEIPT](state, { receipt }) {
+        const index = state.receipts.findIndex(r => r.reference === receipt.reference)
+        state.receipts[index] = receipt
+  },
+  [types.REFUND_RECEIPT](state, { receipt }) {
+        const index = state.receipts.findIndex(r => r.reference === receipt.reference)
+        state.receipts[index] = receipt
+  },
   [types.FETCH_RECEIPT_FAILURE](state) {
    
   },
@@ -57,12 +67,17 @@ export const actions = {
       commit(types.FETCH_RECEIPT_FAILURE)
     }
   },
-
+  async refundReceipt({ commit }, receipt) {
+        
+        commit(types.REFUND_RECEIPT, { receipt })
+  },
+  async voidReceipt({ commit }, receipt) {
+        receipt.status = 'void'
+        commit(types.VOID_RECEIPT, { receipt })
+  },
   async addReceipt({ commit, getters, rootState }, receipt) {
     try {
 
-       
-       
        if(!receipt.status && receipt.type == 'receipt') {
           let number = '00000' + (getters['autoincrement'] + 1)
           number =  number.substr(number.length - 6)
@@ -242,6 +257,7 @@ export const actions = {
  */
 export const getters = {
   receipts: state => state.receipts.sort((a,b) => { return new Date(b.date) - new Date(a.date) }),
+  groupDates: state =>  _.groupBy(state.receipts.sort((a,b) => { return new Date(b.date) - new Date(a.date) }),  t => moment(t.date).format('YYYY-MM-DD')),
   appointments: state => state.appointments,
   receipt: state => state.receipt !== null,
   autoincrement: state => state.autoincrement,

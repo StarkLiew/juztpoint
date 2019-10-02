@@ -19,7 +19,7 @@
     		 	 	<td>Reference:</td><td  class="left">{{ value.reference }}</td>
     		 	 </tr>
     		 	 <tr>
-    		 	 	<td>Cashier:</td><td  class="left">{{ value.teller.name }}</td>
+    		 	 	<td>Cashier:</td><td  class="left"  v-if="value.teller">{{ value.teller.name }}</td>
     		 	 </tr>
     		 </tbody>
     	</table>

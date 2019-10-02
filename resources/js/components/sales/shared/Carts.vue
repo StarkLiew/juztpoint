@@ -283,8 +283,7 @@ export default {
         } else {
              item.discount =  {type: 'percent', rate: 0, amount: 0}
         }
-   
-           
+              
         return item
     },
     sumTotal() {
@@ -297,14 +296,14 @@ export default {
             item.tax_amount =  item.amount * item.tax.properties.rate / 100
             taxTotal += item.tax_amount
         })
-        
-        if(this.footer.discount.type == "percent") {
-            this.footer.discount.amount = total * this.footer.discount.rate /100
+        if(this.footer.discount){
+            if(this.footer.discount.type == "percent") {
+                this.footer.discount.amount = total * this.footer.discount.rate /100
+            }
+            if(this.footer.discount.type == "fix") {
+                this.footer.discount.amount = this.footer.discount.rate
+            }
         }
-        if(this.footer.discount.type == "fix") {
-            this.footer.discount.amount = this.footer.discount.rate
-        }
-
 
         this.footer.charge = (total - this.footer.discount.amount) + taxTotal
         this.footer.tax = taxTotal

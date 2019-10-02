@@ -37,10 +37,12 @@
     "idle-vue": "^2.0.5",
     "js-cookie": "^2.2.1",
     "localforage": "^1.7.3",
+    "lodash": "^4.17.15",
     "moment-timezone": "^0.5.26",
     "vue-cookies": "^1.5.13",
     "vue-currency-filter": "^3.4.2",
     "vue-easy-print": "0.0.8",
+    "vue-lodash": "^2.0.2",
     "vue-moment": "^4.0.0",
     "vuex-persist": "^2.0.1"
   }

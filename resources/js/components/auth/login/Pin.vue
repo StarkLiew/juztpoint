@@ -4,7 +4,7 @@
     <v-layout justify-center>                  
       <v-flex xs8 sm6>
          <v-layout justify-center mb-10>
-            <h1 class="display-3">JuxtPoint</h1>
+            <h1 class="display-3">{{ title }}</h1>
         </v-layout>
          <v-layout justify-center mb-5>
              <v-icon :color="val.length >= 1 ? 'red' : 'dark'">fiber_manual_record</v-icon>
@@ -67,6 +67,10 @@ export default {
   computed: mapGetters({
       users: 'user/users'
   }),
+  props: {
+      title: {default: 'JuxtPoint'},
+      supervisor: {type: Boolean, default: false }
+  },
   
   methods: {
      async touched(key) {
@@ -101,10 +105,24 @@ export default {
                      this.isShake = true
                     return
                 }
-                await this.$store.dispatch('auth/setUser', { user })
- 
-                if(user.properties.role === 'MGR') this.$router.push({ name: 'index' })
-                else this.$router.push({ name: 'sales' })
+
+                if(this.supervisor) {
+                    if(user.properties.role === 'MGR') { 
+                        this.$emit('verified');
+                         this.val = ''
+                    } else {
+                         this.val = ''
+                         this.overlay = false
+                         this.isShake = true
+                        return
+                    }
+                } else {
+                   await this.$store.dispatch('auth/setUser', { user })
+   
+                    if(user.properties.role === 'MGR') this.$router.push({ name: 'index' })
+                    else this.$router.push({ name: 'sales' })          
+                }
+
 
                 this.overlay = false
                 return

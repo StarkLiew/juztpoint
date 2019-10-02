@@ -2,21 +2,21 @@
     <div>
          
    
-        <v-card v-if="selected" >
-
+        <v-card v-if="value" >
+        
 				  <v-sheet
 				      id="scroll-receipt-content"
 				      class="overflow-y-auto"
 
 				    >
 				      <v-container class="text-center">
-		                  <h1 class="display-2">{{selected.charge | currency}}</h1>
-		               	  <p class="caption">Reference: {{ selected.reference }}</p>
-		               	  <p class="caption">Teller: {{ selected.teller.name }}</p>
+		                  <h1 class="display-2">{{value.charge | currency}}</h1>
+		               	  <p class="caption">Reference: {{ value.reference }}</p>
+		               	  <p class="caption"  v-if="value.teller">Teller: {{ value.teller.name }}</p>
 
-		               	  <p class="subtitle" v-if="selected.customer">{{ selected.customer.name }}</p>
+		               	  <p class="subtitle" v-if="value.customer">{{ value.customer.name }}</p>
                          <v-divider></v-divider>
-					     <div v-for="(item, index) in selected.items" :key="index" >
+					     <div v-for="(item, index) in value.items" :key="index" >
 							        <v-list-item two-line>
 
 							            <v-menu
@@ -27,12 +27,12 @@
 							                :min-width="380"
 							                :nudge-left="30"
 							                offset-x
-							                left
+							                right
 							              >
 							                <template v-slot:activator="{ on }">
 							                   <v-btn @click="editItem = []" icon v-on="on">{{item.qty}}</v-btn>
 							                </template>
-							                <item-edit :item="item" :show="editItem[index]" :index="index" @done="editedItem" @cancel="editItem = []"></item-edit>
+							                <item-qty :item="item" :show="editItem[index]" :index="index" @done="editedItem" @cancel="editItem = []"></item-qty>
 							            </v-menu>
 							              
 							            <v-list-item-content>
@@ -70,7 +70,7 @@
 
 	           <vue-easy-print tableShow style="display: none" ref="receipt">
                                   <template slot-scope="func">
-                                      <receipt v-model="selected" :header="{company, store}"></receipt>
+                                      <receipt v-model="value" :header="{company, store}"></receipt>
                                   </template>
                                </vue-easy-print>
 
@@ -86,13 +86,9 @@
 
         </v-card>
 
-        <v-footer v-if="selected" 
-						          flat
-						          dense
-						          padless
-						        >
+        <v-footer v-if="value" flat dense padless>
 
-						 	  <v-sheet
+			<v-sheet
 						 	  width="100%"
 				      id="receipt-footer"
 				      class="overflow-y-auto"
@@ -102,31 +98,31 @@
 						              <v-list-item-content>
 						                <v-list-item-title>Discount</v-list-item-title>
 						              </v-list-item-content>
-						                    <v-btn icon>{{ selected.discount_amount | currency}}</v-btn>
+						                    <v-btn icon>{{ value.discount_amount | currency}}</v-btn>
 						     
 						            </v-list-item>
 						             <v-list-item one-line>
 						              <v-list-item-content>
 						                <v-list-item-title>Service</v-list-item-title>
 						              </v-list-item-content>
-						               <v-btn icon>{{ selected.service_charge  | currency}}</v-btn>
+						               <v-btn icon>{{ value.service_charge  | currency}}</v-btn>
 						            </v-list-item>
 						             <v-list-item one-line>
 						              <v-list-item-content>
 						                <v-list-item-title>Tax</v-list-item-title>
 						              </v-list-item-content>
-						              <v-btn icon>{{ selected.tax_total | currency}}</v-btn>
+						              <v-btn icon>{{ value.tax_total | currency}}</v-btn>
 						            </v-list-item>
 
 						                <v-list-item one-line >
 						                  <v-list-item-content>
 						                    <v-list-item-title>Charge</v-list-item-title>
 						                  </v-list-item-content>
-						                    <v-btn  icon class="caption">{{ selected.charge | currency}}</v-btn>
+						                    <v-btn  icon class="caption">{{ value.charge | currency}}</v-btn>
 						                </v-list-item>
                                
                                           
-                                        <v-list-item one-line v-for="(payment, index) in selected.payments" :key="index">
+                                        <v-list-item one-line v-for="(payment, index) in value.payments" :key="index">
 						                  <v-list-item-content>
 						                    <v-list-item-title>Received {{ payment.name }}</v-list-item-title>
 						                  </v-list-item-content>
@@ -138,7 +134,7 @@
 						                  <v-list-item-content>
 						                    <v-list-item-title>Refund</v-list-item-title>
 						                  </v-list-item-content>
-						                    <v-btn  icon class="caption">{{ selected.refund | currency}}</v-btn>
+						                    <v-btn  icon class="caption">{{ value.refund | currency}}</v-btn>
 						                </v-list-item>
                                      
 
@@ -156,55 +152,140 @@
 									      <span>Resend</span>
 									      <v-icon>email</v-icon>
 									    </v-btn>
-						                <v-btn value="nearby">
-									      <span>Refund</span>
-									      <v-icon>cancel</v-icon>
-									    </v-btn>
-									    <v-btn value="nearby">
-									      <span>Void</span>
-									      <v-icon>cancel</v-icon>
-									    </v-btn>
+		                                 <v-dialog
+								             v-model="voidDialog"
+										      fullscreen
+									        hide-overlay
+									        transition="dialog-bottom-transition"
+									        scrollable
+										    >
+										      <template v-slot:activator="{ on }">
+										        <v-btn  dark v-on="on">
+                                                     <span>Refund</span>
+												     <v-icon>money_off</v-icon>
+										        </v-btn>
+										      </template>
+
+										      <v-card tile>
+										       
+			                                     <v-toolbar flat dark >
+													   <v-toolbar-title>Confirm refund to customer?</v-toolbar-title>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn @click="voidDialog=false">
+                                                        	     <v-icon>close</v-icon>
+                                                        </v-btn>
+                                                  </v-toolbar>
+								
+
+										        <v-card-text class="text-center">
+										        	<h2>Supervisor Pin require to proceed.</h2>
+										          
+										           <v-layout justify-center>
+										             <pin title="" :supervisor="true" @verified="refund"></pin>
+										           </v-layout>
+										            
+										        </v-card-text>
+										      </v-card>
+										    </v-dialog>
+										                   
+								        <v-dialog
+								             v-model="voidDialog"
+										      fullscreen
+									        hide-overlay
+									        transition="dialog-bottom-transition"
+									        scrollable
+										    >
+										      <template v-slot:activator="{ on }">
+										        <v-btn  dark v-on="on">
+                                                     <span>Void</span>
+												     <v-icon>cancel</v-icon>
+										        </v-btn>
+										      </template>
+
+										      <v-card tile>
+										       
+			                                     <v-toolbar flat dark >
+													   <v-toolbar-title>Confirm to void this receipt?</v-toolbar-title>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn @click="voidDialog=false">
+                                                        	     <v-icon>close</v-icon>
+                                                        </v-btn>
+                                                  </v-toolbar>
+								
+
+										        <v-card-text class="text-center">
+										        	<h2>Supervisor Pin require to proceed.</h2>
+										            WARNING: You cannot undo once the receipt is void.
+										           <v-layout justify-center>
+										             <pin title="" :supervisor="true" @verified="proceedVoid"></pin>
+										           </v-layout>
+										            
+										        </v-card-text>
+										      </v-card>
+										    </v-dialog>
+										                                                                
+
+
 									  </v-bottom-navigation>
                                    
-						        </v-footer>
-
-
-
-         <v-card v-if="!selected">
+						        </v-footer
+         <v-card v-if="!value">
         </v-card>
-
-
-
-
     </div>
  </template>
  <script>
     import { mapGetters } from 'vuex'
-    import ItemEdit from '../../sales/shared/ItemEdit'
+    import ItemQty from '../../sales/shared/ItemQty'
     import vueEasyPrint from 'vue-easy-print'
     import receipt from "../../sales/shared/ReceiptTemplate"
+    import pin from "../../auth/login/Pin"
+    import Carts from "../../sales/shared/Carts"
 
     export default {
+
     	data: () => ({
            editItem: [],
+           voidDialog: false,
+           value: null,
     	}),
     	components: {
-    		ItemEdit,
     		vueEasyPrint,
     		receipt,
-    	},
+      		pin,
+    		ItemQty,Carts,
+    	}, 	
         props:['selected'],
+        watch: { 
+          selected(newValue){
+
+               this.value = {...newValue}
+          }
+   
+        },
         computed: mapGetters({
 		    company: 'system/company',
 		    store: 'auth/store',
 		}),
         methods: {
-			print(){
+			print() {
 			    this.$refs.receipt.print()
 			},
-			editedItem() {
-				
+			async refund() {
+				 await this.$store.dispatch('receipt/refundReceipt',this.value)
 			},
+			editedItem(item, index) {
+                
+				let selectedItem = this.value[index]
+				selectedItem.refund = {qty: selectedItem.qty - item.qty, amount: selectedItem.amount - item.amount}
+				selectedItem = this.sumAmount(item)
+		        this.sumTotal(this.selected)
+
+		        
+			},
+			async proceedVoid() {
+				await this.$store.dispatch('receipt/voidReceipt',this.value)
+                this.voidDialog = false
+			}
         },
     }
  </script> 	
