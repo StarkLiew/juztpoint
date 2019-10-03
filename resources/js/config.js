@@ -1,71 +1,71 @@
 const siteUrl = Laravel.siteUrl,
-  apiUrl = Laravel.apiUrl
+    apiUrl = Laravel.apiUrl
 
 export const settings = {
-  siteName: Laravel.siteName
+    siteName: Laravel.siteName
 }
 
 class URL {
-  constructor(base) {
-    this.base = base
-  }
-
-  path(path, args) {
-    path = path.split('.')
-    let obj = this,
-      url = this.base
-
-    for (let i = 0; i < path.length && obj; i++) {
-      if (obj.url) {
-        url += '/' + obj.url
-      }
-
-      obj = obj[path[i]]
-    }
-    if (obj) {
-      url = url + '/' + (typeof obj === 'string' ? obj : obj.url)
+    constructor(base) {
+        this.base = base
     }
 
-    if (args) {
-      for (let key in args) {
-        url = url.replace(':' + key, args[key])
-      }
-    }
+    path(path, args) {
+        path = path.split('.')
+        let obj = this,
+            url = this.base
 
-    return url
-  }
+        for (let i = 0; i < path.length && obj; i++) {
+            if (obj.url) {
+                url += '/' + obj.url
+            }
+
+            obj = obj[path[i]]
+        }
+        if (obj) {
+            url = url + '/' + (typeof obj === 'string' ? obj : obj.url)
+        }
+
+        if (args) {
+            for (let key in args) {
+                url = url.replace(':' + key, args[key])
+            }
+        }
+
+        return url
+    }
 }
 export const graphql = Object.assign(new URL(''), {
-   query: 'graphql',
+    query: 'graphql',
 })
 
 export const api = Object.assign(new URL(apiUrl), {
-  url: '',
+    url: '',
 
-  login: {
-    url: 'auth/login',
-    refresh: 'refresh'
-  },
+    login: {
+        url: 'auth/login',
+        refresh: 'refresh'
+    },
 
-  logout: 'auth/logout',
+    logout: 'auth/logout',
 
-  register: 'register',
+    register: 'register',
 
-  password: {
-    url: 'password',
-    forgot: 'email',
-    reset: 'reset'
-  },
-  me: 'me',
-  users: {
-    url: 'users',
+    password: {
+        url: 'password',
+        forgot: 'email',
+        reset: 'reset'
+    },
+    me: 'me',
+    users: {
+        url: 'users',
 
-    activate: ':id/activate',
-    single: ':id',
-    restore: ':id/restore'
-  },
+        activate: ':id/activate',
+        single: ':id',
+        restore: ':id/restore'
+    },
 
-  profile: {
-    url: 'profile'
-  }
+    profile: {
+        url: 'profile'
+    }
 })

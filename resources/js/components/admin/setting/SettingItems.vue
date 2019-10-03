@@ -141,37 +141,9 @@ export default {
 
         await setTimeout(async () => {
 
-          /* Upload all offline transaction to server */
+          this.sync(this.$store)
 
-          const offline_receipts = this.$store.getters['receipt/receipts'].filter(r => r.status === 'offline')
         
-          for(const r of offline_receipts) {
-               await this.$store.dispatch('receipt/addReceipt', r)
-          }
-
-          /* const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
-
-          for(const a of offline_appointments) {
-               await this.$store.dispatch('receipt/addReceipt', a)
-          } */
-
-
-          const offline_customers = this.$store.getters['account/customers'].filter(c => c.status === 'offline')
-         
-          for(const c of offline_customers) {
-                console.log(c)
-               await this.$store.dispatch('account/addCustomer', c)
-          }
-
-         /* Fetch latest data */
-          await this.$store.dispatch('user/fetchUsers')
-          await this.$store.dispatch('product/fetchProducts')
-          await this.$store.dispatch('service/fetchServices')
-          await this.$store.dispatch('account/fetchCustomers')
-          await this.$store.dispatch('system/fetchSystem')
-
-          
-
           this.$emit('overlay', false)
         }, 3000)
  

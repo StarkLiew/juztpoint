@@ -148,10 +148,22 @@ class NewReceiptMutation extends Mutation {
 		DB::beginTransaction();
 		try {
 
-			$document = Document::create($args);
+			$document = Document::where('reference', $args['reference'])->first();
 
-			$document->items()->createMany($args['items']);
-			$document->payments()->createMany($args['payments']);
+			if ($document) {
+				//permenantly remove all ccommission
+
+				$document->commissions()->where('type', 'commission')->forceDelete();
+				$document->items()->where('type', 'item')->forceDelete();
+				$document->update($args);
+				$document->items()->createMany($args['items']);
+
+			} else {
+				$document = Document::create($args);
+				$document->items()->createMany($args['items']);
+
+			}
+
 			$document->commissions()->createMany($commissions);
 
 			// $document->items()->save($args->items);

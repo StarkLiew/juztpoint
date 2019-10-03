@@ -1,123 +1,111 @@
 <template>
-
-
-      <v-card>
-             <v-toolbar flat dark color="primary">
-                    <v-btn icon dark @click="cancel()">
-                        <v-icon>close</v-icon>
-                    </v-btn>
-                     <v-spacer></v-spacer>
-              <span>Discount</span>
-                    <v-spacer></v-spacer>
-                    <v-btn icon dark text @click="done()">
-                        Done
-                    </v-btn>
-              </v-toolbar>
-
+    <v-card>
+        <v-toolbar flat dark color="primary">
+            <v-btn icon dark @click="cancel()">
+                <v-icon>close</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <span>Discount</span>
+            <v-spacer></v-spacer>
+            <v-btn icon dark text @click="done()">
+                Done
+            </v-btn>
+        </v-toolbar>
         <v-divider></v-divider>
         <v-toolbar flat>
-                  <v-spacer></v-spacer> 
-                  <v-flex class="subheader">
-                     <v-icon>label</v-icon>Discount
-                  </v-flex>
-                  <v-flex class="display-1" @click="showKeyboard = true">
-                         {{discountRate | currency({fractionCount: decimal})}}
-                  </v-flex>
-                  <v-btn-toggle v-model="discountType" @change="(val) => { decimal = val + 1 }">
-                      <v-btn large text>
-                           %
-                      </v-btn>
-                      <v-btn large text>
-                           $
-                      </v-btn>
-                  </v-btn-toggle>
-     
+            <v-spacer></v-spacer>
+            <v-flex class="subheader">
+                <v-icon>label</v-icon>Discount
+            </v-flex>
+            <v-flex class="display-1" @click="showKeyboard = true">
+                {{discountRate | currency({fractionCount: decimal})}}
+            </v-flex>
+            <v-btn-toggle v-model="discountType" @change="(val) => { decimal = val + 1 }">
+                <v-btn large text>
+                    %
+                </v-btn>
+                <v-btn large text>
+                    $
+                </v-btn>
+            </v-btn-toggle>
         </v-toolbar>
-
-         <keyboard 
-            @done="showKeyboard = false"
-            @clear="discountRate = 0.0"
-            @change="discountRateChange"
-            @close="closedKeyboard"
-            :decimal="decimal"  
-            :show="showKeyboard">
+        <keyboard @done="showKeyboard = false" @clear="discountRate = 0.0" @change="discountRateChange" @close="closedKeyboard" :decimal="decimal" :show="showKeyboard">
         </keyboard>
-      </v-card>
-
+    </v-card>
 </template>
-
 <script>
 import Keyboard from '../../ui/Keyboard'
 
 export default {
-  data: () => ({
+    data: () => ({
 
-     discountFixed: false, 
-     showKeyboard: false,
-     discountRate: 0.0,
-     decimal: 1,
-     discountType: 0,
-  }),
-  components: {
-    Keyboard,
-  },
+        discountFixed: false,
+        showKeyboard: false,
+        discountRate: 0.0,
+        decimal: 1,
+        discountType: 0,
+    }),
+    components: {
+        Keyboard,
+    },
 
-  props: ['discount'],
-  mounted() {
+    props: ['discount'],
+    mounted() {
         this.update()
-  },
-  watch: {
-     show: {
-        handler(val){
-            this.update()
+    },
+    watch: {
+        show: {
+            handler(val) {
+                this.update()
+            },
+            deep: true
+        }
+    },
+    methods: {
+        update() {
+            if (this.discount) {
+                this.discountType = this.parseDiscountType(this.discount.discountType)
+                this.discountRate = this.discount.rate
+            }
+
         },
-        deep: true
-     }
-  },
-  methods: {
-      update() {
-          if(this.discount) {
-             this.discountType = this.parseDiscountType(this.discount.discountType)
-             this.discountRate = this.discount.rate
-          }
 
-      },
+        done() {
 
-      done() {
+            const { discountRate, discountType } = this
 
-        const { discountRate, discountType} = this
+            let discount = { rate: discountRate, type: this.parseDiscountType(discountType) }
 
-         let discount = {rate: discountRate, type: this.parseDiscountType(discountType)}
-           
-         this.$emit('done', discount)
-      },
-      cancel() {
-         this.$emit('cancel')
-      },
-      discountRateChange(val) {
-         this.discountRate = val
-      },
-      parseDiscountType(discountType) {
+            this.$emit('done', discount)
+        },
+        cancel() {
+            this.$emit('cancel')
+        },
+        discountRateChange(val) {
+            this.discountRate = val
+        },
+        parseDiscountType(discountType) {
 
-            if(discountType === 0) {
+            if (discountType === 0) {
                 return 'percent'
-            } 
+            }
 
-            if(discountType === 1) {
+            if (discountType === 1) {
                 return 'fix'
-            } 
+            }
 
-            if(discountType === 'fix') {
+            if (discountType === 'fix') {
                 return 1
-            } 
+            }
 
             return 0
 
-      },
-      closedKeyboard() {
+        },
+        closedKeyboard() {
 
-          showKeyboard = false
-      }
-  }
+            showKeyboard = false
+        }
+    }
 }
+
 </script>

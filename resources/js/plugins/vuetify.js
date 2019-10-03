@@ -9,24 +9,24 @@ import moment from 'moment-timezone'
 
 
 Vue.use(VueCurrencyFilter, {
-  symbol : '',
-  thousandsSeparator: ',',
-  fractionCount: 2,
-  fractionSeparator: '.',
-  symbolPosition: 'front',
-  symbolSpacing: true
+    symbol: '',
+    thousandsSeparator: ',',
+    fractionCount: 2,
+    fractionSeparator: '.',
+    symbolPosition: 'front',
+    symbolSpacing: true
 })
 
-Vue.use(VueMoment, {moment})
+Vue.use(VueMoment, { moment })
 
 Vue.use(Vuetify, {
-  components: {
-    VSnackbar,
-    VBtn,
-    VIcon
-  }
+    components: {
+        VSnackbar,
+        VBtn,
+        VIcon
+    }
 })
 Vue.use(VuetifyToast)
- 
+
 
 export default new Vuetify()

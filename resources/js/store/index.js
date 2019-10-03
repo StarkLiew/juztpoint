@@ -8,29 +8,27 @@ Vue.use(Vuex)
 
 
 const vuexLocal = new VuexPersistence({
-  storage: localforage,
-  saveState: (key, state, storage) => Promise.resolve(storage.setItem(key, state)),
-  restoreState: (key, storage) => Promise.resolve(storage.getItem(key))
+    storage: localforage,
+    saveState: (key, state, storage) => Promise.resolve(storage.setItem(key, state)),
+    restoreState: (key, storage) => Promise.resolve(storage.getItem(key))
 });
 
 
 const requireContext = require.context('./modules', false, /.*\.js$/)
 
 const modules = requireContext.keys()
-  .map(file =>
-    [file.replace(/(^.\/)|(\.js$)/g, ''), requireContext(file)]
-  )
-  .reduce((modules, [name, module]) => {
-    if (module.namespaced === undefined) {
-      module.namespaced = true
-    }
+    .map(file => [file.replace(/(^.\/)|(\.js$)/g, ''), requireContext(file)])
+    .reduce((modules, [name, module]) => {
+        if (module.namespaced === undefined) {
+            module.namespaced = true
+        }
 
-    return { ...modules, [name]: module }
-  }, {})
+        return { ...modules, [name]: module }
+    }, {})
 
 
 
 export default new Vuex.Store({
-  modules,
-  plugins: [vuexLocal.plugin]
+    modules,
+    plugins: [vuexLocal.plugin]
 })
