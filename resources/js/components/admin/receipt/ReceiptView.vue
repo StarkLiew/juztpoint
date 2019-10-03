@@ -94,7 +94,7 @@
                 </v-btn>
                 <v-dialog v-model="refundDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
-                        <v-btn dark v-on="on">
+                        <v-btn dark v-on="on" :disabled="refundDisabled">
                             <span>Refund</span>
                             <v-icon>money_off</v-icon>
                         </v-btn>
@@ -157,6 +157,7 @@ export default {
     data: () => ({
         editItem: [],
         voidDialog: false,
+        refundDisabled: true,
         refundDialog: false,
         value: null,
     }),
@@ -189,14 +190,17 @@ export default {
         async refund() {
             await this.$store.dispatch('receipt/refundReceipt', this.value)
             this.refundDialog = false
-        
+
         },
         editedItem(item, index) {
             const original = this.selected.items[index]
             item = this.sumAmount(item)
             item.refund = { qty: original.qty - item.qty, amount: original.amount - item.amount }
+
             this.value.items[index] = item
             this.sumTotal(this.value)
+            if (original.refund !== this.value.refund) this.refundDisabled = false
+            else this.refundDisabled = true
 
         },
         async proceedVoid() {
