@@ -118,6 +118,7 @@ Vue.mixin({
             }
 
             receipt.refund = refundAmount
+            receipt.charge = total
 
             if (receipt.tax) {
                 receipt.tax = taxTotal

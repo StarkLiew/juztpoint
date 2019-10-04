@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="edit-receipt-content">
         <v-card v-if="value">
             <v-sheet id="scroll-receipt-content" class="overflow-y-auto">
                 <v-container class="text-center">
@@ -140,7 +140,8 @@
                     </v-card>
                 </v-dialog>
             </v-bottom-navigation>
-        </v-footer <v-card v-if="!value">
+        </v-footer>
+        <v-card v-if="!value">
         </v-card>
     </div>
 </template>
@@ -199,7 +200,8 @@ export default {
 
             this.value.items[index] = item
             this.sumTotal(this.value)
-            if (original.refund !== this.value.refund) this.refundDisabled = false
+   
+            if (this.selected.charge !== this.value.charge) this.refundDisabled = false
             else this.refundDisabled = true
 
         },
@@ -212,12 +214,18 @@ export default {
 
 </script>
 <style>
+#edit-receipt-content {
+      min-height: calc(100vh - 54px);
+}
+
 #scroll-receipt-content {
-    max-height: calc(100vh - (54px + (56px * 6)));
+    min-height: calc(100vh - 54px - (54px + (56px * 7)));
+    max-height: calc(100vh - 54px - (54px + (56px * 7)));
 }
 
 #receipt-footer {
-    max-height: calc(100vh - (54px + (56px * 10)));
+    min-height: calc(100vh - (54px + (56px * 6)));
+    max-height: calc(100vh - (54px + (56px * 6)));
 }
 
 </style>
