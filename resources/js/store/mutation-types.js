@@ -53,6 +53,8 @@ export const FETCH_SYSTEM_FAILURE = 'FETCH_RECEIPT_FAILURE'
 export const AUTO_INCREMENT = 'AUTO_INCREMENT'
 export const SET_OFFLINE = 'SET_OFFLINE'
 export const SET_PAYMENT_OPTION = 'SET_PAYMENT_OPTION'
+export const OPEN_SHIFT = 'OPEN_SHIFT'
+export const CLOSE_SHIFT = 'CLOSE_SHIFT'
 
 /**
  * appointment.js

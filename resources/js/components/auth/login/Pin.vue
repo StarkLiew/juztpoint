@@ -92,7 +92,7 @@ export default {
 
                     if (this.supervisor) {
                         if (user.properties.role === 'MGR') {
-                            this.$emit('verified');
+                            this.$emit('verified', user);
                             this.val = ''
                         } else {
                             this.val = ''

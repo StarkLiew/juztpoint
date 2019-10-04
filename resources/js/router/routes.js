@@ -33,7 +33,8 @@ export default [
             path: '/',
             component: require('$comp/admin/AdminWrapper').default,
             children: [
-                { path: '/', name: 'index', redirect: { name: 'profile' } },
+                { path: '/', name: 'index', redirect: { name: 'shift' } },
+                { path: '/shift', name: 'shift', component: require('$comp/admin/shift/ShiftWrapper').default },
                 { path: '/setting', name: 'settings', component: require('$comp/admin/setting/SettingWrapper').default },
                 {
                     path: '/profile',

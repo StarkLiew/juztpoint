@@ -118,7 +118,7 @@ export default {
                     { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Open/Close Shift', icon: 'store', role: 'MGR', exact: true }
+                    { title: 'Open/Close Shift', icon: 'store', to: { name: 'shift' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }
