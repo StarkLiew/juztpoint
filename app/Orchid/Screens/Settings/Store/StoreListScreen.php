@@ -32,7 +32,7 @@ class StoreListScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.stores';
+	public $permission = 'platform.systems';
 
 	/**
 	 * Query data.

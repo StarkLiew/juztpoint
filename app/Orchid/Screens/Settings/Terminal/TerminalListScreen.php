@@ -32,7 +32,7 @@ class TerminalListScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.terminals';
+	public $permission = 'platform.systems';
 
 	/**
 	 * Query data.

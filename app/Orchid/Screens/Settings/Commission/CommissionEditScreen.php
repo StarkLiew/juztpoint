@@ -36,7 +36,7 @@ class CommissionEditScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.commissions';
+	public $permission = 'platform.systems';
 
 	/**
 	 * Query data.

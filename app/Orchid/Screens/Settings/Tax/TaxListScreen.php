@@ -32,7 +32,7 @@ class TaxListScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.taxes';
+	public $permission = 'platform.systems';
 
 	/**
 	 * Query data.

@@ -36,7 +36,7 @@ class PaymentEditScreen extends Screen {
 	/**
 	 * @var string
 	 */
-	public $permission = 'platform.systems.payments';
+	public $permission = 'platform.systems';
 
 	/**
 	 * Query data.
