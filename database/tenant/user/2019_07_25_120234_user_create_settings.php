@@ -16,6 +16,7 @@ class UserCreateSettings extends Migration {
 		Schema::create("user_{$id}_settings", function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
+			$table->bigInteger('subscription_id')->unsigned()->nullable();
 			$table->string('description')->nullable();
 			$table->string('type');
 			$table->json('properties')->nullable();

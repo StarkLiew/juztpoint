@@ -7,12 +7,13 @@ use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 use Orchestra\Tenanti\Tenantor;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable {
-	use SoftDeletes, Notifiable, HasApiTokens;
+	use SoftDeletes, Notifiable, HasApiTokens, Billable;
 
 	protected $appends = array('company_name');
 	protected $company_name;
