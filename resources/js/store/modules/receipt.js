@@ -100,7 +100,7 @@ export const actions = {
                 receipt.reference = receipt.reference + number
             }
 
-            const { reference, account_id, terminal_id, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
+            const { reference, account_id, terminal_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
 
             let castItems = ""
             let castComm = ""
@@ -141,7 +141,7 @@ export const actions = {
                     }
                 }
                 const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}}`
-                
+
                 const cast = `{line: ${line + 1}, 
                          type: "item", 
                          item_id: ${item_id},
@@ -198,6 +198,7 @@ export const actions = {
                                  terminal_id: ${terminal_id},
                                  account_id: "${account_id}",
                                  transact_by: ${teller.id},
+                                 shift_id: ${shiftId},
                                  date: "${date}",
                                  discount: "${JSON.stringify(discount).replace(/"/g, '\\"')}",
                                  discount_amount: ${parseFloat(discount_amount)},
@@ -223,16 +224,17 @@ export const actions = {
             if (!isOffline) {
 
                 const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation receipts' + mutation.replace(/[,]\s+/g, ',') } })
-                receipt.id = data.data.newReceipt.id
-                receipt.status = 'active'
-                if (!receipt.id) {
 
+                if (!receipt.id) {
+                    receipt.id = data.data.newReceipt.id
+                    receipt.status = 'active'
                     commit(types.ADD_RECEIPT, { receipt })
                 } else {
-
+                    receipt.status = 'active'
                     commit(types.REFUND_RECEIPT, { receipt })
 
                 }
+
 
             } else {
                 if (!receipt.id) {

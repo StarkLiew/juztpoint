@@ -95,7 +95,7 @@ export default {
 
             await setTimeout(async () => {
 
-                 this.sync(this.$store)
+                this.sync(this.$store)
 
 
 
@@ -112,13 +112,16 @@ export default {
         navigation() {
             this.items = [
                 [
-                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
+                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
                 ],
                 [
                     { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Open/Close Shift', icon: 'store', to: { name: 'shift' }, role: 'MGR', exact: true }
+                ],
+                [
+                    { title: 'Shift Report', icon: 'notes',  to: { name: 'report' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }

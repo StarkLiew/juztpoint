@@ -108,7 +108,7 @@
                             </v-btn>
                         </v-toolbar>
                         <v-card-text class="text-center">
-                            <h2>Supervisor Pin require to proceed.</h2>
+                            <h2>Manager Pin require to proceed.</h2>
                             <v-layout justify-center>
                                 <pin title="" :supervisor="true" @verified="refund"></pin>
                             </v-layout>
@@ -131,7 +131,7 @@
                             </v-btn>
                         </v-toolbar>
                         <v-card-text class="text-center">
-                            <h2>Supervisor Pin require to proceed.</h2>
+                            <h2>Manager Pin require to proceed.</h2>
                             WARNING: You cannot undo once the receipt is void.
                             <v-layout justify-center>
                                 <pin title="" :supervisor="true" @verified="proceedVoid"></pin>

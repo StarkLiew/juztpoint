@@ -1,21 +1,35 @@
 <template>
     <div class="fill-height">
-        <carts @cart-toggle="cartToggle" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
-        <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
-        <v-content style="margin-top: 5px">
-            <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
-                <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
-                <item-add @close="showEdit = false" v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
-                <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
-                <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'"></payment>
-            </v-sheet>
-            <v-overlay :value="overlay">
-                <v-progress-circular indeterminate size="64"></v-progress-circular>
-            </v-overlay>
-        </v-content>
+        <div v-if="shift && shift.status === 'open'">
+            <carts @cart-toggle="cartToggle" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
+            <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
+            <v-content style="margin-top: 5px">
+                <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
+                    <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
+                    <item-add @close="showEdit = false" v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
+                    <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
+                    <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'"></payment>
+                </v-sheet>
+                <v-overlay :value="overlay">
+                    <v-progress-circular indeterminate size="64"></v-progress-circular>
+                </v-overlay>
+            </v-content>
+        </div>
+        <v-banner v-if="!shift" single-line @click:icon="alert">
+            <v-icon slot="icon" color="warning" size="36">
+                mdi-wifi-strength-alert-outline
+            </v-icon>
+            Shift is closed. Seek Manager assistance to open new shift.
+            <template v-slot:actions>
+                <v-btn color="primary" text to="{name: 'pos'}">
+                    Exit
+                </v-btn>
+            </template>
+        </v-banner>
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import TopMenu from './shared/TopMenu'
 import Carts from './shared/Carts'
 import ProductsList from './shared/ProductsList'
@@ -47,6 +61,9 @@ export default {
         CustomersList,
         Payment,
     },
+    computed: mapGetters({
+        shift: 'system/shift',
+    }),
 
     methods: {
         cartToggle() {

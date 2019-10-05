@@ -105,6 +105,7 @@ export const getters = {
     company: state => state.company,
     users: state => state.users,
     shift: state => state.shift,
+    shifts: state => state.shifts.slice().reverse(),
     lastShift: state => state.shifts[state.shifts.length - 1],
     categories: state => state.categories,
     offline: state => state.offline,

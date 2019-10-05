@@ -206,9 +206,15 @@
         </v-container>
         <keyboard @done="showKeyboard = false" @clear="clear" @change="change" @close="" :decimal="2" :show="showKeyboard">
         </keyboard>
-        <v-overlay :value="showKeyboard || inprogress" opacity="0">
+        <v-overlay :value="showKeyboard" opacity="0">
         </v-overlay>
+        <v-overlay :value="inprogress">
+            <v-progress-circular :size="70" :width="7" color="amber" indeterminate></v-progress-circular>
+         </v-overlay>   
     </div>
+</template>
+</v-overlay>
+</div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -246,6 +252,7 @@ export default {
         auth: 'auth/user',
         company: 'system/company',
         store: 'auth/store',
+        shift: 'system/shift',
         offline: 'system/offline',
         terminal: 'auth/terminal',
         payementMethod: 'system/paymentMethod',
@@ -378,6 +385,7 @@ export default {
                 account_id: customer ? customer.uid : '',
                 terminal_id: this.terminal.id,
                 customer: customer ? customer : null,
+                shiftId: this.shift ? this.shift.id : '',
                 date: now,
                 type: type,
                 reference: reference,

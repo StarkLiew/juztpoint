@@ -1,12 +1,24 @@
 <template>
     <v-layout justify-center class="fill-height">
-        <v-card class="mx-auto" flat color="#F9F9F9" width="50%">
+        <v-card class="mx-auto" flat color="#F9F9F9" width="50%" v-if="auth && auth.properties.role !== 'MGR'">
+            <v-card-text>
+                <v-list-item three-line>
+                    <v-list-item-content>
+                        <v-list-item-title class="headline">{{ shift && shift.status === 'open' ? 'Shift is open' : 'Shift is closed' }}</v-list-item-title>
+                        <v-list-item-subtitle wrap v-if="shift">Shift open on {{ shift.open.date }}</v-list-item-subtitle>
+                        <v-list-item-subtitle wrap v-if="shift">by {{ shift.open.user.name }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+                
+            </v-card-text>
+        </v-card>
+        <v-card class="mx-auto" flat color="#F9F9F9" width="50%" v-if="auth && auth.properties.role === 'MGR'">
             <v-card-text>
                 <v-list-item three-line>
                     <v-list-item-content>
                         <v-list-item-title class="headline">{{ shift && shift.status === 'open' ? 'Close' : 'Open New' }} Shift</v-list-item-title>
-                        <v-list-item-subtitle wrap v-if="last && last.status === 'close'">Last Shift closed on {{ last.close.date }}</v-list-item-subtitle>
-                         <v-list-item-subtitle wrap v-if="last && last.status === 'close'">by {{ last.close.user.name }}</v-list-item-subtitle>
+                        <v-list-item-subtitle wrap v-if="last && last.status === 'close'">Last Shift closed on {{ last.close.date | moment('DD/MM/YYYY hh:mmA') }}</v-list-item-subtitle>
+                        <v-list-item-subtitle wrap v-if="last && last.status === 'close'">by {{ last.close.user.name }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
                 <v-divider></v-divider>
@@ -18,16 +30,7 @@
                 <v-divider></v-divider>
                 <numeric-key @clear="amount = 0.0" @done="done" @change="amountChange" :decimal="2" :show="true">
                 </numeric-key>
-                <v-row v-if="shift && shift.status === 'open'">
-                    <v-col align="center">
-                        <v-btn large>
-                            <v-icon>printer</v-icon>X Report
-                        </v-btn>
-                        <v-btn large>
-                            <v-icon>printer</v-icon>Z Report
-                        </v-btn>
-                    </v-col>
-                </v-row>
+    
             </v-card-text>
         </v-card>
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
@@ -40,7 +43,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text class="text-center">
-                    <h2>Supervisor Pin require to proceed.</h2>
+                    <h2>Manager Pin require to proceed.</h2>
                     <v-layout justify-center>
                         <pin title="" :supervisor="true" @verified="openCloseShift"></pin>
                     </v-layout>
@@ -65,6 +68,7 @@ export default {
         dialog: false,
     }),
     computed: mapGetters({
+        auth: 'auth/user',
         shift: 'system/shift',
         last: 'system/lastShift',
     }),
@@ -88,9 +92,11 @@ export default {
             if (this.shift && this.shift.status === 'open') {
                 await this.$store.dispatch('system/closeShift', this.amount)
                 this.amount = 0.00
+
             } else {
                 await this.$store.dispatch('system/openShift', this.amount)
                 this.amount = 0.00
+                this.$router.push({ name: 'sales' })
             }
             this.dialog = false
         },

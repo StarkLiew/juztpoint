@@ -31,6 +31,10 @@ class ReceiptType extends GraphQLType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'Description of the setting',
 			],
+			'shift_id' => [
+				'type' => Type::int(),
+				'description' => 'Description of the setting',
+			],
 			'account' => [
 				'type' => GraphQL::type('account'),
 				'description' => 'Description of the setting',

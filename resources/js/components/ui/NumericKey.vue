@@ -1,8 +1,8 @@
 <template>
     <v-layout justify-center>
    
-            <v-container fluid grid-list-sm style="width:250px">
-                <v-layout wrap style="width:250px">
+            <v-container fluid grid-list-sm style="width:200px">
+                <v-layout wrap style="width:200px">
                     <v-flex v-for="(key, i) in keys" :key="i" xs4 @click="touched(key)">
                         <v-img :src="``" :lazy-src="``" aspect-ratio="1" v-ripple class="blue lighten-2 v-btn">
                             <template v-slot:placeholder>

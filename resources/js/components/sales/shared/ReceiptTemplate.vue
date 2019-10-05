@@ -100,6 +100,13 @@
                         <td class="line">Change</td>
                         <td class="line">{{ value.change | currency }}</td>
                     </tr>
+                    <tr v-if="value.refund">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="line">Refund</td>
+                        <td class="line">{{ value.refund | currency }}</td>
+                    </tr>
                 </div>
             </tbody>
         </table>

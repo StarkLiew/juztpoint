@@ -35,6 +35,7 @@ export default [
             children: [
                 { path: '/', name: 'index', redirect: { name: 'shift' } },
                 { path: '/shift', name: 'shift', component: require('$comp/admin/shift/ShiftWrapper').default },
+                { path: '/report', name: 'report', component: require('$comp/admin/shift/ShiftReport').default },
                 { path: '/setting', name: 'settings', component: require('$comp/admin/setting/SettingWrapper').default },
                 {
                     path: '/profile',

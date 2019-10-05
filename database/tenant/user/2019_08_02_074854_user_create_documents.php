@@ -19,6 +19,7 @@ class UserCreateDocuments extends Migration {
 			$table->string('account_id')->nullable();
 			$table->bigInteger('transact_by')->unsigned();
 			$table->bigInteger('terminal_id')->unsigned();
+			$table->bigInteger('shift_id')->unsigned()->nullable();
 			$table->timestamp('date');
 			$table->string('type');
 			$table->string('status');

@@ -2,8 +2,12 @@
     <v-flex sm8 md6 lg4 :class="{shake: isShake}">
         <v-layout justify-center>
             <v-flex xs8 sm6>
-                <v-layout justify-center mb-10>
+                <v-layout justify-center mb-5>
                     <h1 class="display-3">{{ title }}</h1>
+                </v-layout>
+                <v-layout justify-center>
+                    <h3 class="subtitle-1" v-if="shift">Shift is {{ shift.status }}</h3>
+                    <h3 class="subtitle-1" v-if="!shift">Shift is close</h3>
                 </v-layout>
                 <v-layout justify-center mb-5>
                     <v-icon :color="val.length >= 1 ? 'red' : 'dark'">fiber_manual_record</v-icon>
@@ -49,7 +53,8 @@ export default {
         isShake: false,
     }),
     computed: mapGetters({
-        users: 'user/users'
+        shift: 'system/shift',
+        users: 'user/users',
     }),
     props: {
         title: { default: 'JuxtPoint' },
@@ -102,9 +107,12 @@ export default {
                         }
                     } else {
                         await this.$store.dispatch('auth/setUser', { user })
-
+                        
                         if (user.properties.role === 'MGR') this.$router.push({ name: 'index' })
-                        else this.$router.push({ name: 'sales' })
+                        else { 
+                             if(!this.shift) this.$router.push({ name: 'index' })
+                             else this.$router.push({ name: 'sales' })
+                        }
                     }
 
 
