@@ -422,7 +422,7 @@ export default {
                 }
 
                 const appointments = this.$store.getters['receipt/appointments']
-                console.log(appointments)
+
                 const results = appointments.filter((any) => {
                     const aStart = new Date(any.properties.start)
                     const aEnd = new Date(any.properties.end)

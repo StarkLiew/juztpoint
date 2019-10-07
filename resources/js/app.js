@@ -60,6 +60,11 @@ Vue.mixin({
                 }
 
 
+              const offline_shifts = $store.getters['system/shifts'].filter(s => s.synced === false)
+
+                for (const s of offline_shifts) {
+                    await $store.dispatch('system/syncShift', s)
+                }
                 /* Fetch latest data */
                 await $store.dispatch('user/fetchUsers')
                 await $store.dispatch('product/fetchProducts')

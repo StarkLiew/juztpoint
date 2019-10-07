@@ -110,6 +110,7 @@ return [
 				'newReceipt' => App\GraphQL\Mutation\NewReceiptMutation::class,
 				'newAppointment' => App\GraphQL\Mutation\NewAppointmentMutation::class,
 				'voidReceipt' => App\GraphQL\Mutation\VoidReceiptMutation::class,
+				'shift' => App\GraphQL\Mutation\ShiftMutation::class,
 			],
 			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],

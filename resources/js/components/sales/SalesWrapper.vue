@@ -15,7 +15,7 @@
                 </v-overlay>
             </v-content>
         </div>
-        <v-banner v-if="!shift" single-line @click:icon="alert">
+        <v-banner v-if="!shift" single-line>
             <v-icon slot="icon" color="warning" size="36">
                 mdi-wifi-strength-alert-outline
             </v-icon>

@@ -195,7 +195,7 @@ export default {
             const { qty, discountRate, discountType, note, servicesBy, shareWith, saleBy } = this
             this.item.qty = qty
             this.item.note = note
-            this.item.discount = { rate: discountRate, type: this.parseDiscountType(discountType) }
+            this.item.discount = { rate: parseFloat(discountRate), type: this.parseDiscountType(discountType) }
             this.item.saleBy = saleBy
             this.item.servicesBy = servicesBy
             this.item.shareWith = shareWith

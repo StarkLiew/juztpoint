@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { graphql } from '~/config'
 import * as types from '../mutation-types'
+import moment from 'moment'
 
 /**
  * Initial state
@@ -46,21 +47,30 @@ export const mutations = {
         state.shift = { status: 'open', open }
         state.shiftId = state.shiftId + 1
         state.shift.id = state.shiftId
+        state.shift.synced = false
         state.shifts.push(state.shift)
+
 
     },
     [types.CLOSE_SHIFT](state, { close }) {
 
         const index = state.shifts.findIndex(s => s.id === state.shift.id)
         let shift = state.shifts[index]
+
         shift.close = close
         shift.status = 'close'
+        shift.synced = false
         state.shifts[index] = shift
         state.shift = null
     },
 
     [types.FETCH_SYSTEM_FAILURE](state) {
 
+    },
+    [types.SHIFT_SYNC_STATUS](state, { id, success }) {
+        const index = state.shifts.findIndex(s => s.id === id)
+        
+        state.shifts[index].synced = success
     },
 }
 
@@ -69,13 +79,46 @@ export const mutations = {
  */
 export const actions = {
 
-    async openShift({ commit, rootState }, amount) {
+    async openShift({ commit, rootState, dispatch, state }, amount) {
         const open = { amount, date: new Date(), user: rootState.auth.user }
         commit(types.OPEN_SHIFT, { open })
+        if (!state.offline) dispatch('syncShift', state.shift)
     },
-    async closeShift({ commit, rootState }, amount) {
+    async closeShift({ commit, rootState, dispatch, state }, amount) {
         const close = { amount, date: new Date(), user: rootState.auth.user }
+
         commit(types.CLOSE_SHIFT, { close })
+        if (!state.offline) dispatch('syncShift', state.shifts[state.shifts.length - 1])
+    },
+    async syncShift({ commit, rootState }, shift) {
+
+        let props = ''
+        if (shift.status === 'close') {
+            props = JSON.stringify({ open: shift.open }).replace(/"/g, '\\"')
+        } else {
+            props = JSON.stringify({ open: shift.open, close: shift.close }).replace(/"/g, '\\"')
+        }
+        const terminal_id = rootState.auth.terminal.id
+
+        const mutation = `{
+                             shift (
+                                 reference: "${'T' + terminal_id + '-' + shift.id}",
+                                 status: "${shift.status}",
+                                 terminal_id: ${terminal_id},
+                                 transact_by: ${shift.open.user.id},
+                                 shift_id: ${shift.id},
+                                 date: "${moment(shift.open.date).format('YYYY-MM-DD HH:mm:ss')}",
+                                 discount: "{}",
+                                 properties: "${props}",
+                             ) {id}}`
+
+        try {
+            const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation shift' + mutation.replace(/[,]\s+/g, ',') } })
+            commit(types.SHIFT_SYNC_STATUS, { id: shift.id, success: true })
+        } catch (e) {
+            commit(types.SHIFT_SYNC_STATUS, { id: shift.id, success: false })
+        }
+
     },
     async setPaymentMethod({ commit }, option) {
         commit(types.SET_PAYMENT_OPTION, option)

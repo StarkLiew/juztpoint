@@ -12,18 +12,17 @@
                 </v-row>
                 <v-divider></v-divider>
                 <v-sheet class="mx-auto" elevation="8" min-height="60vh" style="padding: 10px">
-                    <vue-easy-print tableShow ref="report">
+                    <vue-easy-print tableShow ref="report" v-if="shiftId">
                         <template slot-scope="func">
-                            <report :header="{company, store}" :title="getShiftLabel(shiftId)"></report>
+                            <report :header="{company, store}" :by="by()" :data="computeSummary()" :title="getShiftLabel(shiftId)"></report>
                         </template>
                     </vue-easy-print>
                 </v-sheet>
                 <v-divider></v-divider>
-           
             </v-card-text>
-                 <v-btn block color="primary" dark large @click="print()">
-                    <v-icon>printer</v-icon>Print {{ getShiftLabel(shiftId) }} Report
-                </v-btn>
+            <v-btn block color="primary" dark large @click="print()">
+                <v-icon>printer</v-icon>Print {{ getShiftLabel(shiftId) }} Report
+            </v-btn>
         </v-card>
         <v-overlay :value="overlay">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -51,6 +50,7 @@ export default {
         last: 'system/lastShift',
         shifts: 'system/shifts',
         company: 'system/company',
+        paymentMethod: 'system/paymentMethod',
         store: 'auth/store',
     }),
     mounted() {
@@ -101,8 +101,13 @@ export default {
             }
 
         },
+        by() {
+            if (this.staffId === 0) return { id: 0, name: 'All Staff' }
+            return this.users.find(u => u.id === this.staffId)
+        },
         getShift(id) {
             return this.shifts.find(s => s.id === id)
+
         },
         getShiftLabel(id) {
             const shift = this.shifts.find(s => s.id === id)
@@ -113,6 +118,46 @@ export default {
                 return false
             }
 
+        },
+        computeSummary() {
+            const id = this.shiftId
+
+            let receipts = this.$store.getters['receipt/receipts'].filter(r => r.shiftId === id)
+            if (this.staffId > 0) {
+                receipts = receipts.filter(r => r.teller.id === this.staffId)
+            }
+
+            if (!receipts) return {}
+            return {
+                shift: this.shifts.find(s => s.id === id),
+                count: receipts.length,
+                nett: receipts.reduce((acc, curr) => acc + (curr.charge + (-curr.rounding) - (curr.tax_total + curr.service_charge)), 0),
+                total_charge: receipts.reduce((acc, curr) => acc + curr.charge, 0),
+                gross: receipts.reduce((acc, curr) => acc + ((curr.charge + curr.discount_amount + curr.refund) - (curr.service_charge + curr.tax_total + curr.rounding)), 0),
+                refund: receipts.reduce((acc, curr) => acc + curr.refund, 0),
+                service_charge: receipts.reduce((acc, curr) => acc + curr.service_charge, 0),
+                tax_total: receipts.reduce((acc, curr) => acc + curr.tax_total, 0),
+                rounding: receipts.reduce((acc, curr) => acc + curr.rounding, 0),
+                footer_discount: receipts.reduce((acc, curr) => acc + curr.discount_amount, 0),
+                payment: this.payment(receipts),
+
+            }
+
+        },
+        payment(receipts) {
+            let p = {}
+            let id = 1
+            for (const [key, value] of Object.entries(this.paymentMethod)) {
+
+                if (value) {
+                    p[key] = parseFloat(receipts.reduce((acc, curr) => acc + curr.payments.filter(p => p.item_id === id).reduce((a, c) => a + c.total_amount, 0), 0))
+                } else {
+                    p[key] = 0.00
+                }
+                id++
+            }
+
+            return p
         },
 
         overlayShow(value) {
