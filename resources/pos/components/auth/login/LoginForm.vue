@@ -1,0 +1,92 @@
+<template>
+    <v-form ref="form" @submit.prevent="submit" lazy-validation v-model="valid">
+        <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading" prepend-icon="person"></v-text-field>
+        <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="lock"></v-text-field>
+        <v-text-field :label="labels.device_id" v-model="form.device_id" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (device_idHidden = !device_idHidden)" :type="device_idHidden ? 'device_id' : 'text'" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" prepend-icon="tv"></v-text-field>
+        <v-layout class="mt-4 mx-0">
+            <v-spacer></v-spacer>
+            <v-btn text :disabled="loading" :to="{ name: 'forgot', query: {email: form.email} }" color="grey darken-2">
+                Forgot password?
+            </v-btn>
+            <v-btn type="submit" :loading="loading" :disabled="loading || !valid" color="primary" class="ml-4">
+                Login
+            </v-btn>
+        </v-layout>
+    </v-form>
+</template>
+<script>
+import axios from 'axios'
+import { api } from '~/config'
+import Form from '~/mixins/form'
+
+export default {
+    mixins: [Form],
+
+    data: () => ({
+        passwordHidden: true,
+        device_idHidden: true,
+        form: {
+            email: null,
+            password: null,
+            device_id: null,
+            fingerprint: null,
+        }
+    }),
+
+    created() {
+        this.form.email = this.$route.query.email || null
+    },
+
+    methods: {
+        async submit() {
+            if (this.$refs.form.validate()) {
+                this.loading = true
+
+
+
+                //Collect fingerprint
+                this.form.fingerprint = JSON.stringify(await this.scanFingerprint())
+
+                await axios.post(api.path('login'), this.form)
+                    .then(async res => {
+
+                        const data = res.data
+                        await this.$store.dispatch('auth/saveToken', data)
+                        // await this.$store.dispatch('auth/setUser', data)
+
+                        /* Fetch latest data */
+                        await this.$store.dispatch('user/fetchUsers')
+                        await this.$store.dispatch('product/fetchProducts')
+                        await this.$store.dispatch('account/fetchCustomers')
+                        await this.$store.dispatch('system/fetchSystem')
+
+
+                        this.$toast.success('Welcome back!')
+                        this.$emit('success', res.data)
+                    })
+                    .catch(err => {
+                        this.handleErrors(err.response.data.errors)
+
+                    })
+                    .then(() => {
+                        this.loading = false
+                    })
+
+
+            }
+        },
+        scanFingerprint() {
+            return new Promise((resolve, reject) => {
+                setTimeout(function() {
+                    Fingerprint2.get(function(components) {
+                        resolve(components)
+                    })
+                }, 500)
+            });
+
+        }
+
+    }
+}
+
+</script>

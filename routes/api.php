@@ -38,7 +38,8 @@ return $request->user();
 Route::group([
 	'prefix' => 'auth',
 ], function () {
-	Route::post('login', 'Auth\AuthController@machine');
+	Route::post('pos/register', 'Auth\AuthController@machine');
+	Route::post('login', 'Auth\AuthController@login');
 });
 
 // Route::post('user/register', ['as' => 'user.register', 'uses' => 'Logic\UserController@register']);

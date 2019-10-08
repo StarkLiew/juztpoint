@@ -12,18 +12,20 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/pos/app.js', 'public/pos')
+   .js('resources/backoffice/app.js', 'public/backoffice')
    .sass('resources/styles/app.sass', 'public/css')
-
-
+    
 
 
 mix.webpackConfig({
   resolve: {
     extensions: ['.js', '.json', '.vue'],
     alias: {
-      '~': path.join(__dirname , './resources/js'),
-      '$comp': path.join(__dirname, './resources/js/components')
+      '~': path.join(__dirname , './resources/pos'),
+      '~back': path.join(__dirname , './resources/backoffice'),
+      '$pos': path.join(__dirname, './resources/pos/components'),
+      '$backoffice': path.join(__dirname, './resources/backoffice/components'),
     }
   },
   plugins: [
@@ -37,7 +39,8 @@ mix.webpackConfig({
         handleFetch: true,
         dynamicUrlToDependencies: {
             '/': ['resources/views/pos.blade.php'],
-            '/pos': ['resources/views/pos.blade.php']
+            '/pos': ['resources/views/pos.blade.php'],
+            '/backoffice': ['resources/views/backoffice.blade.php'],
         },
         staticFileGlobsIgnorePatterns: [/\.map$/, /mix-manifest\.json$/, /manifest\.json$/, /service-worker\.js$/],
         runtimeCaching: [

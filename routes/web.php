@@ -14,8 +14,14 @@
 
 // Static subdomain
 Route::domain('pos.juxtpoint.com')->group(function ($router) {
-	Route::get('/', 'HomeController@app')->name('welcome');
-	Route::get('/{any}', 'HomeController@app')->name('welcome');
+	Route::get('/', 'HomeController@pos')->name('pos');
+	Route::get('/{any}', 'HomeController@pos')->name('pos');
+});
+
+// Static subdomain
+Route::domain('backoffice.juxtpoint.com')->group(function ($router) {
+	Route::get('/', 'HomeController@backoffice')->name('backoffice');
+	Route::get('/{any}', 'HomeController@backoffice')->name('backoffice');
 });
 
 // Wildcard subdomain
