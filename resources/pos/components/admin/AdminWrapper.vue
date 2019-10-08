@@ -22,7 +22,7 @@ import AppFooter from './shared/AppFooter'
 
 export default {
     data: () => ({
-        mini: false,
+        mini: true,
         overlay: false
     }),
 

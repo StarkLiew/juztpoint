@@ -9,7 +9,7 @@ axios.interceptors.request.use(config => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
 
     // const token = store.getters['auth/token']
-    const token = VueCookies.get('jxpt_backoffice')
+    const token = VueCookies.get('JXPTBCK')
 
     if (token) {
         config.headers['Authorization'] = 'Bearer ' + token

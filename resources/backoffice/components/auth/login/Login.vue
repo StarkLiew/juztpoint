@@ -28,7 +28,7 @@ export default {
     methods: {
         hasToken() {
 
-            const token = VueCookies.get('JXPT')
+            const token = VueCookies.get('JXPTBCK')
             if (token !== null) return true
 
             return false
@@ -36,7 +36,7 @@ export default {
         },
         async success(data) {
 
-            this.$router.push({ name: 'pin' })
+            this.$router.push({ name: 'index' })
 
         }
     }

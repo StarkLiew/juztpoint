@@ -16,25 +16,20 @@ export default [
             }
         ]
     }, ]),
-    ...applyRules(['auth'], [
-        {
-            path: '/',
-            component: require('$backoffice/admin/AdminWrapper').default,
-            children: [
-                { path: '/', name: 'index', redirect: { name: 'profile' } },
-                   {
-                    path: '/profile',
-                    component: require('$backoffice/admin/profile/ProfileWrapper').default,
-                    children: [
-                        { path: '/', name: 'profile', component: require('$backoffice/admin/profile/Profile').default },
-                        { path: '/edit', name: 'profile-edit', component: require('$backoffice/admin/profile/edit/ProfileEdit').default }
-                    ]
-                },
-
-            ]
-        },
-    ]),
-    { path: '*', redirect: { name: 'index' } }
+  ...applyRules(['auth'], [
+    { path: '/', component: require('$backoffice/admin/AdminWrapper').default, children:
+      [
+        { path: '', name: 'index', redirect: { name: 'profile' } },
+        { path: '/profile', component: require('$backoffice/admin/profile/ProfileWrapper').default, children:
+          [
+            { path: '', name: 'profile', component: require('$backoffice/admin/profile/Profile').default },
+            { path: '/edit', name: 'profile-edit', component: require('$backoffice/admin/profile/edit/ProfileEdit').default }
+          ]
+        }
+      ]
+    },
+  ]),
+  { path: '*', redirect: { name: 'index' } }
 ]
 
 function applyRules(rules, routes) {

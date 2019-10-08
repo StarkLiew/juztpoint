@@ -2,16 +2,13 @@
     <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" width="300">
         <v-list class="py-0">
             <v-list-item>
+                     <v-spacer></v-spacer>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
+
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
                         <v-icon>chevron_right</v-icon>
                     </v-btn>
                 </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>{{ store.name }}</v-list-item-title>
-                    <v-list-item-title class="caption">{{ terminal.name }}</v-list-item-title>
-                    <v-list-item-title class="caption">Version 1.0.1</v-list-item-title>
-                </v-list-item-content>
                 <v-list-item-icon>
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
                         <v-icon>chevron_left</v-icon>
@@ -62,8 +59,6 @@ export default {
 
     computed: mapGetters({
         auth: 'auth/user',
-        store: 'auth/store',
-        terminal: 'auth/terminal',
     }),
 
     watch: {
@@ -112,33 +107,29 @@ export default {
         navigation() {
             this.items = [
                 [
-                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
+                    { title: 'Dashboard', icon: 'store', to: { name: 'sales' },  exact: true }
                 ],
                 [
-                    { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
+                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
                 ],
                 [
-                    { title: 'Open/Close Shift', icon: 'store', to: { name: 'shift' }, role: 'MGR', exact: true }
+                    { title: 'Inventory', icon: 'assignment_turned_in', to: { name: 'sales' },  exact: true }
                 ],
                 [
-                    { title: 'Shift Report', icon: 'notes',  to: { name: 'report' }, role: 'MGR', exact: true }
+                    { title: 'Customers', icon: 'account_box', to: { name: 'receipts' }, role: 'MGR', exact: true }
+                ],
+                [
+                    { title: 'Products', icon: 'view_array', to: { name: 'shift' }, role: 'MGR', exact: true }
+                ],
+                [
+                    { title: 'Services', icon: 'face', to: { name: 'shift' }, role: 'MGR', exact: true }
+                ],
+                [
+                    { title: 'Employees', icon: 'person',  to: { name: 'report' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }
                 ],
-                [
-                    //{ title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
-                ],
-                [
-                    // { title: 'Update', icon: 'update', action: this.update, role:'MGR' }
-                ],
-
-                [
-                    // { title: 'Refresh', icon: 'refresh', action: this.refresh, role:'MGR' }
-                ],
-                [
-                    { title: 'Logout', icon: 'power_settings_new', action: this.logout }
-                ]
             ]
         }
     }
