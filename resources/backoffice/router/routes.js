@@ -25,7 +25,13 @@ export default [
             { path: '', name: 'profile', component: require('$backoffice/admin/profile/Profile').default },
             { path: '/edit', name: 'profile-edit', component: require('$backoffice/admin/profile/edit/ProfileEdit').default }
           ]
-        }
+        },
+        { path: '/customers', component: require('$backoffice/admin/customer/CustomerWrapper').default, children:
+          [
+            { path: '', name: 'customers', component: require('$backoffice/admin/customer/Customer').default },
+         
+          ]
+        },
       ]
     },
   ]),

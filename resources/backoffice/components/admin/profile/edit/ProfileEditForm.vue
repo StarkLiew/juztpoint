@@ -27,8 +27,8 @@
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import { api } from '~back/config'
-import Form from '~back/mixins/form'
+import { api } from '~~/config'
+import Form from '~~/mixins/form'
 
 export default {
     mixins: [Form],

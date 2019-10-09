@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { graphql } from '~back/config'
+import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 /**

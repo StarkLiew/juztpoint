@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '~back/store/index'
+import store from '~~/store/index'
 import routes from './routes'
-import { api } from '~back/config'
+import { api } from '~~/config'
 
 Vue.use(VueRouter)
 

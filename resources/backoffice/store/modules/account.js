@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { graphql } from '~back/config'
+import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 /**
@@ -7,7 +7,8 @@ import * as types from '../mutation-types'
  */
 export const state = {
     customer: null,
-    customers: []
+    customers: [],
+    customerCount: 0,
 }
 
 /**
@@ -15,25 +16,19 @@ export const state = {
  */
 export const mutations = {
     [types.SET_CUSTOMER](state, { customer }) {
-
         state.customer = customer
-
-
     },
     [types.FILL_CUSTOMERS](state, { accounts }) {
-
-        state.customers = accounts
+        state.customers = accounts.data
+        state.customerCount = accounts.total
     },
     [types.ADD_CUSTOMER](state, { customer }) {
-
         const index = state.customers.findIndex(c => c.uid === customer.uid)
         if (index > -1) {
             state.customers[index] = customer
         } else {
             state.customers.push(customer)
         }
-
-
     },
     [types.FETCH_CUSTOMER_FAILURE](state) {
         state.customer = null
@@ -44,9 +39,11 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-    async fetchCustomers({ commit }) {
+    async fetchCustomers({ commit }, { limit, page }) {
         try {
-            const { data } = await axios.get(graphql.path('query'), { params: { query: '{accounts(type:"customer"){ id, uid, name, status, properties{email, mobile}}}' } })
+       
+
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"customer", limit: ${limit}, page: ${page}){data{id, uid, name, status, properties{email, mobile}}, total,per_page}}`}})
             commit(types.FILL_CUSTOMERS, data.data)
 
         } catch (e) {
@@ -55,11 +52,7 @@ export const actions = {
     },
     async addCustomer({ commit }, customer) {
         try {
-
-
-
             // uniqid
-
             if (customer.status !== 'offline') {
                 var ts = String(new Date().getTime()),
                     i = 0,
@@ -83,13 +76,9 @@ export const actions = {
                              ) {id, name, status, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-
-
-
             customer = data.data.newAccount
-
-
             commit(types.ADD_CUSTOMER, { customer })
+
             return customer
         } catch (e) {
 
@@ -106,4 +95,5 @@ export const actions = {
 export const getters = {
     customers: state => state.customers,
     customer: state => state.customer !== null,
+    customerCount: state => state.customerCount,
 }

@@ -15,7 +15,7 @@ class ProductsQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('product'));
+		return GraphQL::paginate('products');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -40,7 +40,12 @@ class ProductsQuery extends Query {
 				'type' => Type::string(),
 				'name' => 'sku',
 			],
-
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
+			],
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
@@ -66,7 +71,7 @@ class ProductsQuery extends Query {
 		$results = Product::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($selectedFields)
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;
 	}

@@ -2,13 +2,14 @@
     <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" width="300">
         <v-list class="py-0">
             <v-list-item>
-                     <v-spacer></v-spacer>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
-
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
                         <v-icon>chevron_right</v-icon>
                     </v-btn>
                 </v-list-item-icon>
+                <v-list-item-content>
+           
+                </v-list-item-content>
                 <v-list-item-icon>
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
                         <v-icon>chevron_left</v-icon>
@@ -107,16 +108,16 @@ export default {
         navigation() {
             this.items = [
                 [
-                    { title: 'Dashboard', icon: 'store', to: { name: 'sales' },  exact: true }
+                    { title: 'Dashboard', icon: 'store', to: { name: 'sales' }, exact: true }
                 ],
                 [
-                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
+                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
                 ],
                 [
-                    { title: 'Inventory', icon: 'assignment_turned_in', to: { name: 'sales' },  exact: true }
+                    { title: 'Inventory', icon: 'assignment_turned_in', to: { name: 'sales' }, exact: true }
                 ],
                 [
-                    { title: 'Customers', icon: 'account_box', to: { name: 'receipts' }, role: 'MGR', exact: true }
+                    { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Products', icon: 'view_array', to: { name: 'shift' }, role: 'MGR', exact: true }
@@ -125,7 +126,7 @@ export default {
                     { title: 'Services', icon: 'face', to: { name: 'shift' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Employees', icon: 'person',  to: { name: 'report' }, role: 'MGR', exact: true }
+                    { title: 'Employees', icon: 'person', to: { name: 'report' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }

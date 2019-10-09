@@ -1,4 +1,4 @@
-import formatter from '~back/helpers/formatter'
+import formatter from '~~/helpers/formatter'
 
 export default {
     data: () => ({

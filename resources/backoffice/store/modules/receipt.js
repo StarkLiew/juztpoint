@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { graphql } from '~back/config'
+import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 import moment from 'moment'
 import _ from 'lodash'

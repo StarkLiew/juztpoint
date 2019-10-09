@@ -15,7 +15,8 @@ class AppointmentsQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('item'));
+
+		return GraphQL::paginate('items');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -27,6 +28,12 @@ class AppointmentsQuery extends Query {
 			'trxn_id' => [
 				'name' => 'trxn_id',
 				'type' => Type::string(),
+			],
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
 			],
 
 		];
@@ -46,7 +53,7 @@ class AppointmentsQuery extends Query {
 			->where('type', 'appointment')
 			->where($where)
 			->select($fields->getSelect())
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 		return $results;
 	}
 }

@@ -19,7 +19,7 @@
                                 <v-icon v-text="'people'"></v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
-                                <v-list-item-title v-text="customer.name"></v-list-item-title>
+                                <v-list-item-title>{{ customer.name }}</v-list-item-title>
                             </v-list-item-content>
                         </v-list-item>
                         <v-divider></v-divider>
@@ -46,18 +46,16 @@ export default {
     computed: mapGetters({
         customers: 'account/customers',
         terminal: 'auth/terminal',
-
     }),
-
     methods: {
         mapCustomers(alpha) {
-            let customers = this.$store.getters['account/customers']
-            if (!customers) return []
-            return customers.filter(row => row.name.toString().toLowerCase().startsWith(alpha.toLowerCase()))
+           /* let customers = this.$store.getters['account/customers']
+            if (!customers) return []*/
+                
+            return this.customers.filter(row => row.name.toString().toLowerCase().startsWith(alpha.toLowerCase()))
         },
         selected(customer) {
             this.$emit('selected', customer)
-
         },
         close() {
             this.$emit('close')

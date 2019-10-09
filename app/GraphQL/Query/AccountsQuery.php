@@ -15,7 +15,9 @@ class AccountsQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('account'));
+
+		return GraphQL::paginate('accounts');
+
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -44,6 +46,12 @@ class AccountsQuery extends Query {
 				'name' => 'status',
 				'type' => Type::string(),
 			],
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
+			],
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
@@ -63,7 +71,8 @@ class AccountsQuery extends Query {
 		$results = Account::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
+
 		return $results;
 	}
 }

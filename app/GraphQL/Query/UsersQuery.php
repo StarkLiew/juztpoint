@@ -16,7 +16,7 @@ class UsersQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('user'));
+		return GraphQL::paginate('users');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -29,6 +29,13 @@ class UsersQuery extends Query {
 				'name' => 'email',
 				'type' => Type::string(),
 			],
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
+			],
+
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
@@ -50,7 +57,7 @@ class UsersQuery extends Query {
 			->orWhere('id', '=', $id)
 			->where($where)
 			->select($fields->getSelect())
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;
 	}

@@ -1,11 +1,11 @@
 import 'babel-polyfill'
 import Vue from 'vue'
 
-import router from '~back/router/index'
-import store from '~back/store/index'
+import router from '~~//router/index'
+import store from '~~//store/index'
 import App from '$backoffice/App'
-import '~back/plugins/index'
-import vuetify from '~back/plugins/vuetify'
+import '~~//plugins/index'
+import vuetify from '~~//plugins/vuetify'
 import VueLodash from 'vue-lodash'
 
 const eventsHub = new Vue()

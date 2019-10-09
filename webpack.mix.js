@@ -23,7 +23,7 @@ mix.webpackConfig({
     extensions: ['.js', '.json', '.vue'],
     alias: {
       '~': path.join(__dirname , './resources/pos'),
-      '~back': path.join(__dirname , './resources/backoffice'),
+      '~~': path.join(__dirname , './resources/backoffice'),
       '$pos': path.join(__dirname, './resources/pos/components'),
       '$backoffice': path.join(__dirname, './resources/backoffice/components'),
     }

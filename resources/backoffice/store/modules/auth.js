@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { api } from '~back/config'
+import { api } from '~~//config'
 import * as types from '../mutation-types'
 import VueCookies from 'vue-cookies'
 

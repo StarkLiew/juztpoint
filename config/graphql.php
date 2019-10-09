@@ -140,6 +140,14 @@ return [
 		'item' => App\GraphQL\Type\ItemType::class,
 		'ItemInput' => App\GraphQL\Input\ItemInput::class,
 
+		//Pagination Type
+		'accounts' => App\GraphQL\Pagination\AccountsPagination::class,
+		'items' => App\GraphQL\Pagination\ItemsPagination::class,
+		'products' => App\GraphQL\Pagination\ProductsPagination::class,
+		'receipts' => App\GraphQL\Pagination\ReceiptsPagination::class,
+		'settings' => App\GraphQL\Pagination\SettingsPagination::class,
+		'users' => App\GraphQL\Pagination\UsersPagination::class,
+
 	],
 
 	// The types will be loaded on demand. Default is to load all types on each request

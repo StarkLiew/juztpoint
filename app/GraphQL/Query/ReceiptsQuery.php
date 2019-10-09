@@ -15,7 +15,7 @@ class ReceiptsQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('receipt'));
+		return GraphQL::paginate('receipts');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -35,6 +35,12 @@ class ReceiptsQuery extends Query {
 			'status' => [
 				'name' => 'status',
 				'type' => Type::string(),
+			],
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
 			],
 
 		];
@@ -60,7 +66,7 @@ class ReceiptsQuery extends Query {
 			->where('type', 'receipt')
 			->where($where)
 			->select($fields->getSelect())
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 		return $results;
 	}
 }

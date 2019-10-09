@@ -15,7 +15,7 @@ class SettingsQuery extends Query {
 	];
 
 	public function type(): Type {
-		return Type::listOf(GraphQL::type('setting'));
+		return GraphQL::paginate('settings');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -36,6 +36,12 @@ class SettingsQuery extends Query {
 				'name' => 'type',
 				'type' => Type::string(),
 			],
+			'limit' => [
+				'type' => Type::int(),
+			],
+			'page' => [
+				'type' => Type::int(),
+			],
 
 		];
 	}
@@ -53,7 +59,7 @@ class SettingsQuery extends Query {
 		$results = Setting::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())
-			->get();
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 		return $results;
 	}
 }

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import store from '~back/store/index'
-import router from '~back/router/index'
-import { api } from '~back/config'
-import { app } from '~back/app'
+import store from '~~/store/index'
+import router from '~~/router/index'
+import { api } from '~~/config'
+import { app } from '~~/app'
 import VueCookies from 'vue-cookies'
 
 axios.interceptors.request.use(config => {
