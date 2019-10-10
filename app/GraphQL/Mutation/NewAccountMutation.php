@@ -15,33 +15,46 @@ class NewAccountMutation extends Mutation {
 	}
 	public function args(): array{
 		return [
+			'id' => [
+				'name' => 'id',
+				'type' => Type::string(),
+			],
 			'name' => [
 				'name' => 'name',
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 			],
 			'uid' => [
 				'name' => 'uid',
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 			],
 			'type' => [
 				'name' => 'type',
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 			],
 			'status' => [
 				'name' => 'status',
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 			],
 			'properties' => [
 				'name' => 'properties',
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
+			],
+			'action' => [
+				'name' => 'action',
+				'type' => Type::string(),
 			],
 		];
 	}
 	public function resolve($root, $args) {
 
-		$args['user_id'] = Auth::id();
+		if (isset($args['action']) && $args['action'] === 'delete') {
+			$account = Account::where('uid', $args['uid'])->delete();
+			return null;
+		}
 
-		$account = Account::create($args);
+		$args['properties'] = json_decode($args['properties']);
+		$args['user_id'] = Auth::id();
+		$account = Account::updateOrCreate(['uid' => $args['uid']], $args);
 
 		if (!$account) {
 			return null;

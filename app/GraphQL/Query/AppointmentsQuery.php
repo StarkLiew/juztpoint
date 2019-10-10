@@ -35,6 +35,12 @@ class AppointmentsQuery extends Query {
 			'page' => [
 				'type' => Type::int(),
 			],
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'sort_desc' => [
+				'type' => Type::string(),
+			],
 
 		];
 	}

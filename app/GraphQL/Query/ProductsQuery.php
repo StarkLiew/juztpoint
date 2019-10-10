@@ -53,6 +53,9 @@ class ProductsQuery extends Query {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
+			if (isset($args['name'])) {
+				$query->where('name', 'like', '@' . $args['name'] . '%');
+			}
 			if (isset($args['type'])) {
 				$query->where('type', $args['type']);
 			}

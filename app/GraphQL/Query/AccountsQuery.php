@@ -52,12 +52,21 @@ class AccountsQuery extends Query {
 			'page' => [
 				'type' => Type::int(),
 			],
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'desc' => [
+				'type' => Type::string(),
+			],
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
+			}
+			if (isset($args['name'])) {
+				$query->where('name', 'like', '%' . $args['name'] . '%');
 			}
 			if (isset($args['type'])) {
 				$query->where('type', $args['type']);
@@ -68,10 +77,21 @@ class AccountsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
-		$results = Account::with(array_keys($fields->getRelations()))
+		$query = Account::with(array_keys($fields->getRelations()))
 			->where($where)
-			->select($fields->getSelect())
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($fields->getSelect());
+
+		if (isset($args['sort']) && isset($args['desc'])) {
+
+			if (isset($args['desc']) && $args['desc'] === 'desc') {
+				$query->orderBy($args['sort'], 'desc');
+			} else {
+				$query->orderBy($args['sort']);
+			}
+
+		}
+
+		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;
 	}

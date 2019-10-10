@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'Vue'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
@@ -25,10 +26,15 @@ export const mutations = {
     [types.ADD_CUSTOMER](state, { customer }) {
         const index = state.customers.findIndex(c => c.uid === customer.uid)
         if (index > -1) {
-            state.customers[index] = customer
+            Vue.set(state.customers, index, customer)
         } else {
             state.customers.push(customer)
         }
+    },
+    [types.REMOVE_CUSTOMER](state, { customer }) {
+          const index = state.customers.findIndex(c => c.uid === customer.uid)
+          Vue.set(state.customers, index, customer)
+          state.customers.splice(index , 1)
     },
     [types.FETCH_CUSTOMER_FAILURE](state) {
         state.customer = null
@@ -39,11 +45,11 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-    async fetchCustomers({ commit }, { limit, page }) {
+    async fetchCustomers({ commit }, { search, limit, page, sort, desc }) {
         try {
-       
-
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"customer", limit: ${limit}, page: ${page}){data{id, uid, name, status, properties{email, mobile}}, total,per_page}}`}})
+            const filter = `name: "${search}"`
+            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"customer", limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, uid, name, status, properties{email, mobile}}, total,per_page}}` } })
             commit(types.FILL_CUSTOMERS, data.data)
 
         } catch (e) {
@@ -52,18 +58,20 @@ export const actions = {
     },
     async addCustomer({ commit }, customer) {
         try {
+
             // uniqid
-            if (customer.status !== 'offline') {
+            if (!customer.id) {
                 var ts = String(new Date().getTime()),
                     i = 0,
                     uniqid = ''
                 for (i = 0; i < ts.length; i += 2) {
                     uniqid += Number(ts.substr(i, 2)).toString(36)
                 }
-                customer.uid = 'T' + customer.uid + '-' + uniqid
+                customer.uid = 'B-' + uniqid
+                customer.id = -1
             }
 
-            const { name, uid, properties } = customer
+            const { id, name, uid, note, properties } = customer
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             const mutation = `mutation accounts{
@@ -73,7 +81,7 @@ export const actions = {
                                  status: "active",
                                  type: "customer",
                                  properties: "${props}"
-                             ) {id, name, status, properties{email, mobile}}}`
+                             ) {id, uid, name, status, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
             customer = data.data.newAccount
@@ -82,9 +90,28 @@ export const actions = {
             return customer
         } catch (e) {
 
-            customer.status = 'offline'
-            commit(types.ADD_CUSTOMER, { customer })
+            return e
+        }
+    },
+    async trashCustomer({ commit }, customer) {
+        try {
+
+            const { uid } = customer
+
+            const mutation = `mutation accounts{
+                             newAccount(
+                                 uid: "${uid}",
+                                 action: "delete"
+                             ) {id, uid, name, status, properties{email, mobile}}}`
+
+            await axios.get(graphql.path('query'), { params: { query: mutation } })
+         
+            commit(types.REMOVE_CUSTOMER, { customer })
+
             return customer
+        } catch (e) {
+
+            return e
         }
     },
 }
