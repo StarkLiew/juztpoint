@@ -1,12 +1,20 @@
 <template>
-    <v-data-table :headers="headers" :items="items" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading...">
+    <v-data-table :headers="headers" :items="items" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
+    'items-per-page-options': [50, 100]
+  }">
+         <slot name="column"></slot>
+
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
-                <v-layout row wrap>
-                    <v-text-field type="search" v-model="search" append-icon="search" outlined name="search" label="Search..."></v-text-field>
-                </v-layout>
+                <v-btn color="primary" class="mb-2" @click="filter">
+                    <v-icon>search</v-icon>
+                </v-btn>
+                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..."></v-text-field>
+                <v-btn color="primary" class="mb-2" @click="reset">
+                    <v-icon>refresh</v-icon>
+                </v-btn>
                 <div class="flex-grow-1"></div>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
@@ -46,31 +54,41 @@
                     </template>
                     <v-list>
                         <v-list-item @click="">
-                            <v-list-item-title>PDF</v-list-item-title>
+                            <v-list-item-title>
+                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="data.csv">
+                                    CSV
+                                </download-excel>
+                            </v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="">
-                            <v-list-item-title>Excel</v-list-item-title>
+                            <v-list-item-title>
+                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="data.xls">
+                                    Excel
+                                </download-excel>
+                            </v-list-item-title>
                         </v-list-item>
                     </v-list>
                 </v-menu>
             </v-toolbar>
         </template>
-        <template v-slot:item.action="{ item }">
+        <template v-slot:item.action="{ item, header }">
             <v-icon small class="mr-2" @click="editItem(item)">
                 edit
             </v-icon>
-            <v-icon small @click="deleteItem(item)">
+            <v-icon small @click="deleteItem(item)" v-if="!header.hideTrash || item[header.hideTrash]">
                 delete
             </v-icon>
         </template>
         <template v-slot:no-data>
-            <v-btn fab small @click="">
-                <v-icon>refresh</v-icon>
-            </v-btn>
+            <v-container class="mt-5 mb-5">
+                <h1 class="title">Empty data</h1>
+            </v-container>
         </template>
     </v-data-table>
 </template>
 <script>
+import JsonExcel from 'vue-json-excel'
+
 export default {
     data() {
         return {
@@ -82,10 +100,13 @@ export default {
             mutateOptions: this.options,
         }
     },
+    components: {
+        'downloadExcel': JsonExcel,
+    },
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod'],
+    props: ['title', 'headers', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -95,9 +116,6 @@ export default {
     watch: {
         dialog(val) {
             val || this.close()
-        },
-        async search(val) {
-            await this.refresh(val, this.mutateOptions)
         },
         mutateOptions: {
             async handler() {
@@ -122,6 +140,13 @@ export default {
             const index = this.items.indexOf(item)
             confirm('Are you sure you want to delete this item?') && await this.removeMethod(item)
         },
+        async filter() {
+            await this.refresh(this.search, this.mutateOptions)
+        },
+        async reset() {
+            this.search = ''
+            await this.refresh(this.search, this.mutateOptions)
+        },
         close() {
             this.dialog = false
             setTimeout(() => {
@@ -135,12 +160,14 @@ export default {
 
             if (this.$refs.form.validate()) {
                 await this.saveMethod(this.editedItem)
-
                 this.close()
             }
+        },
+        async allItems() {
+            const options = Object.assign(this.mutateOptions, { limit: 0, page: 1 })
+            const results = await this.refresh(this.search, options, true)
 
-
-
+            return results
         },
 
     }

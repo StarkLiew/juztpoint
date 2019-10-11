@@ -8,7 +8,6 @@
                     </v-btn>
                 </v-list-item-icon>
                 <v-list-item-content>
-           
                 </v-list-item-content>
                 <v-list-item-icon>
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
@@ -106,6 +105,10 @@ export default {
         },
 
         navigation() {
+            const inventory = [
+                { title: 'Vendors', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true }
+            ]
+
             this.items = [
                 [
                     { title: 'Dashboard', icon: 'store', to: { name: 'sales' }, exact: true }
@@ -114,7 +117,7 @@ export default {
                     { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
                 ],
                 [
-                    { title: 'Inventory', icon: 'assignment_turned_in', to: { name: 'sales' }, exact: true }
+                    { title: 'Inventory', icon: 'assignment_turned_in', items: inventory, exact: true }
                 ],
                 [
                     { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
@@ -126,7 +129,7 @@ export default {
                     { title: 'Services', icon: 'face', to: { name: 'shift' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Employees', icon: 'person', to: { name: 'report' }, role: 'MGR', exact: true }
+                    { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }

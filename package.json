@@ -42,6 +42,7 @@
     "vue-cookies": "^1.5.13",
     "vue-currency-filter": "^3.4.2",
     "vue-easy-print": "0.0.8",
+    "vue-json-excel": "^0.2.98",
     "vue-lodash": "^2.0.2",
     "vue-moment": "^4.0.0",
     "vuex-persist": "^2.0.1"

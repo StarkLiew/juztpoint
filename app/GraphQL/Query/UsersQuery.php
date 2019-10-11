@@ -25,6 +25,10 @@ class UsersQuery extends Query {
 				'name' => 'id',
 				'type' => Type::int(),
 			],
+			'name' => [
+				'name' => 'name',
+				'type' => Type::string(),
+			],
 			'email' => [
 				'name' => 'email',
 				'type' => Type::string(),
@@ -35,6 +39,16 @@ class UsersQuery extends Query {
 			'page' => [
 				'type' => Type::int(),
 			],
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'desc' => [
+				'type' => Type::string(),
+			],
+			'search' => [
+				'name' => 'search',
+				'type' => Type::string(),
+			],
 
 		];
 	}
@@ -43,21 +57,49 @@ class UsersQuery extends Query {
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
+			if (isset($args['search'])) {
+				$query->where(function ($query) use ($args) {
+					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->mobile', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->email', 'LIKE', '%' . $args['search'] . '%');
+				});
+
+			}
+
+			if (isset($args['name'])) {
+				$query->where('name', $args['name']);
+			}
 			if (isset($args['email'])) {
 				$query->where('email', $args['email']);
 			}
-		};
 
-		$id = Auth::id();
+			if (isset($args['status'])) {
+				$query->where('status', $args['status']);
+			}
+		};
+		$auth = Auth::user();
+		$tid = $auth->id;
+		if ($auth->tenant) {
+			$tid = $auth->tenant;
+		}
 
 		$fields = $getSelectFields();
-
-		$results = User::with(array_keys($fields->getRelations()))
-			->where('tenant', '=', $id)
-			->orWhere('id', '=', $id)
+		$query = User::with(array_keys($fields->getRelations()))
+			->where('tenant', '=', $tid)
+			->orWhere('id', '=', $tid)
 			->where($where)
-			->select($fields->getSelect())
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($fields->getSelect());
+
+		if (isset($args['sort']) && isset($args['desc'])) {
+
+			if (isset($args['desc']) && $args['desc'] === 'desc') {
+				$query->orderBy($args['sort'], 'desc');
+			} else {
+				$query->orderBy($args['sort']);
+			}
+
+		}
+		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;
 	}

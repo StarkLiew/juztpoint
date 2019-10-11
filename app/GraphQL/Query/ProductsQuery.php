@@ -43,8 +43,15 @@ class ProductsQuery extends Query {
 			'limit' => [
 				'type' => Type::int(),
 			],
-			'page' => [
-				'type' => Type::int(),
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'desc' => [
+				'type' => Type::string(),
+			],
+			'search' => [
+				'name' => 'search',
+				'type' => Type::string(),
 			],
 		];
 	}

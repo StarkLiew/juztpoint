@@ -42,6 +42,16 @@ class ReceiptsQuery extends Query {
 			'page' => [
 				'type' => Type::int(),
 			],
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'desc' => [
+				'type' => Type::string(),
+			],
+			'search' => [
+				'name' => 'search',
+				'type' => Type::string(),
+			],
 
 		];
 	}
@@ -64,6 +74,11 @@ class ReceiptsQuery extends Query {
 		$fields = $getSelectFields();
 		$results = Document::with(array_keys($fields->getRelations()))
 			->where('type', 'receipt')
+			->where($where)
+			->select($fields->getSelect())
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
+		$fields = $getSelectFields();
+		$results = Setting::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect())
 			->paginate($args['limit'], ['*'], 'page', $args['page']);

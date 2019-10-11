@@ -42,16 +42,32 @@ class SettingsQuery extends Query {
 			'page' => [
 				'type' => Type::int(),
 			],
+			'sort' => [
+				'type' => Type::string(),
+			],
+			'desc' => [
+				'type' => Type::string(),
+			],
+			'search' => [
+				'name' => 'search',
+				'type' => Type::string(),
+			],
 
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
+			if (isset($args['type'])) {
+				$query->where('type', $args['type']);
+			}
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
-			if (isset($args['type'])) {
-				$query->where('type', $args['type']);
+			if (isset($args['search'])) {
+				$query->where(function ($query) use ($args) {
+					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
+				});
+
 			}
 		};
 

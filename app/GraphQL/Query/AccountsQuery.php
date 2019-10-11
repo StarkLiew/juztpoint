@@ -58,19 +58,33 @@ class AccountsQuery extends Query {
 			'desc' => [
 				'type' => Type::string(),
 			],
+			'search' => [
+				'name' => 'search',
+				'type' => Type::string(),
+			],
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
-			if (isset($args['id'])) {
-				$query->where('id', $args['id']);
-			}
-			if (isset($args['name'])) {
-				$query->where('name', 'like', '%' . $args['name'] . '%');
-			}
 			if (isset($args['type'])) {
 				$query->where('type', $args['type']);
 			}
+			if (isset($args['id'])) {
+				$query->where('id', $args['id']);
+			}
+			if (isset($args['search'])) {
+				$query->where(function ($query) use ($args) {
+					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->mobile', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->email', 'LIKE', '%' . $args['search'] . '%');
+				});
+
+			}
+
+			if (isset($args['name'])) {
+				$query->where('name', 'like', '%' . $args['name'] . '%');
+			}
+
 			if (isset($args['status'])) {
 				$query->where('status', $args['status']);
 			}

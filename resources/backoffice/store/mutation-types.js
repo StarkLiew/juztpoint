@@ -1,10 +1,9 @@
 /**
  * auth.js
  */
-export const SET_USER = 'SET_USER'
+
 export const LOGOUT = 'LOGOUT'
 export const DEREGISTER = 'DEREGISTER'
-export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 export const SET_TOKEN = 'SET_TOKEN'
 
 /**
@@ -25,16 +24,24 @@ export const FETCH_SERVICE_FAILURE = 'FETCH_SERVICE_FAILURE'
  * account.js
  */
 export const SET_CUSTOMER = 'SET_CUSTOMER'
-export const ADD_CUSTOMER = 'SET_CUSTOMERS'
-export const REMOVE_CUSTOMER = 'REMOVE_CUSTOMER'
+export const ADD_CUSTOMER = 'ADD_CUSTOMER'
 export const FILL_CUSTOMERS = 'FILL_CUSTOMERS'
-export const FETCH_CUSTOMER_FAILURE = 'FETCH_CUSTOMER_FAILURE'
+export const REMOVE_CUSTOMER = 'REMOVE_CUSTOMER'
+export const FETCH_CUSTOMER_FAILURE = 'FETCH_ACCOUNT_FAILURE'
+export const SET_VENDOR = 'SET_VENDOR'
+export const ADD_VENDOR = 'ADD_VENDOR'
+export const FILL_VENDORS = 'FILL_VENDORS'
+export const REMOVE_VENDOR = 'REMOVE_VENDOR'
+export const FETCH_VENDOR_FAILURE = 'FETCH_VENDOR_FAILURE'
 
 /**
  * user.js
  */
+export const SET_USER = 'SET_USER'
+export const ADD_USER = 'ADD_USER'
 export const FILL_USERS = 'FILL_USERS'
-export const FETCH_USERS_FAILURE = 'FETCH_USER_FAILURE'
+export const REMOVE_USER = 'REMOVE_USER'
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 
 /**
  * receipt.js

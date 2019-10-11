@@ -16,7 +16,7 @@ class UsersPagination extends Pagination {
 	public function fields(): array{
 		return [
 			'id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'The id of the user',
 			],
 			'email' => [
@@ -29,6 +29,10 @@ class UsersPagination extends Pagination {
 			],
 			'pin' => [
 				'type' => Type::string(),
+				'description' => 'The name of the user',
+			],
+			'tenant' => [
+				'type' => Type::int(),
 				'description' => 'The name of the user',
 			],
 			'properties' => [

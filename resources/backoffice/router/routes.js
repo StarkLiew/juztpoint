@@ -16,26 +16,45 @@ export default [
             }
         ]
     }, ]),
-  ...applyRules(['auth'], [
-    { path: '/', component: require('$backoffice/admin/AdminWrapper').default, children:
-      [
-        { path: '', name: 'index', redirect: { name: 'profile' } },
-        { path: '/profile', component: require('$backoffice/admin/profile/ProfileWrapper').default, children:
-          [
-            { path: '', name: 'profile', component: require('$backoffice/admin/profile/Profile').default },
-            { path: '/edit', name: 'profile-edit', component: require('$backoffice/admin/profile/edit/ProfileEdit').default }
-          ]
-        },
-        { path: '/customers', component: require('$backoffice/admin/customer/CustomerWrapper').default, children:
-          [
-            { path: '', name: 'customers', component: require('$backoffice/admin/customer/Customer').default },
-         
-          ]
-        },
-      ]
-    },
-  ]),
-  { path: '*', redirect: { name: 'index' } }
+    ...applyRules(['auth'], [{
+        path: '/',
+        component: require('$backoffice/admin/AdminWrapper').default,
+        children: [
+            { path: '', name: 'index', redirect: { name: 'profile' } },
+            {
+                path: '/profile',
+                component: require('$backoffice/admin/profile/ProfileWrapper').default,
+                children: [
+                    { path: '', name: 'profile', component: require('$backoffice/admin/profile/Profile').default },
+                    { path: '/edit', name: 'profile-edit', component: require('$backoffice/admin/profile/edit/ProfileEdit').default }
+                ]
+            },
+            {
+                path: '/customers',
+                component: require('$backoffice/admin/customer/CustomerWrapper').default,
+                children: [
+                    { path: '', name: 'customers', component: require('$backoffice/admin/customer/Customer').default },
+
+                ]
+            },
+            {
+                path: '/vendors',
+                component: require('$backoffice/admin/vendor/VendorWrapper').default,
+                children: [
+                    { path: '', name: 'vendors', component: require('$backoffice/admin/vendor/Vendor').default },
+
+                ]
+            },
+            {
+                path: '/users',
+                component: require('$backoffice/admin/user/UserWrapper').default,
+                children: [
+                    { path: '', name: 'users', component: require('$backoffice/admin/user/User').default },
+                ]
+            },
+        ]
+    }, ]),
+    { path: '*', redirect: { name: 'index' } }
 ]
 
 function applyRules(rules, routes) {
