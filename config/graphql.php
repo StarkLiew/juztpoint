@@ -107,11 +107,15 @@ return [
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
 				'newAccount' => App\GraphQL\Mutation\NewAccountMutation::class,
-				'newUser' => App\GraphQL\Mutation\NewUserMutation::class,
 				'newReceipt' => App\GraphQL\Mutation\NewReceiptMutation::class,
 				'newAppointment' => App\GraphQL\Mutation\NewAppointmentMutation::class,
 				'voidReceipt' => App\GraphQL\Mutation\VoidReceiptMutation::class,
 				'shift' => App\GraphQL\Mutation\ShiftMutation::class,
+
+				'newUser' => App\GraphQL\Mutation\User\NewUserMutation::class,
+				'updateUser' => App\GraphQL\Mutation\User\UpdateUserMutation::class,
+				'trashUser' => App\GraphQL\Mutation\User\TrashUserMutation::class,
+
 			],
 			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],

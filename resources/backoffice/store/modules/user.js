@@ -67,26 +67,42 @@ export const actions = {
     },
     async addUser({ commit }, user) {
         try {
-            const { id, name, email,  properties } = user
-
-            let params = ''
-            if (id && id > 0) {
-                params = `id: ${id},`
-            }
-
-
+            const { name, email, properties } = user
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
-            params += `name: "${name}",
-                       email: "${email}",
-                       properties: "${props}"`
 
             const mutation = `mutation users{
-                             newUser(
-                              ${params}
+                                newUser(
+                                    name: "${name}",
+                                    email: "${email}",
+                                    properties: "${props}"
                              ) {id, email, name, tenant, properties{backoffice, role}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
             user = data.data.newUser
+
+            commit(types.ADD_USER, { user })
+
+            return user
+        } catch (e) {
+
+            return e
+        }
+    },
+    async updateUser({ commit }, user) {
+        try {
+            const { id, name, properties } = user
+
+            const props = JSON.stringify(properties).replace(/"/g, '\\"')
+       
+            const mutation = `mutation users{
+                               updateUser(
+                                    id: ${id},
+                                    name: "${name}",
+                                    properties: "${props}"
+                             ) {id, email, name, tenant, properties{backoffice, role}}}`
+
+            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+            user = data.data.updateUser
 
             commit(types.ADD_USER, { user })
 
@@ -101,11 +117,7 @@ export const actions = {
 
             const { id } = user
 
-            const mutation = `mutation user{
-                             newUser(
-                                 id: "${id}",
-                                 action: "delete"
-                             ) {id, uid, name, email }}`
+            const mutation = `mutation user{trashUser(id: "${id}") {id, uid, name, email}}`
 
             await axios.get(graphql.path('query'), { params: { query: mutation } })
 

@@ -2,8 +2,11 @@
     <v-data-table :headers="headers" :items="items" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
     'items-per-page-options': [50, 100]
   }">
-         <slot name="column"></slot>
+   
+        <template v-slot:item[header.value]="{ item }"  v-for="header in headers.filter(h => h.custom === true)">
+              <slot :name="'item.' + header.value" :item="item"></slot>
 
+        </template>
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
