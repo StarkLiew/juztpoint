@@ -49,6 +49,7 @@ export default {
 
     methods: {
         navToggle() {
+
             this.$emit('nav-toggle')
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <crud title="Customers" :headers="headers" :items.sync='customers' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="customerCount" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
+    <crud title="Customers" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
         <template v-slot:dialog="{ valid, editedItem }">
             <v-container>
                 <v-row>
@@ -13,6 +13,10 @@
                     </v-col>
                 </v-row>
             </v-container>
+        </template>
+        <template v-slot:item.status="{item}">
+            <v-icon color="success" v-if="item.status === 'active'">check</v-icon>
+            <v-icon color="danger" v-if="item.status === 'inactive'">time</v-icon>
         </template>
     </crud>
 </template>
@@ -44,7 +48,7 @@ export default {
                 { text: 'Name', value: 'name' },
                 { text: 'Mobile #', value: 'properties.mobile', sortable: false },
                 { text: 'Email #', value: 'properties.email', sortable: false },
-                { text: 'Active', value: 'status', filterable: false, sortable: false },
+                { text: 'Active', value: 'status', filterable: false, sortable: false, custom: true },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
             exportFields: {
@@ -55,8 +59,8 @@ export default {
         }
     },
     computed: mapGetters({
-        customers: 'account/customers',
-        customerCount: 'account/customerCount',
+        items: 'account/items',
+        count: 'account/count',
     }),
     async mounted() {
 
@@ -68,24 +72,31 @@ export default {
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
 
-            const results = await this.$store.dispatch('account/fetchCustomers', { search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('account/fetch', { type: 'customer', search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
 
             if (noCommit) return results
         },
-        async save(customer) {
+        async save(item) {
+    
             this.loading = true
+            if (!item.id) {
+                item.type = 'customer'
+                await this.$store.dispatch('account/add', item)
+            } else {
+          
+                await this.$store.dispatch('account/update', item)
+            }
 
-            await this.$store.dispatch('account/addCustomer', customer)
 
             this.loading = false
         },
-        async remove(customer) {
+        async remove(item) {
 
             this.loading = true
 
-            await this.$store.dispatch('account/trashCustomer', customer)
+            await this.$store.dispatch('account/trash', item)
 
             this.loading = false
 

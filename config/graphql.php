@@ -112,9 +112,15 @@ return [
 				'voidReceipt' => App\GraphQL\Mutation\VoidReceiptMutation::class,
 				'shift' => App\GraphQL\Mutation\ShiftMutation::class,
 
+				//USER
 				'newUser' => App\GraphQL\Mutation\User\NewUserMutation::class,
 				'updateUser' => App\GraphQL\Mutation\User\UpdateUserMutation::class,
 				'trashUser' => App\GraphQL\Mutation\User\TrashUserMutation::class,
+
+				//ACCOUNT
+				'newAccount' => App\GraphQL\Mutation\Account\NewAccountMutation::class,
+				'updateAccount' => App\GraphQL\Mutation\Account\UpdateAccountMutation::class,
+				'trashAccount' => App\GraphQL\Mutation\Account\TrashAccountMutation::class,
 
 			],
 			'middleware' => ['auth:api'],

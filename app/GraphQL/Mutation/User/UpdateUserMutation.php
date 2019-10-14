@@ -17,6 +17,7 @@ class UpdateUserMutation extends Mutation {
 			'id' => [
 				'name' => 'id',
 				'type' => Type::int(),
+				'rules' => ['required'],
 			],
 			'name' => [
 				'name' => 'name',
@@ -45,9 +46,8 @@ class UpdateUserMutation extends Mutation {
 		}
 
 		$user = User::find($args['id']);
-		$user->update($args);
 
-		if (!$user) {
+		if (!$user->save($args)) {
 			return null;
 		}
 		return $user;

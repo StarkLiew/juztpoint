@@ -8,7 +8,7 @@
                         <v-text-field v-model="editedItem.email" :disabled="!editedItem.id ? false : true" label="Email" :rules="[v =>  /.+@.+\..+/.test(v)|| 'E-mail must be valid']"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-select v-model="editedItem.properties.role" :items="[ {name: 'Manager', value: 'MGR' },  { name: 'Cashier', value: 'CSH' }]" label="Role" hint="Point-of-Sale System role." item-text="name" item-value="value"></v-select>
+                        <v-select v-model="editedItem.properties.role" :items="[ {name: 'Manager', value: 'MGR' },  { name: 'Cashier', value: 'CSH' }]"  label="Role" hint="Point-of-Sale System role." item-text="name" item-value="value"></v-select>
                         <v-checkbox :false-value="0" :true-value="1" v-model="editedItem.properties.backoffice" label="Allow access to BackOffice"></v-checkbox>
                     </v-col>
                 </v-row>
@@ -16,6 +16,9 @@
         </template>
         <template v-slot:item.properties.backoffice="{item}">
             <v-icon color="success" v-if="item.properties.backoffice === 1">check</v-icon>
+        </template>
+        <template v-slot:item.properties.role="{item}">
+            <span class="caption">{{ item.properties.role === 'MGR' ? 'MANAGER' : 'CASHIER' }}</span>
         </template>
     </crud>
 </template>
@@ -46,7 +49,7 @@ export default {
             headers: [
                 { text: 'Name', value: 'name' },
                 { text: 'Email', value: 'email', },
-                { text: 'POS Role', value: 'properties.role', sortable: false },
+                { text: 'POS Role', value: 'properties.role', sortable: false, custom: true },
                 { text: 'BackOffice', value: 'properties.backoffice', sortable: false, custom: true},
                 { text: 'Actions', value: 'action', sortable: false, hideTrash: 'tenant' },
             ],

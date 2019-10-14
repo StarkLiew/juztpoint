@@ -7,229 +7,148 @@ import * as types from '../mutation-types'
  * Initial state
  */
 export const state = {
-    account: null,
-    customers: [],
-    vendors: [],
-    customerCount: 0,
-    VendorCount: 0,
+    item: null,
+    items: [],
+    count: 0,
 }
 
 /**
  * Mutations
  */
 export const mutations = {
-    [types.SET_CUSTOMER](state, { customer }) {
-        state.customer = customer
+    [types.SET_ACCOUNT](state, { item }) {
+        state.item = item
     },
-    [types.FILL_CUSTOMERS](state, { accounts }) {
-         
-        state.customers = accounts.data
-        state.customerCount = accounts.total
+    [types.FILL_ACCOUNTS](state, { items }) {
+
+        state.items = items.data
+        state.count = items.total
     },
-    [types.ADD_CUSTOMER](state, { customer }) {
-        const index = state.customers.findIndex(c => c.uid === customer.uid)
+    [types.ADD_ACCOUNT](state, { item }) {
+
+
+        const index = state.items.findIndex(u => u.id === item.id)
+
         if (index > -1) {
-            Vue.set(state.customers, index, customer)
+            Vue.set(state.items, index, item)
         } else {
-            state.customers.push(customer)
+            state.items.push(item)
         }
     },
-    [types.REMOVE_CUSTOMER](state, { customer }) {
-        const index = state.customers.findIndex(c => c.uid === customer.uid)
-        Vue.set(state.customers, index, customer)
-        state.customers.splice(index, 1)
+    [types.REMOVE_ACCOUNT](state, { item }) {
+        const index = state.items.findIndex(u => u.id === item.id)
+        Vue.set(state.items, index, item)
+        state.items.splice(index, 1)
     },
-    [types.FETCH_CUSTOMER_FAILURE](state) {
-        state.customer = null
+    [types.FETCH_ACCOUNT_FAILURE](state) {
+        state.item = null
+        state.items = []
+        state.count = 0
     },
-    [types.SET_VENDOR](state, { vendor }) {
-        state.vendor = vendor
-    },
-    [types.FILL_VENDORS](state, { accounts }) {
-        state.vendors = accounts.data
-        state.vendorCount = accounts.total
-    },
-    [types.ADD_VENDOR](state, { vendor }) {
-        const index = state.vendors.findIndex(c => c.uid === vendor.uid)
-        if (index > -1) {
-            Vue.set(state.vendors, index, vendor)
-        } else {
-            state.vendors.push(vendor)
-        }
-    },
-    [types.REMOVE_VENDOR](state, { vendor }) {
-        const index = state.vendors.findIndex(c => c.uid === vendor.uid)
-        Vue.set(state.vendors, index, vendor)
-        state.vendors.splice(index, 1)
-    },
-    [types.FETCH_VENDOR_FAILURE](state) {
-        state.vendor = null
-    },
+
+
 }
 
 /**
  * Actions
  */
 export const actions = {
-    async fetchCustomers({ commit }, { search, limit, page, sort, desc, noCommit }) {
+    async reset() {
+        commit(types.FETCH_ACCOUNT_FAILURE)
+    },
+    async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit }) {
+
+        commit(types.FETCH_ACCOUNT_FAILURE) //reset
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"customer", limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, uid, name, status, properties{email, mobile}}, total,per_page}}` } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, name, type, properties{mobile, email}}, total,per_page}}` } })
 
             if (noCommit) {
 
                 return data.data.accounts.data
             }
-            commit(types.FILL_CUSTOMERS, data.data)
+            commit(types.FILL_ACCOUNTS, { items: data.data.accounts })
 
         } catch (e) {
-            commit(types.FETCH_CUSTOMER_FAILURE)
+            commit(types.FETCH_ACCOUNT_FAILURE)
         }
     },
-    async addCustomer({ commit }, customer) {
+    async add({ commit }, item) {
         try {
-
-            // uniqid
-            if (!customer.id) {
-                var ts = String(new Date().getTime()),
-                    i = 0,
-                    uniqid = ''
-                for (i = 0; i < ts.length; i += 2) {
-                    uniqid += Number(ts.substr(i, 2)).toString(36)
-                }
-                customer.uid = 'B-' + uniqid
-                customer.id = -1
-            }
-
-            const { id, name, uid, note, properties, status } = customer
+            const { name, type, properties, status } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             const mutation = `mutation accounts{
-                             newAccount(
-                                 name: "${name}",
-                                 uid: "${uid}",
-                                 status: "${status}",
-                                 type: "customer",
-                                 properties: "${props}"
-                             ) {id, uid, name, status, properties{email, mobile}}}`
+                                newAccount(
+                                    name: "${name}",
+                                    type: "${type}",
+                                    status: "${status}",
+                                    properties: "${props}"
+                             ) {id, name, type, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-            customer = data.data.newAccount
-            commit(types.ADD_CUSTOMER, { customer })
+            item = data.data.newAccount
 
-            return customer
+            commit(types.ADD_ACCOUNT, { item })
+
+            return item
         } catch (e) {
 
             return e
         }
     },
-    async trashCustomer({ commit }, customer) {
+    async update({ commit }, item) {
         try {
+            const { id, name, properties } = item
 
-            const { uid } = customer
-
-            const mutation = `mutation accounts{
-                             newAccount(
-                                 uid: "${uid}",
-                                 action: "delete"
-                             ) {id, uid, name, status, properties{email, mobile}}}`
-
-            await axios.get(graphql.path('query'), { params: { query: mutation } })
-
-            commit(types.REMOVE_CUSTOMER, { customer })
-
-            return customer
-        } catch (e) {
-
-            return e
-        }
-    },
-
-    async fetchVendors({ commit }, { search, limit, page, sort, desc, noCommit }) {
-        try {
-            const filter = `search: "${search}"`
-            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"supplier", limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, uid, name, status, properties{email, mobile}}, total,per_page}}` } })
-            if (noCommit) {
-
-                return data.data.accounts.data
-            }
-            commit(types.FILL_VENDORS, data.data)
-
-        } catch (e) {
-            commit(types.FETCH_VENDOR_FAILURE)
-        }
-    },
-    async addVendor({ commit }, vendor) {
-        try {
-
-            // uniqid
-            if (!vendor.id) {
-                var ts = String(new Date().getTime()),
-                    i = 0,
-                    uniqid = ''
-                for (i = 0; i < ts.length; i += 2) {
-                    uniqid += Number(ts.substr(i, 2)).toString(36)
-                }
-                vendor.uid = 'B-' + uniqid
-                vendor.id = -1
-            }
-
-            const { id, name, uid, note, properties, status } = vendor
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             const mutation = `mutation accounts{
-                             newUser(
-                                 name: "${name}",
-                                 uid: "${uid}",
-                                 status: "${status}",
-                                 type: "supplier",
-                                 properties: "${props}"
-                             ) {id, uid, name, status, properties{email, mobile}}}`
+                               updateAccount(
+                                    id: ${id},
+                                    name: "${name}",
+                                    properties: "${props}"
+                             ) {id, name,type, properties{mobile, email}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-            vendor = data.data.newAccount
-            commit(types.ADD_VENDOR, { vendor })
+            item = data.data.updateAccount
 
-            return vendor
+            commit(types.ADD_ACCOUNT, { item })
+
+            return item
         } catch (e) {
 
             return e
         }
     },
-    async trashVendor({ commit }, vendor) {
+    async trash({ commit }, item) {
         try {
 
-            const { uid } = vendor
+            const { id } = item
 
-            const mutation = `mutation accounts{
-                             newAccount(
-                                 uid: "${uid}",
-                                 action: "delete"
-                             ) {id, uid, name, status, properties{email, mobile}}}`
+            const mutation = `mutation account{trashAccount(id: "${id}") {id, name }}`
 
             await axios.get(graphql.path('query'), { params: { query: mutation } })
 
-            commit(types.REMOVE_VENDOR, { vendor })
+            commit(types.REMOVE_ACCOUNT, { item })
 
-            return vendor
+            return item
         } catch (e) {
 
             return e
         }
     },
+
+
 }
 
 /**
  * Getters
  */
 export const getters = {
-    customers: state => state.customers,
-    customer: state => state.customer !== null,
-    customerCount: state => state.customerCount,
-    vendors: state => state.vendors,
-    vendor: state => state.vendor !== null,
-    vendorCount: state => state.vendorCount,
+    items: state => state.items,
+    item: state => state.item !== null,
+    count: state => state.count,
 
 }

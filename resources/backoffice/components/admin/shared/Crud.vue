@@ -2,10 +2,8 @@
     <v-data-table :headers="headers" :items="items" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
     'items-per-page-options': [50, 100]
   }">
-   
-        <template v-slot:item[header.value]="{ item }"  v-for="header in headers.filter(h => h.custom === true)">
-              <slot :name="'item.' + header.value" :item="item"></slot>
-
+        <template v-slot:[header]="{ item }" v-for="header in headers.filter(h => h.custom === true).map(h => 'item.' +  h.value)">
+            <slot :name="header" :item="item"></slot>
         </template>
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
@@ -28,13 +26,13 @@
                     <v-form ref="form" v-model="valid" lazy-validation>
                         <v-card tile>
                             <v-toolbar flat dark color="primary" max-height="68">
-                                <v-btn icon dark @click="close">
+                                <v-btn icon dark @click="close" :disabled="saving">
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                                 <div class="flex-grow-1"></div>
                                 <v-toolbar-items>
-                                    <v-btn dark text @click="save">
+                                    <v-btn dark text @click="save" :loading="saving" :disabled="saving || !valid">
                                         Save
                                     </v-btn>
                                 </v-toolbar-items>
@@ -100,6 +98,7 @@ export default {
             editedIndex: -1,
             search: '',
             valid: true,
+            saving: false,
             mutateOptions: this.options,
         }
     },
@@ -160,11 +159,12 @@ export default {
             }, 300)
         },
         async save() {
-
+            this.saving = true
             if (this.$refs.form.validate()) {
                 await this.saveMethod(this.editedItem)
                 this.close()
             }
+            this.saving = false
         },
         async allItems() {
             const options = Object.assign(this.mutateOptions, { limit: 0, page: 1 })

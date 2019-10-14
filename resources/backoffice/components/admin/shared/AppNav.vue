@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" width="300">
+    <v-navigation-drawer fixed app  :value.sync="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300">
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -53,27 +53,23 @@ export default {
     data: () => ({
         items: [],
         name: null,
+
     }),
-
     props: ['mini'],
-
     computed: mapGetters({
         auth: 'auth/user',
     }),
-
     watch: {
         authName(val) {
             if (val) {
                 this.name = val
             }
-        }
+        },
     },
-
     mounted() {
+        this.navigation() 
         this.name = this.auth.name
-        this.navigation()
     },
-
     methods: {
         navToggle() {
             this.$emit('nav-toggle')
@@ -116,9 +112,15 @@ export default {
                 [
                     { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
                 ],
-                [
-                    { title: 'Inventory', icon: 'assignment_turned_in', items: inventory, exact: true }
-                ],
+                [{
+                    title: 'Inventory',
+                    icon: 'assignment_turned_in',
+                    items: inventory,
+                    action: () => {
+                        alert('me')
+                    },
+                    exact: true
+                }],
                 [
                     { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
                 ],
