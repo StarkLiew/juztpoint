@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app  :value.sync="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300">
+    <v-navigation-drawer fixed app :value.sync="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange">
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -19,7 +19,7 @@
         <v-list class="py-0" dense v-for="(group, index) in items" :key="index">
             <v-divider class="mb-2" :class="{ 'mt-0': !index, 'mt-2': index }" v-if="group.length"></v-divider>
             <template v-for="item in group">
-                <v-list-group v-if="!!item.items" :prepend-icon="item.icon" no-action :key="item.title">
+                <v-list-group v-if="!!item.items" :prepend-icon="item.icon"  @click.native="item.action && mini ? item.action() : false"  :key="item.title">
                     <template v-slot:activator>
                         <v-list-item-content>
                             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -39,7 +39,7 @@
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title>{{ item.title}}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </template>
@@ -67,10 +67,13 @@ export default {
         },
     },
     mounted() {
-        this.navigation() 
+        this.navigation()
         this.name = this.auth.name
     },
     methods: {
+        inputChange(val) {
+            this.$emit('status-changed', val)
+        },
         navToggle() {
             this.$emit('nav-toggle')
         },
@@ -102,7 +105,7 @@ export default {
 
         navigation() {
             const inventory = [
-                { title: 'Vendors', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true }
+                { title: 'Vendors', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true}
             ]
 
             this.items = [
@@ -117,7 +120,7 @@ export default {
                     icon: 'assignment_turned_in',
                     items: inventory,
                     action: () => {
-                        alert('me')
+                        this.$emit('status-changed', false)
                     },
                     exact: true
                 }],
@@ -125,10 +128,10 @@ export default {
                     { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Products', icon: 'view_array', to: { name: 'shift' }, role: 'MGR', exact: true }
+                    { title: 'Products', icon: 'view_array', to: { name: 'products' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Services', icon: 'face', to: { name: 'shift' }, role: 'MGR', exact: true }
+                    { title: 'Services', icon: 'face', to: { name: 'services' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true }

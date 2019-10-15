@@ -53,6 +53,9 @@ class ProductsQuery extends Query {
 				'name' => 'search',
 				'type' => Type::string(),
 			],
+			'page' => [
+				'type' => Type::int(),
+			],
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {

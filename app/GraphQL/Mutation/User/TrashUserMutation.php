@@ -7,7 +7,7 @@ use Rebing\GraphQL\Support\Mutation;
 
 class TrashUserMutation extends Mutation {
 	protected $attributes = [
-		'name' => 'NewUser',
+		'name' => 'TrashUser',
 	];
 	public function type(): Type {
 		return GraphQL::type('user');

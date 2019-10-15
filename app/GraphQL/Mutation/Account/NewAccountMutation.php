@@ -32,10 +32,7 @@ class NewAccountMutation extends Mutation {
 				'name' => 'properties',
 				'type' => Type::string(),
 			],
-			'action' => [
-				'name' => 'action',
-				'type' => Type::string(),
-			],
+
 		];
 	}
 

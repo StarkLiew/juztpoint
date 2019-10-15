@@ -6,19 +6,6 @@ export const LOGOUT = 'LOGOUT'
 export const DEREGISTER = 'DEREGISTER'
 export const SET_TOKEN = 'SET_TOKEN'
 
-/**
- * product.js
- */
-export const SET_PRODUCT = 'SET_PRODUCT'
-export const FILL_PRODUCTS = 'FILL_PRODUCTS'
-export const FETCH_PRODUCT_FAILURE = 'FETCH_PRODUCT_FAILURE'
-
-/**
- * service.js
- */
-export const SET_SERVICE = 'SET_SERVICE'
-export const FILL_SERVICES = 'FILL_SERVICES'
-export const FETCH_SERVICE_FAILURE = 'FETCH_SERVICE_FAILURE'
 
 
 /**
@@ -30,6 +17,16 @@ export const FILL_ACCOUNTS = 'FILL_ACCOUNTS'
 export const REMOVE_ACCOUNT = 'REMOVE_ACCOUNT'
 export const FETCH_ACCOUNT_FAILURE = 'FETCH_ACCOUNT_FAILURE'
 
+
+
+/**
+ * product.js
+ */
+export const SET_PRODUCT = 'SET_PRODUCT'
+export const ADD_PRODUCT = 'ADD_PRODUCT'
+export const FILL_PRODUCTS = 'FILL_PRODUCTS'
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
+export const FETCH_PRODUCT_FAILURE = 'FETCH_PRODUCT_FAILURE'
 
 /**
  * user.js

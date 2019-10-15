@@ -39,6 +39,7 @@
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.26",
+    "vue-avatar-cropper": "^1.0.5",
     "vue-cookies": "^1.5.13",
     "vue-currency-filter": "^3.4.2",
     "vue-easy-print": "0.0.8",

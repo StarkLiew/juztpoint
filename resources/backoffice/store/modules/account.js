@@ -88,9 +88,10 @@ export const actions = {
                              ) {id, name, type, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+       
             item = data.data.newAccount
 
-            commit(types.ADD_ACCOUNT, { item })
+            commit(types.ADD_ACCOUNT,  { item })
 
             return item
         } catch (e) {

@@ -122,6 +122,11 @@ return [
 				'updateAccount' => App\GraphQL\Mutation\Account\UpdateAccountMutation::class,
 				'trashAccount' => App\GraphQL\Mutation\Account\TrashAccountMutation::class,
 
+				//ACCOUNT
+				'newProduct' => App\GraphQL\Mutation\Product\NewProductMutation::class,
+				'updateProduct' => App\GraphQL\Mutation\Product\UpdateProductMutation::class,
+				'trashProduct' => App\GraphQL\Mutation\Product\TrashProductMutation::class,
+
 			],
 			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],

@@ -46,6 +46,15 @@ export default [
                 ]
             },
             {
+                path: '/products',
+                component: require('$backoffice/admin/product/ProductWrapper').default,
+                children: [
+                    { path: '', name: 'products', component: require('$backoffice/admin/product/product').default },
+
+                ]
+            },
+  
+            {
                 path: '/users',
                 component: require('$backoffice/admin/user/UserWrapper').default,
                 children: [

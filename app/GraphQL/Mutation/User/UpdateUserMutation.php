@@ -7,7 +7,7 @@ use Rebing\GraphQL\Support\Mutation;
 
 class UpdateUserMutation extends Mutation {
 	protected $attributes = [
-		'name' => 'NewUser',
+		'name' => 'UpdateUser',
 	];
 	public function type(): Type {
 		return GraphQL::type('user');
