@@ -16,17 +16,20 @@ class SettingsPagination extends Pagination {
 	public function fields(): array{
 		return [
 			'id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'The id of the user',
 			],
+
 			'name' => [
 				'type' => Type::string(),
-				'description' => 'The name or value of the setting',
+				'description' => 'The type of setting',
 			],
+
 			'description' => [
 				'type' => Type::string(),
-				'description' => 'Description of the setting',
+				'description' => 'The type of setting',
 			],
+
 			'type' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',
@@ -36,7 +39,6 @@ class SettingsPagination extends Pagination {
 				'description' => 'A list of the property',
 				'is_relation' => false,
 			],
-
 		];
 	}
 

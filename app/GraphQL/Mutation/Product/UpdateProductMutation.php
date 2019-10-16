@@ -19,6 +19,10 @@ class UpdateProductMutation extends Mutation {
 				'type' => Type::int(),
 				'rules' => ['required'],
 			],
+			'thumbnail' => [
+				'name' => 'thumbnail',
+				'type' => GraphQL::type('upload'),
+			],
 			'name' => [
 				'name' => 'name',
 				'type' => Type::string(),
@@ -49,12 +53,16 @@ class UpdateProductMutation extends Mutation {
 				'name' => 'allow_assistant',
 				'type' => Type::int(),
 			],
+			'commission_id' => [
+				'name' => 'commission_id',
+				'type' => Type::int(),
+			],
 			'discount' => [
 				'name' => 'discount',
 				'type' => Type::float(),
 			],
 			'stockable' => [
-				'name' => 'allow_assistant',
+				'name' => 'stockable',
 				'type' => Type::int(),
 			],
 			'note' => [

@@ -4,7 +4,7 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 
-const columns = `id,name,sku,type,category{id, name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate, code}}, properties{ price, thumbnail, color}`
+const columns = `id, thumbnail, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, properties{ cost, price, thumbnail, color}`
 /**
  * Initial state
  */
@@ -78,11 +78,12 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, stockable, note } = item
+            const { thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             const mutation = `mutation products{
                                 newProduct(
+                                    thumbnail: ${thumbnail},
                                     name: "${name}",
                                     type: "${type}",
                                     status: "${status}",
@@ -92,6 +93,7 @@ export const actions = {
                                     tax_id: ${tax_id},
                                     allow_assistant: ${allow_assistant},
                                     discount: ${discount},
+                                    commission_id: ${commission_id},
                                     stockable: ${stockable},
                                     note: "${note}",
                              ) {${columns}}}`
@@ -109,13 +111,14 @@ export const actions = {
     },
     async update({ commit }, item) {
         try {
-            const { id, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, stockable, note } = item
-   
+            const { id, thumbnail, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, commission_id, stockable, note } = item
+
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation products{
+            const mutation = `mutation products($thumbnail: upload!) {
                                updateProduct(
                                     id: ${id},
+                                    thumbnail: $thumbnail,
                                     name: "${name}",
                                     type: "${type}",
                                     status: "${status}",
@@ -125,11 +128,13 @@ export const actions = {
                                     tax_id: ${tax_id},
                                     allow_assistant: ${allow_assistant},
                                     discount: ${discount},
+                                    commission_id: ${commission_id},
                                     stockable: ${stockable},
-                                    note: "${note}",
+                                    note: "${note}"
                              ) {${columns}}}`
 
-            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+
+            const { data } = await axios.post(graphql.path('query'), thumbnail, { params: { query: mutation } })
             item = data.data.updateProduct
 
             commit(types.ADD_PRODUCT, { item })

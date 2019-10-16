@@ -18,7 +18,6 @@ export const REMOVE_ACCOUNT = 'REMOVE_ACCOUNT'
 export const FETCH_ACCOUNT_FAILURE = 'FETCH_ACCOUNT_FAILURE'
 
 
-
 /**
  * product.js
  */
@@ -46,6 +45,15 @@ export const FILL_RECEIPTS = 'FILL_RECEIPTS'
 export const VOID_RECEIPT = 'VOID_RECEIPT'
 export const REFUND_RECEIPT = 'REFUND_RECEIPT'
 export const FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE'
+
+/**
+ * setting.js
+ */
+export const SET_SETTING = 'SET_SETTING'
+export const ADD_SETTING = 'ADD_SETTING'
+export const FILL_SETTINGS = 'FILL_SETTINGS'
+export const REMOVE_SETTING = 'REMOVE_SETTING'
+export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE'
 
 /**
  * system.js

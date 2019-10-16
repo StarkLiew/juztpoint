@@ -9,17 +9,17 @@
             <v-toolbar flat dark color="primary">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
-                <v-btn color="primary" class="mb-2" @click="filter">
+                <v-btn color="primary" class="mb-2" @click="filter" :disabled="loading">
                     <v-icon>search</v-icon>
                 </v-btn>
-                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..."></v-text-field>
-                <v-btn color="primary" class="mb-2" @click="reset">
+                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading"></v-text-field>
+                <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
                     <v-icon>refresh</v-icon>
                 </v-btn>
                 <div class="flex-grow-1"></div>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark class="mb-2" v-on="on">
+                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading">
                             <v-icon>add</v-icon>
                         </v-btn>
                     </template>
@@ -49,7 +49,7 @@
                 </v-dialog>
                 <v-menu>
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark v-on="on" class="mb-2">
+                        <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
                             <v-icon>arrow_downward</v-icon>
                         </v-btn>
                     </template>
@@ -117,6 +117,7 @@ export default {
 
     watch: {
         dialog(val) {
+            this.$emit('edit-dialog-changed', val)
             val || this.close()
         },
         mutateOptions: {
@@ -130,12 +131,11 @@ export default {
 
     methods: {
         initialize() {
-
-            this.editedItem = this.defaultItem
+            this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
         },
         editItem(item) {
             this.editedIndex = this.items.indexOf(item)
-            this.editedItem = Object.assign({}, item)
+            this.editedItem = JSON.parse(JSON.stringify(item))
             this.dialog = true
         },
         async deleteItem(item) {
@@ -152,10 +152,9 @@ export default {
         close() {
             this.dialog = false
             setTimeout(() => {
-                this.editedItem = Object.assign({}, this.defaultItem)
+                this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
                 this.editedIndex = -1
                 this.$refs.form.reset()
-
             }, 300)
         },
         async save() {

@@ -21,6 +21,10 @@ class ProductsPagination extends PaginationType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'The id of the user',
 			],
+			'thumbnail' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
 			'name' => [
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',
@@ -75,7 +79,7 @@ class ProductsPagination extends PaginationType {
 				'description' => 'The type of setting',
 			],
 			'allow_assistant' => [
-				'type' => Type::boolean(),
+				'type' => Type::int(),
 				'description' => 'The type of setting',
 			],
 			'discount' => [
@@ -83,7 +87,7 @@ class ProductsPagination extends PaginationType {
 				'description' => 'The type of setting',
 			],
 			'stockable' => [
-				'type' => Type::boolean(),
+				'type' => Type::int(),
 				'description' => 'The type of setting',
 			],
 			'commission_id' => [

@@ -32,7 +32,7 @@ class Product extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'name', 'type', 'status', 'sku', 'cat_id', 'tax_id', 'sellable', 'consumable', 'allow_assistant', 'discount', 'stockable', 'variants', 'composites', 'commission_id', 'properties', 'note',
+		'name', 'type', 'thumbnail', 'status', 'sku', 'cat_id', 'tax_id', 'sellable', 'consumable', 'allow_assistant', 'discount', 'stockable', 'variants', 'composites', 'user_id', 'commission_id', 'properties', 'note',
 	];
 
 	protected $allowedFilters = ['name', 'type', 'sku', 'category', 'status'];

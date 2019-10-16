@@ -20,6 +20,10 @@ class NewProductMutation extends Mutation {
 				'type' => Type::string(),
 				'rules' => ['required'],
 			],
+			'thumbnail' => [
+				'name' => 'thumbnail',
+				'type' => GraphQL::type('upload'),
+			],
 			'type' => [
 				'name' => 'type',
 				'type' => Type::string(),
@@ -45,12 +49,16 @@ class NewProductMutation extends Mutation {
 				'name' => 'allow_assistant',
 				'type' => Type::int(),
 			],
+			'commission_id' => [
+				'name' => 'commission_id',
+				'type' => Type::int(),
+			],
 			'discount' => [
 				'name' => 'discount',
 				'type' => Type::float(),
 			],
 			'stockable' => [
-				'name' => 'allow_assistant',
+				'name' => 'stockable',
 				'type' => Type::int(),
 			],
 			'note' => [
@@ -75,6 +83,7 @@ class NewProductMutation extends Mutation {
 
 		$args['properties'] = json_decode($args['properties']);
 		$args['user_id'] = Auth::id();
+
 		$data = Product::create($args);
 
 		if (!$data) {
