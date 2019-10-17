@@ -4,7 +4,7 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 
-const columns = `id, thumbnail, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, properties{ cost, price, thumbnail, color}`
+const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, properties{ cost, price, thumbnail, color}`
 /**
  * Initial state
  */
@@ -78,70 +78,117 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note } = item
+            const { formData, thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation products{
-                                newProduct(
-                                    thumbnail: ${thumbnail},
-                                    name: "${name}",
-                                    type: "${type}",
-                                    status: "${status}",
-                                    properties: "${props}",
-                                    cat_id: ${cat_id},
-                                    sku: "${sku}",
-                                    tax_id: ${tax_id},
-                                    allow_assistant: ${allow_assistant},
-                                    discount: ${discount},
-                                    commission_id: ${commission_id},
-                                    stockable: ${stockable},
-                                    note: "${note}",
+            const input = `name: "${name}",
+                           type: "${type}",
+                           status: "${status}",
+                           properties: "${props}",
+                           cat_id: ${cat_id},
+                           sku: "${sku}",
+                           tax_id: ${tax_id},
+                           allow_assistant: ${allow_assistant},
+                           discount: ${discount},
+                           commission_id: ${commission_id},
+                           stockable: ${stockable},
+                           note: "${note}",`
+
+            if (!formData) {
+                const mutation = `mutation products{newProduct(${input}){${columns}}}`
+
+                const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+                item = data.data.newProduct
+
+            } else {
+                const mutation = `mutation products($thumbnail: Upload!){
+                               newProduct(
+                                    ${input}
+                                    thumbnail: $thumbnail
                              ) {${columns}}}`
 
-            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-            item = data.data.newProduct
+                const files = formData.getAll('thumbnail')
+                formData.set('operations', JSON.stringify({
+                    'query': mutation,
+                    'variables': { "thumbnail": files[0] }
+                }))
+
+                formData.set('map', JSON.stringify({ "thumbnail": ['variables.thumbnail'] }))
+                formData.set('operationName', null)
+
+                const { data } = await axios.post(graphql.path('query'), formData, { 'Content-Type': 'multipart/form-data' })
+                item = data.data.newProduct
+            }
 
             commit(types.ADD_PRODUCT, { item })
 
             return item
         } catch (e) {
-
+            console.log(e)
             return e
         }
     },
     async update({ commit }, item) {
         try {
-            const { id, thumbnail, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, commission_id, stockable, note } = item
+            const { formData, id, thumbnail, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, commission_id, stockable, note } = item
 
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation products($thumbnail: upload!) {
+            const input = `id: ${id},
+                           name: "${name}",
+                           type: "${type}",
+                           status: "${status}",
+                           properties: "${props}",
+                           cat_id: ${cat_id},
+                           sku: "${sku}",
+                           tax_id: ${tax_id},
+                           allow_assistant: ${allow_assistant},
+                           discount: ${discount},
+                           commission_id: ${commission_id},
+                           stockable: ${stockable},
+                           note: "${note}",`
+
+            if (!formData) {
+                const thumbInput = thumbnail === '' ? `clear_image: true` : ''
+
+                const mutation = `mutation products {
                                updateProduct(
-                                    id: ${id},
-                                    thumbnail: $thumbnail,
-                                    name: "${name}",
-                                    type: "${type}",
-                                    status: "${status}",
-                                    properties: "${props}",
-                                    cat_id: ${cat_id},
-                                    sku: "${sku}",
-                                    tax_id: ${tax_id},
-                                    allow_assistant: ${allow_assistant},
-                                    discount: ${discount},
-                                    commission_id: ${commission_id},
-                                    stockable: ${stockable},
-                                    note: "${note}"
+                                    ${input}
+                                    ${thumbInput}
                              ) {${columns}}}`
 
+                const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+                item = data.data.updateProduct
 
-            const { data } = await axios.post(graphql.path('query'), thumbnail, { params: { query: mutation } })
-            item = data.data.updateProduct
+            } else {
+
+
+                const mutation = `mutation products($thumbnail: Upload!) {
+                               updateProduct(
+                                    ${input}
+                                    thumbnail: $thumbnail,
+                             ) {${columns}}}`
+
+                const files = formData.getAll('thumbnail')
+                formData.set('operations', JSON.stringify({
+                    'query': mutation,
+                    'variables': { "thumbnail": files[0] }
+                }))
+
+                formData.set('map', JSON.stringify({ "thumbnail": ['variables.thumbnail'] }))
+                formData.set('operationName', null)
+
+                const { data } = await axios.post(graphql.path('query'), formData, { 'Content-Type': 'multipart/form-data' })
+                item = data.data.updateProduct
+            }
+
+
 
             commit(types.ADD_PRODUCT, { item })
 
             return item
         } catch (e) {
-
+            console.log(e)
             return e
         }
     },

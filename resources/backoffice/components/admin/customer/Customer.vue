@@ -14,6 +14,13 @@
                 </v-row>
             </v-container>
         </template>
+        <template v-slot:item.avatar="{item}">
+            <v-avatar v-if="!!item.avatar">
+                <img :src="item.avatar" alt="Thumbnail">
+            </v-avatar>
+            <v-avatar v-if="!item.avatar" :color="'grey'">
+            </v-avatar>
+        </template>
         <template v-slot:item.status="{item}">
             <v-icon color="success" v-if="item.status === 'active'">check</v-icon>
             <v-icon color="danger" v-if="item.status === 'inactive'">time</v-icon>
@@ -45,6 +52,7 @@ export default {
                 }
             },
             headers: [
+                { text: 'Preview', value: 'avatar', sortable: false, custom: true },
                 { text: 'Name', value: 'name' },
                 { text: 'Mobile #', value: 'properties.mobile', sortable: false },
                 { text: 'Email #', value: 'properties.email', sortable: false },
@@ -79,13 +87,13 @@ export default {
             if (noCommit) return results
         },
         async save(item) {
-    
+
             this.loading = true
             if (!item.id) {
                 item.type = 'customer'
                 await this.$store.dispatch('account/add', item)
             } else {
-          
+
                 await this.$store.dispatch('account/update', item)
             }
 

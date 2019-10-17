@@ -21,7 +21,11 @@ class UpdateProductMutation extends Mutation {
 			],
 			'thumbnail' => [
 				'name' => 'thumbnail',
-				'type' => GraphQL::type('upload'),
+				'type' => GraphQL::type('Upload'),
+			],
+			'clear_image' => [
+				'name' => 'clear_image',
+				'type' => Type::boolean(),
 			],
 			'name' => [
 				'name' => 'name',
@@ -84,6 +88,14 @@ class UpdateProductMutation extends Mutation {
 		];
 	}
 	public function resolve($root, $args) {
+
+		if (isset($args['thumbnail'])) {
+			$args['thumbnail'] = $args['thumbnail']->get();
+		}
+
+		if (isset($args['clear_image'])) {
+			$args['thumbnail'] = '';
+		}
 
 		$args['properties'] = json_decode($args['properties']);
 		$data = Product::find($args['id']);

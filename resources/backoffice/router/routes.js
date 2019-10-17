@@ -53,7 +53,13 @@ export default [
 
                 ]
             },
-  
+            {
+                path: '/services',
+                component: require('$backoffice/admin/service/ServiceWrapper').default,
+                children: [
+                    { path: '', name: 'services', component: require('$backoffice/admin/service/service').default },
+                ]
+            },
             {
                 path: '/users',
                 component: require('$backoffice/admin/user/UserWrapper').default,

@@ -75,7 +75,7 @@ class PropertyType extends GraphQLType {
 				'description' => 'Description of the setting',
 			],
 			'duration' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'The type of duration',
 			],
 			'contain' => [
@@ -83,19 +83,19 @@ class PropertyType extends GraphQLType {
 				'description' => 'The type of duration',
 			],
 			'rate' => [
-				'type' => Type::nonNull(Type::float()),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'qty' => [
-				'type' => Type::nonNull(Type::float()),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'cost' => [
-				'type' => Type::nonNull(Type::float()),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'price' => [
-				'type' => Type::nonNull(Type::float()),
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'thumbnail' => [

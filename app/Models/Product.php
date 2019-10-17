@@ -25,6 +25,7 @@ class Product extends Model {
 	protected $appends = array('qty');
 	protected $casts = [
 		'properties' => 'array',
+		'thumbnail' => 'file',
 	];
 	/**
 	 * The attributes that are mass assignable.
@@ -71,6 +72,13 @@ class Product extends Model {
 
 		$result = Item::select(DB::raw('SUM(qty) as balance'))->where('item_id', $this->id)->where('type', 'open')->orWhere('type', 'item')->orWhere('type', 'receive')->first();
 		return $result->balance;
+	}
+	public static function getThumbnailAttribute($value) {
+		if (!$value) {
+			return null;
+		}
+
+		return 'data:image/jpeg;base64,' . base64_encode($value);
 	}
 
 	public function user() {

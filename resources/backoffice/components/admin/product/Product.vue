@@ -34,7 +34,7 @@
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable"></v-switch>
                         <v-text-field v-if="editedItem.stockable" prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
-                        <v-text-field v-if="editedItem.stockable" v-model="editedItem.properties.cost" label="Opening Quantity"></v-text-field>
+                        <v-text-field v-if="editedItem.stockable" v-model="editedItem.properties.opening" label="Opening Quantity"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
                     </v-col>
                 </v-row>
@@ -107,7 +107,9 @@ export default {
                     price: 0.00,
                     cost: 0.00,
                     color: '',
+                    opening: 0.00,
                 },
+                formData: null,
             },
             headers: [
                 { text: 'Preview', value: 'thumbnail', sortable: false, custom: true },
@@ -156,13 +158,13 @@ export default {
             if (noCommit) return results
         },
         async save(item) {
-
             this.loading = true
+
             if (!item.id) {
                 item.type = 'product'
                 await this.$store.dispatch('product/add', item)
             } else {
-                await this.$store.dispatch('product/update', item)
+                await this.$store.dispatch('product/update',  item )
             }
 
             this.loading = false
@@ -179,8 +181,19 @@ export default {
             editedItem.thumbnail = ''
         },
         async handleSubmitted(editedItem) {
+            this.loading = true
             const avatar = this.$refs.cropper
-            editedItem.thumbnail = await avatar.cropper.getCroppedCanvas().toDataURL('image/jpeg')
+
+            const croppedCanvas = await avatar.cropper.getCroppedCanvas()
+            editedItem.thumbnail = await croppedCanvas.toDataURL('image/jpeg')
+            await croppedCanvas.toBlob((blob) => {
+                editedItem.formData = new FormData()
+                editedItem.formData.append('thumbnail', blob)
+
+            })
+
+            this.loading = false
+
 
         }
     },

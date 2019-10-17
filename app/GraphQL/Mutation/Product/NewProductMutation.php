@@ -22,7 +22,7 @@ class NewProductMutation extends Mutation {
 			],
 			'thumbnail' => [
 				'name' => 'thumbnail',
-				'type' => GraphQL::type('upload'),
+				'type' => GraphQL::type('Upload'),
 			],
 			'type' => [
 				'name' => 'type',
@@ -80,6 +80,10 @@ class NewProductMutation extends Mutation {
 		];
 	}
 	public function resolve($root, $args) {
+
+		if (isset($args['thumbnail'])) {
+			$args['thumbnail'] = $args['thumbnail']->get();
+		}
 
 		$args['properties'] = json_decode($args['properties']);
 		$args['user_id'] = Auth::id();

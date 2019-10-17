@@ -8,8 +8,6 @@ import VueCookies from 'vue-cookies'
 axios.interceptors.request.use(config => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     
-    
-    config.headers['Content-Type'] = 'multipart/form-data'
     // const token = store.getters['auth/token']
     const token = VueCookies.get('JXPTBCK')
 

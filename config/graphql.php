@@ -144,7 +144,7 @@ return [
 	//
 	'types' => [
 
-		'upload' => \Rebing\GraphQL\Support\UploadType::class,
+		'Upload' => \Rebing\GraphQL\Support\UploadType::class,
 		// 'example'           => ExampleType::class,
 		// 'relation_example'  => ExampleRelationType::class,
 		// \Rebing\GraphQL\Support\UploadType::class,
