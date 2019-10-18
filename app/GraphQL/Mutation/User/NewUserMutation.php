@@ -20,6 +20,10 @@ class NewUserMutation extends Mutation {
 				'type' => Type::string(),
 				'rules' => ['required'],
 			],
+			'avatar' => [
+				'name' => 'avatar',
+				'type' => GraphQL::type('Upload'),
+			],
 			'email' => [
 				'name' => 'email',
 				'type' => Type::string(),

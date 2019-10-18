@@ -19943,7 +19943,9 @@ html {
   margin-left: 8px;
 }
 
-.v-input--selection-controls__input input {
+.v-input--selection-controls__input input[role=checkbox],
+.v-input--selection-controls__input input[role=radio],
+.v-input--selection-controls__input input[role=switch] {
   position: absolute;
   opacity: 0;
   width: 100%;

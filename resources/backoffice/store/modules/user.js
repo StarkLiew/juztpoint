@@ -53,7 +53,7 @@ export const actions = {
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{users(limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, name, email, tenant, properties{role, backoffice}}, total,per_page}}` } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{users(limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, avatar, name, email, tenant, properties{role, backoffice}}, total,per_page}}` } })
 
             if (noCommit) {
 
@@ -75,7 +75,7 @@ export const actions = {
                                     name: "${name}",
                                     email: "${email}",
                                     properties: "${props}"
-                             ) {id, email, name, tenant, properties{backoffice, role}}}`
+                             ) {id, avatar, email, name, tenant, properties{backoffice, role}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
             user = data.data.newUser
@@ -99,7 +99,7 @@ export const actions = {
                                     id: ${id},
                                     name: "${name}",
                                     properties: "${props}"
-                             ) {id, email, name, tenant, properties{backoffice, role}}}`
+                             ) {id, avatar, email, name, tenant, properties{backoffice, role}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
             user = data.data.updateUser

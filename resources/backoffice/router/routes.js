@@ -20,7 +20,14 @@ export default [
         path: '/',
         component: require('$backoffice/admin/AdminWrapper').default,
         children: [
-            { path: '', name: 'index', redirect: { name: 'profile' } },
+            { path: '', name: 'index', redirect: { name: 'home' } },
+            {
+                path: '/home',
+                component: require('$backoffice/admin/home/HomeWrapper').default,
+                children: [
+                    { path: '', name: 'home', component: require('$backoffice/admin/home/Home').default },
+                ]
+            },
             {
                 path: '/profile',
                 component: require('$backoffice/admin/profile/ProfileWrapper').default,
@@ -65,6 +72,13 @@ export default [
                 component: require('$backoffice/admin/user/UserWrapper').default,
                 children: [
                     { path: '', name: 'users', component: require('$backoffice/admin/user/User').default },
+                ]
+            },
+            {
+                path: '/reports',
+                component: require('$backoffice/admin/report/ReportWrapper').default,
+                children: [
+                    { path: '', name: 'reports', component: require('$backoffice/admin/report/report').default },
                 ]
             },
         ]

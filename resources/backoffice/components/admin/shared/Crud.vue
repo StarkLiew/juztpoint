@@ -1,7 +1,14 @@
 <template>
     <v-data-table :headers="headers" :items="items" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
-    'items-per-page-options': [50, 100]
-  }">
+    'items-per-page-options': [50, 100]}" :show-group-by="showGroupBy" :group-by="groupBy">
+        <template v-slot:group.header="{ group, groupedBy, items, headers, toggle }">
+            <td :colspan="headers.length" class="text-start">
+                <v-btn fab icon @click="toggle">
+                    <v-icon>remove</v-icon>
+                </v-btn>
+                {{ groupBy }} - {{ groupText(items) }}
+            </td>
+        </template>
         <template v-slot:[header]="{ item }" v-for="header in headers.filter(h => h.custom === true).map(h => 'item.' +  h.value)">
             <slot :name="header" :item="item"></slot>
         </template>
@@ -17,6 +24,7 @@
                     <v-icon>refresh</v-icon>
                 </v-btn>
                 <div class="flex-grow-1"></div>
+                <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading">
@@ -93,6 +101,8 @@ import JsonExcel from 'vue-json-excel'
 export default {
     data() {
         return {
+            groupBy: null,
+            showGroupBy: false,
             dialog: false,
             editedItem: {},
             editedIndex: -1,
@@ -108,7 +118,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields'],
+    props: ['title', 'headers', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -171,6 +181,16 @@ export default {
 
             return results
         },
+        groupText(items) {
+            if (items.length > 0) {
+
+                const item = this.groups.find(v => v.value === this.groupBy)
+
+                if (!item) return ''
+                else return items[0][this.groupBy][item.text]
+            }
+            return ''
+        }
 
     }
 }

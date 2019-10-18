@@ -1,5 +1,5 @@
 <template>
-    <crud title="Services" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" @edit-dialog-changed='editDialogHandler'>
+    <crud title="Services" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" @edit-dialog-changed='editDialogHandler' :groups="[{name:'Category', value: 'category', text: 'name'}]">
         <template v-slot:dialog="{ dialog, valid, editedItem }">
             <v-container>
                 <v-row>
@@ -39,10 +39,10 @@
             </v-container>
         </template>
         <template v-slot:item.thumbnail="{item}">
-            <v-avatar v-if="!!item.thumbnail">
+            <v-avatar size="36px" v-if="!!item.thumbnail">
                 <img :src="item.thumbnail" alt="Thumbnail">
             </v-avatar>
-            <v-avatar v-if="!item.thumbnail" :color="!!item.properties.color ? item.properties.color : 'grey'">
+            <v-avatar size="36px" v-if="!item.thumbnail" :color="!!item.properties.color ? item.properties.color : 'grey'">
             </v-avatar>
         </template>
         <template v-slot:item.status="{item}">

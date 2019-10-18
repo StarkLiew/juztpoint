@@ -26,8 +26,9 @@
                         <v-list-item-title>Account</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
+                       <v-divider></v-divider>
                     <v-list-item @click="">
-                        <v-list-item-title>Change Password</v-list-item-title>
+                        <v-list-item-title>Log Out</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>

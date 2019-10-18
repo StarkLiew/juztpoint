@@ -110,7 +110,7 @@ export default {
 
             this.items = [
                 [
-                    { title: 'Dashboard', icon: 'store', to: { name: 'sales' }, exact: true }
+                    { title: 'Home', icon: 'store', to: { name: 'home' }, exact: true }
                 ],
                 [
                     { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
@@ -135,6 +135,9 @@ export default {
                 ],
                 [
                     { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true }
+                ],
+                           [
+                    { title: 'Reports', icon: 'bar_chart', to: { name: 'reports' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }

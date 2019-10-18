@@ -14,6 +14,14 @@
                 </v-row>
             </v-container>
         </template>
+            <template v-slot:item.avatar="{item}">
+            <v-avatar size="36px" v-if="!!item.avatar">
+                <img :src="item.avatar" alt="Thumbnail">
+            </v-avatar>
+            <v-avatar size="36px" v-if="!item.avatar" color="primary">
+                 <span class="white--text">{{ item.name.charAt(0).toUpperCase() }}</span>
+            </v-avatar>
+        </template>
         <template v-slot:item.properties.backoffice="{item}">
             <v-icon color="success" v-if="item.properties.backoffice === 1">check</v-icon>
         </template>
@@ -47,6 +55,7 @@ export default {
                 }
             },
             headers: [
+                { text: 'Photo', value: 'avatar', sortable: false, custom: true },
                 { text: 'Name', value: 'name' },
                 { text: 'Email', value: 'email', },
                 { text: 'POS Role', value: 'properties.role', sortable: false, custom: true },

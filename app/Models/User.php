@@ -28,6 +28,7 @@ class User extends Authenticatable {
 
 	protected $fillable = [
 		'name',
+		'avatar',
 		'email',
 		'password',
 		'pin',
@@ -88,6 +89,14 @@ class User extends Authenticatable {
 	 */
 	public function setCompanyNameAttribute($value) {
 		$this->company_name = $value;
+	}
+
+	public static function getAvatarAttribute($value) {
+		if (!$value) {
+			return null;
+		}
+
+		return 'data:image/jpeg;base64,' . base64_encode($value);
 	}
 
 }
