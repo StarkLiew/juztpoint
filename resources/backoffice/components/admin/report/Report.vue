@@ -1,7 +1,7 @@
 <template>
-    <v-row dense>
-       <v-col col="6"  v-for="(report, index) in items" :key="index">
-        <v-card class="mx-auto mx-2" color="grey lighten-4" max-width="600">
+    <v-row >
+       <v-col col="6" lg="6" md="6" sm="12" v-for="(report, index) in items" :key="index">
+        <v-card min-width="300" class="mx-auto mx-2" color="grey lighten-4" max-width="600">
             <v-card-title>
                 {{ report.title }}
             </v-card-title>
