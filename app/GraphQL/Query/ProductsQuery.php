@@ -60,6 +60,7 @@ class ProductsQuery extends Query {
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
+
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
@@ -74,6 +75,14 @@ class ProductsQuery extends Query {
 			}
 			if (isset($args['sku'])) {
 				$query->where('sku', $args['sku']);
+			}
+			if (isset($args['search'])) {
+
+				$query->where(function ($query) use ($args) {
+					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('sku', 'LIKE', '%' . $args['search'] . '%');
+				});
+
 			}
 		};
 

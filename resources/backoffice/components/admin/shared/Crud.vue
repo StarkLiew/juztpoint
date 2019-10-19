@@ -19,7 +19,7 @@
                 <v-btn color="primary" class="mb-2" @click="filter" :disabled="loading">
                     <v-icon>search</v-icon>
                 </v-btn>
-                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading"></v-text-field>
+                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="remove"></v-text-field>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
                     <v-icon>refresh</v-icon>
                 </v-btn>

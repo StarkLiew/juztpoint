@@ -58,6 +58,7 @@ class UsersQuery extends Query {
 				$query->where('id', $args['id']);
 			}
 			if (isset($args['search'])) {
+
 				$query->where(function ($query) use ($args) {
 					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
 					$query->orWhere('properties->mobile', 'LIKE', '%' . $args['search'] . '%');
@@ -85,9 +86,12 @@ class UsersQuery extends Query {
 
 		$fields = $getSelectFields();
 		$query = User::with(array_keys($fields->getRelations()))
-			->where('tenant', '=', $tid)
-			->orWhere('id', '=', $tid)
+			->where(function ($query) use ($tid) {
+				$query->where('tenant', '=', $tid);
+				$query->orWhere('id', '=', $tid);
+			})
 			->where($where)
+
 			->select($fields->getSelect());
 
 		if (isset($args['sort']) && isset($args['desc'])) {
@@ -99,6 +103,7 @@ class UsersQuery extends Query {
 			}
 
 		}
+
 		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;

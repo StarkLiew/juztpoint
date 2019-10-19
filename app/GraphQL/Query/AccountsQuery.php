@@ -69,6 +69,17 @@ class AccountsQuery extends Query {
 			if (isset($args['type'])) {
 				$query->where('type', $args['type']);
 			}
+
+			if (isset($args['search'])) {
+
+				$query->where(function ($query) use ($args) {
+					$query->orWhere('name', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->mobile', 'LIKE', '%' . $args['search'] . '%');
+					$query->orWhere('properties->email', 'LIKE', '%' . $args['search'] . '%');
+				});
+
+			}
+
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
