@@ -78,8 +78,8 @@ export default [
                 path: '/reports',
                 component: require('$backoffice/admin/report/ReportWrapper').default,
                 children: [
-                    { path: '', name: 'reports', component: require('$backoffice/admin/report/report').default },
-                ]
+                    { path: '', name: 'reports', component: require('$backoffice/admin/report/report').default},
+                 ]
             },
         ]
     }, ]),

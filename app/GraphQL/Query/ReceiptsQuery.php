@@ -10,8 +10,8 @@ use Rebing\GraphQL\Support\Query;
 
 class ReceiptsQuery extends Query {
 	protected $attributes = [
-		'name' => 'receipts',
-		'description' => 'A query of receipts',
+		'name' => 'reports',
+		'description' => 'A query of reports',
 	];
 
 	public function type(): Type {

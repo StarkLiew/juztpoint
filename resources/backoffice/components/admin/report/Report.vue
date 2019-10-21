@@ -1,35 +1,51 @@
 <template>
-    <v-row >
-       <v-col col="6" lg="6" md="6" sm="12" v-for="(report, index) in items" :key="index">
-        <v-card min-width="300" class="mx-auto mx-2" color="grey lighten-4" max-width="600">
-            <v-card-title>
-                {{ report.title }}
-            </v-card-title>
-            <v-list>
-                <v-list-item-group color="primary">
-                    <v-list-item v-for="(item, i) in report.items" :key="i">
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
-        </v-card>
-    </v-col>
-    </v-row>
+    <v-container>
+        <v-row v-if="!selected">
+            <v-col col="6" lg="6" md="6" sm="12" v-for="(report, index) in items" :key="index">
+                <v-card min-width="300" class="mx-auto mx-2" color="grey lighten-4" max-width="600">
+                    <v-card-title>
+                        {{ report.title }}
+                    </v-card-title>
+                    <v-list>
+                        <v-list-item-group color="primary">
+                            <v-list-item v-for="(item, i) in report.items" :key="i" @click="select(item)">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-card>
+            </v-col>
+        </v-row>
+        <viewer v-if="!!selected" :title="selected.title" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" :groups="[]" @closed="selected = null">
+        </viewer>
+    </v-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-const exhale = ms =>
-    new Promise(resolve => setTimeout(resolve, ms))
+import Viewer from '../shared/Viewer'
+
 
 export default {
     components: {
-
+        Viewer
     },
     data() {
         return {
+            selected: null,
+            count: 0,
+            options: {
+                sortBy: [],
+                sortDesc: [],
+                page: 1,
+                itemsPerPage: 10,
+            },
+            title: '',
             items: [],
+            exportFields: {},
+            headers: [],
+            loading: false,
 
         }
     },
@@ -38,13 +54,38 @@ export default {
         this.initialise()
     },
     methods: {
+        async retrieve(search, options, noCommit = false) {
+
+            this.loading = true
+            const { sortBy, sortDesc, page, itemsPerPage } = options
+
+
+            const results = await this.$store.dispatch('report/fetch', { name: this.selected.name, fields: this.selected.fields, search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+
+            this.loading = false
+
+            if (noCommit) return results
+        },
+        select(item) {
+            this.selected = item
+        },
         initialise() {
             this.items = [{
                     title: 'Accounts',
                     describe: 'Keep track on all cash flow, payments, taxes, and etc',
                     items: [
-                        { title: 'Account Summary', to: '' },
-                        { title: 'Payments Summary', to: '' },
+                        { title: 'Account Summary', fields: '"date", "item_id", "total_amount"', headers: [], exports: {}, },
+                        {
+                            title: 'Payments Summary',
+                            name: 'payment_summary',
+                            fields: "'item_id', 'total_amount'",
+                            headers: [
+                              { text: 'Date', value: 'date', sortable: false },
+                              { text: 'Description', value: 'item_id', sortable: false },
+                              { text: 'Collected', value: 'total_amount', sortable: false },
+                            ],
+                            exports: {},
+                        },
                         { title: 'Payments Log', to: '' },
                         { title: 'Taxes Summary', to: '' },
                         { title: 'Discount Summary', to: '' },

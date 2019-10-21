@@ -132,13 +132,11 @@ export default {
         },
         mutateOptions: {
             async handler() {
-
                 await this.refresh(this.search, this.mutateOptions)
             },
             deep: true,
         },
     },
-
     methods: {
         initialize() {
             this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
@@ -178,7 +176,6 @@ export default {
         async allItems() {
             const options = Object.assign(this.mutateOptions, { limit: 0, page: 1 })
             const results = await this.refresh(this.search, options, true)
-
             return results
         },
         groupText(items) {

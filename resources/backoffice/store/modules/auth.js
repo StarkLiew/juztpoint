@@ -9,12 +9,10 @@ import VueCookies from 'vue-cookies'
 export const state = {
     user: null,
     access: false,
-    terminal: null,
     store: null,
     //token: window.localStorage.getItem('token')
-    token: VueCookies.get('JXPTBCK'),
+    token: null,
 }
-
 /**
  * Mutations
  */
@@ -25,18 +23,13 @@ export const mutations = {
     },
 
     [types.LOGOUT](state) {
+        const expire = new Date() //expire now
         state.access = false
         state.user = null
-    },
+        state.token = null
+        VueCookies.set('JXPTBCK', '', expire, true)
 
-    [types.DEREGISTER](state) {
-        state.access = false
-        state.user = null
-        state.store = null
-        state.terminal = null
-        // state.token = null
-        //window.localStorage.removeItem('token')
-        VueCookies.remove('JXPTBCK')
+
     },
 
 
@@ -47,17 +40,18 @@ export const mutations = {
         VueCookies.remove('JXPTBCK')
     },
 
-    [types.SET_TOKEN](state, { token, expires_at, store, terminal }) {
+    [types.SET_TOKEN](state, { token, expires_at, store, user }) {
         // state.token = token
         // window.localStorage.setItem('token', token)
+        
         const expire = new Date(expires_at)
+        state.access = true
         state.store = store
-        state.terminal = terminal
+        state.user = user
         VueCookies.set('JXPTBCK', token, expire, true)
 
     }
 }
-
 /**
  * Actions
  */
@@ -75,26 +69,18 @@ export const actions = {
         }
     },
 
-
     setUser({ commit }, payload) {
         commit(types.SET_USER, payload)
     },
 
-
-    async logout({ commit }, payload) {
+    async logout({ commit }) {
         commit(types.LOGOUT)
-    },
-
-    async deregister({ commit }) {
-        /* await axios.post(api.path('logout')) */
-        commit(types.DEREGISTER)
     },
 
     destroy({ commit }) {
         commit(types.LOGOUT)
     }
 }
-
 /**
  * Getters
  */

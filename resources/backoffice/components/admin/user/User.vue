@@ -83,7 +83,6 @@ export default {
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
-
             const results = await this.$store.dispatch('user/fetchUsers', { search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
@@ -94,10 +93,8 @@ export default {
             this.loading = true
 
             if (!user.id) {
-   
                 await this.$store.dispatch('user/addUser', user)
             } else {
-
                 await this.$store.dispatch('user/updateUser', user)
             }
 
@@ -109,12 +106,8 @@ export default {
         async remove(user) {
 
             this.loading = true
-
             await this.$store.dispatch('user/trashUser', user)
-
             this.loading = false
-
-
 
         }
     },

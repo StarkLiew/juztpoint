@@ -12,7 +12,6 @@
 
                 </v-card-title>
                 <v-sheet color="transparent">
-                    <v-sparkline :key="String(avg)" :smooth="16" :gradient="['#f72047', '#ffd200', '#1feaea']" :line-width="3" :value="heartbeats" auto-draw stroke-linecap="round"></v-sparkline>
                 </v-sheet>
             </v-card>
         </v-col>

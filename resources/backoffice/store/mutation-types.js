@@ -36,6 +36,13 @@ export const FILL_USERS = 'FILL_USERS'
 export const REMOVE_USER = 'REMOVE_USER'
 export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 
+
+/**
+ * user.js
+ */
+export const FILL_REPORT_ITEMS = 'FILL_REPORT_ITEMS'
+export const FETCH_REPORT_FAILURE = 'FETCH_REPORT_FAILURE'
+
 /**
  * receipt.js
  */

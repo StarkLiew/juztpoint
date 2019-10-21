@@ -1,7 +1,7 @@
 <template>
     <div class="fill-height">
         <app-nav @overlay="onOverlay" :mini.sync="mini" @nav-toggle="navToggle" @status-changed="status"></app-nav>
-        <top-menu @nav-toggle="navToggle"></top-menu>
+        <top-menu @nav-toggle="navToggle" @overlay="onOverlay"></top-menu>
         <v-content>
             <v-container fluid>
                 <transition name="fade" mode="out-in">
@@ -34,14 +34,11 @@ export default {
 
     methods: {
         status(val) {
-   
             this.mini = val
         },
         navToggle() {
-
             this.mini = !this.mini
         },
-
         onOverlay(status) {
             this.overlay = status
         }

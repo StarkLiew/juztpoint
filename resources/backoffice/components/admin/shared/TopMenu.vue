@@ -26,8 +26,8 @@
                         <v-list-item-title>Account</v-list-item-title>
                     </v-list-item>
                     <v-divider></v-divider>
-                       <v-divider></v-divider>
-                    <v-list-item @click="">
+                    <v-divider></v-divider>
+                    <v-list-item @click="logout">
                         <v-list-item-title>Log Out</v-list-item-title>
                     </v-list-item>
                 </v-list>
@@ -47,10 +47,16 @@ export default {
     computed: mapGetters({
         auth: 'auth/user',
     }),
-
     methods: {
-        navToggle() {
+        async logout() {
+            this.$emit('overlay', true)
+            await this.$store.dispatch('auth/logout')
+            this.$toast.success('Logged out!')
+            this.$emit('overlay', false)
+            this.$router.push({ name: 'login' })
 
+        },
+        navToggle() {
             this.$emit('nav-toggle')
         }
     }

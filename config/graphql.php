@@ -103,6 +103,7 @@ return [
 				'products' => App\GraphQL\Query\ProductsQuery::class,
 				'receipts' => App\GraphQL\Query\ReceiptsQuery::class,
 				'appointments' => App\GraphQL\Query\AppointmentsQuery::class,
+				'reports' => App\GraphQL\Query\ReportsQuery::class,
 			],
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
@@ -165,6 +166,8 @@ return [
 		'receipts' => App\GraphQL\Pagination\ReceiptsPagination::class,
 		'settings' => App\GraphQL\Pagination\SettingsPagination::class,
 		'users' => App\GraphQL\Pagination\UsersPagination::class,
+
+		'reports' => App\GraphQL\Pagination\ReportsPagination::class,
 
 	],
 

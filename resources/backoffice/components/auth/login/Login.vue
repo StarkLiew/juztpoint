@@ -21,21 +21,17 @@ export default {
         LoginForm,
     },
     data: () => ({
-        showPin: false,
 
     }),
 
     methods: {
         hasToken() {
-
             const token = VueCookies.get('JXPTBCK')
             if (token !== null) return true
 
             return false
-
         },
         async success(data) {
-
             this.$router.push({ name: 'index' })
 
         }
