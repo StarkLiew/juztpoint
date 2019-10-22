@@ -174,7 +174,7 @@ export default {
             this.saving = false
         },
         async allItems() {
-            const options = Object.assign(this.mutateOptions, { limit: 0, page: 1 })
+            const options = Object.assign(this.mutateOptions, { itemsPerPage: 0, page: 1 })
             const results = await this.refresh(this.search, options, true)
             return results
         },

@@ -116,6 +116,10 @@ class ReportsPagination extends Pagination {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'Description of the setting',
 			],
+			'item_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
 			'product' => [
 				'type' => GraphQL::type('product'),
 				'description' => 'A list of the item',
@@ -170,6 +174,10 @@ class ReportsPagination extends Pagination {
 				'description' => 'The type of setting',
 			],
 			'sum' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+			'net' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],

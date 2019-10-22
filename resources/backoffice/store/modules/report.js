@@ -2,6 +2,7 @@ import axios from 'axios'
 import Vue from 'Vue'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'
+import moment from 'moment'
 
 /**
  * Initial state
@@ -34,13 +35,22 @@ export const actions = {
     async reset() {
         commit(types.FETCH_REPORT_FAILURE)
     },
-    async fetch({ commit }, { name, fields, dates, location, user, terminal, limit, page, sort, desc }) {
+    async fetch({ commit }, { name, fields, dates, location, user, terminal, limit, page, sort, desc, noCommit }) {
 
-        commit(types.FETCH_REPORT_FAILURE) //reset
+        if (!noCommit) commit(types.FETCH_REPORT_FAILURE) //reset
         try {
-            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(limit: ${limit}, page: ${page}, ${sorting}){data{${fields}}, total,per_page}}` } })
+            let _from = ''
+            let _to = ''
+            if (dates && dates.length === 2) {
+                _from = moment(dates[0]).format('YYYY-MM-DD')
+                _to = moment(dates[1]).format('YYYY-MM-DD')
+            }
 
+            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(from:"${_from}",to:"${_to}",name:"${name}",limit: ${limit}, page: ${page}, ${sorting}){data{${fields}}, total,per_page}}` } })
+            if (noCommit) {
+                return data.data.reports
+            }
             commit(types.FILL_REPORT_ITEMS, { items: data.data.reports })
 
         } catch (e) {
@@ -61,3 +71,4 @@ export const getters = {
     count: state => state.count,
 
 }
+

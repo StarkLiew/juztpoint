@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <v-row v-if="!selected">
-            <v-col col="6" lg="6" md="6" sm="12" v-for="(report, index) in items" :key="index">
+            <v-col col="6" lg="6" md="6" sm="12" v-for="(report, index) in reports" :key="index">
                 <v-card min-width="300" class="mx-auto mx-2" color="grey lighten-4" max-width="600">
                     <v-card-title>
                         {{ report.title }}
@@ -33,8 +33,8 @@ export default {
     },
     data() {
         return {
+            reports: [],
             selected: null,
-            count: 0,
             options: {
                 sortBy: [],
                 sortDesc: [],
@@ -42,49 +42,62 @@ export default {
                 itemsPerPage: 10,
             },
             title: '',
-            items: [],
             exportFields: {},
             headers: [],
             loading: false,
 
         }
     },
-    computed: {},
+    computed: mapGetters({
+        items: 'report/items',
+        count: 'report/count',
+    }),
     async mounted() {
         this.initialise()
     },
     methods: {
-        async retrieve(search, options, noCommit = false) {
+        async retrieve(dates, options, noCommit = false) {
 
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
 
-            const results = await this.$store.dispatch('report/fetch', { name: this.selected.name, fields: this.selected.fields, search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('report/fetch', { name: this.selected.name, fields: this.selected.fields, dates, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
+
 
             if (noCommit) return results
         },
         select(item) {
             this.selected = item
+            this.headers = item.headers
+            this.exportFields = item.exports
         },
         initialise() {
-            this.items = [{
+            this.reports = [{
                     title: 'Accounts',
                     describe: 'Keep track on all cash flow, payments, taxes, and etc',
                     items: [
-                        { title: 'Account Summary', fields: '"date", "item_id", "total_amount"', headers: [], exports: {}, },
+                        { title: 'Account Summary', fields: '"date", "item_name", "total_amount"', headers: [], exports: {}, },
                         {
                             title: 'Payments Summary',
                             name: 'payment_summary',
-                            fields: "'item_id', 'total_amount'",
+                            fields: 'item_name, total_amount, refund_amount, net, count',
                             headers: [
-                              { text: 'Date', value: 'date', sortable: false },
-                              { text: 'Description', value: 'item_id', sortable: false },
-                              { text: 'Collected', value: 'total_amount', sortable: false },
+                                { text: 'Payment', value: 'item_name', sortable: false },
+                                { text: 'Transactions', value: 'count', sortable: false, align: 'end', },
+                                { text: 'Gross', value: 'total_amount', sortable: false, align: 'end', currency: true },
+                                { text: 'Refund', value: 'refund_amount', sortable: false, align: 'end', currency: true },
+                                { text: 'Net', value: 'net', sortable: false, align: 'end', currency: true },
                             ],
-                            exports: {},
+                            exports: {
+                                'payment': 'item_name',
+                                'transactions': 'count',
+                                'gross': 'total_amount',
+                                'refund': 'refund_amount',
+                                'net': 'net',
+                            },
                         },
                         { title: 'Payments Log', to: '' },
                         { title: 'Taxes Summary', to: '' },

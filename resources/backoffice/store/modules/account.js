@@ -58,7 +58,7 @@ export const actions = {
     },
     async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit }) {
 
-        commit(types.FETCH_ACCOUNT_FAILURE) //reset
+        if (!noCommit) commit(types.FETCH_ACCOUNT_FAILURE) //reset
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
@@ -88,10 +88,10 @@ export const actions = {
                              ) {id, name, type, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-       
+
             item = data.data.newAccount
 
-            commit(types.ADD_ACCOUNT,  { item })
+            commit(types.ADD_ACCOUNT, { item })
 
             return item
         } catch (e) {

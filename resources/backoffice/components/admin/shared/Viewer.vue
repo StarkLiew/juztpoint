@@ -12,6 +12,9 @@
         <template v-slot:[header]="{ item }" v-for="header in headers.filter(h => h.custom === true).map(h => 'item.' +  h.value)">
             <slot :name="header" :item="item"></slot>
         </template>
+        <template v-slot:[header]="{ item, header }" v-for="header in headers.filter(h => h.currency === true).map(h => 'item.' +  h.value)">
+            <span>{{ item[header.value] | currency }}</span>
+        </template>
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
                 <v-btn color="primary" dark @click="$emit('closed')" :disabled="loading">
@@ -23,12 +26,12 @@
             <v-toolbar flat dark color="primary">
                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="dates" transition="scale-transition" offset-y min-width="290px">
                     <template v-slot:activator="{ on }">
-                        <v-text-field class="mt-5 ml-2 mr-2" v-model="dates" label="Date range" prepend-icon="event" readonly v-on="on"></v-text-field>
+                        <v-text-field class="mt-5 ml-2 mr-2" v-model="dateRangeText" label="Date range" prepend-icon="event" readonly v-on="on"></v-text-field>
                     </template>
-                    <v-date-picker v-model="dates" no-title s range scrollable></v-date-picker>
+                    <v-date-picker v-model="dates" no-title range scrollable></v-date-picker>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                    <v-btn text color="primary" @click="menu = false">OK</v-btn>
+                    <v-btn text color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
                     </v-date-picker>
                 </v-menu>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
@@ -135,6 +138,9 @@ export default {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
+        dateRangeText() {
+            return this.dates.join(' ~ ')
+        },
     },
 
     watch: {
@@ -154,16 +160,17 @@ export default {
 
         },
         async filter() {
-            await this.refresh(this.search, this.mutateOptions)
+            await this.refresh(this.dates, this.mutateOptions)
         },
         async reset() {
-            this.search = ''
-            await this.refresh(this.search, this.mutateOptions)
+            this.dates = []
+            await this.refresh(this.dates, this.mutateOptions)
         },
 
         async allItems() {
-            const options = Object.assign(this.mutateOptions, { limit: 0, page: 1 })
-            const results = await this.refresh(this.search, options, true)
+            const options = Object.assign(this.mutateOptions, { itemsPerPage: 0, page: 1 })
+            const results = await this.refresh(this.dates, options, true)
+
             return results
         },
         filterDone() {

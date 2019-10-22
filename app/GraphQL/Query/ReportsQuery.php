@@ -21,7 +21,13 @@ class ReportsQuery extends Query {
 	// arguments to filter query
 	public function args(): array{
 		return [
-			'query' => [
+			'name' => [
+				'type' => Type::string(),
+			],
+			'from' => [
+				'type' => Type::string(),
+			],
+			'to' => [
 				'type' => Type::string(),
 			],
 			'location' => [
@@ -36,40 +42,57 @@ class ReportsQuery extends Query {
 			'limit' => [
 				'type' => Type::int(),
 			],
-			'limit' => [
-				'type' => Type::int(),
-			],
 			'page' => [
 				'type' => Type::int(),
 			],
 			'sort' => [
 				'type' => Type::string(),
 			],
-			'sort_desc' => [
+			'desc' => [
 				'type' => Type::string(),
 			],
 
 		];
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
-		$where = function ($query) use ($args) {
 
-		};
-		if (isset($args['query'])) {
-			switch ($args['query']) {
+		$fields = $getSelectFields();
+		$fieldList = $fields->getSelect();
+		$from = '';
+		$to = '';
+		// unset($fieldList[array_search('sum', $fieldList)]);
+		// unset($fieldList[array_search('count', $fieldList)]);
+
+		if (isset($args['name'])) {
+			switch ($args['name']) {
 			case 'payment_summary':
-				$fields = $getSelectFields();
-				$results = Item::with(array_keys($fields->getRelations()))
-					->where('type', 'payment')
-					->where($where)
-					->groupBy('item_id')
-					->groupBy('date')
-					->select($fields->getSelect())->sum('total_amount')
-					->paginate($args['limit'], ['*'], 'page', $args['page']);
+				return $this->paymentSummary($args);
 				break;
 
 			}
 		}
+
+	}
+
+	public function paymentSummary($args) {
+		$where = function ($query) use ($args) {
+
+		};
+
+		if (isset($args['from']) && isset($args['to'])) {
+			$from = $args['from'] . '00:00:00';
+			$to = $args['to'] . '23:59:59';
+		}
+
+		$results = Item::with('document')
+			->where('type', 'payment')
+			->selectRaw('CASE WHEN item_id = 1 THEN "Cash"
+                                      WHEN item_id = 2 THEN "Card"
+                                      WHEN item_id = 3 THEN "Transfer"
+                                      WHEN item_id = 4 THEN "Boost"
+                                      ELSE "undefined" END as item_name, sum(total_amount) as total_amount, count(id) as count, sum(refund_amount) as refund_amount, sum(total_amount) - sum(refund_amount) as net')
+			->groupBy('item_id')
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return $results;
 	}
