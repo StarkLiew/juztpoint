@@ -64,17 +64,13 @@ class ReportsQuery extends Query {
 		// unset($fieldList[array_search('count', $fieldList)]);
 
 		if (isset($args['name'])) {
-			switch ($args['name']) {
-			case 'payment_summary':
-				return $this->paymentSummary($args);
-				break;
-
-			}
+			$func = $args['name'];
+			return $this->$func($args);
 		}
 
 	}
 
-	public function paymentSummary($args) {
+	public function payment_summary($args) {
 		$where = function ($query) use ($args) {
 
 		};
