@@ -32,6 +32,7 @@
                         </v-btn>
                     </template>
                     <v-form ref="form" v-model="valid" lazy-validation>
+                        <slot name="option"></slot>
                         <v-card tile>
                             <v-toolbar flat dark color="primary" max-height="68">
                                 <v-btn icon dark @click="close" :disabled="saving">

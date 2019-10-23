@@ -1,8 +1,52 @@
 <template>
     <crud title="Products" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" @edit-dialog-changed='editDialogHandler' :groups="[{name:'Category', value: 'category', text: 'name'}]">
+        <template v-slot:option>
+            <v-item-group mandatory>
+                <v-container>
+                    <v-row>
+                        <v-col cols="4" md="4">
+                            <v-item v-slot:default="{ active, toggle }">
+                                <v-card :color="active ? 'primary' : ''" class="d-flex align-center" dark height="200" @click="toggle">
+                                    <v-scroll-y-transition>
+                                        <div class="caption flex-grow-1 text-center">
+                                            <v-icon v-if="active">check</v-icon>
+                                            Standard
+                                        </div>
+                                    </v-scroll-y-transition>
+                                </v-card>
+                            </v-item>
+                        </v-col>
+                        <v-col cols="4" md="4">
+                            <v-item v-slot:default="{ active, toggle }">
+                                <v-card :color="active ? 'primary' : ''" class="d-flex align-center" dark height="200" @click="toggle">
+                                    <v-scroll-y-transition>
+                                        <div class="caption flex-grow-1 text-center">
+                                            <v-icon v-if="active">check</v-icon>
+                                            Variants
+                                        </div>
+                                    </v-scroll-y-transition>
+                                </v-card>
+                            </v-item>
+                        </v-col>
+                        <v-col cols="4" md="4">
+                            <v-item v-slot:default="{ active, toggle }">
+                                <v-card :color="active ? 'primary' : ''" class="d-flex align-center" dark height="200" @click="toggle">
+                                    <v-scroll-y-transition>
+                                        <div class="caption flex-grow-1 text-center">
+                                            <v-icon v-if="active">check</v-icon>
+                                            Composite
+                                        </div>
+                                    </v-scroll-y-transition>
+                                </v-card>
+                            </v-item>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-item-group>
+        </template>
         <template v-slot:dialog="{ dialog, valid, editedItem }">
             <v-container>
-                <v-row>
+                <v-row v-if="editedItem.id">
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-row class="text-center">
                             <v-col cols="4" sm="4" md="4" lg="4">
@@ -25,17 +69,29 @@
                         </v-row>
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                         <v-text-field v-model="editedItem.sku" :rules="[v => !!v || 'SKU is required',]" required label="Stock Keeping Unit (SKU)"></v-text-field>
+                        <v-textarea clearable v-model="editedItem.note" clear-icon="cancel" label="Description"></v-textarea>
                         <v-select :loading="loading" :rules="[v => !!v || 'Category is required',]" required item-text="name" item-value="id" v-model="editedItem.cat_id" :items="categories" label="Category"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Tax is required',]" required item-text="name" item-value="id" v-model="editedItem.tax_id" :items="taxes" label="Tax"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Staff Commission is required',]" required item-text="name" item-value="id" v-model="editedItem.commission_id" :items="commissions" label="Staff Commission Rate"></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-textarea clearable v-model="editedItem.note" clear-icon="cancel" label="Description"></v-textarea>
-                        <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
-                        <v-switch :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable"></v-switch>
                         <v-text-field v-if="editedItem.stockable" prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
-                        <v-text-field v-if="editedItem.stockable" v-model="editedItem.properties.opening" label="Opening Quantity"></v-text-field>
+                        <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
+                        <v-combobox v-model="select" :items="items" label="Composite" multiple outlined dense></v-combobox>
+                        <v-combobox v-model="model" :items="items" :search-input.sync="search" hide-selected hint="Color, Size" label="Variants" multiple persistent-hint small-chips>
+                            <template v-slot:no-data>
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            No results matching "<strong>{{ search }}</strong>". Press <kbd>enter</kbd> to create a new one
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template>
+                        </v-combobox>
+                        <v-switch :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable"></v-switch>
+                        <v-text-field v-if="editedItem.stockable" v-model="editedItem.properties.opening" label="Opening Quantity"></v-text-field>
                     </v-col>
                 </v-row>
             </v-container>
@@ -87,6 +143,7 @@ export default {
                 ['#00FFFF', '#00AAAA', '#005555'],
                 ['#0000FF', '#0000AA', '#000055'],
             ],
+            type: '',
             loading: true,
             commissions: [],
             taxes: [],

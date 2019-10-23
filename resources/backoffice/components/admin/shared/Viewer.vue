@@ -31,7 +31,7 @@
                     <v-date-picker v-model="dates" no-title range scrollable></v-date-picker>
                     <v-spacer></v-spacer>
                     <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                    <v-btn text color="primary" @click="$refs.menu.save(dates)">OK</v-btn>
+                    <v-btn text color="primary" @click="filter">OK</v-btn>
                     </v-date-picker>
                 </v-menu>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
@@ -79,16 +79,16 @@
                         </v-btn>
                     </template>
                     <v-list>
-                        <v-list-item @click="">
+                        <v-list-item>
                             <v-list-item-title>
-                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="data.csv">
+                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="report.csv">
                                     CSV
                                 </download-excel>
                             </v-list-item-title>
                         </v-list-item>
-                        <v-list-item @click="">
+                        <v-list-item>
                             <v-list-item-title>
-                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="data.xls">
+                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="report.xls">
                                     Excel
                                 </download-excel>
                             </v-list-item-title>
@@ -150,7 +150,7 @@ export default {
         },
         mutateOptions: {
             async handler() {
-                await this.refresh(this.search, this.mutateOptions)
+                await this.refresh(this.dates, this.mutateOptions)
             },
             deep: true,
         },
@@ -160,6 +160,11 @@ export default {
 
         },
         async filter() {
+            if (this.menu) {
+                this.$refs.menu.save(this.dates)
+                this.menu = false
+            }
+
             await this.refresh(this.dates, this.mutateOptions)
         },
         async reset() {
@@ -170,17 +175,13 @@ export default {
         async allItems() {
             const options = Object.assign(this.mutateOptions, { itemsPerPage: 0, page: 1 })
             const results = await this.refresh(this.dates, options, true)
-
-            return results
+            return results.data
         },
         filterDone() {
             this.dialog = false
         },
         close() {
             this.dialog = false
-        },
-        save() {
-
         },
         remove() {
 
