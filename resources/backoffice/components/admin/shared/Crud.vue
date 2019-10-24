@@ -15,11 +15,12 @@
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
+            </v-toolbar>
+            <v-toolbar flat dark color="primary">
                 <v-btn color="primary" class="mb-2" @click="filter" :disabled="loading">
                     <v-icon>search</v-icon>
                 </v-btn>
-                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="remove"></v-text-field>
+                <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="'remove'"></v-text-field>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
                     <v-icon>refresh</v-icon>
                 </v-btn>
@@ -32,7 +33,6 @@
                         </v-btn>
                     </template>
                     <v-form ref="form" v-model="valid" lazy-validation>
-                        <slot name="option"></slot>
                         <v-card tile>
                             <v-toolbar flat dark color="primary" max-height="68">
                                 <v-btn icon dark @click="close" :disabled="saving">

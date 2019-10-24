@@ -105,7 +105,10 @@ export default {
 
         navigation() {
             const inventory = [
-                { title: 'Vendors', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true}
+                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true},
+                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true},
+                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true},
+                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true},
             ]
 
             this.items = [
@@ -126,9 +129,6 @@ export default {
                 }],
                 [
                     { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
-                ],
-                [
-                    { title: 'Products', icon: 'view_array', to: { name: 'products' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Services', icon: 'face', to: { name: 'services' }, role: 'MGR', exact: true }

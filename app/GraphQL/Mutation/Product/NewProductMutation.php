@@ -1,5 +1,6 @@
 <?php
 namespace App\GraphQL\Mutation\Product;
+use App\Models\Item;
 use App\Models\Product;
 use Auth;
 use GraphQL\Type\Definition\Type;
@@ -53,6 +54,15 @@ class NewProductMutation extends Mutation {
 				'name' => 'commission_id',
 				'type' => Type::int(),
 			],
+			'variants' => [
+				'name' => 'variants',
+				'type' => Type::string(),
+
+			],
+			'composites' => [
+				'name' => 'composites',
+				'type' => Type::string(),
+			],
 			'discount' => [
 				'name' => 'discount',
 				'type' => Type::float(),
@@ -85,14 +95,40 @@ class NewProductMutation extends Mutation {
 			$args['thumbnail'] = $args['thumbnail']->get();
 		}
 
-		$args['properties'] = json_decode($args['properties']);
-		$args['user_id'] = Auth::id();
+		DB::beginTransaction();
+		try {
+			$args['properties'] = json_decode($args['properties']);
+			$args['user_id'] = Auth::id();
 
-		$data = Product::create($args);
+			$data = Product::create($args);
+			if ($data->type === 'product') {
+				$open = Item::where('item_id', $data->id)->where('type', 'open')->first();
+				if (!$open) {
+					$open = new Item();
+				}
+				$open->line = 1;
+				$open->item_id = $data->id;
+				$open->qty = $data->properties['qty'];
+				$open->trxn_id = 1;
+				$open->tax_id = 1;
+				$open->type = 'open';
+				$open->discount = '{}';
+				$open->refund_qty = 0;
+				$open->tax_amount = 0.00;
+				$open->discount_amount = 0.00;
+				$open->refund_amount = 0.00;
+				$open->total_amount = 0.00;
+				$open->user_id = $data->user_id;
+				$open->save();
+			}
 
-		if (!$data) {
+			DB::commit();
+			return $data;
+
+		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollback();
 			return null;
 		}
-		return $data;
+
 	}
 }

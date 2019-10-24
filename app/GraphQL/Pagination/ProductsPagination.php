@@ -99,6 +99,16 @@ class ProductsPagination extends PaginationType {
 				'description' => 'The type of setting',
 				'is_relation' => true,
 			],
+			'variants' => [
+				'type' => Type::listOf(Type::string()),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
+			'composites' => [
+				'type' => Type::listOf(Type::int()),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
 			'properties' => [
 				'type' => GraphQL::type('property'),
 				'description' => 'A list of the property',

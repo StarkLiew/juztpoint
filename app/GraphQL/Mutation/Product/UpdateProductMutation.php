@@ -61,6 +61,15 @@ class UpdateProductMutation extends Mutation {
 				'name' => 'commission_id',
 				'type' => Type::int(),
 			],
+			'variants' => [
+				'name' => 'variants',
+				'type' => Type::string(),
+
+			],
+			'composites' => [
+				'name' => 'composites',
+				'type' => Type::string(),
+			],
 			'discount' => [
 				'name' => 'discount',
 				'type' => Type::float(),
@@ -96,12 +105,39 @@ class UpdateProductMutation extends Mutation {
 		if (isset($args['clear_image'])) {
 			$args['thumbnail'] = '';
 		}
-
 		$args['properties'] = json_decode($args['properties']);
-		$data = Product::find($args['id']);
-		if (!$data->update($args)) {
+
+		DB::beginTransaction();
+		try {
+
+			$data = Product::find($args['id']);
+			if (!$data->update($args)) {
+				return null;
+			}
+			if ($data->type === 'product') {
+				$data = Product::create($args);
+				$open = new Item();
+				$open->line = 1;
+				$open->item_id = $data->id;
+				$open->qty = $data->properties['qty'];
+				$open->trxn_id = 1;
+				$open->tax_id = 1;
+				$open->type = 'open';
+				$open->discount = '{}';
+				$open->refund_qty = 0;
+				$open->tax_amount = 0.00;
+				$open->discount_amount = 0.00;
+				$open->refund_amount = 0.00;
+				$open->total_amount = 0.00;
+				$open->user_id = $data->user_id;
+				$open->save();
+			}
+			DB::commit();
+			return $data;
+		} catch (\Illuminate\Database\QueryException $e) {
+			DB::rollback();
 			return null;
 		}
-		return $data;
+
 	}
 }

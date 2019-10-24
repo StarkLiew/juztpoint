@@ -56,8 +56,9 @@ export default [
                 path: '/products',
                 component: require('$backoffice/admin/product/ProductWrapper').default,
                 children: [
-                    { path: '', name: 'products', component: require('$backoffice/admin/product/product').default },
-
+                    { path: '/standard', name: 'products', component: require('$backoffice/admin/product/product').default },
+                    { path: '/variant', name: 'variants', component: require('$backoffice/admin/product/variant').default },
+                    { path: '/composite', name: 'composites', component: require('$backoffice/admin/product/composite').default },
                 ]
             },
             {
@@ -78,8 +79,8 @@ export default [
                 path: '/reports',
                 component: require('$backoffice/admin/report/ReportWrapper').default,
                 children: [
-                    { path: '', name: 'reports', component: require('$backoffice/admin/report/report').default},
-                 ]
+                    { path: '', name: 'reports', component: require('$backoffice/admin/report/report').default },
+                ]
             },
         ]
     }, ]),

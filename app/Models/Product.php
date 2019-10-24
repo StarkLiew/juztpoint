@@ -25,6 +25,8 @@ class Product extends Model {
 	protected $appends = array('qty');
 	protected $casts = [
 		'properties' => 'array',
+		'variants' => 'array',
+		'composites' => 'array',
 		'thumbnail' => 'file',
 	];
 	/**
