@@ -33,7 +33,7 @@
                         <v-select :loading="loading" :rules="[v => !!v || 'Staff Commission is required',]" required item-text="name" item-value="id" v-model="editedItem.commission_id" :items="commissions" label="Staff Commission Rate"></v-select>
                         <v-text-field prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
-                        <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
+                        <v-switch true-value="active" false-value="inactive" v-model="editedItem.status" inset :label="`Active`"></v-switch>
                         <v-switch :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable"></v-switch>
                         <v-text-field v-if="editedItem.stockable" v-model="editedItem.properties.opening" label="Opening Quantity"></v-text-field>
                     </v-col>

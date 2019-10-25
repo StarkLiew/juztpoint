@@ -154,6 +154,8 @@ return [
 		'account' => App\GraphQL\Type\AccountType::class,
 		'product' => App\GraphQL\Type\ProductType::class,
 		'property' => App\GraphQL\Type\PropertyType::class,
+		'variant' => App\GraphQL\Type\VariantType::class,
+		'variant_stock' => App\GraphQL\Type\VariantStockType::class,
 		'receipt' => App\GraphQL\Type\ReceiptType::class,
 		'services_by' => App\GraphQL\Type\ServicesByType::class,
 		'item' => App\GraphQL\Type\ItemType::class,

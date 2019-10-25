@@ -90,6 +90,16 @@ class ProductType extends GraphQLType {
 				'type' => Type::int(),
 				'description' => 'The type of setting',
 			],
+			'variants' => [
+				'type' => Type::listOf(GraphQL::type('variant')),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
+			'composites' => [
+				'type' => Type::listOf(Type::int()),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
 			'commission_id' => [
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'The type of setting',

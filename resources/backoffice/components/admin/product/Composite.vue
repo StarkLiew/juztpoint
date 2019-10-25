@@ -30,7 +30,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
-                        <v-combobox :loading="loading" v-model="select" :items="standards" label="Composite" multiple dense item-text="name" item-value="id">
+                        <v-combobox :loading="loading" v-model="editedItem.composites" :items="standards" label="Composite" multiple dense item-text="name" item-value="id">
                             <template v-slot:selection="{ attrs, item, parent, selected }">
                                 <v-chip v-if="item === Object(item)" v-bind="attrs" color="primary" :input-value="selected" label small>
                                     <span class="pr-2">
@@ -40,10 +40,12 @@
                                 </v-chip>
                             </template>
                         </v-combobox>
+                           {{ editedItem.composites }}
                         <v-select :loading="loading" :rules="[v => !!v || 'Category is required',]" required item-text="name" item-value="id" v-model="editedItem.cat_id" :items="categories" label="Category"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Tax is required',]" required item-text="name" item-value="id" v-model="editedItem.tax_id" :items="taxes" label="Tax"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Staff Commission is required',]" required item-text="name" item-value="id" v-model="editedItem.commission_id" :items="commissions" label="Staff Commission Rate"></v-select>
                     </v-col>
+
                 </v-row>
             </v-container>
         </template>
@@ -151,7 +153,7 @@ export default {
                 this.categories = await this.$store.dispatch('setting/fetch', { type: 'category', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
                 this.taxes = await this.$store.dispatch('setting/fetch', { type: 'tax', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
                 this.commissions = await this.$store.dispatch('setting/fetch', { type: 'commission', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
-                this.standards = await this.$store.dispatch('product/fetch', { type: 'product', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
+                this.standards = await this.$store.dispatch('product/fetch', { type: 'product%', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
             }
 
             this.loading = false
@@ -162,7 +164,7 @@ export default {
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
 
-            const results = await this.$store.dispatch('product/fetch', { type: 'product-composite', search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('product/fetch', { type: 'composite-product', search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
 
@@ -172,7 +174,7 @@ export default {
             this.loading = true
 
             if (!item.id) {
-                item.type = 'product'
+                item.type = 'composite-product'
                 await this.$store.dispatch('product/add', item)
             } else {
                 await this.$store.dispatch('product/update', item)

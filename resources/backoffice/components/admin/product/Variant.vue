@@ -31,9 +31,10 @@
                         <v-select :loading="loading" :rules="[v => !!v || 'Staff Commission is required',]" required item-text="name" item-value="id" v-model="editedItem.commission_id" :items="commissions" label="Staff Commission Rate"></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-text-field v-if="editedItem.stockable" prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
-                        <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
+                        <v-alert v-if="!!editedItem.id" type="error">
+                            Any changes to this section below will affect Stock calculation.
+                        </v-alert>
                         <v-data-table :headers="variantHeaders" :items="editedItem.variants" class="elevation-1">
                             <template v-slot:item.value="{ item }">
                                 <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
@@ -93,6 +94,27 @@
                         </v-data-table>
                         <v-switch @change="assignStock(editedItem)" :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable ">
                         </v-switch>
+                        <v-data-table v-if="!!editedItem.stockable" :headers="stockHeaders" :items="editedItem.properties.stocks" class="elevation-1">
+                            <template v-slot:item.value="{ item }">
+                                <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
+                            </template>
+                            <template v-slot:top>
+                                <v-toolbar flat color="white">
+                                    <v-toolbar-title>Inventory detail</v-toolbar-title>
+                                    <v-divider class="mx-4" inset vertical></v-divider>
+                                    <v-spacer></v-spacer>
+                                </v-toolbar>
+                            </template>
+                            <template v-slot:item.cost="props">
+                                <v-text-field v-model="props.item.cost" label="Cost" prefix="$"></v-text-field>
+                            </template>
+                            <template v-slot:item.price="props">
+                                <v-text-field v-model="props.item.price" label="Selling Price" prefix="$"></v-text-field>
+                            </template>
+                            <template v-slot:item.qty="props">
+                                <v-text-field v-model="props.item.qty" label="Opening Quantity"></v-text-field>
+                            </template>
+                        </v-data-table>
                     </v-col>
                 </v-row>
             </v-container>
@@ -169,6 +191,7 @@ export default {
                 tax_id: 0,
                 stockable: 0,
                 status: 'active',
+                discount: 0.00,
                 note: '',
                 allow_assistant: 0,
                 commission_id: 0,
@@ -195,6 +218,12 @@ export default {
                 { text: 'Variant name', value: 'name' },
                 { text: 'Variant value', value: 'value' },
                 { text: 'Actions', value: 'action', sortable: false },
+            ],
+            stockHeaders: [
+                { text: 'Name', value: 'name' },
+                { text: 'Cost', value: 'cost' },
+                { text: 'Price', value: 'price' },
+                { text: 'Opening Qty', value: 'qty' },
             ],
             exportFields: {
                 'name': 'name',
@@ -239,14 +268,23 @@ export default {
             this.variantDialog = true
         },
 
-        deleteVariantItem(editedItem, item) {
+        async deleteVariantItem(editedItem, item) {
             const index = editedItem.variants.findIndex(v => v.name === item.name)
             editedItem.variants.splice(index, 1)
+
+            if (editedItem.stockable === 1) {
+                await this.assignStock(editedItem)
+            }
+
         },
         async saveVariant(editedItem) {
 
             if (this.editedVariantIndex > -1) {
                 Vue.set(editedItem.variants, this.editedVariantIndex, this.editedVariantItem)
+
+                if (editedItem.stockable === 1) {
+                    await this.assignStock(editedItem)
+                }
             } else {
                 const index = editedItem.variants.findIndex(v => v.name === this.editedVariantItem.name)
 
@@ -255,13 +293,15 @@ export default {
                 } else {
                     try {
                         editedItem.variants.push(this.editedVariantItem)
+
+                        if (editedItem.stockable === 1) {
+                            await this.assignStock(editedItem)
+                        }
                     } catch (e) {
                         throw e
                     }
-
                 }
             }
-
             await this.closeVariant()
         },
         async closeVariant() {
@@ -277,7 +317,7 @@ export default {
             this.loading = true
 
             if (!item.id) {
-                item.type = 'product'
+                item.type = 'product-variant'
                 await this.$store.dispatch('product/add', item)
             } else {
                 await this.$store.dispatch('product/update', item)
@@ -310,15 +350,47 @@ export default {
 
             this.loading = false
         },
-        assignStock(editedItem) {
+        async assignStock(editedItem) {
+
             this.loading = true
-            if (editedItem.stockable === 1) {
-                let stocks
-      
-                this.editedItem.properties.stocks = stocks
+
+            if (editedItem.stockable === 1 && editedItem.variants.length > 0) {
+                let stocks = this.combine(editedItem.variants)
+                for (let stock of editedItem.properties.stocks) {
+                    const index = stocks.findIndex(v => v.name === stock.name)
+                    let newStock = stocks[index]
+                    if (!!newStock) {
+                        newStock.cost = stock.cost
+                        newStock.price = stock.price
+                        newStock.qty = stock.qty
+                    }
+                }
+                editedItem.properties.stocks = stocks
+            } else {
+                editedItem.properties.stocks = []
             }
             this.loading = false
         },
+
+        combine(variants) {
+            let combos = [
+                []
+            ]
+            for (const variant of variants) {
+                let tmp = []
+                if (!variant.value) return
+                for (const combo of combos) {
+                    for (const value of variant.value) {
+                        if (combo == '') tmp.push({ name: value, cost: 0, price: 0, qty: 0 });
+                        else tmp.push({ name: combo.name + '-' + value, cost: 0, price: 0, qty: 0 })
+                    }
+                }
+                combos = tmp
+            }
+            return combos
+        },
+
+
     },
 }
 

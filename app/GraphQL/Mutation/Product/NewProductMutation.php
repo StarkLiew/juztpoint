@@ -3,6 +3,7 @@ namespace App\GraphQL\Mutation\Product;
 use App\Models\Item;
 use App\Models\Product;
 use Auth;
+use DB;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
@@ -98,28 +99,27 @@ class NewProductMutation extends Mutation {
 		DB::beginTransaction();
 		try {
 			$args['properties'] = json_decode($args['properties']);
+
+			if (isset($args['variants'])) {
+				$args['variants'] = json_decode($args['variants']);
+			}
+
+			if (isset($args['composites'])) {
+				$args['composites'] = json_decode($args['composites']);
+			}
+
 			$args['user_id'] = Auth::id();
 
 			$data = Product::create($args);
-			if ($data->type === 'product') {
-				$open = Item::where('item_id', $data->id)->where('type', 'open')->first();
-				if (!$open) {
-					$open = new Item();
+			if ($data->type === 'product' && $data->stockable === 1) {
+				$this->open($data->id, $data->properties['opening'], $data->user_id);
+			}
+			if ($data->type === 'product-variant' && $data->stockable === 1) {
+				$opening = 0;
+				foreach ($data['properties']['stocks'] as $key => $stock) {
+					$opening += $stock['qty'];
 				}
-				$open->line = 1;
-				$open->item_id = $data->id;
-				$open->qty = $data->properties['qty'];
-				$open->trxn_id = 1;
-				$open->tax_id = 1;
-				$open->type = 'open';
-				$open->discount = '{}';
-				$open->refund_qty = 0;
-				$open->tax_amount = 0.00;
-				$open->discount_amount = 0.00;
-				$open->refund_amount = 0.00;
-				$open->total_amount = 0.00;
-				$open->user_id = $data->user_id;
-				$open->save();
+				$this->open($data->id, $opening, $data->user_id);
 			}
 
 			DB::commit();
@@ -130,5 +130,25 @@ class NewProductMutation extends Mutation {
 			return null;
 		}
 
+	}
+	public function open($id, $qty, $user_id) {
+		$open = Item::where('item_id', $id)->where('type', 'open')->first();
+		if (!$open) {
+			$open = new Item();
+		}
+		$open->line = 1;
+		$open->item_id = $id;
+		$open->qty = $qty;
+		$open->trxn_id = 1;
+		$open->tax_id = 1;
+		$open->type = 'open';
+		$open->discount = '{}';
+		$open->refund_qty = 0;
+		$open->tax_amount = 0.00;
+		$open->discount_amount = 0.00;
+		$open->refund_amount = 0.00;
+		$open->total_amount = 0.00;
+		$open->user_id = $user_id;
+		$open->save();
 	}
 }

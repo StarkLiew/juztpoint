@@ -7,7 +7,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class ServicesByType extends GraphQLType {
 	protected $attributes = [
-		'name' => 'ServiceByType',
+		'name' => 'ServiceBy',
 		'description' => 'JSON of object property',
 
 	];

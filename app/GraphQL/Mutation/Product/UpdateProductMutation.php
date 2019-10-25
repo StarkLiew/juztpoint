@@ -119,7 +119,7 @@ class UpdateProductMutation extends Mutation {
 				$open = new Item();
 				$open->line = 1;
 				$open->item_id = $data->id;
-				$open->qty = $data->properties['qty'];
+				$open->qty = $data->properties['opening'];
 				$open->trxn_id = 1;
 				$open->tax_id = 1;
 				$open->type = 'open';

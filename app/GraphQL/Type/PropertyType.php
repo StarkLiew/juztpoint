@@ -98,12 +98,20 @@ class PropertyType extends GraphQLType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'opening' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'thumbnail' => [
 				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
 			'shareWith' => [
 				'type' => Type::int(),
+				'description' => 'The type of setting',
+			],
+			'stocks' => [
+				'type' => Type::listOf(GraphQL::type('variant_stock')),
 				'description' => 'The type of setting',
 			],
 			'servicesBy' => [

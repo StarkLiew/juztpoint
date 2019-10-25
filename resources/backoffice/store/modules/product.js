@@ -4,7 +4,7 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 
-const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants, composites, properties{ cost, price, thumbnail, color}`
+const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants{name, value}, composites, properties{ cost, price, thumbnail, color, opening, stocks{name, cost, price, qty}}`
 /**
  * Initial state
  */
@@ -78,10 +78,10 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { formData, thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note } = item
+            const { formData, thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note, variants, composites, qty } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const input = `name: "${name}",
+            let input = `name: "${name}",
                            type: "${type}",
                            status: "${status}",
                            properties: "${props}",
@@ -93,6 +93,16 @@ export const actions = {
                            commission_id: ${commission_id},
                            stockable: ${stockable},
                            note: "${note}",`
+
+            if (!!variants) {
+                const variantsCasted = JSON.stringify(variants).replace(/"/g, '\\"')
+                input += `variants: "${variantsCasted}",`
+            }
+            if (!!composites) {
+                const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
+                input += `composites: "${compositesCasted}",`
+            }
+
 
             if (!formData) {
                 const mutation = `mutation products{newProduct(${input}){${columns}}}`

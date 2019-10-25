@@ -100,7 +100,7 @@ class ProductsPagination extends PaginationType {
 				'is_relation' => true,
 			],
 			'variants' => [
-				'type' => Type::listOf(Type::string()),
+				'type' => Type::listOf(GraphQL::type('variant')),
 				'description' => 'A list of the property',
 				'is_relation' => false,
 			],
