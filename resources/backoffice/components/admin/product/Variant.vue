@@ -33,7 +33,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
                         <v-alert v-if="!!editedItem.id" type="error">
-                            Any changes to this section below will affect Stock calculation.
+                            Any changes or removing item from this section below will affect stock calculation.
                         </v-alert>
                         <v-data-table :headers="variantHeaders" :items="editedItem.variants" class="elevation-1">
                             <template v-slot:item.value="{ item }">
@@ -41,7 +41,7 @@
                             </template>
                             <template v-slot:top>
                                 <v-toolbar flat color="white">
-                                    <v-toolbar-title>New Variant</v-toolbar-title>
+                                    <v-toolbar-title>Variant</v-toolbar-title>
                                     <v-divider class="mx-4" inset vertical></v-divider>
                                     <v-spacer></v-spacer>
                                     <v-dialog v-model="variantDialog" max-width="500px">
@@ -263,6 +263,7 @@ export default {
             if (noCommit) return results
         },
         editVariantItem(editedItem, item) {
+
             this.editedVariantItem = JSON.parse(JSON.stringify(item))
             this.editedVariantIndex = editedItem.variants.indexOf(item)
             this.variantDialog = true

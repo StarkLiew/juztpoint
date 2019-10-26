@@ -96,7 +96,7 @@ class ProductType extends GraphQLType {
 				'is_relation' => false,
 			],
 			'composites' => [
-				'type' => Type::listOf(Type::int()),
+				'type' => Type::listOf(GraphQL::type('property')),
 				'description' => 'A list of the property',
 				'is_relation' => false,
 			],

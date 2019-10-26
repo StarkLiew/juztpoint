@@ -4,7 +4,8 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 
-const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants{name, value}, composites, properties{ cost, price, thumbnail, color, opening, stocks{name, cost, price, qty}}`
+const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants{name, value}, composites{id, name}, properties{ cost, price, thumbnail, color, opening, stocks{name, cost, price, qty}}`
+
 /**
  * Initial state
  */
@@ -58,13 +59,13 @@ export const actions = {
     async reset() {
         commit(types.FETCH_PRODUCT_FAILURE)
     },
-    async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit }) {
+    async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit, customFields }) {
 
         if (!noCommit) commit(types.FETCH_PRODUCT_FAILURE) //reset
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{products(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{${columns}}, total,per_page}}` } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{products(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{${!!customFields ? customFields : columns}}, total,per_page}}` } })
 
             if (noCommit) {
 
@@ -140,11 +141,11 @@ export const actions = {
     },
     async update({ commit }, item) {
         try {
-            const { formData, id, thumbnail, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, commission_id, stockable, note } = item
+            const { formData, id, thumbnail, name, type, properties, status, cat_id, sku, tax_id, allow_assistant, discount, commission_id, stockable, note, variants, composites, qty } = item
 
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const input = `id: ${id},
+            let input = `id: ${id},
                            name: "${name}",
                            type: "${type}",
                            status: "${status}",
@@ -157,6 +158,14 @@ export const actions = {
                            commission_id: ${commission_id},
                            stockable: ${stockable},
                            note: "${note}",`
+            if (!!variants) {
+                const variantsCasted = JSON.stringify(variants).replace(/"/g, '\\"')
+                input += `variants: "${variantsCasted}",`
+            }
+            if (!!composites) {
+                const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
+                input += `composites: "${compositesCasted}",`
+            }
 
             if (!formData) {
                 const thumbInput = thumbnail === '' ? `clear_image: true` : ''

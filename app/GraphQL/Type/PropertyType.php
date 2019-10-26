@@ -14,6 +14,10 @@ class PropertyType extends GraphQLType {
 	// define field of type
 	public function fields(): array{
 		return [
+			'id' => [
+				'type' => Type::int(),
+				'description' => 'Description of the setting',
+			],
 			'name' => [
 				'type' => Type::string(),
 				'description' => 'Description of the setting',
