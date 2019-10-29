@@ -37,6 +37,14 @@ export default [
                 ]
             },
             {
+                path: '/sales',
+                component: require('$backoffice/admin/sale/SaleWrapper').default,
+                children: [
+                    { path: '', name: 'sales', component: require('$backoffice/admin/sale/sale').default },
+
+                ]
+            },
+            {
                 path: '/customers',
                 component: require('$backoffice/admin/customer/CustomerWrapper').default,
                 children: [
@@ -56,23 +64,40 @@ export default [
                 path: '/products',
                 component: require('$backoffice/admin/product/ProductWrapper').default,
                 children: [
-                    { path: '/standard', name: 'products', component: require('$backoffice/admin/product/product').default },
-                    { path: '/variant', name: 'variants', component: require('$backoffice/admin/product/variant').default },
-                    { path: '/composite', name: 'composites', component: require('$backoffice/admin/product/composite').default },
+                    { path: '/products/standard', name: 'products', component: require('$backoffice/admin/product/product').default },
+                    { path: '/products/variant', name: 'variants', component: require('$backoffice/admin/product/variant').default },
+                    { path: '/products/composite', name: 'composites', component: require('$backoffice/admin/product/composite').default },
                 ]
             },
             {
                 path: '/services',
                 component: require('$backoffice/admin/service/ServiceWrapper').default,
                 children: [
-                    { path: '', name: 'services', component: require('$backoffice/admin/service/service').default },
+                    { path: '/services/standard', name: 'services.standard', component: require('$backoffice/admin/service/standard').default },
+                    { path: '/services/variant', name: 'services.variant', component: require('$backoffice/admin/service/variant').default },
+                    { path: '/services/composite', name: 'services.composite', component: require('$backoffice/admin/service/composite').default },
+
                 ]
             },
             {
                 path: '/users',
                 component: require('$backoffice/admin/user/UserWrapper').default,
                 children: [
-                    { path: '', name: 'users', component: require('$backoffice/admin/user/User').default },
+                    { path: '', name: 'users', component: require('$backoffice/admin/user/user').default },
+
+                ]
+            },
+            {
+                path: '/setting',
+                component: require('$backoffice/admin/setting/SettingWrapper').default,
+                children: [
+                    { path: '', name: 'setting', component: require('$backoffice/admin/setting/setting').default },
+                    { path: '/setting/stores', name: 'setting.stores', component: require('$backoffice/admin/setting/stores').default },
+                    { path: '/setting/terminals', name: 'setting.terminals', component: require('$backoffice/admin/setting/terminals').default },
+                    { path: '/setting/categories', name: 'setting.categories', component: require('$backoffice/admin/setting/categories').default },
+                    { path: '/setting/taxes', name: 'setting.taxes', component: require('$backoffice/admin/setting/taxes').default },
+                    { path: '/setting/commissions', name: 'setting.commissions', component: require('$backoffice/admin/setting/commissions').default },
+                    { path: '/setting/company', name: 'setting.company', component: require('$backoffice/admin/setting/company').default },
                 ]
             },
             {

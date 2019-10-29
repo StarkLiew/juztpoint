@@ -1,5 +1,5 @@
 <template>
-    <crud title="Customers" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
+    <crud title="Customers" :headers="headers" :items='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
         <template v-slot:dialog="{ valid, editedItem }">
             <v-container>
                 <v-row>
@@ -15,7 +15,7 @@
             </v-container>
         </template>
         <template v-slot:item.avatar="{item}">
-            <v-avatar v-if="!!item.avatar">
+            <v-avatar size="164" v-if="!!item.avatar">
                 <img :src="item.avatar" alt="Thumbnail">
             </v-avatar>
             <v-avatar v-if="!item.avatar" :color="'grey'">

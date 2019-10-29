@@ -1,5 +1,5 @@
 <template>
-    <crud title="Suppliers" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
+    <crud title="Suppliers" :headers="headers" :items="items" sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
         <template v-slot:dialog="{ valid, editedItem }">
             <v-container>
                 <v-row>

@@ -21,6 +21,7 @@
                     <v-icon>search</v-icon>
                 </v-btn>
                 <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="'remove'"></v-text-field>
+                <slot name="filter" :options="mutateOptions" :refresh="reset" ></slot>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
                     <v-icon>refresh</v-icon>
                 </v-btn>
@@ -28,7 +29,8 @@
                 <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading">
+      
+                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!hideAdd">
                             <v-icon>add</v-icon>
                         </v-btn>
                     </template>
@@ -119,13 +121,27 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups'],
+    props: {
+        items: {},
+        title: { type: String, default: '' },
+        headers: { type: Array, default: [] },
+        sortBy: { type: String, default: '' },
+        defaultItem: { type: Object, default: {} },
+        options: { type: Object, default: () => {} },
+        loading: { type: Boolean, default: false },
+        serverItemsLength: { type: Number, default: 0 },
+        refresh: { type: Function, default: () => {} },
+        saveMethod: { type: Function, default: () => {} },
+        removeMethod: { type: Function, default: () => {} },
+        exportFields: { type: Object, default: {}},
+        groups: {},
+        hideAdd: { type: Boolean, default: false },
+    },
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
     },
-
     watch: {
         dialog(val) {
             this.$emit('edit-dialog-changed', val)
@@ -146,6 +162,7 @@ export default {
             this.editedIndex = this.items.indexOf(item)
             this.editedItem = JSON.parse(JSON.stringify(item))
             this.dialog = true
+
         },
         async deleteItem(item) {
             const index = this.items.indexOf(item)

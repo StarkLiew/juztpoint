@@ -1,5 +1,5 @@
 <template>
-    <crud title="Variant Products" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" @edit-dialog-changed='editDialogHandler' :groups="[{name:'Category', value: 'category', text: 'name'}]">
+    <crud title="Variant Products" :headers="headers" :items='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields" @edit-dialog-changed='editDialogHandler' :groups="[{name:'Category', value: 'category', text: 'name'}]">
         <template v-slot:dialog="{ dialog, valid, editedItem }">
             <v-container>
                 <v-row>
@@ -35,7 +35,7 @@
                         <v-alert v-if="!!editedItem.id" type="error">
                             Any changes or removing item from this section below will affect stock calculation.
                         </v-alert>
-                        <v-data-table :headers="variantHeaders" :items="editedItem.variants" class="elevation-1">
+                        <v-data-table disable-pagination :headers="variantHeaders" :items="editedItem.variants" class="elevation-1">
                             <template v-slot:item.value="{ item }">
                                 <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
                             </template>
@@ -92,9 +92,7 @@
                                 <div class="caption">Add some variant</div>
                             </template>
                         </v-data-table>
-                        <v-switch @change="assignStock(editedItem)" :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable ">
-                        </v-switch>
-                        <v-data-table v-if="!!editedItem.stockable" :headers="stockHeaders" :items="editedItem.properties.stocks" class="elevation-1">
+                        <v-data-table disable-pagination :headers="stockHeaders" :items="editedItem.properties.stocks" class="elevation-1">
                             <template v-slot:item.value="{ item }">
                                 <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
                             </template>
@@ -102,16 +100,21 @@
                                 <v-toolbar flat color="white">
                                     <v-toolbar-title>Inventory detail</v-toolbar-title>
                                     <v-divider class="mx-4" inset vertical></v-divider>
+                                    <v-switch @change="assignStock(editedItem)" :true-value="1" :false-value="0" v-model="editedItem.stockable" inset label="Stockable" class="mt-6">
+                                    </v-switch>
                                     <v-spacer></v-spacer>
+                                    <v-btn color="secondary" @click="assignStock(editedItem)" class="mt-2 mb-2">
+                                        <v-icon>refresh</v-icon>
+                                    </v-btn>
                                 </v-toolbar>
                             </template>
-                            <template v-slot:item.cost="props">
+                            <template v-if="!!editedItem.stockable" v-slot:item.cost="props">
                                 <v-text-field v-model="props.item.cost" label="Cost" prefix="$"></v-text-field>
                             </template>
                             <template v-slot:item.price="props">
                                 <v-text-field v-model="props.item.price" label="Selling Price" prefix="$"></v-text-field>
                             </template>
-                            <template v-slot:item.qty="props">
+                            <template v-if="!!editedItem.stockable" v-slot:item.qty="props">
                                 <v-text-field v-model="props.item.qty" label="Opening Quantity"></v-text-field>
                             </template>
                         </v-data-table>
@@ -263,10 +266,11 @@ export default {
             if (noCommit) return results
         },
         editVariantItem(editedItem, item) {
-
+    
             this.editedVariantItem = JSON.parse(JSON.stringify(item))
             this.editedVariantIndex = editedItem.variants.indexOf(item)
             this.variantDialog = true
+
         },
 
         async deleteVariantItem(editedItem, item) {

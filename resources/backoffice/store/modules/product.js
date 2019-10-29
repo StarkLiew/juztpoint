@@ -130,7 +130,7 @@ export const actions = {
                 const { data } = await axios.post(graphql.path('query'), formData, { 'Content-Type': 'multipart/form-data' })
                 item = data.data.newProduct
             }
-
+  
             commit(types.ADD_PRODUCT, { item })
 
             return item

@@ -22,6 +22,9 @@ Route::domain('pos.juxtpoint.com')->group(function ($router) {
 Route::domain('backoffice.juxtpoint.com')->group(function ($router) {
 	Route::get('/', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/{any}', 'HomeController@backoffice')->name('backoffice');
+	Route::get('/services/{any}', 'HomeController@backoffice')->name('backoffice');
+	Route::get('/products/{any}', 'HomeController@backoffice')->name('backoffice');
+	Route::get('/setting/{any}', 'HomeController@backoffice')->name('backoffice');
 });
 
 // Wildcard subdomain

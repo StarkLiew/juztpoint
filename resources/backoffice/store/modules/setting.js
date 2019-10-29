@@ -6,6 +6,10 @@ import * as types from '../mutation-types'
 const commissionFields = "id, name, description, type, properties{rate, type}"
 const taxFields = "id, name, description, type, properties{rate, type}"
 const categoryFields = "id, name, description, type"
+const storeFields = "id, name, description,  properties{currency, timezone}"
+const companyFields = "id, name, description,  properties{address, currency, timezone}"
+const terminalFields = "id, name, description"
+
 /**
  * Initial state
  */
@@ -66,13 +70,17 @@ export const actions = {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
             let fields = ''
-            if(type === 'commission') fields = commissionFields
-            if(type === 'tax') fields = taxFields
-            if(type === 'category') fields = categoryFields
+            if (type === 'commission') fields = commissionFields
+            if (type === 'tax') fields = taxFields
+            if (type === 'category') fields = categoryFields
+            if (type === 'store') fields = storeFields
+            if (type === 'terminal') fields = terminalFields
+            if (type === 'company') fields = companyFields
+
             const { data } = await axios.get(graphql.path('query'), { params: { query: `{settings(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{${fields}}, total,per_page}}` } })
 
             if (noCommit) {
-  
+
                 return data.data.settings.data
             }
             commit(types.FILL_SETTINGS, { items: data.data.settings })
@@ -95,10 +103,10 @@ export const actions = {
                              ) {id, name, type, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-       
+
             item = data.data.newAccount
 
-            commit(types.ADD_SETTING,  { item })
+            commit(types.ADD_SETTING, { item })
 
             return item
         } catch (e) {

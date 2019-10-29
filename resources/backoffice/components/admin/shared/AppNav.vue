@@ -19,7 +19,7 @@
         <v-list class="py-0" dense v-for="(group, index) in items" :key="index">
             <v-divider class="mb-2" :class="{ 'mt-0': !index, 'mt-2': index }" v-if="group.length"></v-divider>
             <template v-for="item in group">
-                <v-list-group v-if="!!item.items" :prepend-icon="item.icon"  @click.native="item.action && mini ? item.action() : false"  :key="item.title">
+                <v-list-group v-if="!!item.items" :prepend-icon="item.icon" @click.native="item.action && mini ? item.action() : false" :key="item.title">
                     <template v-slot:activator>
                         <v-list-item-content>
                             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -105,15 +105,28 @@ export default {
 
         navigation() {
             const inventory = [
-                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true},
-                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true},
-                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true},
-                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true},
+                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true },
+                { title: 'Add Stock', icon: 'library_add', to: { name: 'addstock' }, exact: true },
+                { title: 'Stock Card', icon: 'assignment', to: { name: 'stockcard' }, exact: true },
+                { title: 'Stock Take', icon: 'check_box', to: { name: 'stocktake' }, exact: true },
+            ]
+            const products = [
+                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true },
+                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true },
+                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true },
+            ]
+            const services = [
+                { title: 'Standard Service', icon: 'face', to: { name: 'services.standard' }, exact: true },
+                { title: 'Variant Service', icon: 'face', to: { name: 'services.variant' }, exact: true },
+                { title: 'Composite Service', icon: 'face', to: { name: 'services.composite' }, exact: true },
             ]
 
             this.items = [
                 [
                     { title: 'Home', icon: 'store', to: { name: 'home' }, exact: true }
+                ],
+                [
+                    { title: 'Appointment', icon: 'calendar_today', to: { name: 'appointments' }, exact: true }
                 ],
                 [
                     { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
@@ -130,17 +143,32 @@ export default {
                 [
                     { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
                 ],
-                [
-                    { title: 'Services', icon: 'face', to: { name: 'services' }, role: 'MGR', exact: true }
-                ],
+                [{
+                    title: 'Products',
+                    icon: 'view_array',
+                    items: products,
+                    action: () => {
+                        this.$emit('status-changed', false)
+                    },
+                    exact: true
+                }],
+                [{
+                    title: 'Services',
+                    icon: 'face',
+                    items: services,
+                    action: () => {
+                        this.$emit('status-changed', false)
+                    },
+                    exact: true
+                }],
                 [
                     { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true }
                 ],
-                           [
+                [
                     { title: 'Reports', icon: 'bar_chart', to: { name: 'reports' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }
+                    { title: 'Setting', icon: 'settings', to: { name: 'setting' }, role: 'MGR', exact: true }
                 ],
             ]
         }
