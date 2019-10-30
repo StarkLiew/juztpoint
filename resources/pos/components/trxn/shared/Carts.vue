@@ -1,8 +1,8 @@
 <template>
-   <v-container :max-width="350">
+   <v-layout :max-width="350">
      
  
-        <template v-slot:prepend>
+ 
             <v-toolbar dark dense flat color="secondary">
                 <v-btn icon v-if="show">
                     <v-icon>close</v-icon>
@@ -33,7 +33,7 @@
                 </v-btn>
             </v-list-item>
             <v-divider></v-divider>
-        </template>
+
         <div v-for="(item, index) in items" :key="index">
             <v-list-item two-line>
                 <v-menu absolute v-model="editItem[index]" :close-on-content-click="false" :close-on-click="true" :min-width="380" :max-width="380" :nudge-left="30" offset-x left>
@@ -111,7 +111,7 @@
             </v-list-item>
         </v-footer>
         <v-overlay absolute :value="!isEntry" opacity="0"></v-overlay>
-   </v-container>  
+   </v-layout>  
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -122,7 +122,7 @@ export default {
 
     data: () => ({
         items: [],
-        isEntry: true,
+        isEntry: false,
         allowRemoveItem: false,
         editDiscountFooter: false,
         editItem: [],

@@ -27,6 +27,7 @@ export default [
 
     ...applyRules(['pin'], [
         { path: '/sales', name: 'sales', component: require('$pos/sales/SalesWrapper').default },
+        { path: '/trxn', name: 'trxn', component: require('$pos/trxn/TrxnWrapper').default },
         { path: '/receipt', name: 'receipts', component: require('$pos/admin/receipt/ReceiptWrapper').default },
 
         {

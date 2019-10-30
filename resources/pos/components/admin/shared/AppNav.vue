@@ -114,6 +114,9 @@ export default {
                 [
                     { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
                 ],
+                            [
+                    { title: 'TRXN', icon: 'shopping_cart', to: { name: 'trxn' },  exact: true }
+                ],
                 [
                     { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
                 ],
