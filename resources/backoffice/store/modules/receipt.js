@@ -126,6 +126,12 @@ export const actions = {
                 if (item.shareWith) {
                     shareWith = item.shareWith.id
                 }
+                let variant = ''
+
+                if (item.properties.variant) {
+                    variant =  'variant:\\"' + JSON.stringify(item.variant).replace(/"/g, '\\"') + '\\"'
+                }
+
 
                 let servicesBy = ``
 
@@ -140,7 +146,7 @@ export const actions = {
                         }
                     }
                 }
-                const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}}`
+                const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}, ${variant}}`
 
                 const cast = `{line: ${line + 1}, 
                          type: "item", 

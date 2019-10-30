@@ -19,7 +19,7 @@ export const mutations = {
     },
     [types.FILL_PRODUCTS](state, { products }) {
 
-        state.products = products
+        state.products = products.data
     },
 
     [types.FETCH_PRODUCT_FAILURE](state) {
@@ -34,8 +34,8 @@ export const mutations = {
 export const actions = {
     async fetchProducts({ commit }) {
         try {
-            const { data } = await axios.get(graphql.path('query'), { params: { query: '{products(type: "product", limit:0, page:1){ data{id,   name,  sku, type,  category{id, name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate, code}}, properties{ price, thumbnail, color}}}}' } })
-            commit(types.FILL_PRODUCTS, data.data.data)
+            const { data } = await axios.get(graphql.path('query'), { params: { query: '{products(type: "%product%", limit:0, page:1){ data{id,  thumbnail, name,  sku, type,  category{id, name}, commission{id, name, properties{rate, type}},tax{id, name, properties{rate, code}}, variants{name, value}, composites{id}, properties{ price, thumbnail, color, stocks{name, price}}}}}' } })
+            commit(types.FILL_PRODUCTS, data.data)
         } catch (e) {
             commit(types.FETCH_PRODUCT_FAILURE)
         }

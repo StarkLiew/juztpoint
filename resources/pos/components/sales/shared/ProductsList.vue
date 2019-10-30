@@ -68,7 +68,7 @@
                 </v-flex>
                 <v-flex v-if="show === 'product' && !filter" v-for="(product, index) in filterProducts(search)" :key="index" xs4 sm2 md2 d-flex child-flex @click="selected(product)">
                     <v-card flat tile class="d-flex">
-                        <v-img :src="product.properties.thumbnail ? product.properties.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn" :class="[product.properties.color ? product.properties.color : 'blue']">
+                        <v-img :src="product.thumbnail ? product.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn"  :style="{backgroundColor: product.properties.color ? product.properties.color : 'blue'}">
                             <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
@@ -82,7 +82,7 @@
                 </v-flex>
                 <v-flex v-if="show === 'service' && !filter" v-for="(service, index) in filterServices(search)" :key="index" xs4 sm2 md2 d-flex child-flex @click="selected(service)">
                     <v-card flat tile class="d-flex">
-                        <v-img :src="service.properties.thumbnail ? service.properties.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn" :class="[service.properties.color ? service.properties.color : 'blue']">
+                        <v-img :src="service.thumbnail ? service.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn" :style="{backgroundColor: service.properties.color ? service.properties.color : 'blue'}">
                             <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
@@ -126,7 +126,7 @@
                 </v-flex>
                 <v-flex v-if="show === 'category' && filter" v-for="(item, index) in filterItems(filter)" :key="index" xs4 sm2 md2 d-flex child-flex @click="selected(item)">
                     <v-card flat tile class="d-flex">
-                        <v-img :src="item.properties.thumbnail ? item.properties.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn" :class="[item.properties.color ? item.properties.color : 'blue']">
+                        <v-img :src="item.thumbnail ? item.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn" :class="[item.properties.color ? item.properties.color : 'blue']">
                             <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>

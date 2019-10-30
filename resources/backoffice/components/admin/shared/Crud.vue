@@ -17,11 +17,11 @@
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
             </v-toolbar>
             <v-toolbar flat dark color="primary">
+                <slot name="filter" :options="mutateOptions" :refresh="reset"></slot>
                 <v-btn color="primary" class="mb-2" @click="filter" :disabled="loading">
                     <v-icon>search</v-icon>
                 </v-btn>
                 <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="'remove'"></v-text-field>
-                <slot name="filter" :options="mutateOptions" :refresh="reset" ></slot>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
                     <v-icon>refresh</v-icon>
                 </v-btn>
@@ -29,7 +29,6 @@
                 <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
-      
                         <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!hideAdd">
                             <v-icon>add</v-icon>
                         </v-btn>
@@ -133,7 +132,7 @@ export default {
         refresh: { type: Function, default: () => {} },
         saveMethod: { type: Function, default: () => {} },
         removeMethod: { type: Function, default: () => {} },
-        exportFields: { type: Object, default: {}},
+        exportFields: { type: Object, default: {} },
         groups: {},
         hideAdd: { type: Boolean, default: false },
     },

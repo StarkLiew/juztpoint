@@ -15,8 +15,7 @@ export const state = {
  */
 export const mutations = {
     [types.FILL_USERS](state, { users }) {
-
-        state.users = users
+        state.users = users.data
     },
     [types.FETCH_USERS_FAILURE](state) {
         state.user = null
@@ -30,8 +29,10 @@ export const mutations = {
 export const actions = {
     async fetchUsers({ commit }) {
         try {
-            const { data } = await axios.get(graphql.path('query'), { params: { query: '{users{ id, name, pin, properties{role}}}' } })
-            commit(types.FILL_USERS, data.data)
+
+            const { data } = await axios.get(graphql.path('query'), { params: { query: '{users(limit:0, page:1){ data{id, name, pin, properties{role}}}}' } })
+   
+            commit(types.FILL_USERS,  data.data )
 
         } catch (e) {
             commit(types.FETCH_USERS_FAILURE)

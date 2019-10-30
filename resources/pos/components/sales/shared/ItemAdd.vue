@@ -24,6 +24,9 @@
                             <v-icon>remove</v-icon>
                         </v-btn>
                     </v-toolbar>
+                    <v-toolbar v-if="item.variants" v-for="(variant, vindex) in item.variants" :key="vindex">
+                        <v-select :rules="variantRules" required v-model="selectedVariant[variant.name]" :items="variant.value" :label="variant.name" class="mt-6"></v-select>
+                    </v-toolbar>
                     <v-layout>
                         <v-textarea filled auto-grow label="Note" rows="4" row-height="30" v-model="item.note" shaped></v-textarea>
                     </v-layout>
@@ -61,7 +64,11 @@ export default {
     data: () => ({
         showKeyboard: false,
         valid: false,
+        selectedVariant: [],
         lazy: false,
+        variantRules: [
+            v => !!v || 'Choice a product variant',
+        ],
         saleByRules: [
             v => !!v || 'Sale person is required',
         ],
@@ -74,6 +81,7 @@ export default {
         auth: 'auth/user'
     }),
     mounted() {
+
         this.item.saleBy = this.auth
     },
     props: ['item', 'show'],
@@ -84,11 +92,27 @@ export default {
     },
     methods: {
         inc(neg, prop) {
+
             let val = parseFloat(this.item[prop]) + neg
             if (val > 0) this.item[prop] = val
+
+
         },
         done() {
+
             if (this.$refs.form.validate()) {
+                if (!!this.item.properties.variants) {
+                    this.item.properties.variant = Object.assign(this.item.properties.variant, this.selectedVariant)
+
+                    if (!!this.item.properties.stocks) {
+                        const joinedName = this.castVariantString(this.item)
+                        const stock = this.item.properties.stocks.find(v => v.name === joinedName)
+                        this.item.properties.price = stock.price
+                    }
+                    this.selectedVariant = []
+                }
+
+                this.$refs.form.reset()
                 this.$emit('done', this.item)
             }
         },

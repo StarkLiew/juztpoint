@@ -86,6 +86,11 @@ export default {
                 this.isShake = false
                 await setTimeout(async () => {
 
+                    if (!this.$store.getters['system/offline']) {
+                        /* Fetch latest use data, if any */
+                        await this.$store.dispatch('user/fetchUsers')
+                    }
+
                     const user = this.users.find(user => user.pin === this.val)
 
                     if (!user) {
@@ -107,11 +112,11 @@ export default {
                         }
                     } else {
                         await this.$store.dispatch('auth/setUser', { user })
-                        
+
                         if (user.properties.role === 'MGR') this.$router.push({ name: 'index' })
-                        else { 
-                             if(!this.shift) this.$router.push({ name: 'index' })
-                             else this.$router.push({ name: 'sales' })
+                        else {
+                            if (!this.shift) this.$router.push({ name: 'index' })
+                            else this.$router.push({ name: 'sales' })
                         }
                     }
 

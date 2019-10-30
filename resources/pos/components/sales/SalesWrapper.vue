@@ -1,5 +1,5 @@
 <template>
-    <div class="fill-height">
+    <div class="fill-height" >
         <div v-if="shift && shift.status === 'open'">
             <carts @cart-toggle="cartToggle" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
             <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>

@@ -22,55 +22,64 @@ Vue.use(VueLodash, options) // options is optional
 Vue.mixin({
 
     methods: {
+        castVariantString(item) {
+            let values = []
+
+            for (const variant of item.variants) {
+                values.push(item.properties.variant[variant.name])
+            }
+
+            return values.join('-')
+        },
         async sync($store) {
 
-                /* Upload all offline transaction to server */
+            /* Upload all offline transaction to server */
 
-                const offline_receipts = $store.getters['receipt/receipts'].filter(r => r.status === 'offline')
+            const offline_receipts = $store.getters['receipt/receipts'].filter(r => r.status === 'offline')
 
-                for (const r of offline_receipts) {
-                    await $store.dispatch('receipt/addReceipt', r)
-                }
+            for (const r of offline_receipts) {
+                await $store.dispatch('receipt/addReceipt', r)
+            }
 
-                /*  const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
+            /*  const offline_appointments = this.$store.getters['receipt/appointments'].filter(a => a.status === 'offline')
 
-                  for(const a of offline_appointments) {
-                       await this.$store.dispatch('receipt/addReceipt', a)
-                  } */
-
-
-                const offline_customers = $store.getters['account/customers'].filter(c => c.status === 'offline')
-
-                for (const c of offline_customers) {
-                    await $store.dispatch('account/addCustomer', c)
-                }
+              for(const a of offline_appointments) {
+                   await this.$store.dispatch('receipt/addReceipt', a)
+              } */
 
 
-                const offline_voids = $store.getters['receipt/receipts'].filter(r => r.status === 'void offline')
+            const offline_customers = $store.getters['account/customers'].filter(c => c.status === 'offline')
 
-                for (const v of offline_voids) {
-                    await $store.dispatch('receipt/voidReceipt', v)
-                }
-
-
-                const offline_refunds = $store.getters['receipt/receipts'].filter(r => r.status === 'update offline')
-
-                for (const r of offline_refunds) {
-                    await $store.dispatch('receipt/refundReceipt', r)
-                }
+            for (const c of offline_customers) {
+                await $store.dispatch('account/addCustomer', c)
+            }
 
 
-              const offline_shifts = $store.getters['system/shifts'].filter(s => s.synced === false)
+            const offline_voids = $store.getters['receipt/receipts'].filter(r => r.status === 'void offline')
 
-                for (const s of offline_shifts) {
-                    await $store.dispatch('system/syncShift', s)
-                }
-                /* Fetch latest data */
-                await $store.dispatch('user/fetchUsers')
-                await $store.dispatch('product/fetchProducts')
-                await $store.dispatch('service/fetchServices')
-                await $store.dispatch('account/fetchCustomers')
-                await $store.dispatch('system/fetchSystem')
+            for (const v of offline_voids) {
+                await $store.dispatch('receipt/voidReceipt', v)
+            }
+
+
+            const offline_refunds = $store.getters['receipt/receipts'].filter(r => r.status === 'update offline')
+
+            for (const r of offline_refunds) {
+                await $store.dispatch('receipt/refundReceipt', r)
+            }
+
+
+            const offline_shifts = $store.getters['system/shifts'].filter(s => s.synced === false)
+
+            for (const s of offline_shifts) {
+                await $store.dispatch('system/syncShift', s)
+            }
+            /* Fetch latest data */
+            await $store.dispatch('user/fetchUsers')
+            await $store.dispatch('product/fetchProducts')
+            await $store.dispatch('service/fetchServices')
+            await $store.dispatch('account/fetchCustomers')
+            await $store.dispatch('system/fetchSystem')
 
         },
 

@@ -224,7 +224,7 @@ export default {
         },
         closedKeyboard() {
 
-            showKeyboard = false
+            this.showKeyboard = false
         },
         getItem(id) {
             return this.$store.getters['service/collection'].find(o => o.id === id)

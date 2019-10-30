@@ -45,6 +45,9 @@
                         <template v-slot:activator="{ on }">
                             <div>
                                 <v-list-item-title v-on="on">{{item.name}}</v-list-item-title>
+                                <span class="caption" v-if="item.properties.variant">
+                                    {{ castVariantString(item) }}
+                                </span>
                                 <span class="caption" v-if="item.saleBy">
                                     <v-avatar class="accent white--text" left size="16">
                                         {{ item.saleBy.name.slice(0, 1).toUpperCase() }}
@@ -210,6 +213,7 @@ export default {
         sumAmount(item) {
 
             if (item.properties && !item.properties.price) {
+
                 item.price = item.properties.price = 0.00
             }
 
