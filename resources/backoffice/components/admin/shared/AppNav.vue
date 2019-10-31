@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app :value.sync="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange">
+    <v-navigation-drawer fixed app v-model="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange"  expand-on-hover>
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -72,7 +72,7 @@ export default {
     },
     methods: {
         inputChange(val) {
-            this.$emit('status-changed', val)
+           // this.$emit('status-changed', val)
         },
         navToggle() {
             this.$emit('nav-toggle')

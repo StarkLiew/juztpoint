@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" :value="mini" width="300">
+    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" v-model="mini" width="300">
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -56,9 +56,10 @@ export default {
     data: () => ({
         items: [],
         name: null,
+        mini: false,
     }),
 
-    props: ['mini'],
+    props: ['minified'],
 
     computed: mapGetters({
         auth: 'auth/user',
@@ -71,7 +72,13 @@ export default {
             if (val) {
                 this.name = val
             }
-        }
+        },
+        mini(val) {
+            this.$emit('nav-toggle-update', val)
+        },
+        minified(val) {
+            this.mini = val
+        },
     },
 
     mounted() {
@@ -112,10 +119,7 @@ export default {
         navigation() {
             this.items = [
                 [
-                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' },  exact: true }
-                ],
-                            [
-                    { title: 'TRXN', icon: 'shopping_cart', to: { name: 'trxn' },  exact: true }
+                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
                 ],
                 [
                     { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
@@ -124,7 +128,7 @@ export default {
                     { title: 'Open/Close Shift', icon: 'store', to: { name: 'shift' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Shift Report', icon: 'notes',  to: { name: 'report' }, role: 'MGR', exact: true }
+                    { title: 'Shift Report', icon: 'notes', to: { name: 'report' }, role: 'MGR', exact: true }
                 ],
                 [
                     { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }

@@ -1,12 +1,12 @@
 <template>
-    <div class="fill-height" >
+    <div class="fill-height">
         <div v-if="shift && shift.status === 'open'">
-            <carts @cart-toggle="cartToggle" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
+            <carts @cart-toggle="cartToggleUpdate" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show-cart.sync="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
             <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
             <v-content style="margin-top: 5px">
                 <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
                     <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
-                    <item-add @close="showEdit = false" v-if="item" :item="item" :show="showEdit" @done="addedProduct"></item-add>
+                    <item-add @close="showEdit = false" v-if="item" :product="item" :show="showEdit" @done="addedProduct"></item-add>
                     <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
                     <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'"></payment>
                 </v-sheet>
@@ -61,6 +61,7 @@ export default {
         CustomersList,
         Payment,
     },
+
     computed: mapGetters({
         shift: 'system/shift',
     }),
@@ -68,6 +69,10 @@ export default {
     methods: {
         cartToggle() {
             this.showCart = !this.showCart
+        },
+        cartToggleUpdate(val) {
+                        console.log(val)
+            this.showCart = val
         },
         customerToggle() {
             this.panel = 'customer'
@@ -102,13 +107,13 @@ export default {
         },
         addedProduct(item) {
             this.showEdit = false
-            this.product = item
+            this.product = JSON.parse(JSON.stringify(item))
+
         },
         cancelProductEdit() {
             this.productToggle()
         },
         doneProductEdit(item) {
-
             this.productToggle()
         },
         cancelPayment() {

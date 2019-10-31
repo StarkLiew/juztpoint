@@ -13,13 +13,13 @@
 // Registration Routes...
 
 // Static subdomain
-Route::domain('pos.juxtpoint.com')->group(function ($router) {
+Route::domain(env('POS_URL', 'pos.juxtpoint.com'))->group(function ($router) {
 	Route::get('/', 'HomeController@pos')->name('pos');
 	Route::get('/{any}', 'HomeController@pos')->name('pos');
 });
 
 // Static subdomain
-Route::domain('backoffice.juxtpoint.com')->group(function ($router) {
+Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juxtpoint.com'))->group(function ($router) {
 	Route::get('/', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/{any}', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/services/{any}', 'HomeController@backoffice')->name('backoffice');
@@ -28,7 +28,7 @@ Route::domain('backoffice.juxtpoint.com')->group(function ($router) {
 });
 
 // Wildcard subdomain
-Route::domain('www.juxtpoint.com')->group(function ($router) {
+Route::domain(env('APP_URL', 'www.juxtpoint.com'))->group(function ($router) {
 	Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 	Route::post('register', 'Auth\RegisterController@register');
 
@@ -44,10 +44,4 @@ Route::domain('www.juxtpoint.com')->group(function ($router) {
 
 	Route::get('/pos/{vue_capture?}', 'HomeController@pos')->name('pos')->where('vue_capture', '[\/\w\.-]*');
 
-});
-
-// Dev Static subdomain
-Route::domain('localhost:3000')->group(function ($router) {
-	Route::get('/', 'HomeController@app')->name('welcome');
-	Route::get('/{any}', 'HomeController@app')->name('welcome');
 });

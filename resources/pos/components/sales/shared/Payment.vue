@@ -378,7 +378,7 @@ export default {
 
             }
 
-
+    
             const reference = cast_user_id + year + month + day + hours + minutes + seconds
 
             let receipt = {

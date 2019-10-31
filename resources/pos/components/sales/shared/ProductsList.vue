@@ -2,7 +2,7 @@
     <div>
         <v-container grid-list-sm fluid>
             <v-layout wrap>
-                <v-flex xs4 sm2 md2 d-flex child-flex v-if="(show === 'service' || show === 'product') && !filter" @click="swap('calendar')">
+              <!--  <v-flex xs4 sm2 md2 d-flex child-flex v-if="(show === 'service' || show === 'product') && !filter" @click="swap('calendar')">
                     <v-card flat tile class="d-flex">
                         <v-img aspect-ratio="1" v-ripple class="v-btn light-blue">
                             <v-layout pa-2 column fill-height class="lightbox white--text text-center">
@@ -17,7 +17,7 @@
                             </v-layout>
                         </v-img>
                     </v-card>
-                </v-flex>
+                </v-flex> -->
                 <v-flex xs4 sm2 md2 d-flex child-flex v-if="show === 'product' && !filter" @click="swap('service')">
                     <v-card flat tile class="d-flex">
                         <v-img aspect-ratio="1" v-ripple class="v-btn red darken-1">
@@ -150,7 +150,7 @@ export default {
 
 
     data: () => ({
-        show: 'product',
+        show: 'service',
         filter: '',
         back: '',
     }),

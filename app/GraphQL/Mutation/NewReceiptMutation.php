@@ -123,21 +123,30 @@ class NewReceiptMutation extends Mutation {
 
 				$amount = $this->calcCommission($item, $commission);
 
-				$prop = json_decode($item['properties']);
+				$item['properties'] = json_decode($item['properties']);
 
-				if ($prop->shareWith) {
-					$amount = $amount / 2;
-					$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $prop->shareWith, $amount);
+				$prop = $item['properties'];
+
+				if (!empty($prop) && property_exists($prop, 'shareWith')) {
+					if ($prop->shareWith !== 0) {
+						$amount = $amount / 2;
+						$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $prop->shareWith, $amount);
+					}
+
 				}
 
-				if ($prop->servicesBy) {
-					foreach ($prop->servicesBy as $key => $emp) {
-						$service_item = Product::with(['commission'])->find($key);
+				if (!empty($prop) && property_exists($prop, 'composites')) {
 
-						if (!empty($service_item)) {
+					foreach ($prop->composites as $key => $composed) {
+						$service_item = Product::with(['commission'])->find($composed->item_id);
+						$emp = $composed->perform_by;
+
+						if (!empty($service_item) && !empty($emp)) {
 
 							$service_amount = $this->calcCommission($service_item, $service_item->commission);
+
 							$commissions[] = $this->row($item['line'], $service_item->id, $service_item->commission, $emp, $service_amount);
+
 							$amount -= $service_amount;
 						}
 
@@ -210,7 +219,7 @@ class NewReceiptMutation extends Mutation {
 
 	protected function calcCommission($item, $commission) {
 
-		if ($commission['properties']['type'] === "1") {
+		if ((int) $commission['properties']['type'] === 1) {
 			return (float) $commission['properties']['rate'];
 		} else {
 			return $item['total_amount'] * ((float) $commission['properties']['rate']) / 100;

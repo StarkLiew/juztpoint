@@ -1,6 +1,6 @@
 <template>
     <div class="fill-height">
-        <app-nav @overlay="onOverlay" :mini="mini" @nav-toggle="navToggle"></app-nav>
+        <app-nav @nav-toggle-update="navToggleUpdate" @overlay="onOverlay" :minified="mini" @nav-toggle="navToggle"></app-nav>
         <top-menu @nav-toggle="navToggle"></top-menu>
         <v-content>
             <v-container fluid>
@@ -35,6 +35,9 @@ export default {
     methods: {
         navToggle() {
             this.mini = !this.mini
+        },
+        navToggleUpdate(val) {
+           this.mini = val
         },
         onOverlay(status) {
             this.overlay = status

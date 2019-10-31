@@ -127,20 +127,36 @@ export const actions = {
                     shareWith = item.shareWith.id
                 }
 
-                let servicesBy = ``
 
-                if (item.servicesBy && item.properties.contain) {
+                let variant = ''
 
-                    for (const subitem of item.properties.contain) {
+                if (item.properties.variant) {
+                    variant = ',\\"variant\\":' + JSON.stringify(item.variant).replace(/"/g, '\\"')
+                }
 
-                        if (item.servicesBy[subitem]) {
-                            if (servicesBy !== '') servicesBy += ','
-                            servicesBy += `\\"${subitem}\\" : ${item.servicesBy[subitem].id}`
+                let composites = ""
+                let tasks = []
+
+
+
+                if (item.composites) {
+                    for (const composite of item.composites) {
+                        if ('performBy' in composite) {
+                            if (composite.performBy.id !== 0) {
+                                tasks.push({ item_id: composite.id, perform_by: composite.performBy.id })
+                            }
 
                         }
                     }
+                    if (tasks.length > 0) {
+                        composites = ',\\"composites\\":' + JSON.stringify(tasks).replace(/"/g, '\\"')
+                    }
+
                 }
-                const props = `{\\"shareWith\\":${shareWith},\\"servicesBy\\":{${servicesBy}}}`
+
+
+                const props = `{\\"shareWith\\":${shareWith} ${variant} ${composites}}`
+
 
                 const cast = `{line: ${line + 1}, 
                          type: "item", 
@@ -156,7 +172,7 @@ export const actions = {
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
                          properties:"${props}"
-                         },`
+                        },`
 
                 castItems += cast
             }

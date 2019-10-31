@@ -41,36 +41,13 @@
             </v-btn-toggle>
         </v-toolbar>
         <v-layout>
-            <v-textarea filled auto-grow label="Note" rows="2" v-model="note" row-height="30" shaped></v-textarea>
+            <v-textarea filled auto-grow label="Note" rows="2" v-model="note" row-height="10" shaped></v-textarea>
         </v-layout>
-        <v-sheet v-if="item.properties.contain" class="mx-auto" elevation="8" max-width="380">
-            <v-slide-group class="pa-4" center-active show-arrows>
-                <v-slide-item v-for="(subitem, subindex) in item.properties.contain" :key="subindex" v-slot:default="{ active, toggle }">
-                    <v-row class="fill-height" align="center" justify="center">
-                        <v-menu offset-y>
-                            <template v-slot:activator="{ on }">
-                                <v-card>
-                                    <p class="caption">{{ getItem(subitem).name }} </p>
-                                    <v-btn color="primary overline" dark v-on="on">
-                                        {{ servicesBy[subitem] ? servicesBy[subitem].name : "" }}
-                                    </v-btn>
-                                </v-card>
-                            </template>
-                            <v-list>
-                                <v-list-item @click="changeUserService(subitem, false)">
-                                    <v-list-item-title>None</v-list-item-title>
-                                </v-list-item>
-                                <v-list-item v-for="(user, index) in users" :key="index" @click="changeUserService(subitem, user)">
-                                    <v-list-item-title>{{ user.name }}</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-menu>
-                    </v-row>
-                </v-slide-item>
-            </v-slide-group>
-        </v-sheet>
+            <v-toolbar v-if="item.composites" v-for="(composite, index) in item.composites" :key="index">
+                <v-select return-object v-model="composite.performBy" :items="[{id:0, name: 'None'}].concat(users)" :label="composite.name" class="mt-6" item-value="id" item-text="name"></v-select>
+            </v-toolbar>
         <v-layout>
-            <v-card tile class="pa-2" outlined>
+            <v-card tile class="pa-2">
                 <v-combobox v-model="saleBy" :items="users" :rules="saleByRules" chips required label="Sale Person">
                     <template v-slot:item="{ index, item }">
                         <v-list-item-content>
@@ -92,8 +69,9 @@
                     </template>
                 </v-combobox>
             </v-card>
-            <v-card tile class="pa-2" outlined>
-                <v-combobox v-model="shareWith" :items="users" chips required label="Share with">
+
+            <v-card v-if="item.allow_assistant === 1" tile class="pa-2">
+                <v-combobox v-model="shareWith" :items="[{id:0, name: 'None'}].concat(users)" chips required label="Share with">
                     <template v-slot:item="{ index, item }">
                         <v-list-item-content>
                             <v-chip>
@@ -136,7 +114,7 @@ export default {
         ],
         showKeyboard: false,
         discountRate: 0.0,
-        shareWith: null,
+        shareWith: { id: 0, name: 'none' },
         saleBy: null,
         servicesBy: [],
         decimal: 1,
@@ -198,7 +176,12 @@ export default {
             this.item.discount = { rate: parseFloat(discountRate), type: this.parseDiscountType(discountType) }
             this.item.saleBy = saleBy
             this.item.servicesBy = servicesBy
-            this.item.shareWith = shareWith
+            if (shareWith.id === 0) {
+                this.item.shareWith = null
+            } else {
+                this.item.shareWith = shareWith
+            }
+
             this.$emit('done', this.item, this.index)
         },
         cancel() {

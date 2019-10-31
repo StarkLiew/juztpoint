@@ -37,6 +37,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-app-bar-nav-icon @click.stop="cartToggle"></v-app-bar-nav-icon>
     </v-app-bar>
 </template>
 <script>

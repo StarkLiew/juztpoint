@@ -1,8 +1,8 @@
 <template>
-    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" :value="show" :width="350" :right="isEntry">
+    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="350" :right="isEntry">
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
-                <v-btn icon v-if="show">
+                <v-btn icon v-if="show" @click="show = false">
                     <v-icon>close</v-icon>
                 </v-btn>
                 <v-tooltip bottom>
@@ -65,6 +65,12 @@
                                         {{ getItem(subitem).name }} ({{ item.servicesBy[subitem].name}})
                                     </v-chip>
                                 </div>
+                                <div v-if="item.composites" v-for="(composite, index) in item.composites" :key="index">
+                                    <v-chip pill v-if="'performBy' in composite && composite.performBy.id !== 0" x-small>
+                                        <strong> {{ composite.name.toUpperCase() }}</strong>&nbsp;
+                                        <span>({{ composite.performBy.name }})</span>
+                                    </v-chip>
+                                </div>
                             </div>
                         </template>
                         <span>{{item.note}}</span>
@@ -120,13 +126,14 @@ export default {
 
     data: () => ({
         items: [],
+        show: false,
         isEntry: true,
         allowRemoveItem: false,
         editDiscountFooter: false,
         editItem: [],
         footer: { charge: 0.00, discount: { rate: 0.00, type: 'percent', amount: 0.00 }, tax: 0.00, service: { rate: 0.00, type: 'percent', amount: 0.00 } }
     }),
-    props: ['show', 'customer', 'product', 'isProductEntry', 'reset', 'calmode'],
+    props: ['showCart', 'customer', 'product', 'isProductEntry', 'reset', 'calmode'],
     components: {
         ItemEdit,
         DiscountAdd,
@@ -138,19 +145,30 @@ export default {
         isProductEntry(val) {
             this.isEntry = val
         },
+        showCart(val) {
+            this.show = val
+        },
+        show(val) {
+
+            this.$emit('cart-toggle', val)
+        },
         reset(val) {
             if (val) {
                 Object.assign(this.$data, this.$options.data.call(this))
                 this.$emit('reset-done')
             }
         },
-        product(newVal, oldVal) {
+        product(val) {
+
+            let item = this.sumAmount(JSON.parse(JSON.stringify(val)))
+
 
             this.allowRemoveItem = false
 
-            if (newVal) {
+            if (val) {
 
-                let item = this.sumAmount({ ...newVal })
+
+
 
                 /* item.note = ""
                 item.saleBy = null
@@ -158,6 +176,7 @@ export default {
                 item.properties.servicesBy = [] */
 
                 this.items.push(item)
+                 this.$emit('cart-toggle', true)
                 setTimeout(() => {
                     this.sumTotal()
                     let container = this.$el.querySelector(".v-navigation-drawer__content");
