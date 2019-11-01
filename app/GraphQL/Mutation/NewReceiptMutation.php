@@ -24,6 +24,10 @@ class NewReceiptMutation extends Mutation {
 				'name' => 'terminal_id',
 				'type' => Type::nonNull(Type::int()),
 			],
+			'store_id' => [
+				'name' => 'store_id',
+				'type' => Type::nonNull(Type::int()),
+			],
 			'shift_id' => [
 				'name' => 'shift_id',
 				'type' => Type::int(),
@@ -130,7 +134,7 @@ class NewReceiptMutation extends Mutation {
 				if (!empty($prop) && property_exists($prop, 'shareWith')) {
 					if ($prop->shareWith !== 0) {
 						$amount = $amount / 2;
-						$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $prop->shareWith, $amount);
+						$commissions[] = $this->row($item['line'], $item['item_id'], $args['store_id'], $args['terminal_id'], $args['shift_id'], $commission, $prop->shareWith, $amount);
 					}
 
 				}
@@ -145,7 +149,7 @@ class NewReceiptMutation extends Mutation {
 
 							$service_amount = $this->calcCommission($service_item, $service_item->commission);
 
-							$commissions[] = $this->row($item['line'], $service_item->id, $service_item->commission, $emp, $service_amount);
+							$commissions[] = $this->row($item['line'], $service_item->id, $args['store_id'], $args['terminal_id'], $args['shift_id'], $service_item->commission, $emp, $service_amount);
 
 							$amount -= $service_amount;
 						}
@@ -153,7 +157,7 @@ class NewReceiptMutation extends Mutation {
 					}
 				}
 
-				$commissions[] = $this->row($item['line'], $item['item_id'], $commission, $item['user_id'], $amount);
+				$commissions[] = $this->row($item['line'], $item['item_id'], $args['store_id'], $args['terminal_id'], $args['shift_id'], $commission, $item['user_id'], $amount);
 
 			}
 
@@ -198,12 +202,15 @@ class NewReceiptMutation extends Mutation {
 		return $document;
 	}
 
-	protected function row($line, $item_id, $commission, $user, $amount) {
+	protected function row($line, $item_id, $store_id, $terminal_id, $shift_id, $commission, $user, $amount) {
 
 		return [
 			'line' => $line,
 			'type' => 'commission',
 			'item_id' => $item_id,
+			'terminal_id' => $terminal_id,
+			'store_id' => $store_id,
+			'shift_id' => $shift_id,
 			'discount' => '{}',
 			'discount_amount' => 0.00,
 			'tax_id' => 1,

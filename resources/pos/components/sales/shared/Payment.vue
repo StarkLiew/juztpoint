@@ -385,6 +385,7 @@ export default {
                 account_id: customer ? customer.uid : '',
                 terminal_id: this.terminal.id,
                 customer: customer ? customer : null,
+                store_id: this.store.id,
                 shiftId: this.shift ? this.shift.id : '',
                 date: now,
                 type: type,

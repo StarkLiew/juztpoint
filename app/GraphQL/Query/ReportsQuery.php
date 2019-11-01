@@ -4,6 +4,7 @@ namespace App\GraphQL\Query;
 use App\Helpers\TenantTable;
 use App\Models\Item;
 use Closure;
+use DB;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -31,7 +32,7 @@ class ReportsQuery extends Query {
 			'to' => [
 				'type' => Type::string(),
 			],
-			'location' => [
+			'store' => [
 				'type' => Type::int(),
 			],
 			'terminal' => [
@@ -95,6 +96,53 @@ class ReportsQuery extends Query {
                                       ELSE "undefined" END as item_name, sum(total_amount) as total_amount, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount) - sum(refund_amount) as net')
 			->groupBy('item_id')
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
+
+		return $results;
+	}
+	public function commission_daily_summary($args) {
+
+		$documents = TenantTable::parse('documents');
+		$settings = TenantTable::parse('settings');
+		$items = TenantTable::parse('items');
+
+		$where = function ($query) use ($args, $documents, $items, $settings) {
+			if (isset($args['from']) && isset($args['to'])) {
+				if ($args['from'] !== "" && $args['to'] !== "") {
+					$from = $args['from'] . ' 00:00:00';
+					$to = $args['to'] . ' 23:59:59';
+					$query->whereBetween($documents . '.date', [$from, $to]);
+				}
+			}
+			if (isset($args['store'])) {
+				$query->where($items . '.store_id', $args['store']);
+			}
+			if (isset($args['terminal'])) {
+				$query->where($items . '.terminal_id', $args['terminal']);
+			}
+			if (isset($args['user'])) {
+				$query->where($items . '.user_id', $args['user']);
+			}
+
+		};
+
+		$sum_total = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+			->join('users', 'users.id', '=', $items . '.user_id')
+			->where($items . '.type', 'commission')
+			->where($where)
+			->sum('total_amount');
+
+		$results = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+			->join('users', 'users.id', '=', $items . '.user_id')
+			->where($items . '.type', 'commission')
+			->where($where)
+			->selectRaw('DATE(' . $documents . '.date) as item_date, users.name as item_name, sum(total_amount) as total_amount')
+			->groupBy(DB::raw('DATE(' . $documents . '.date)'))
+			->groupBy('users.name')
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
+
+		$results->map(function ($item) use ($sum_total) {
+			$item->summary = $sum_total;
+		});
 
 		return $results;
 	}

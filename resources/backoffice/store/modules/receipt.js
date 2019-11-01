@@ -100,7 +100,7 @@ export const actions = {
                 receipt.reference = receipt.reference + number
             }
 
-            const { reference, account_id, terminal_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
+            const { reference, account_id, terminal_id, store_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
 
             let castItems = ""
             let castComm = ""
@@ -151,6 +151,9 @@ export const actions = {
                 const cast = `{line: ${line + 1}, 
                          type: "item", 
                          item_id: ${item_id},
+                         terminal_id: ${terminal_id},
+                         store_id: ${store_id},
+                         shift_id: ${shiftId},
                          discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
@@ -176,6 +179,9 @@ export const actions = {
 
                     const { item_id, total_amount, note } = payment
                     const cast = `{line: ${line + 1}, 
+                               terminal_id: ${terminal_id},
+                               store_id: ${store_id},
+                               shift_id: ${shiftId},
                                type: "payment", 
                                item_id: ${item_id},
                                discount: "{}", 

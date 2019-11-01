@@ -112,6 +112,10 @@ class ReceiptType extends GraphQLType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'summary' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'note' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',

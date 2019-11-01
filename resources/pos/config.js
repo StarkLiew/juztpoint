@@ -31,7 +31,7 @@ class URL {
                 url = url.replace(':' + key, args[key])
             }
         }
-
+      
         return url
     }
 }

@@ -58,6 +58,7 @@ export default {
 
             const results = await this.$store.dispatch('setting/fetch', { type: 'terminal', search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
+
             this.loading = false
 
             if (noCommit) return results

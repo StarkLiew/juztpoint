@@ -30,6 +30,7 @@ export const mutations = {
     },
 
     [types.DEREGISTER](state) {
+  
         state.access = false
         state.user = null
         state.store = null
@@ -50,6 +51,7 @@ export const mutations = {
     [types.SET_TOKEN](state, { token, expires_at, store, terminal }) {
         // state.token = token
         // window.localStorage.setItem('token', token)
+
         const expire = new Date(expires_at)
         state.store = store
         state.terminal = terminal
@@ -63,6 +65,7 @@ export const mutations = {
  */
 export const actions = {
     saveToken({ commit }, payload) {
+    
         commit(types.SET_TOKEN, payload)
     },
 

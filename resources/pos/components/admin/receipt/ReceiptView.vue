@@ -21,12 +21,27 @@
                                     <template v-slot:activator="{ on }">
                                         <div>
                                             <v-list-item-title v-on="on">{{item.name}}</v-list-item-title>
+                                            <span class="caption" v-if="item.properties.variant">
+                                                {{ castVariantString(item) }}
+                                            </span>
                                             <span class="caption" v-if="item.saleBy">
                                                 <v-avatar class="accent white--text" left size="16">
                                                     {{ item.saleBy.name.slice(0, 1).toUpperCase() }}
                                                 </v-avatar>
                                                 {{item.saleBy.name}}
                                             </span>
+                                            <span class="caption" v-if="item.shareWith"> &amp;
+                                                <v-avatar class="accent white--text" left size="16">
+                                                    {{ item.shareWith.name.slice(0, 1).toUpperCase() }}
+                                                </v-avatar>
+                                                {{item.shareWith.name}}
+                                            </span>
+                                            <div v-if="item.composites" v-for="(composite, index) in item.composites" :key="index">
+                                                <v-chip pill v-if="'performBy' in composite && composite.performBy.id !== 0" x-small>
+                                                    <strong> {{ composite.name.toUpperCase() }}</strong>&nbsp;
+                                                    <span>({{ composite.performBy.name }})</span>
+                                                </v-chip>
+                                            </div>
                                         </div>
                                     </template>
                                     <span>{{item.note}}</span>
@@ -200,7 +215,7 @@ export default {
 
             this.value.items[index] = item
             this.sumTotal(this.value)
-   
+
             if (this.selected.charge !== this.value.charge) this.refundDisabled = false
             else this.refundDisabled = true
 
@@ -215,7 +230,7 @@ export default {
 </script>
 <style>
 #edit-receipt-content {
-      min-height: calc(100vh - 54px);
+    min-height: calc(100vh - 54px);
 }
 
 #scroll-receipt-content {

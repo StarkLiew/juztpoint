@@ -29,7 +29,7 @@ class Document extends Model {
 	 * @var array
 	 */
 	protected $fillable = [
-		'reference', 'account_id', 'terminal_id', 'shift_id', 'transact_by', 'date', 'type', 'status', 'discount', 'discount_amount', 'service_charge', 'tax_amount', 'rounding', 'charge', 'refund', 'received', 'change', 'note', 'properties',
+		'reference', 'account_id', 'store_id', 'terminal_id', 'shift_id', 'transact_by', 'date', 'type', 'status', 'discount', 'discount_amount', 'service_charge', 'tax_amount', 'rounding', 'charge', 'refund', 'received', 'change', 'note', 'properties',
 	];
 
 	protected $allowedFilters = ['reference', 'status'];

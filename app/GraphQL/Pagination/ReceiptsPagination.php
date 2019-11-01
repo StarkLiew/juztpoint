@@ -47,7 +47,7 @@ class ReceiptsPagination extends Pagination {
 				'description' => 'Description of the setting',
 			],
 			'date' => [
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
 			'type' => [

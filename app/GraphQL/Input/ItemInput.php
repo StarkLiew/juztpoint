@@ -73,7 +73,18 @@ class ItemInput extends InputType {
 				'type' => Type::nonNull(Type::int()),
 				'name' => 'user_id',
 			],
-
+			'shift_id' => [
+				'type' => Type::int(),
+				'name' => 'shift_id',
+			],
+			'terminal_id' => [
+				'type' => Type::nonNull(Type::int()),
+				'name' => 'terminal_id',
+			],
+			'store_id' => [
+				'type' => Type::nonNull(Type::int()),
+				'name' => 'store_id',
+			],
 		];
 	}
 }

@@ -100,7 +100,7 @@ export const actions = {
                 receipt.reference = receipt.reference + number
             }
 
-            const { reference, account_id, terminal_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
+            const { reference, account_id, terminal_id, store_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
 
             let castItems = ""
             let castComm = ""
@@ -113,7 +113,6 @@ export const actions = {
 
                 const user_id = item.saleBy.id
                 const qty = item.qty
-                const terminal_id = item.saleBy.id
                 const tax_id = item.tax.id
                 const tax_amount = item.tax_amount
                 const total_amount = item.amount
@@ -129,10 +128,11 @@ export const actions = {
 
 
                 let variant = ''
-
+    
                 if (item.properties.variant) {
-                    variant = ',\\"variant\\":' + JSON.stringify(item.variant).replace(/"/g, '\\"')
+                    variant = ',\\"variant\\":' + JSON.stringify(item.properties.variant).replace(/"/g, '\\"')
                 }
+
 
                 let composites = ""
                 let tasks = []
@@ -169,6 +169,9 @@ export const actions = {
                          refund_amount: ${ item.refund ? parseFloat(item.amount) : 0.00},
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
+                         terminal_id: ${terminal_id},
+                         store_id: ${store_id},
+                         shift_id: ${shiftId},
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
                          properties:"${props}"
@@ -196,6 +199,9 @@ export const actions = {
                                tax_id: 1, 
                                tax_amount: 0.00, 
                                user_id: ${teller.id},
+                               terminal_id: ${terminal_id},
+                               store_id: ${store_id},
+                               shift_id: ${shiftId},
                                total_amount: ${parseFloat(total_amount)}, 
                                note: "${note}"}, `
                     castPayments += cast
@@ -212,6 +218,7 @@ export const actions = {
                                  status: "active",
                                  type: "${type}",
                                  terminal_id: ${terminal_id},
+                                 store_id: ${store_id},
                                  account_id: "${account_id}",
                                  transact_by: ${teller.id},
                                  shift_id: ${shiftId},

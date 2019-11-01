@@ -131,8 +131,9 @@ export const actions = {
             const company = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "company", limit:0, page:1){ data{id, name, properties{address, timezone, email, mobile}}}}' } })
             // const payments = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "payment"){ id, name, properties{email, mobile}}}'}})
             const categories = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "category", limit:0, page:1){ data{id, name}}}' } })
-        
-            const system = { company: company.data.data.settings[0], payments: payments.data.data.settings, categories: categories.data.data.settings }
+  
+            const system = { company: company.data.data.settings.data[0], categories: categories.data.data.settings.data }
+             
             commit(types.FILL_SYSTEM, { system })
 
         } catch (e) {

@@ -55,6 +55,9 @@ export default {
     computed: mapGetters({
         shift: 'system/shift',
         users: 'user/users',
+        auth: 'auth/user',
+        store: 'auth/store',
+        terminal: 'auth/terminal',
     }),
     props: {
         title: { default: 'JuxtPoint' },
@@ -85,6 +88,13 @@ export default {
                 this.overlay = true
                 this.isShake = false
                 await setTimeout(async () => {
+
+                    if (!this.store || !this.terminal) {
+                        await this.$store.dispatch('auth/deregister')
+                        this.$toast.info('Device signed out.')
+                        this.$router.push({ name: 'login' })
+                        
+                    }
 
                     if (!this.$store.getters['system/offline']) {
                         /* Fetch latest use data, if any */

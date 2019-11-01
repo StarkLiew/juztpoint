@@ -1,9 +1,9 @@
 <?php
 namespace App\GraphQL\Pagination;
 
+use App\GraphQL\Type\SummaryType as Pagination;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use Rebing\GraphQL\Support\Type as Pagination;
 
 class ReportsPagination extends Pagination {
 	protected $attributes = [
@@ -14,7 +14,15 @@ class ReportsPagination extends Pagination {
 	public function fields(): array{
 		return [
 			'id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
+				'description' => 'The id of the user',
+			],
+			'date' => [
+				'type' => Type::string(),
+				'description' => 'The id of the user',
+			],
+			'item_date' => [
+				'type' => Type::string(),
 				'description' => 'The id of the user',
 			],
 			'reference' => [
@@ -26,7 +34,7 @@ class ReportsPagination extends Pagination {
 				'description' => 'Description of the setting',
 			],
 			'terminal_id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'Description of the setting',
 			],
 			'shift_id' => [
@@ -38,7 +46,7 @@ class ReportsPagination extends Pagination {
 				'description' => 'Description of the setting',
 			],
 			'transact_by' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'Description of the setting',
 			],
 			'user' => [
@@ -46,7 +54,7 @@ class ReportsPagination extends Pagination {
 				'description' => 'Description of the setting',
 			],
 			'date' => [
-				'type' => Type::nonNull(Type::string()),
+				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
 			'type' => [

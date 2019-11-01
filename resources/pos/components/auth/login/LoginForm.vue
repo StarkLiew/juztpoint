@@ -49,17 +49,14 @@ export default {
 
                 await axios.post(api.path('login'), this.form)
                     .then(async res => {
-
+                     
                         const data = res.data
+              
                         await this.$store.dispatch('auth/saveToken', data)
                         // await this.$store.dispatch('auth/setUser', data)
 
                         /* Fetch latest data */
-                        await this.$store.dispatch('user/fetchUsers')
-                        await this.$store.dispatch('product/fetchProducts')
-                        await this.$store.dispatch('account/fetchCustomers')
-                        await this.$store.dispatch('system/fetchSystem')
-
+                        this.sync(this.$store) 
 
                         this.$toast.success('Welcome back!')
                         this.$emit('success', res.data)

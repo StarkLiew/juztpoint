@@ -170,6 +170,7 @@ return [
 		'users' => App\GraphQL\Pagination\UsersPagination::class,
 
 		'reports' => App\GraphQL\Pagination\ReportsPagination::class,
+		'summary' => App\GraphQL\Type\SummaryType::class,
 
 	],
 

@@ -4,9 +4,9 @@ namespace App\GraphQL\Pagination;
 use App\Models\Product;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use Rebing\GraphQL\Support\Type as PaginationType;
+use Rebing\GraphQL\Support\Type as Pagination;
 
-class ProductsPagination extends PaginationType {
+class ProductsPagination extends Pagination {
 
 	protected $attributes = [
 		'name' => 'products',

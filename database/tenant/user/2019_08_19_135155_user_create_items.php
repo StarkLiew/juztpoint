@@ -29,6 +29,9 @@ class UserCreateItems extends Migration {
 			$table->float('total_amount');
 			$table->longText('note')->nullable();
 			$table->bigInteger('user_id')->unsigned();
+			$table->bigInteger('store_id')->unsigned();
+			$table->bigInteger('terminal_id')->unsigned();
+			$table->bigInteger('shift_id')->nullable();
 			$table->json('properties')->nullable();
 			$table->timestamps();
 			$table->softDeletes();

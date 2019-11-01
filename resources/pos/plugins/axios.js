@@ -37,7 +37,7 @@ axios.interceptors.response.use(response => {
                 error.response.data.message === 'The token has been blacklisted'
             ))
         ) {
-            store.dispatch('auth/destroy')
+            store.dispatch('auth/deregister')
             router.push({ name: 'login' })
         }
     }
