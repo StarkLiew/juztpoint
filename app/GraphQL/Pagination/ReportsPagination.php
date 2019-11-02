@@ -1,11 +1,11 @@
 <?php
 namespace App\GraphQL\Pagination;
 
-use App\GraphQL\Type\SummaryType as Pagination;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\Type as PaginationType;
 
-class ReportsPagination extends Pagination {
+class ReportsPagination extends PaginationType {
 	protected $attributes = [
 		'name' => 'reports',
 		'description' => 'The collection of all report fields',
