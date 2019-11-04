@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "9000:9001"
+      - "9001:9001"
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: prod
@@ -40,8 +40,8 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:81"
-      - "443:442"
+      - "81:81"
+      - "442:442"
     volumes:
       - ./:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3307"
+      - "3307:3307"
     environment:
       MYSQL_DATABASE: homestead
       MYSQL_ROOT_PASSWORD: example
@@ -73,7 +73,7 @@ services:
     container_name: adminer
     restart: always
     ports:
-      - 8080:8081
+      - 8081:8081
     depends_on:
       - db
     networks:
