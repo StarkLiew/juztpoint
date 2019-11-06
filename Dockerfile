@@ -44,6 +44,10 @@ RUN docker-php-source extract; \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
+RUN chmod +x init-letsencrypt.sh 
+RUN sudo ./init-letsencrypt.sh
+
 # RUN mv wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # Install extensions
@@ -74,5 +78,8 @@ USER www
 EXPOSE 3306
 EXPOSE 9000
 CMD ["php-fpm"]
+
+RUN php artisan migrate
+RUN php artisan passport:install
 
 ENTRYPOINT []
