@@ -214,7 +214,7 @@ class NewReceiptMutation extends Mutation {
 			'discount' => '{}',
 			'discount_amount' => 0.00,
 			'tax_id' => 1,
-			'qty' => 1.00,
+			'qty' => 1,
 			'refund_qty' => 0.00,
 			'refund_amount' => 0.00,
 			'tax_amount' => 0.00,

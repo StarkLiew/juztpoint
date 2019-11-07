@@ -4,7 +4,7 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 
-const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants{name, value}, composites{id, name}, properties{ cost, price, thumbnail, color, opening, stocks{name, cost, price, qty}}`
+const columns = `id, thumbnail, note, name,sku, status, type,cat_id, category{id, name}, commission_id, commission{id, name, properties{rate, type}},tax_id,tax{id, name, properties{rate, code}}, allow_assistant, discount, stockable, variants{name, value}, composites{id, name, variant, qty}, properties{ cost, price, thumbnail, color, opening, stocks{name, cost, price, qty}}`
 
 /**
  * Initial state

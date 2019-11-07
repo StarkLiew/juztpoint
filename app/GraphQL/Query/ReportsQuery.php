@@ -83,7 +83,6 @@ class ReportsQuery extends Query {
 					$query->whereBetween($documents . '.date', [$from, $to]);
 				}
 			}
-
 		};
 
 		$results = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
@@ -99,6 +98,7 @@ class ReportsQuery extends Query {
 
 		return $results;
 	}
+
 	public function commission_daily_summary($args) {
 
 		$documents = TenantTable::parse('documents');
@@ -125,7 +125,7 @@ class ReportsQuery extends Query {
 
 		};
 
-		$sum_total = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+		$sum = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
 			->join('users', 'users.id', '=', $items . '.user_id')
 			->where($items . '.type', 'commission')
 			->where($where)
@@ -140,8 +140,8 @@ class ReportsQuery extends Query {
 			->groupBy('users.name')
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
 
-		$results->map(function ($item) use ($sum_total) {
-			$item->summary = $sum_total;
+		$results->map(function ($item) use ($sum) {
+			$item->summary = $sum;
 		});
 
 		return $results;

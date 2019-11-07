@@ -30,7 +30,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
-                        <v-data-table disable-pagination :headers="compositeHeaders" :items="editedItem.composites" class="elevation-1">
+                        <v-data-table :loading="loading"  disable-pagination :headers="compositeHeaders" :items="editedItem.composites" class="elevation-1">
                             <template v-slot:item.value="{ item }">
                                 <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
                             </template>
@@ -72,6 +72,10 @@
                                         </v-card>
                                     </v-dialog>
                                 </v-toolbar>
+                            </template>
+                            <template v-slot:item.variant="{ item }">
+            
+                                      {{ castVariant(item.variant) }}
                             </template>
                             <template v-slot:item.action="{ item }">
                                 <v-icon small class="mr-2" @click="editCompositeItem(editedItem, item)">
@@ -152,7 +156,7 @@ export default {
             },
             compositeHeaders: [
                 { text: 'Item name', value: 'name' },
-                { text: 'Variant', value: 'variant', custom: true },
+                { text: 'Variant', value: 'variant' },
                 { text: 'Qty', value: 'qty' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
@@ -311,6 +315,7 @@ export default {
 
         },
         castVariant(variant) {
+            if(typeof variant === 'string') return variant
             if(!variant) return ''
             let values = []
             for (let [key, v] of Object.entries(variant)) {

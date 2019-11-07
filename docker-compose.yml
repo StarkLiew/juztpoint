@@ -50,6 +50,7 @@ services:
 
   #Certbot Letsencrypt SSL Service 
   certbot:
+    container_name: certbot
     image: certbot/certbot
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
