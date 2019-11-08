@@ -44,7 +44,7 @@
                                     <v-spacer></v-spacer>
                                     <v-dialog v-model="compositeDialog" max-width="500px">
                                         <template v-slot:activator="{ on }">
-                                            <v-btn color="primary" dark class="mb-2" v-on="on">Add</v-btn>
+                                            <v-btn :disabled="loading" color="primary" dark class="mb-2" v-on="on">Add</v-btn>
                                         </template>
                                         <v-card>
                                             <v-card-text>
@@ -78,9 +78,6 @@
                                       {{ castVariant(item.variant) }}
                             </template>
                             <template v-slot:item.action="{ item }">
-                                <v-icon small class="mr-2" @click="editCompositeItem(editedItem, item)">
-                                    edit
-                                </v-icon>
                                 <v-icon small @click="deleteCompositeItem(editedItem, item)">
                                     delete
                                 </v-icon>
@@ -315,7 +312,14 @@ export default {
 
         },
         castVariant(variant) {
-            if(typeof variant === 'string') return variant
+            if(typeof variant === 'string')  {
+                try {
+                    variant = JSON.parse(variant)
+                } catch (e) {
+                    return variant
+                }
+            }
+
             if(!variant) return ''
             let values = []
             for (let [key, v] of Object.entries(variant)) {

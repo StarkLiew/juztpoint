@@ -117,6 +117,7 @@ class NewReceiptMutation extends Mutation {
 		$error = null;
 
 		$commissions = [];
+		$stocks = [];
 
 		if ($args['type'] === 'receipt') {
 
@@ -134,14 +135,22 @@ class NewReceiptMutation extends Mutation {
 				if (!empty($prop) && property_exists($prop, 'shareWith')) {
 					if ($prop->shareWith !== 0) {
 						$amount = $amount / 2;
-						$commissions[] = $this->row($item['line'], $item['item_id'], $args['store_id'], $args['terminal_id'], $args['shift_id'], $commission, $prop->shareWith, $amount);
+						$commissions[] = $this->row(['line' => $item['line'], 'item_id' => $item['item_id'], 'store_id' => $args['store_id'], 'terminal_id' => $args['terminal_id'], 'shift_id' => $args['shift_id'], 'type' => 'commission', 'user_id' => $item['user_id'], 'amount' => $amount]);
 					}
 
+				}
+
+				if ($castedItem->type === 'composite-product') {
+					foreach ($castedItem->composites as $key => $product) {
+
+						$stocks[] = $this->row(['line' => $item['line'], 'item_id' => $product['id'], 'store_id' => $args['store_id'], 'terminal_id' => $args['terminal_id'], 'shift_id' => $args['shift_id'], 'type' => 'credit', 'user_id' => $item['user_id'], 'amount' => 0, 'variant' => $product['variant']], -1);
+					}
 				}
 
 				if (!empty($prop) && property_exists($prop, 'composites')) {
 
 					foreach ($prop->composites as $key => $composed) {
+
 						$service_item = Product::with(['commission'])->find($composed->item_id);
 						$emp = $composed->perform_by;
 
@@ -149,7 +158,7 @@ class NewReceiptMutation extends Mutation {
 
 							$service_amount = $this->calcCommission($service_item, $service_item->commission);
 
-							$commissions[] = $this->row($item['line'], $service_item->id, $args['store_id'], $args['terminal_id'], $args['shift_id'], $service_item->commission, $emp, $service_amount);
+							$commissions[] = $this->row(['line' => $item['line'], 'item_id' => $service_item->id, 'store_id' => $args['store_id'], 'terminal_id' => $args['terminal_id'], 'shift_id' => $args['shift_id'], 'type' => 'commission', 'user_id' => $emp, 'amount' => $service_amount]);
 
 							$amount -= $service_amount;
 						}
@@ -157,7 +166,7 @@ class NewReceiptMutation extends Mutation {
 					}
 				}
 
-				$commissions[] = $this->row($item['line'], $item['item_id'], $args['store_id'], $args['terminal_id'], $args['shift_id'], $commission, $item['user_id'], $amount);
+				$commissions[] = $this->row(['line' => $item['line'], 'item_id' => $item['item_id'], 'store_id' => $args['store_id'], 'terminal_id' => $args['terminal_id'], 'shift_id' => $args['shift_id'], 'type' => 'commission', 'user_id' => $item['user_id'], 'amount' => $amount]);
 
 			}
 
@@ -182,7 +191,7 @@ class NewReceiptMutation extends Mutation {
 			}
 
 			$document->commissions()->createMany($commissions);
-
+			$document->items()->createMany($stocks);
 			// $document->items()->save($args->items);
 			// $document->payments()->save($args->payments);
 			// $document->commissions()->save($args->commissions);
@@ -202,26 +211,30 @@ class NewReceiptMutation extends Mutation {
 		return $document;
 	}
 
-	protected function row($line, $item_id, $store_id, $terminal_id, $shift_id, $commission, $user, $amount) {
+	protected function row($data, $qty = 1) {
 
-		return [
-			'line' => $line,
-			'type' => 'commission',
-			'item_id' => $item_id,
-			'terminal_id' => $terminal_id,
-			'store_id' => $store_id,
-			'shift_id' => $shift_id,
+		$row = [
+			'line' => $data['line'],
+			'type' => $data['type'],
+			'item_id' => $data['item_id'],
+			'terminal_id' => $data['terminal_id'],
+			'store_id' => $data['store_id'],
+			'shift_id' => $data['shift_id'],
 			'discount' => '{}',
 			'discount_amount' => 0.00,
 			'tax_id' => 1,
-			'qty' => 1,
+			'qty' => $qty,
 			'refund_qty' => 0.00,
 			'refund_amount' => 0.00,
 			'tax_amount' => 0.00,
-			'user_id' => $user,
-			'total_amount' => $amount,
+			'user_id' => $data['user_id'],
+			'total_amount' => $data['amount'],
 			'note' => '',
 		];
+		if (array_key_exists('variant', $data)) {
+			$row['properties'] = $data['variant'];
+		}
+		return $row;
 	}
 
 	protected function calcCommission($item, $commission) {

@@ -130,8 +130,7 @@ class PropertyType extends GraphQLType {
 		];
 	}
 	protected function resolveVariantField($root, $args) {
-
-		return json_encode($root->variant);
+		return json_encode($root['variant']);
 	}
 
 }
