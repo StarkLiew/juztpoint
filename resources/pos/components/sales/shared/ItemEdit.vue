@@ -43,7 +43,7 @@
         <v-layout>
             <v-textarea filled auto-grow label="Note" rows="2" v-model="note" row-height="10" shaped></v-textarea>
         </v-layout>
-            <v-toolbar v-if="item.composites" v-for="(composite, index) in item.composites" :key="index">
+            <v-toolbar v-if="item.composites && item.type !== 'composite-product'" v-for="(composite, index) in item.composites" :key="index">
                 <v-select return-object v-model="composite.performBy" :items="[{id:0, name: 'None'}].concat(users)" :label="composite.name" class="mt-6" item-value="id" item-text="name"></v-select>
             </v-toolbar>
         <v-layout>

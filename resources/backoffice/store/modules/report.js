@@ -9,6 +9,10 @@ import moment from 'moment'
  */
 export const state = {
     items: [],
+    summary: {
+       count: 0,
+       sum: 0,
+    },
     count: 0,
 }
 
@@ -19,10 +23,12 @@ export const mutations = {
     [types.FILL_REPORT_ITEMS](state, { items }) {
 
         state.items = items.data
+        state.summary = items.summary
         state.count = items.total
     },
     [types.FETCH_REPORT_FAILURE](state) {
         state.item = null
+        state.summary = { count: 0, sum: 0}
         state.items = []
         state.count = 0
     },
@@ -63,10 +69,13 @@ export const actions = {
             }
 
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{${fields}}, summary, total,per_page}}` } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{data{${fields}}, total, per_page}, summary{count, sum}}}` } })
+        
+
             if (noCommit) {
                 return data.data.reports
             }
+
             commit(types.FILL_REPORT_ITEMS, { items: data.data.reports })
 
         } catch (e) {
@@ -84,6 +93,7 @@ export const actions = {
  */
 export const getters = {
     items: state => state.items,
+    summary: state => state.summary,
     count: state => state.count,
 
 }

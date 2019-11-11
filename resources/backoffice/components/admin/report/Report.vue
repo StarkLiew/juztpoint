@@ -18,7 +18,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <viewer v-if="!!selected" :title="selected.title" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="exportFields" :groups="[]" @closed="selected = null">
+        <viewer v-if="!!selected" :title="selected.title" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="exportFields" :groups="[]" @closed="selected = null">
         </viewer>
     </v-container>
 </template>
@@ -50,6 +50,7 @@ export default {
     },
     computed: mapGetters({
         items: 'report/items',
+        summary: 'report/summary',
         count: 'report/count',
     }),
     async mounted() {
@@ -62,6 +63,8 @@ export default {
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
             const results = await this.$store.dispatch('report/fetch', { name: this.selected.name, fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+
+
 
             this.loading = false
 

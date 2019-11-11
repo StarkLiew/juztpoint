@@ -24,14 +24,68 @@
                             </v-col>
                         </v-row>
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
-                        <v-text-field v-model="editedItem.sku" :rules="[v => !!v || 'SKU is required',]" required label="Service Code"></v-text-field>
+                        <v-text-field v-model="editedItem.sku" :rules="[v => !!v || 'SKU is required',]" required label="Stock Keeping Unit (SKU)"></v-text-field>
                         <v-textarea clearable v-model="editedItem.note" clear-icon="cancel" label="Description"></v-textarea>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-text-field prefix="$" v-model="editedItem.properties.price" label="Price from"></v-text-field>
+                        <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
-                        <v-combobox return-object :loading="loading" v-model="editedItem.composites" :items="standards"  label="Composite" multiple dense item-text="name" item-value="id" chips deletable-chips clearable>
-                        </v-combobox>
+                        <v-data-table :loading="loading"  disable-pagination :headers="compositeHeaders" :items="editedItem.composites" class="elevation-1">
+                            <template v-slot:item.value="{ item }">
+                                <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
+                            </template>
+                            <template v-slot:item.variant="{item}">
+                                <span>{{ castVariant(item.variant) }}</span>
+                            </template>
+                            <template v-slot:top>
+                                <v-toolbar flat color="white">
+                                    <v-toolbar-title>Composites</v-toolbar-title>
+                                    <v-divider class="mx-4" inset vertical></v-divider>
+                                    <v-spacer></v-spacer>
+                                    <v-dialog v-model="compositeDialog" max-width="500px">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn :disabled="loading" color="primary" dark class="mb-2" v-on="on">Add</v-btn>
+                                        </template>
+                                        <v-card>
+                                            <v-card-text>
+                                                <v-container>
+                                                    <v-row>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-select v-model="editedCompositeItem.item" :items="standards" return-object item-value="id" item-text="name" label="Item to be include">
+                                                            </v-select>
+                                                            <div v-if="editedCompositeItem.item">
+                                                                <v-select v-if="editedCompositeItem.item.variants" v-for="(variant, index) in editedCompositeItem.item.variants" :key="index" v-model="editedCompositeItem.variant[variant.name]" :items="variant.value" :label="variant.name">
+                                                                </v-select>
+                                                            </div>
+                                                        </v-col>
+                                                        <v-col cols="12" sm="6" md="6">
+                                                            <v-text-field v-model="editedCompositeItem.qty" label="Quantity" :disabled="editedCompositeIndex > -1"></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="blue darken-1" text @click="closeCompositeEditDialog">Cancel</v-btn>
+                                                <v-btn color="blue darken-1" text @click="saveComposite(editedItem)">Save</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                </v-toolbar>
+                            </template>
+                            <template v-slot:item.variant="{ item }">
+            
+                                      {{ castVariant(item.variant) }}
+                            </template>
+                            <template v-slot:item.action="{ item }">
+                                <v-icon small @click="deleteCompositeItem(editedItem, item)">
+                                    delete
+                                </v-icon>
+                            </template>
+                            <template v-slot:no-data>
+                                <div class="caption">Include some item</div>
+                            </template>
+                        </v-data-table>
                         <v-select :loading="loading" :rules="[v => !!v || 'Category is required',]" required item-text="name" item-value="id" v-model="editedItem.cat_id" :items="categories" label="Category"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Tax is required',]" required item-text="name" item-value="id" v-model="editedItem.tax_id" :items="taxes" label="Tax"></v-select>
                         <v-select :loading="loading" :rules="[v => !!v || 'Staff Commission is required',]" required item-text="name" item-value="id" v-model="editedItem.commission_id" :items="commissions" label="Staff Commission Rate"></v-select>
@@ -73,12 +127,36 @@ export default {
     data() {
         return {
             colorDialog: false,
+            variantDialog: false,
+            compositeDialog: false,
+            variants: [],
+            compositeDefaultItem: {
+                item: null,
+                id: 0,
+                name: '',
+                variant: {},
+                qty: 0,
+            },
+            editedCompositeIndex: -1,
+            editedCompositeItem: {
+                item: null,
+                id: 0,
+                name: '',
+                variant: {},
+                qty: 0,
+            },
             options: {
                 sortBy: [],
                 sortDesc: [],
                 page: 1,
                 itemsPerPage: 10,
             },
+            compositeHeaders: [
+                { text: 'Item name', value: 'name' },
+                { text: 'Variant', value: 'variant' },
+                { text: 'Qty', value: 'qty' },
+                { text: 'Actions', value: 'action', sortable: false },
+            ],
             swatches: [
                 ['#FF0000', '#AA0000', '#550000'],
                 ['#FFFF00', '#AAAA00', '#555500'],
@@ -142,7 +220,7 @@ export default {
                 this.categories = await this.$store.dispatch('setting/fetch', { type: 'category', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
                 this.taxes = await this.$store.dispatch('setting/fetch', { type: 'tax', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
                 this.commissions = await this.$store.dispatch('setting/fetch', { type: 'commission', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
-                this.standards = await this.$store.dispatch('product/fetch', { type: 'service%', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true, customFields: 'id, name' })
+                this.standards = await this.$store.dispatch('product/fetch', { type: 'service%', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true, customFields: 'id, name, variants{name, value}' })
             }
 
             this.loading = false
@@ -183,6 +261,27 @@ export default {
         clearThumbnail(editedItem) {
             editedItem.thumbnail = ''
         },
+        itemChanged(item) {
+            if (item.variants) {
+                this.variants = item.variants
+                this.variantDialog = true
+            }
+
+        },
+        async saveComposite(editedItem) {
+
+            const form = { id: this.editedCompositeItem.item.id, name: this.editedCompositeItem.item.name, variant: this.editedCompositeItem.variant, qty: this.editedCompositeItem.qty }
+
+            editedItem.composites.push(form)
+            this.closeCompositeEditDialog()
+        },
+        async closeCompositeEditDialog() {
+            await setTimeout(() => {
+                this.editedCompositeItem = JSON.parse(JSON.stringify(this.compositeDefaultItem))
+                this.editedCompositeIndex = -1
+                this.compositeDialog = false
+            }, 300)
+        },
         async handleSubmitted(editedItem) {
             this.loading = true
             const avatar = this.$refs.cropper
@@ -198,7 +297,37 @@ export default {
             this.loading = false
 
 
+        },
+        editCompositeItem(editedItem, item) {
+
+            this.editedCompsiteItem = JSON.parse(JSON.stringify(item))
+            this.editedCompositeIndex = editedItem.composites.indexOf(item)
+            this.compositeDialog = true
+
+        },
+        async deleteCompositeItem(editedItem, item) {
+            const index = editedItem.composites.findIndex(v => v.id === item.id)
+            editedItem.composites.splice(index, 1)
+
+        },
+        castVariant(variant) {
+            if(typeof variant === 'string')  {
+                try {
+                    variant = JSON.parse(variant)
+                } catch (e) {
+                    return variant
+                }
+            }
+
+            if(!variant) return ''
+            let values = []
+            for (let [key, v] of Object.entries(variant)) {
+                values.push(v)
+            }
+            return values.join('-')
+
         }
+
     },
 }
 

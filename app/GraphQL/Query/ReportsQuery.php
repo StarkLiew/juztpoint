@@ -18,7 +18,7 @@ class ReportsQuery extends Query {
 
 	public function type(): Type {
 
-		return GraphQL::paginate('reports');
+		return GraphQL::type('report');
 	}
 	// arguments to filter query
 	public function args(): array{
@@ -125,11 +125,10 @@ class ReportsQuery extends Query {
 
 		};
 
-		$sum = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+		$item = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
 			->join('users', 'users.id', '=', $items . '.user_id')
 			->where($items . '.type', 'commission')
-			->where($where)
-			->sum('total_amount');
+			->where($where);
 
 		$results = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
 			->join('users', 'users.id', '=', $items . '.user_id')
@@ -140,10 +139,7 @@ class ReportsQuery extends Query {
 			->groupBy('users.name')
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
 
-		$results->map(function ($item) use ($sum) {
-			$item->summary = $sum;
-		});
+		return ['summary' => ['count' => $item->count('trxn_id'), 'sum' => $item->sum('total_amount')], 'data' => $results];
 
-		return $results;
 	}
 }
