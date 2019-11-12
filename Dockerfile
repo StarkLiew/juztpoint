@@ -68,11 +68,11 @@ RUN getent group www || useradd -u 1000 -ms /bin/bash -g www www
 COPY . /var/www
 
 # Copy existing application directory permissions
-# COPY --chown=www:www . /var/www
+COPY --chown=www:www . /var/www
 
 
 # Change current user to www
-# USER www
+USER www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 3307
