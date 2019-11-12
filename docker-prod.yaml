@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "9001:9001"
+      - "9000:9000"
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
