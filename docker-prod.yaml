@@ -69,7 +69,7 @@ services:
       - "3307:3306"
     environment:
       MYSQL_DATABASE: homestead
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: Point@123@
     volumes:
       - dbdata:/var/lib/mysql/
       - ./docker/mariadb/my.cnf:/etc/mariadb/my.cnf
