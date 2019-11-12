@@ -44,9 +44,9 @@ RUN docker-php-source extract; \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
-RUN chmod +x init-letsencrypt.sh 
-RUN sudo ./init-letsencrypt.sh
+# RUN curl -L https://raw.githubusercontent.com/wmnnd/nginx-certbot/master/init-letsencrypt.sh > init-letsencrypt.sh
+# RUN chmod +x init-letsencrypt.sh 
+# RUN sudo ./init-letsencrypt.sh
 
 # RUN mv wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
