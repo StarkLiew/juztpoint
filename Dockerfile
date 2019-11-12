@@ -79,7 +79,4 @@ EXPOSE 3307
 EXPOSE 9000
 CMD ["php-fpm"]
 
-RUN php artisan migrate
-RUN php artisan passport:install
-
-ENTRYPOINT []
+ENTRYPOINT ["/var/www/run.sh"]
