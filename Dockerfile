@@ -68,6 +68,7 @@ COPY . /var/www
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 RUN chmod -R 777 /var/www/storage
+RUN chmod -R 755 /var/www/bootstrap/cache
 # RUN chown -R www:www /var/www
 
 

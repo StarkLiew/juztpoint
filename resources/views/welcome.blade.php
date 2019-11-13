@@ -70,7 +70,7 @@
                     @auth
                         <a href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}">BackOffice</a>
                     @else
-                        <a href="env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com')">Login</a>
+                        <a href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}">Login</a>
 
                         @if (Route::has('register'))
                             <a href="/register">Get Started</a>
