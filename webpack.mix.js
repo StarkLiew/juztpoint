@@ -17,7 +17,6 @@ mix.js('resources/pos/app.js', 'public/pos')
    .sass('resources/styles/app.sass', 'public/css')
     
 
-
 mix.webpackConfig({
   resolve: {
     extensions: ['.js', '.json', '.vue'],
@@ -41,6 +40,7 @@ mix.webpackConfig({
             '/': ['resources/views/pos.blade.php'],
         },
         staticFileGlobsIgnorePatterns: [/\.map$/, /mix-manifest\.json$/, /manifest\.json$/, /service-worker\.js$/],
+        navigateFallback: 'https://app.juztpoint.com/',
         runtimeCaching: [
             {
                 urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
@@ -51,7 +51,6 @@ mix.webpackConfig({
                 handler: 'cacheFirst'
             }
         ],
-     
     })
   ]
 })

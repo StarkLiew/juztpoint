@@ -6,6 +6,25 @@
         <meta name="author" content="StarkLiew">
         <meta name="description" content="">
 
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="app">
+        <meta name="apple-mobile-web-app-title" content="app">
+        <meta name="theme-color" content="#233b69">
+        <meta name="msapplication-navbutton-color" content="#233b69">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        <link rel="icon" type="image/png" sizes="192x192" href="assets/img/app.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="assets/img/app.png">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+
+        <link rel="manifest" href="manifest.json">
+
+
+
         <title>{{ config('app.name') }}</title>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
