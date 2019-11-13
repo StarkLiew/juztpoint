@@ -13,13 +13,13 @@
 // Registration Routes...
 
 // Static subdomain
-Route::domain(env('POS_URL', 'pos.juxtpoint.com'))->group(function ($router) {
+Route::domain(env('POS_URL', 'pos.juztpoint.com'))->group(function ($router) {
 	Route::get('/', 'HomeController@pos')->name('pos');
 	Route::get('/{any}', 'HomeController@pos')->name('pos');
 });
 
 // Static subdomain
-Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juxtpoint.com'))->group(function ($router) {
+Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com'))->group(function ($router) {
 	Route::get('/', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/{any}', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/services/{any}', 'HomeController@backoffice')->name('backoffice');
@@ -28,7 +28,7 @@ Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juxtpoint.com'))->group(func
 });
 
 // Wildcard subdomain
-Route::domain(env('APP_URL', 'www.juxtpoint.com'))->group(function ($router) {
+Route::domain(env('APP_URL', 'www.juztpoint.com'))->group(function ($router) {
 	Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 	Route::post('register', 'Auth\RegisterController@register');
 
