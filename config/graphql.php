@@ -128,6 +128,11 @@ return [
 				'updateProduct' => App\GraphQL\Mutation\Product\UpdateProductMutation::class,
 				'trashProduct' => App\GraphQL\Mutation\Product\TrashProductMutation::class,
 
+				//SETTING
+				'newSetting' => App\GraphQL\Mutation\Setting\NewSettingMutation::class,
+				'updateSetting' => App\GraphQL\Mutation\Setting\UpdateSettingMutation::class,
+				'trashSetting' => App\GraphQL\Mutation\Setting\TrashSettingMutation::class,
+
 			],
 			'middleware' => ['auth:api'],
 			'method' => ['get', 'post'],

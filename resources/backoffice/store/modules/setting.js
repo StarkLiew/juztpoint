@@ -3,12 +3,12 @@ import Vue from 'Vue'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
-const commissionFields = "id, name, description, type, properties{rate, type}"
+const commissionFields = "id,  name, description, type, properties{rate, type}"
 const taxFields = "id, name, description, type, properties{rate, type}"
 const categoryFields = "id, name, description, type"
-const storeFields = "id, name, description,  properties{currency, timezone}"
-const companyFields = "id, name, description,  properties{address, currency, timezone}"
-const terminalFields = "id, name, description"
+const storeFields = "id, name, description, type,  properties{currency, timezone}"
+const companyFields = "id, name, description, type, properties{address, currency, timezone}"
+const terminalFields = "id, name, description, type"
 
 /**
  * Initial state
@@ -91,20 +91,32 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { name, type, properties, status } = item
+
+            const { name, description, type, properties, status } = item
+
+            let fields = '';
+            if (type === 'commission') fields = commissionFields
+            if (type === 'tax') fields = taxFields
+            if (type === 'category') fields = categoryFields
+            if (type === 'store') fields = storeFields
+            if (type === 'terminal') fields = terminalFields
+            if (type === 'company') fields = companyFields
+
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation accounts{
-                                newAccount(
+            const mutation = `mutation settings{
+                                newSetting(
                                     name: "${name}",
+                                    description: "${description}",
                                     type: "${type}",
                                     status: "${status}",
                                     properties: "${props}"
-                             ) {id, name, type, properties{email, mobile}}}`
+                             ) {${fields}}}`
 
+             
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
 
-            item = data.data.newAccount
+            item = data.data.newSetting
 
             commit(types.ADD_SETTING, { item })
 
@@ -116,19 +128,34 @@ export const actions = {
     },
     async update({ commit }, item) {
         try {
-            const { id, name, properties } = item
 
+
+            const { id, description, type, name, properties } = item
+
+
+            let fields = '';
+            if (type === 'commission') fields = commissionFields
+            if (type === 'tax') fields = taxFields
+            if (type === 'category') fields = categoryFields
+            if (type === 'store') fields = storeFields
+            if (type === 'terminal') fields = terminalFields
+            if (type === 'company') fields = companyFields
+
+ 
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation accounts{
-                               updateAccount(
+            const mutation = `mutation settings{
+                               updateSetting(
                                     id: ${id},
                                     name: "${name}",
+                                    description: "${description}",
                                     properties: "${props}"
-                             ) {id, name,type, properties{mobile, email}}}`
+                             ) {${fields}}}`
+    
+                     
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-            item = data.data.updateAccount
+            item = data.data.updateSetting
 
             commit(types.ADD_SETTING, { item })
 
@@ -143,7 +170,7 @@ export const actions = {
 
             const { id } = item
 
-            const mutation = `mutation account{trashAccount(id: "${id}") {id, name }}`
+            const mutation = `mutation setting{trashSetting(id: "${id}") {id, name }}`
 
             await axios.get(graphql.path('query'), { params: { query: mutation } })
 

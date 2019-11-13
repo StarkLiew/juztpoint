@@ -1,8 +1,11 @@
 <template>
     <v-flex sm8 md6 lg4>
+        <v-layout justify-center mb-5>
+            <h1 class="display-3">{{ title }}</h1>
+        </v-layout>
         <v-card v-if="!hasToken()">
             <v-toolbar dark color="primary" flat>
-                <v-toolbar-title>Login</v-toolbar-title>
+                <v-toolbar-title>Register Terminal</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
                 <login-form @success="success"></login-form>
@@ -22,12 +25,12 @@ export default {
     },
     data: () => ({
         showPin: false,
-
     }),
-
+    props: {
+        title: { default: 'JuxtPoint' },
+    },
     methods: {
         hasToken() {
-
             const token = VueCookies.get('JXPT')
             if (token !== null) return true
 

@@ -5,12 +5,12 @@
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
-                        <v-text-field v-model="editedItem.properties.address" label="Address"></v-text-field>
+                        <v-textarea clearable v-model="editedItem.properties.address" clear-icon="cancel" label="Address"></v-textarea>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.description" label="Desciption"></v-text-field>
-                        <v-text-field v-model="editedItem.properties.currency" label="Desciption"></v-text-field>
-                        <v-text-field v-model="editedItem.properties.timezone" label="Desciption"></v-text-field>
+                        <v-text-field v-model="editedItem.properties.currency" label="Currency"></v-text-field>
+                        <v-text-field v-model="editedItem.properties.timezone" label="Timezone"></v-text-field>
                     </v-col>
                 </v-row>
             </v-container>
@@ -75,12 +75,9 @@ export default {
         async save(item) {
 
             this.loading = true
-            if (!item.id) {
 
-            } else {
+            await this.$store.dispatch('setting/update', item)
 
-                await this.$store.dispatch('setting/update', item)
-            }
 
 
             this.loading = false
