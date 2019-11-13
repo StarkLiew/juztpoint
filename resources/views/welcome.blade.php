@@ -68,12 +68,12 @@
             @if (Route::has('platform.login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ route('platform.index') }}">BackOffice</a>
+                        <a href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}">BackOffice</a>
                     @else
-                        <a href="{{ route('platform.login') }}">Login</a>
+                        <a href="env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com')">Login</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Get Started</a>
+                            <a href="/register">Get Started</a>
                         @endif
                     @endauth
                 </div>
