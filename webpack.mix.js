@@ -31,7 +31,7 @@ mix.webpackConfig({
   plugins: [
     new VuetifyLoaderPlugin(),
     new SWPrecacheWebpackPlugin({
-        cacheId: 'juztpoint',
+        cacheId: 'pwa',
         filename: 'service-worker.js',
         staticFileGlobs: ['public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}'],
         minify: true,
