@@ -31,7 +31,7 @@ mix.webpackConfig({
   plugins: [
     new VuetifyLoaderPlugin(),
     new SWPrecacheWebpackPlugin({
-        cacheId: 'juxtpoint',
+        cacheId: 'juztpoint',
         filename: 'service-worker.js',
         staticFileGlobs: ['public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}'],
         minify: true,
@@ -40,7 +40,6 @@ mix.webpackConfig({
         dynamicUrlToDependencies: {
             '/': ['resources/views/pos.blade.php'],
             '/pos': ['resources/views/pos.blade.php'],
-            '/backoffice': ['resources/views/backoffice.blade.php'],
         },
         staticFileGlobsIgnorePatterns: [/\.map$/, /mix-manifest\.json$/, /manifest\.json$/, /service-worker\.js$/],
         runtimeCaching: [

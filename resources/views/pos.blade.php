@@ -25,14 +25,18 @@
         <script src="{{ mix('/pos/app.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
         <script>
-            (function() {
-                  if('serviceWorker' in navigator) {
-                    navigator.serviceWorker.register('/service-worker.js')
-                  }
 
-
-                })();
-
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, function(err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
 
         </script>
     </body>
