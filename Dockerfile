@@ -11,7 +11,7 @@ USER root
 
 # Add user for laravel application
 RUN getent group www || groupadd -g 1000 www
-RUN getent group www || useradd -u 1000 -ms /bin/bash -g www www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory contents
 COPY . /var/www
