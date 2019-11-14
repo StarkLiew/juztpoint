@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    JuxtPoint
+                    {{ config('app.name') }}
                 </div>
                 <div class="subtitle m-b-md">
                       Malaysia FIRST Point-of-Sale System build with PWA Technology
