@@ -9,8 +9,10 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.description" label="Desciption"></v-text-field>
-                        <v-text-field v-model="editedItem.properties.currency" label="Currency"></v-text-field>
-                        <v-text-field v-model="editedItem.properties.timezone" label="Timezone"></v-text-field>
+                        <v-select v-model="editedItem.properties.currency" :items="getCurrencies()" label="Currency" item-text="currency" item-value="currency">
+                        </v-select>
+                        <v-select v-model="editedItem.properties.timezone" :items="$moment.tz.names()" label="Timezone">
+                        </v-select>
                     </v-col>
                 </v-row>
             </v-container>
@@ -20,6 +22,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
+import Curr from 'iso-country-currency'
 export default {
     components: {
         Crud,
@@ -41,6 +44,7 @@ export default {
                     timezone: '',
                     currency: '',
                 },
+
             },
             headers: [
                 { text: 'Name', value: 'name' },
@@ -92,7 +96,10 @@ export default {
 
 
 
-        }
+        },
+        getCurrencies() {
+            return Curr.getAllISOCodes()
+        },
     },
 }
 

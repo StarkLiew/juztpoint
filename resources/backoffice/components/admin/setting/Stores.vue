@@ -9,10 +9,12 @@
                 </v-row>
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-text-field v-model="editedItem.properties.timezone" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
+                        <v-select v-model="editedItem.properties.timezone" :items="$moment.tz.names()" label="Timezone">
+                        </v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-text-field v-model="editedItem.properties.currency" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
+                        <v-select v-model="editedItem.properties.currency" :items="getCurrencies()" label="Currency" item-text="currency" item-value="currency">
+                        </v-select>
                     </v-col>
                 </v-row>
             </v-container>
@@ -22,6 +24,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
+import Curr from 'iso-country-currency'
+
 export default {
     components: {
         Crud,
@@ -99,7 +103,10 @@ export default {
 
 
 
-        }
+        },
+        getCurrencies() {
+            return Curr.getAllISOCodes()
+        },
     },
 }
 

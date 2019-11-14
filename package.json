@@ -35,6 +35,7 @@
     "@chenfengyuan/vue-qrcode": "^1.0.1",
     "fingerprintjs2": "^2.1.0",
     "idle-vue": "^2.0.5",
+    "iso-country-currency": "^0.3.4",
     "js-cookie": "^2.2.1",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",

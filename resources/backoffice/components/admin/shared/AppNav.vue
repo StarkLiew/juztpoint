@@ -53,7 +53,6 @@ export default {
     data: () => ({
         items: [],
         name: null,
-
     }),
     props: ['mini'],
     computed: mapGetters({

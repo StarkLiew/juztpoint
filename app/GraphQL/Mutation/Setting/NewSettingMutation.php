@@ -53,7 +53,7 @@ class NewSettingMutation extends Mutation {
 		$args['user_id'] = Auth::id();
 		$setting = Setting::create($args);
 
-		if (!$account) {
+		if (!$setting) {
 			return null;
 		}
 		return $setting;
