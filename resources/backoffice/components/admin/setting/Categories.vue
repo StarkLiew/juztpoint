@@ -6,7 +6,9 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                     </v-col>
+
                 </v-row>
+
             </v-container>
         </template>
     </crud>
@@ -30,6 +32,7 @@ export default {
             defaultItem: {
                 name: '',
                 description: '',
+                properties: null,
             },
             headers: [
                 { text: 'Name', value: 'name' },

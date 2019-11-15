@@ -49,11 +49,11 @@ export default {
     }),
     methods: {
         async logout() {
-            this.$emit('overlay', true)
+
             await this.$store.dispatch('auth/logout')
             this.$toast.success('Logged out!')
-            this.$emit('overlay', false)
             this.$router.push({ name: 'login' })
+           
 
         },
         navToggle() {

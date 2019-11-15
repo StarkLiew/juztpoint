@@ -5,7 +5,6 @@
             <template v-slot:footer="{pagination}">
                 <v-toolbar dense>
                     <v-toolbar-title>Total</v-toolbar-title>
-
                     <v-spacer></v-spacer>
                     <v-toolbar-title>{{summary.sum | currency}}</v-toolbar-title>
                 </v-toolbar>
@@ -31,6 +30,30 @@
                     </v-btn>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-toolbar-title>{{ title }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-menu>
+                        <template v-slot:activator="{ on }">
+                            <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
+                                <v-icon>arrow_downward</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item>
+                                <v-list-item-title>
+                                    <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="data.csv">
+                                        CSV
+                                    </download-excel>
+                                </v-list-item-title>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title>
+                                    <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="data.xls">
+                                        Excel
+                                    </download-excel>
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                 </v-toolbar>
                 <v-toolbar flat dark color="primary">
                     <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="filter.dates" transition="scale-transition" offset-y min-width="290px">
@@ -81,29 +104,6 @@
                     </v-btn>
                     <div class="flex-grow-1"></div>
                     <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>
-                    <v-menu>
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
-                                <v-icon>arrow_downward</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list>
-                            <v-list-item>
-                                <v-list-item-title>
-                                    <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="report.csv">
-                                        CSV
-                                    </download-excel>
-                                </v-list-item-title>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-list-item-title>
-                                    <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="report.xls">
-                                        Excel
-                                    </download-excel>
-                                </v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
                 </v-toolbar>
                 <v-toolbar flat dark color="primary">
                     <v-chip class="ma-2" v-for="(value, key) in filter" :key="key" v-if="!!value">
@@ -211,8 +211,9 @@ export default {
         },
 
         async allItems() {
-            const options = Object.assign(this.mutateOptions, { itemsPerPage: 0, page: 1 })
+            const options = Object.assign(...this.mutateOptions, { itemsPerPage: 0, page: 1 })
             const results = await this.refresh(this.filter.dates, options, true)
+
             return results.data
         },
         filterDone() {

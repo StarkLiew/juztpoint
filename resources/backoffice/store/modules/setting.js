@@ -4,11 +4,11 @@ import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
 const commissionFields = "id,  name, description, type, properties{rate, type}"
-const taxFields = "id, name, description, type, properties{rate, type}"
-const categoryFields = "id, name, description, type"
+const taxFields = "id, name, description, type, properties{rate, code}"
+const categoryFields = "id, name, description, type, properties{name}"
 const storeFields = "id, name, description, type,  properties{currency, timezone}"
 const companyFields = "id, name, description, type, properties{address, currency, timezone}"
-const terminalFields = "id, name, description, type"
+const terminalFields = "id, name, description, type, properties{name}"
 
 /**
  * Initial state

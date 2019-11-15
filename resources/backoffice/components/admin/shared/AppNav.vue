@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app v-model="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange"  expand-on-hover>
+    <v-navigation-drawer  absolute v-model="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange" expand-on-hover>
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">

@@ -6,8 +6,17 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                     </v-col>
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                        <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                    </v-col>
                 </v-row>
-
+                <v-row>
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                        <v-text-field v-model="editedItem.properties.code" label="Code"></v-text-field>
+                        <v-text-field v-model="editedItem.properties.rate" type="number" label="Rate"></v-text-field>
+                        </v-select>
+                    </v-col>
+                </v-row>
             </v-container>
         </template>
     </crud>
@@ -31,6 +40,10 @@ export default {
             defaultItem: {
                 name: '',
                 description: '',
+                properties: {
+                    rate: 0,
+                    code: '',
+                }
             },
             headers: [
                 { text: 'Name', value: 'name' },

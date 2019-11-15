@@ -58,7 +58,7 @@ export default {
     },
     methods: {
         async retrieve(filter, options, noCommit = false) {
-
+           
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
@@ -115,6 +115,43 @@ export default {
                     ]
                 },
                 {
+
+                    title: 'Inventory',
+                    describe: 'Keep track on product stock level and etc',
+                    items: [
+                        { title: 'Stock on Hand', to: '' },
+                        { title: 'Product Sales Performance', to: '' },
+                        { title: 'Stock Movement Log', to: '' },
+                        { title: 'Stock Movement Summary', to: '' },
+                        { title: 'Product Own Consumption', to: '' },
+                    ]
+                },
+                {
+                    title: 'Employee',
+                    describe: 'View on team performance and earnings',
+                    items: [
+                    {
+                            title: 'Daily Commission Summary',
+                            name: 'commission_daily_summary',
+                            fields: 'item_date, item_name, total_amount',
+                            headers: [
+                                { text: 'Date', value: 'item_date', sortable: true },
+                                { text: 'Name', value: 'item_name', sortable: true },
+                                { text: 'Earn', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'date': 'item_date',
+                                'name': 'item_name',
+                                'earn': 'total_amount',
+                            },
+                        },
+                        { title: 'Staff Shift Summary', to: '' },
+                        { title: 'Staff Shift Detailed', to: '' },
+                        { title: 'Staff Commission Summary', to: '' },
+                        { title: 'Staff Commission Detailed', to: '' },
+                    ]
+                },
+                {
                     title: 'Sales',
                     describe: 'Intel about all sales related performance and activities',
                     items: [
@@ -133,41 +170,7 @@ export default {
                         { title: 'Sales Log', to: '' },
                     ]
                 },
-                {
 
-                    title: 'Inventory',
-                    describe: 'Keep track on product stock level and etc',
-                    items: [
-                        { title: 'Stock on Hand', to: '' },
-                        { title: 'Product Sales Performance', to: '' },
-                        { title: 'Stock Movement Log', to: '' },
-                        { title: 'Stock Movement Summary', to: '' },
-                        { title: 'Product Own Consumption', to: '' },
-                    ]
-                },
-                {
-                    title: 'Employee',
-                    describe: 'View on team performance and earnings',
-                    items: [{
-                            title: 'Daily Commission Summary',
-                            name: 'commission_daily_summary',
-                            fields: 'item_date, item_name, total_amount',
-                            headers: [
-                                { text: 'Date', value: 'item_date', sortable: true },
-                                { text: 'Name', value: 'item_name', sortable: true },
-                                { text: 'Earn', value: 'total_amount', sortable: true, align: 'end', currency: true },
-                            ],
-                            exports: {
-                                'date': 'item_date',
-                                'name': 'item_name',
-                                'earn': 'total_amount',
-                            },
-                        },
-
-                        { title: 'Staff Commission Summary', to: '' },
-                        { title: 'Staff Commission Detailed', to: '' },
-                    ]
-                },
             ]
             this.loading = false
         }
