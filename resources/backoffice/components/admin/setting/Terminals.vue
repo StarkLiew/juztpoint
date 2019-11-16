@@ -7,7 +7,21 @@
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                     </v-col>
                 </v-row>
+                <v-row>
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                        <v-select v-model="editedItem.properties.store_id" :items="stores" item-text="name" item-value="id" label="Store"></v-select>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                        <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
+                    </v-col>
+                     <v-col cols="12" sm="12" md="6" lg="6">
+                                    <v-switch :true-value="1" :false-value="0" v-model="editedItem.properties.active" inset label="Active"></v-switch>
+                        </v-col>
+                </v-row>
 
+          
             </v-container>
         </template>
     </crud>
@@ -28,12 +42,18 @@ export default {
                 itemsPerPage: 10,
             },
             loading: true,
+            stores: [],
             defaultItem: {
                 name: '',
                 description: '',
+                properties: {
+                    store_id: 0,
+                    active: 0,
+                }
             },
             headers: [
                 { text: 'Name', value: 'name' },
+                { text: 'Identifier', value: 'properties.device_id' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
             exportFields: {
@@ -47,9 +67,13 @@ export default {
         count: 'setting/count',
     }),
     async mounted() {
-
+        this.getStores()
     },
     methods: {
+        async getStores() {
+            this.stores = await this.$store.dispatch('setting/fetch', { type: 'store', search: '', limit: 0, page: 1, sort: true, desc: false, noCommit: true })
+
+        },
         async retrieve(search, options, noCommit = false) {
 
             this.loading = true

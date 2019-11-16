@@ -8,7 +8,7 @@ const taxFields = "id, name, description, type, properties{rate, code}"
 const categoryFields = "id, name, description, type, properties{name}"
 const storeFields = "id, name, description, type,  properties{currency, timezone}"
 const companyFields = "id, name, description, type, properties{address, currency, timezone}"
-const terminalFields = "id, name, description, type, properties{name}"
+const terminalFields = "id, name, description, type, properties{store_id, active, device_id}"
 
 /**
  * Initial state

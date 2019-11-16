@@ -38,14 +38,14 @@
                             </v-btn>
                         </template>
                         <v-list>
-                            <v-list-item>
+                            <v-list-item @click="">
                                 <v-list-item-title>
                                     <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="data.csv">
                                         CSV
                                     </download-excel>
                                 </v-list-item-title>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item  @click="">
                                 <v-list-item-title>
                                     <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="data.xls">
                                         Excel
@@ -211,10 +211,11 @@ export default {
         },
 
         async allItems() {
-            const options = Object.assign(...this.mutateOptions, { itemsPerPage: 0, page: 1 })
+
+            const options = Object.assign({...this.mutateOptions}, { itemsPerPage: 0, page: 1 })
             const results = await this.refresh(this.filter.dates, options, true)
 
-            return results.data
+            return results.data.data
         },
         filterDone() {
             this.dialog = false

@@ -51,6 +51,10 @@ class NewSettingMutation extends Mutation {
 		$args['properties'] = json_decode($args['properties']);
 		$args['uid'] = uniqid();
 		$args['user_id'] = Auth::id();
+		if ($args['type'] === 'terminal') {
+			$args['properties']->device_id = uniqid();
+		}
+
 		$setting = Setting::create($args);
 
 		if (!$setting) {
