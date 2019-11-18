@@ -20,6 +20,13 @@ class ReceiptsQuery extends Query {
 	// arguments to filter query
 	public function args(): array{
 		return [
+			'from' => [
+				'type' => Type::string(),
+			],
+			'to' => [
+				'type' => Type::string(),
+			],
+
 			'id' => [
 				'name' => 'id',
 				'type' => Type::int(),
@@ -57,6 +64,15 @@ class ReceiptsQuery extends Query {
 	}
 	public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields) {
 		$where = function ($query) use ($args) {
+
+			if (isset($args['from']) && isset($args['to'])) {
+				if ($args['from'] !== "" && $args['to'] !== "") {
+					$from = $args['from'] . ' 00:00:00';
+					$to = $args['to'] . ' 23:59:59';
+					$query->whereBetween($documents . '.date', [$from, $to]);
+				}
+			}
+
 			if (isset($args['id'])) {
 				$query->where('id', $args['id']);
 			}
@@ -77,11 +93,11 @@ class ReceiptsQuery extends Query {
 			->where($where)
 			->select($fields->getSelect())
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
-		$fields = $getSelectFields();
-		$results = Setting::with(array_keys($fields->getRelations()))
-			->where($where)
-			->select($fields->getSelect())
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+		/*	$fields = $getSelectFields();
+			$results = Setting::with(array_keys($fields->getRelations()))
+				->where($where)
+				->select($fields->getSelect())
+		*/
 		return $results;
 	}
 }

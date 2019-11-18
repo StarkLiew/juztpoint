@@ -25,7 +25,7 @@
                             <v-list-item-title>{{ item.title }}</v-list-item-title>
                         </v-list-item-content>
                     </template>
-                    <v-list-item v-for="subItem in item.items" :key="subItem.title" @click="subItem.action ? subItem.action() : false" :to="subItem.to" ripple :exact="subItem.exact !== undefined ? subItem.exact : true">
+                    <v-list-item v-for="subItem in item.items" :key="subItem.title" @click="subItem.action ? subItem.action() : false" :to="subItem.to" ripple :exact="subItem.exact !== undefined ? subItem.exact : true" :disabled="subItem.disabled">
                         <v-list-item-content class="pl-2">
                             <v-list-item-title>{{ subItem.title }}</v-list-item-title>
                         </v-list-item-content>
@@ -34,7 +34,7 @@
                         </v-list-item-icon>
                     </v-list-item>
                 </v-list-group>
-                <v-list-item v-else @click.native="item.action ? item.action() : false" :disabled="item.role && auth && item.role !== auth.properties.role" href="javascript:void(0)" :to="item.to" ripple :exact="item.exact !== undefined ? item.exact : true" :key="item.title">
+                <v-list-item v-else @click.native="item.action ? item.action() : false" :disabled="(item.role && auth && item.role !== auth.properties.role) || item.disabled" href="javascript:void(0)" :to="item.to" ripple :exact="item.exact !== undefined ? item.exact : true" :key="item.title">
                     <v-list-item-icon>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-item-icon>
@@ -104,31 +104,30 @@ export default {
 
         navigation() {
             const inventory = [
-                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true },
-                { title: 'Add Stock', icon: 'library_add', to: { name: 'addstock' }, exact: true },
-                { title: 'Stock Card', icon: 'assignment', to: { name: 'stockcard' }, exact: true },
-                { title: 'Stock Take', icon: 'check_box', to: { name: 'stocktake' }, exact: true },
+                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true, disabled: false },
+                { title: 'Stock Card', icon: 'assignment', to: { name: 'stockcard' }, exact: true, disabled: true },
+                { title: 'Stock Take', icon: 'check_box', to: { name: 'stocktake' }, exact: true, disabled: true },
             ]
             const products = [
-                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true },
-                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true },
-                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true },
+                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true, disabled: false },
+                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true, disabled: false },
+                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true, disabled: false },
             ]
             const services = [
-                { title: 'Standard Service', icon: 'face', to: { name: 'services.standard' }, exact: true },
-                { title: 'Variant Service', icon: 'face', to: { name: 'services.variant' }, exact: true },
-                { title: 'Composite Service', icon: 'face', to: { name: 'services.composite' }, exact: true },
+                { title: 'Standard Service', icon: 'face', to: { name: 'services.standard' }, exact: true, disabled: false },
+                { title: 'Variant Service', icon: 'face', to: { name: 'services.variant' }, exact: true, disabled: false },
+                { title: 'Composite Service', icon: 'face', to: { name: 'services.composite' }, exact: true, disabled: false },
             ]
 
             this.items = [
                 [
-                    { title: 'Home', icon: 'store', to: { name: 'home' }, exact: true }
+                    { title: 'Home', icon: 'store', to: { name: 'home' }, exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Appointment', icon: 'calendar_today', to: { name: 'appointments' }, exact: true }
+                    { title: 'Appointment', icon: 'calendar_today', to: { name: 'appointments' }, exact: true, disabled: true }
                 ],
                 [
-                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
+                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true, disabled: false }
                 ],
                 [{
                     title: 'Inventory',
@@ -137,10 +136,10 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true
+                    exact: true, disabled: false
                 }],
                 [
-                    { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true }
+                    { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [{
                     title: 'Products',
@@ -149,7 +148,7 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true
+                    exact: true, disabled: false
                 }],
                 [{
                     title: 'Services',
@@ -158,16 +157,16 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true
+                    exact: true, disabled: false
                 }],
                 [
-                    { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true }
+                    { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Reports', icon: 'bar_chart', to: { name: 'reports' }, role: 'MGR', exact: true }
+                    { title: 'Reports', icon: 'bar_chart', to: { name: 'reports' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Setting', icon: 'settings', to: { name: 'setting' }, role: 'MGR', exact: true }
+                    { title: 'Setting', icon: 'settings', to: { name: 'setting' }, role: 'MGR', exact: true, disabled: false }
                 ],
             ]
         }

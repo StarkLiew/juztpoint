@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>JuztPoint - Point-of-Sale Repid Deployment with Progressive Web App Software</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -73,7 +73,7 @@
                         <a href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}">Login</a>
 
                         @if (Route::has('register'))
-                            <a href="/register">Get Started</a>
+                            <a href="http://backoffice.juxtpoint.com/register">Get Started</a>
                         @endif
                     @endauth
                 </div>
@@ -84,17 +84,15 @@
                     {{ config('app.name') }}
                 </div>
                 <div class="subtitle m-b-md">
-                      Malaysia FIRST Point-of-Sale System build with PWA Technology
+                      Business Frontline Management Software come with quick deployable Point-of-Sales System.
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">What is PWA</a>
-                    <a href="https://laravel.com/docs">Features</a>
-                    <a href="https://laracasts.com">Business</a>
+
+                    <a href="http://backoffice.juxtpoint.com/register">SIGN UP FOR FREE</a>
+                    <a href="#demo">LIVE DEMO</a>
                 </div>
-               <div class="subtitle m-b-md">
-                    Fast and easy to deploy. Effectively running your Store with less effort.
-                </div>
+
             </div>
         </div>
 

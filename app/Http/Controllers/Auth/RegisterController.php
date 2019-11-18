@@ -65,10 +65,9 @@ class RegisterController extends Controller {
 		$user->company_name = $data['companyname'];
 		$user->name = $data['name'];
 		$user->email = $data['email'];
+		$user->pin = '0123'; //Default pin to login to App
 		$user->password = Hash::make($data['password']);
 		$user->level = 0;
-
-		$user->permissions = json_decode('{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1"}');
 
 		$user->properties = json_decode('{"role":"MGR","backoffice":"1"}');
 

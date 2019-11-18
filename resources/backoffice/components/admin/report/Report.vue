@@ -8,7 +8,7 @@
                     </v-card-title>
                     <v-list>
                         <v-list-item-group color="primary">
-                            <v-list-item v-for="(item, i) in report.items" :key="i" @click="select(item)">
+                            <v-list-item :disabled="item.disabled" v-for="(item, i) in report.items" :key="i" @click="select(item)">
                                 <v-list-item-content>
                                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                                 </v-list-item-content>
@@ -20,6 +20,7 @@
         </v-row>
         <viewer v-if="!!selected" :title="selected.title" :headers="headers" :items.sync='items' sort-by="name" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="exportFields" :groups="[]" @closed="selected = null">
         </viewer>
+
     </v-container>
 </template>
 <script>
@@ -88,7 +89,7 @@ export default {
                     title: 'Accounts',
                     describe: 'Keep track on all cash flow, payments, taxes, and etc',
                     items: [
-                        { title: 'Account Summary', fields: '"date", "item_name", "total_amount"', headers: [], exports: {}, },
+                        { title: 'Account Summary', fields: '"date", "item_name", "total_amount"', headers: [], exports: {}, disabled: false },
                         {
                             title: 'Payments Summary',
                             name: 'payment_summary',
@@ -106,12 +107,12 @@ export default {
                                 'gross': 'total_amount',
                                 'refund': 'refund_amount',
                                 'net': 'net',
-                            },
+                            }, disabled: false
                         },
-                        { title: 'Payments Log', to: '' },
-                        { title: 'Taxes Summary', to: '' },
-                        { title: 'Discount Summary', to: '' },
-                        { title: 'Outstanding Payments', to: '' },
+                        { title: 'Payments Log', disabled: true },
+                        { title: 'Taxes Summary', disabled: true },
+                        { title: 'Discount Summary',  disabled: true },
+                        { title: 'Outstanding Payments', disabled: true },
                     ]
                 },
                 {
@@ -119,11 +120,11 @@ export default {
                     title: 'Inventory',
                     describe: 'Keep track on product stock level and etc',
                     items: [
-                        { title: 'Stock on Hand', to: '' },
-                        { title: 'Product Sales Performance', to: '' },
-                        { title: 'Stock Movement Log', to: '' },
-                        { title: 'Stock Movement Summary', to: '' },
-                        { title: 'Product Own Consumption', to: '' },
+                        { title: 'Stock on Hand',  disabled: true  },
+                        { title: 'Product Sales Performance', disabled: true  },
+                        { title: 'Stock Movement Log',  disabled: true },
+                        { title: 'Stock Movement Summary',  disabled: true  },
+                        { title: 'Product Own Consumption',  disabled: true  },
                     ]
                 },
                 {
@@ -144,30 +145,31 @@ export default {
                                 'name': 'item_name',
                                 'earn': 'total_amount',
                             },
+                             disabled: false
                         },
-                        { title: 'Staff Shift Summary', to: '' },
-                        { title: 'Staff Shift Detailed', to: '' },
-                        { title: 'Staff Commission Summary', to: '' },
-                        { title: 'Staff Commission Detailed', to: '' },
+                        { title: 'Staff Shift Summary',  disabled: true  },
+                        { title: 'Staff Shift Detailed', disabled: true },
+                        { title: 'Staff Commission Summary',  disabled: true  },
+                        { title: 'Staff Commission Detailed',  disabled: true },
                     ]
                 },
                 {
                     title: 'Sales',
                     describe: 'Intel about all sales related performance and activities',
                     items: [
-                        { title: 'Sales by Item', to: '' },
-                        { title: 'Sales by Type', to: '' },
-                        { title: 'Sales by Service', to: '' },
-                        { title: 'Sales by Product', to: '' },
-                        { title: 'Sales by Store', to: '' },
-                        { title: 'Sales by Terminal', to: '' },
-                        { title: 'Sales by Customer', to: '' },
-                        { title: 'Sales by Staff', to: '' },
-                        { title: 'Sales by Staff Breakdown', to: '' },
-                        { title: 'Sales by Hour', to: '' },
-                        { title: 'Sales by Month', to: '' },
-                        { title: 'Sales by Year', to: '' },
-                        { title: 'Sales Log', to: '' },
+                        { title: 'Sales by Item',  disabled: true  },
+                        { title: 'Sales by Type',  disabled: true  },
+                        { title: 'Sales by Service',  disabled: true  },
+                        { title: 'Sales by Product',  disabled: true  },
+                        { title: 'Sales by Store',  disabled: true  },
+                        { title: 'Sales by Terminal',  disabled: true  },
+                        { title: 'Sales by Customer',  disabled: true },
+                        { title: 'Sales by Staff',  disabled: true },
+                        { title: 'Sales by Staff Breakdown',  disabled: true },
+                        { title: 'Sales by Hour',  disabled: true  },
+                        { title: 'Sales by Month',  disabled: true  },
+                        { title: 'Sales by Year', disabled: true  },
+                        { title: 'Sales Log',  disabled: true },
                     ]
                 },
 

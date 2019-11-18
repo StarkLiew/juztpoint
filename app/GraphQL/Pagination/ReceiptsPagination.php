@@ -34,6 +34,10 @@ class ReceiptsPagination extends Pagination {
 				'type' => Type::int(),
 				'description' => 'Description of the setting',
 			],
+			'store_id' => [
+				'type' => Type::int(),
+				'description' => 'Description of the setting',
+			],
 			'account' => [
 				'type' => GraphQL::type('account'),
 				'description' => 'Description of the setting',

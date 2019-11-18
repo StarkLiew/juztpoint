@@ -41,15 +41,14 @@ class UpdateUserMutation extends Mutation {
 
 	public function resolve($root, $args) {
 
-		if (isset($args['properties'])) {
-			$args['properties'] = json_decode($args['properties']);
-		}
+		$args['properties'] = json_decode($args['properties']);
 
 		$user = User::find($args['id']);
 
-		if (!$user->save($args)) {
+		if (!$user->update($args)) {
 			return null;
 		}
+
 		return $user;
 	}
 }

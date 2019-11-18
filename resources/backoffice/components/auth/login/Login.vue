@@ -1,5 +1,6 @@
 <template>
     <v-flex sm8 md6 lg4>
+        <h1 class="display-3">{{ siteName }}</h1>
         <v-card v-if="!hasToken()">
             <v-toolbar dark color="primary" flat>
                 <v-toolbar-title>Back Office Login</v-toolbar-title>
@@ -21,7 +22,7 @@ export default {
         LoginForm,
     },
     data: () => ({
-
+     
     }),
 
     methods: {
