@@ -28,7 +28,7 @@
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
-                <numeric-key @clear="amount = 0.0" @done="done" @change="amountChange" :decimal="2" :show="true">
+                <numeric-key @clear="amount = 0.00" @done="done" @change="amountChange" :decimal="2" :show="true">
                 </numeric-key>
     
             </v-card-text>

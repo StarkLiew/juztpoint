@@ -18,7 +18,7 @@
                             <v-icon>add</v-icon>
                         </v-btn>
                         <v-spacer></v-spacer>
-                        <v-toolbar-title @click="showKeyboard = true" class="display-1">{{ item.qty }}</v-toolbar-title>
+                        <v-toolbar-title @click="showKeyboard = true; inputLabel = 'Quantity'" class="display-1">{{ item.qty }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn color="success" large dark @click="inc(-1, 'qty')">
                             <v-icon>remove</v-icon>
@@ -32,7 +32,7 @@
                         <v-flex class="subheader">
                             <v-icon>money</v-icon>Price
                         </v-flex>
-                        <v-flex class="display-1" @click="showKeyboard = true">
+                        <v-flex class="display-1" @click="showKeyboard = true; ; inputLabel = 'Price'">
                             {{item.properties.price | currency({fractionCount: 2})}}
                         </v-flex>
                     </v-toolbar>
@@ -64,7 +64,7 @@
                 </v-form>
             </v-card>
         </v-dialog>
-        <keyboard @done="showKeyboard = false" @clear="item.properties.price = 0.00" @change="priceChange" @close="closedKeyboard" :decimal="2" :show="showKeyboard">
+        <keyboard @done="showKeyboard = false" @clear="item.properties.price = 0.00" @change="priceChange" @close="closedKeyboard" :label="inputLabel" :decimal="2" :show="showKeyboard">
         </keyboard>
     </v-layout>
 </template>
@@ -76,6 +76,7 @@ export default {
     data: () => ({
         showKeyboard: false,
         valid: false,
+        inputLabel: '',
         selectedVariant: [],
         lazy: false,
         item: {
@@ -141,13 +142,13 @@ export default {
 
             const stock = this.item.properties.stocks.find(v => v.name === joinedName)
 
-            if(stock !== undefined) {
+            if (stock !== undefined) {
 
                 this.item.properties.price = stock.price
             } else {
                 this.item.properties.price = 0.00
             }
-            
+
         },
         cancel() {
             this.item = {
@@ -164,7 +165,7 @@ export default {
             this.item.properties.price = val
         },
         closedKeyboard() {
-
+            this.inputLabel = ''
             this.showKeyboard = false
         },
 

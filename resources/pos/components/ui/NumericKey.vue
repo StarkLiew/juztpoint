@@ -9,11 +9,11 @@
                                 <v-layout fill-height align-center justify-center ma-0>
                                 </v-layout>
                             </template>
-                            <v-layout pa-2 column fill-height class="lightbox white--text text-center">
+                            <v-layout pa-4 column fill-height class="lightbox white--text text-center justify-center">
                                 <v-spacer></v-spacer>
-                                <v-flex shrink>
-                                    <div class="subheading text-wrap">{{ key }}</div>
-                                    <v-icon color="white">{{key}}</v-icon>
+                                <v-flex>
+                                    <div class="v-icon text-wrap"  v-if="key.length < 2">{{ key }}</div>
+                                    <v-icon v-if="key.length > 1" color="white">{{key}}</v-icon>
                                 </v-flex>
                             </v-layout>
                         </v-img>

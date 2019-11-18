@@ -127,6 +127,7 @@ class NewProductMutation extends Mutation {
 
 		} catch (\Illuminate\Database\QueryException $e) {
 			DB::rollback();
+
 			return null;
 		}
 
@@ -148,6 +149,9 @@ class NewProductMutation extends Mutation {
 		$open->discount_amount = 0.00;
 		$open->refund_amount = 0.00;
 		$open->total_amount = 0.00;
+		$open->terminal_id = 0;
+		$open->shift_id = 0;
+		$open->store_id = 0;
 		$open->user_id = $user_id;
 		$open->save();
 	}

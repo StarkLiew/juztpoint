@@ -9,7 +9,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">
+                                        <div class="caption text-wrap">
                                             <v-icon>event_available</v-icon><br />Appointment
                                         </div>
                                     </v-overlay>
@@ -25,7 +25,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">
+                                        <div class="caption text-wrap">
                                             <v-icon>build</v-icon><br />Service
                                         </div>
                                     </v-overlay>
@@ -41,7 +41,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">
+                                        <div class="caption text-wrap">
                                             <v-icon>watch</v-icon><br />Product
                                         </div>
                                     </v-overlay>
@@ -57,7 +57,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">
+                                        <div class="caption text-wrap">
                                             <v-icon>all_inbox</v-icon><br />Category
                                         </div>
                                     </v-overlay>
@@ -73,7 +73,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">{{ product.name }}</div>
+                                        <div class="caption text-wrap">{{ product.name }}</div>
                                     </v-overlay>
                                 </v-flex>
                             </v-layout>
@@ -87,7 +87,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">{{ service.name }}</div>
+                                        <div class="caption text-wrap">{{ service.name }}</div>
                                     </v-overlay>
                                 </v-flex>
                             </v-layout>
@@ -101,7 +101,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">
+                                        <div class="caption text-wrap">
                                             <v-icon>backspace</v-icon>
                                         </div>
                                     </v-overlay>
@@ -117,7 +117,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">{{ category.name }}</div>
+                                        <div class="caption text-wrap">{{ category.name }}</div>
                                     </v-overlay>
                                 </v-flex>
                             </v-layout>
@@ -131,7 +131,7 @@
                                 <v-spacer></v-spacer>
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
-                                        <div class="subheading text-wrap">{{ item.name }}</div>
+                                        <div class="caption text-wrap">{{ item.name }}</div>
                                     </v-overlay>
                                 </v-flex>
                             </v-layout>

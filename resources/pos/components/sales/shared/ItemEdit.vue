@@ -28,7 +28,7 @@
             <v-flex class="subheader">
                 <v-icon>label</v-icon>Discount
             </v-flex>
-            <v-flex class="display-1" @click="showKeyboard = true">
+            <v-flex class="display-1" @click="showKeyboard = true; ; inputLabel = 'Discount'">
                 {{discountRate | currency({fractionCount: decimal})}}
             </v-flex>
             <v-btn-toggle v-model="discountType" @change="(val) => { decimal = val + 1 }">
@@ -93,7 +93,7 @@
                 </v-combobox>
             </v-card>
         </v-layout>
-        <keyboard @done="showKeyboard = false" @clear="discountRate = 0.0" @change="discountRateChange" @close="closedKeyboard" :decimal="decimal" :show="showKeyboard">
+        <keyboard @done="showKeyboard = false" @clear="discountRate = 0.0" @change="discountRateChange" @close="closedKeyboard" :label="inputLabel" :decimal="decimal" :show="showKeyboard">
         </keyboard>
     </v-card>
 </template>
@@ -108,6 +108,7 @@ export default {
         discountFixed: false,
         value: '0',
         qty: 1,
+        inputLabel: '',
         note: '',
         saleByRules: [
             v => !!v || 'Sale person is required',
@@ -206,7 +207,7 @@ export default {
             return 0
         },
         closedKeyboard() {
-
+            this.inputLabel = ''
             this.showKeyboard = false
         },
         getItem(id) {
