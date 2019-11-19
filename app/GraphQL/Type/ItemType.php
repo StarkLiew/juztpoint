@@ -40,6 +40,11 @@ class ItemType extends GraphQLType {
 				'description' => 'A list of the item',
 				'is_relation' => true,
 			],
+			'saleBy' => [
+				'type' => GraphQL::type('user'),
+				'description' => 'A list of the item',
+				'is_relation' => true,
+			],
 			'commission' => [
 				'type' => GraphQL::type('setting'),
 				'description' => 'A list of the item',
@@ -51,8 +56,9 @@ class ItemType extends GraphQLType {
 				'is_relation' => true,
 			],
 			'discount' => [
-				'type' => Type::string(),
-				'description' => 'The type of setting',
+				'type' => GraphQL::type('discount'),
+				'description' => 'A list of the item',
+				'is_relation' => true,
 			],
 			'discount_amount' => [
 				'type' => Type::float(),

@@ -25,6 +25,8 @@
             <v-icon color="success" v-if="item.status === 'active'">check</v-icon>
             <v-icon color="danger" v-if="item.status === 'inactive'">time</v-icon>
         </template>
+
+        
     </crud>
 </template>
 <script>

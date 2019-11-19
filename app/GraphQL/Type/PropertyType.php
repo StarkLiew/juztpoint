@@ -111,6 +111,10 @@ class PropertyType extends GraphQLType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'amount' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'price' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',

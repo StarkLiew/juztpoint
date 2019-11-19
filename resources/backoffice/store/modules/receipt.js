@@ -2,16 +2,17 @@ import axios from 'axios'
 import Vue from 'Vue'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'
-
-
-const columns = `id, reference, account{id, name}, store_id, shift_id, terminal_id, transact_by, charge, refund`
+import moment from 'moment'
 
 /**
  * Initial state
  */
 export const state = {
-    item: null,
     items: [],
+    summary: {
+       count: 0,
+       sum: 0,
+    },
     count: 0,
 }
 
@@ -19,28 +20,18 @@ export const state = {
  * Mutations
  */
 export const mutations = {
-    [types.SET_RECEIPT](state, { item }) {
-        state.item = item
-    },
-    [types.FILL_RECEIPTS](state, { items }) {
-        state.items = items.data
-        state.count = items.total
-    },
-    [types.REFUND_RECEIPT](state, { item }) {
+    [types.FILL_RECEIPT_ITEMS](state, { items }) {
 
-    },
-    [types.VOID_RECEIPT](state, { item }) {
-        const index = state.items.findIndex(u => u.id === item.id)
-        Vue.set(state.items, index, item)
-        state.items.splice(index, 1)
+        state.items = items.data
+        state.summary = items.summary
+        state.count = items.data.total
     },
     [types.FETCH_RECEIPT_FAILURE](state) {
         state.item = null
+        state.summary = { count: 0, sum: 0}
         state.items = []
         state.count = 0
     },
-
-
 }
 
 /**
@@ -50,41 +41,48 @@ export const actions = {
     async reset() {
         commit(types.FETCH_RECEIPT_FAILURE)
     },
-    async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit, customFields }) {
+    async fetch({ commit }, { name, fields, filter, location, user, terminal, limit, page, sort, desc, noCommit }) {
 
         if (!noCommit) commit(types.FETCH_RECEIPT_FAILURE) //reset
         try {
-            const filter = `search: "${search}"`
-            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{receipts(limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{${!!customFields ? customFields : columns}}, total,per_page}}` } })
+            let _from = ''
+            let _to = ''
+            let param = ''
 
-            if (noCommit) {
-
-                return data.data.receipts.data
+            if (filter && filter.dates && filter.dates.length === 2) {
+                _from = moment(filter.dates[0]).format('YYYY-MM-DD')
+                _to = moment(filter.dates[1]).format('YYYY-MM-DD')
+                param += `from: "${_from}", to: "${_to}"`
             }
-            commit(types.FILL_RECEIPTS, { items: data.data.receipts })
+
+            if (filter && filter.store) {
+                if (param !== '') param += ','
+                param += `store: ${filter.store}`
+            }
+            if (filter && filter.terminal) {
+                if (param !== '') param += ','
+                param += `terminal: ${filter.terminal}`
+            }
+            if (filter && filter.user) {
+                if (param !== '') param += ','
+                param += `user: ${filter.user}`
+            }
+
+            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{data{${fields}}, total, per_page}, summary{count, sum}}}` } })
+           
+            if (noCommit) {
+                return data.data.reports
+            }
+        
+            commit(types.FILL_RECEIPT_ITEMS, { items: data.data.reports })
 
         } catch (e) {
             commit(types.FETCH_RECEIPT_FAILURE)
         }
     },
-    async trash({ commit }, item) {
-        try {
 
-            const { id } = item
 
-            const mutation = `mutation receipts{trashReceipt(id: "${id}") {id, name }}`
-
-            await axios.get(graphql.path('query'), { params: { query: mutation } })
-
-            commit(types.VOID_RECEIPT, { item })
-
-            return item
-        } catch (e) {
-
-            return e
-        }
-    },
 
 
 }
@@ -94,7 +92,7 @@ export const actions = {
  */
 export const getters = {
     items: state => state.items,
-    item: state => state.item !== null,
+    summary: state => state.summary,
     count: state => state.count,
 
 }

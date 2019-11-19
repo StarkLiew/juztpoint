@@ -21,6 +21,14 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::string(),
 				'description' => 'The id of the user',
 			],
+			'store' => [
+				'type' => GraphQL::type('setting'),
+				'description' => 'Description of the setting',
+			],
+			'discount' => [
+				'type' => GraphQL::type('discount'),
+				'description' => 'Description of the setting',
+			],
 			'item_date' => [
 				'type' => Type::string(),
 				'description' => 'The id of the user',
@@ -41,9 +49,20 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::int(),
 				'description' => 'Description of the setting',
 			],
+			'store_id' => [
+				'type' => Type::int(),
+				'description' => 'Description of the setting',
+			],
+			'customer' => [
+				'type' => GraphQL::type('account'),
+				'description' => 'Description of the setting',
+				'is_relation' => true,
+			],
+
 			'account' => [
 				'type' => GraphQL::type('account'),
 				'description' => 'Description of the setting',
+				'is_relation' => true,
 			],
 			'transact_by' => [
 				'type' => Type::int(),
@@ -52,6 +71,7 @@ class ReportsPagination extends PaginationType {
 			'user' => [
 				'type' => GraphQL::type('user'),
 				'description' => 'Description of the setting',
+				'is_relation' => true,
 			],
 			'date' => [
 				'type' => Type::string(),
@@ -171,7 +191,10 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
-
+			'teller' => [
+				'type' => GraphQL::type('user'),
+				'description' => 'Description of the setting',
+			],
 			'properties' => [
 				'type' => GraphQL::type('property'),
 				'description' => 'A list of the property',

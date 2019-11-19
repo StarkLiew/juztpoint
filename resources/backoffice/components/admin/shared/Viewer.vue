@@ -1,8 +1,7 @@
 <template>
-    <div>
-        <v-data-table :headers="headers" :items="items.data" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
-    'items-per-page-options': [50, 100]}" :show-group-by="showGroupBy" :group-by="groupBy">
-            <template v-slot:footer="{pagination}">
+       <v-data-table :headers="headers" :items="items.data" :sort-by="sortBy" :search="search" class="elevation-1" :options.sync="mutateOptions" :server-items-length="serverItemsLength" :loading="loading" loading-text="Loading..." :footer-props="{
+         'items-per-page-options': [25, 50, 100]}" :show-group-by="showGroupBy" :group-by="groupBy">
+            <template v-if="!!hasSummary" v-slot:footer="{pagination}">
                 <v-toolbar dense>
                     <v-toolbar-title>Total</v-toolbar-title>
                     <v-spacer></v-spacer>
@@ -17,8 +16,8 @@
                     {{ groupBy }} - {{ groupText(items) }}
                 </td>
             </template>
-            <template v-slot:[header]="{ item }" v-for="header in headers.filter(h => h.custom === true).map(h => 'item.' +  h.value)">
-                <slot :name="header" :item="item"></slot>
+            <template v-slot:[headerName]="{ item, header }" v-for="headerName in headers.filter(h => h.custom === true).map(h => 'item.' +  h.value)">
+                <slot :name="headerName" :item="item" :header="header"></slot>
             </template>
             <template v-slot:[header]="{ item, header }" v-for="header in headers.filter(h => h.currency === true).map(h => 'item.' +  h.value)">
                 <span>{{ item[header.value] | currency }}</span>
@@ -45,7 +44,7 @@
                                     </download-excel>
                                 </v-list-item-title>
                             </v-list-item>
-                            <v-list-item  @click="">
+                            <v-list-item @click="">
                                 <v-list-item-title>
                                     <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="xls" name="data.xls">
                                         Excel
@@ -112,22 +111,15 @@
                     </v-chip>
                 </v-toolbar>
             </template>
-            <template v-slot:item.action="{ item, header }">
-                <v-icon small class="mr-2" @click="editItem(item)">
-                    edit
-                </v-icon>
-                <v-icon small @click="deleteItem(item)" v-if="!header.hideTrash || item[header.hideTrash]">
-                    delete
-                </v-icon>
-            </template>
+
             <template v-slot:no-data>
                 <v-container class="mt-5 mb-5">
                     <h1 class="title">Empty data</h1>
                 </v-container>
             </template>
         </v-data-table>
-    </div>
 </template>
+
 <script>
 import JsonExcel from 'vue-json-excel'
 
@@ -158,7 +150,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups'],
+    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -212,7 +204,7 @@ export default {
 
         async allItems() {
 
-            const options = Object.assign({...this.mutateOptions}, { itemsPerPage: 0, page: 1 })
+            const options = Object.assign({ ...this.mutateOptions }, { itemsPerPage: 0, page: 1 })
             const results = await this.refresh(this.filter.dates, options, true)
 
             return results.data.data

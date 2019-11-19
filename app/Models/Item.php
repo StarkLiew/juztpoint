@@ -67,7 +67,9 @@ class Item extends Model {
 	public function tax() {
 		return $this->belongsTo('App\Models\Setting', 'tax_id')->where('type', 'tax');
 	}
-
+	public function saleBy() {
+		return $this->belongsTo('App\Models\User', 'user_id');
+	}
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');
 	}

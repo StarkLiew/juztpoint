@@ -2,6 +2,7 @@
 namespace App\GraphQL\Query;
 
 use App\Helpers\TenantTable;
+use App\Models\Document;
 use App\Models\Item;
 use Closure;
 use DB;
@@ -65,7 +66,7 @@ class ReportsQuery extends Query {
 
 		if (isset($args['name'])) {
 			$func = $args['name'];
-			return $this->$func($args);
+			return $this->$func($args, $getSelectFields);
 		}
 
 	}
@@ -142,4 +143,41 @@ class ReportsQuery extends Query {
 		return ['summary' => ['count' => $item->count('trxn_id'), 'sum' => $item->sum('total_amount')], 'data' => $results];
 
 	}
+
+	public function receipts($args, Closure $getSelectFields) {
+
+		$documents = TenantTable::parse('documents');
+		$settings = TenantTable::parse('settings');
+		$items = TenantTable::parse('items');
+
+		$where = function ($query) use ($args, $documents, $items, $settings) {
+			if (isset($args['from']) && isset($args['to'])) {
+				if ($args['from'] !== "" && $args['to'] !== "") {
+					$from = $args['from'] . ' 00:00:00';
+					$to = $args['to'] . ' 23:59:59';
+					$query->whereBetween($documents . '.date', [$from, $to]);
+				}
+			}
+			if (isset($args['store'])) {
+				$query->where($documents . '.store_id', $args['store']);
+			}
+			if (isset($args['terminal'])) {
+				$query->where($documents . '.terminal_id', $args['terminal']);
+			}
+			if (isset($args['user'])) {
+				$query->where($documents . '.transact_by', $args['user']);
+			}
+
+		};
+		$fields = $getSelectFields();
+
+		$results = Document::with(array_keys($fields->getRelations()))
+			->where('type', 'receipt')
+			->where($where)
+			->paginate($args['limit'], ['*'], 'page', $args['page']);
+
+		return ['summary' => ['count' => 0, 'sum' => 0], 'data' => $results];
+
+	}
+
 }

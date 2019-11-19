@@ -88,16 +88,14 @@ class ReceiptsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
+		$selectFields = $fields->getSelect();
+
 		$results = Document::with(array_keys($fields->getRelations()))
 			->where('type', 'receipt')
 			->where($where)
-			->select($fields->getSelect())
+			->select($selectFields)
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
-		/*	$fields = $getSelectFields();
-			$results = Setting::with(array_keys($fields->getRelations()))
-				->where($where)
-				->select($fields->getSelect())
-		*/
+
 		return $results;
 	}
 }

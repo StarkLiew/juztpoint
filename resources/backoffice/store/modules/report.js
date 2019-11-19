@@ -24,7 +24,7 @@ export const mutations = {
 
         state.items = items.data
         state.summary = items.summary
-        state.count = items.total
+        state.count = items.data.total
     },
     [types.FETCH_REPORT_FAILURE](state) {
         state.item = null

@@ -51,24 +51,26 @@ class Document extends Model {
 	];
 
 	public function items() {
-		return $this->hasMany('App\Models\Item', 'trxn_id');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'item');
 	}
 	public function payments() {
-		return $this->hasMany('App\Models\Item', 'trxn_id');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'payment');
 	}
 	public function commissions() {
-		return $this->hasMany('App\Models\Item', 'trxn_id');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'commission');
 	}
-
+	public function store() {
+		return $this->belongsTo('App\Models\Setting', 'store_id')->where('type', 'store');
+	}
 	public function terminal() {
 		return $this->belongsTo('App\Models\Setting', 'terminal_id');
 	}
 
-	public function account() {
+	public function customer() {
 		return $this->belongsTo('App\Models\Account', 'account_id');
 	}
 
-	public function user() {
+	public function teller() {
 		return $this->belongsTo('App\Models\User', 'transact_by');
 	}
 

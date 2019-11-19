@@ -1,119 +1,130 @@
 <template>
-    <crud title="Sale Receipts" :headers="headers" :items='items' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="count" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
-        <template v-slot:filter="{ options, refresh }">
-            <v-menu ref="menu" v-model="options.dateMenu" :close-on-content-click="false" :return-value.sync="options.dates" transition="scale-transition" offset-y min-width="290px">
-                <template v-slot:activator="{ on }">
-                    <v-text-field class="mt-5 ml-2 mr-2" v-model="options.dateRangeText" label="Date range" prepend-icon="event" readonly v-on="on"></v-text-field>
-                </template>
-                <v-date-picker v-model="options.dates" no-title range scrollable></v-date-picker>
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="options.dateMenu = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="refresh">OK</v-btn>
-                </v-date-picker>
-            </v-menu>
-        </template>
-        <template v-slot:item.avatar="{item}">
-            <v-avatar size="164" v-if="!!item.avatar">
-                <img :src="item.avatar" alt="Thumbnail">
-            </v-avatar>
-            <v-avatar v-if="!item.avatar" :color="'grey'">
-            </v-avatar>
-        </template>
-        <template v-slot:item.status="{item}">
-            <v-icon color="success" v-if="item.status === 'active'">check</v-icon>
-            <v-icon color="danger" v-if="item.status === 'inactive'">time</v-icon>
-        </template>
-         <template v-slot:item.buttons="{ item }">
-            <v-icon small class="mr-2">
-                print
-            </v-icon>
-            <v-icon small>
-                cancel
-            </v-icon>
-            <v-icon small>
-                money_off
-            </v-icon>
-        </template>
-    </crud>
+    <v-container>
+        <viewer :title="selected.title" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false">
+            <template v-slot:item.action="{item}">
+                <v-icon small class="mr-2" @click="print(item)">
+                    print
+                </v-icon>
+                <v-icon small @click="">
+                    money_off
+                </v-icon>
+                <v-icon small @click="">
+                    cancel
+                </v-icon>
+            </template>
+            <template v-slot:item.date="{item, header}">
+                    <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY hh:mmA') }}</span>
+            </template>
+        </viewer>
+        <vue-easy-print v-if="selectedItem" tableShow style="display: block" ref="receipt">
+            <template slot-scope="func">
+                <receipt v-model="selectedItem" :header="{company, store: selectedItem.store}"></receipt>
+            </template>
+        </vue-easy-print>
+    </v-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import Crud from '../shared/Crud'
+import Viewer from '../shared/Viewer'
+import vueEasyPrint from 'vue-easy-print'
+import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
+
 export default {
     components: {
-        Crud,
+        Viewer,
+        vueEasyPrint,
+        receipt,
     },
+
+    /*    discount{type,rate,amount}, discount_amount,  tax_total, 
+                         service_charge, charge, rounding, note,refund, 
+                         items{id, line,  item_id, discount{type,rate,amount}, discount_amount, tax_id, tax_amount, qty, refund_qty, refund_amount, total_amount}, 
+                          payments{id, line, item_id, total_amount} 
+                         properties{name}, note` */
     data() {
         return {
+            reports: [],
+            selected: {
+                title: 'Receipts',
+                name: 'receipts',
+                fields: `id, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name},
+                         teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, 
+                         note,refund, items{id, line, item_id, discount{type, rate, amount}, discount_amount, tax_id, tax_amount, qty, refund_qty, 
+                         refund_amount, total_amount, saleBy{id, name}, properties{price}}, payments{id, line, item_id, total_amount},properties{name}, note`,
+                headers: [
+                    { text: 'Reference', value: 'reference', sortable: true },
+                    { text: 'Date', value: 'date', sortable: true, custom: true },
+                    { text: 'Customer', value: 'customer.name', sortable: true },
+                    { text: 'Amount', value: 'charge', sortable: true, align: 'end', currency: true },
+                    { text: 'Refund', value: 'refund', sortable: true, align: 'end', currency: true },
+                    { text: 'Actions', value: 'action', sortable: false, custom: true },
+                ],
+                exports: {
+                    'reference': 'reference',
+                    'date': 'date',
+                    'customer': 'customer.name',
+                    'amount': 'charge',
+                },
+                disabled: false
+            },
             options: {
                 sortBy: [],
                 sortDesc: [],
                 page: 1,
-                itemsPerPage: 10,
-                dates: [],
-                dateRangeText: '',
-                dateMenu: false,
+                itemsPerPage: 25,
             },
-            loading: true,
-            defaultItem: {
-                reference: '',
+            title: '',
+            exportFields: {},
+            headers: [],
+            loading: false,
+            company: null,
+            store: null,
+            selectedItem: null,
 
-            },
-            headers: [
-                { text: 'Date', value: 'date' },
-                { text: 'Reference', value: 'reference' },
-                { text: 'Customer #', value: 'customer.name', sortable: false },
-                { text: 'Charge', value: 'charge', sortable: false, align: 'end' },
-                { text: 'Shift', value: 'shift_id', sortable: false },
-                { text: 'Terminal', value: 'terminal_id', sortable: false },
-                { text: 'Store', value: 'store_id', sortable: false },
-                { text: 'Cashier', value: 'transact_by', sortable: false },
-                { text: 'Actions', value: 'buttons', sortable: false },
-            ],
-            exportFields: {
-                'reference': 'reference',
-
-            },
         }
     },
     computed: mapGetters({
         items: 'receipt/items',
+        summary: 'receipt/summary',
         count: 'receipt/count',
     }),
     async mounted() {
 
     },
     methods: {
-        async retrieve(search, options, noCommit = false) {
+        async print(item) {
+
+            this.selectedItem = item
+            console.log(item)
+            // this.$refs.receipt.print()
+        },
+
+        async retrieve(filter, options, noCommit = false) {
 
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
+            const com = await this.$store.dispatch('setting/fetch', { type: 'company', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true })
+            this.company = com[0]
 
-            const results = await this.$store.dispatch('receipt/fetch', { search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('receipt/fetch', { name: this.selected.name, fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
+
 
             if (noCommit) return results
         },
-        async save(item) {
+        applyFilter(filter) {
 
-            this.loading = true
-
-            this.loading = false
         },
-        async remove(item) {
-
-            this.loading = true
-
-            await this.$store.dispatch('receipt/trash', item)
-
-            this.loading = false
+        select(item) {
+            this.selected = item
+            this.headers = item.headers
+            this.exportFields = item.exports
+        },
 
 
-
-        }
-    },
+    }
 }
 
 </script>

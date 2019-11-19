@@ -42,6 +42,7 @@ class ReceiptType extends GraphQLType {
 			'account' => [
 				'type' => GraphQL::type('account'),
 				'description' => 'Description of the setting',
+				'is_relation' => true,
 			],
 			'transact_by' => [
 				'type' => Type::nonNull(Type::int()),
