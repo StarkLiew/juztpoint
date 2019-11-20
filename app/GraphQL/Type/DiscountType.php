@@ -18,10 +18,6 @@ class DiscountType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
-			'type' => [
-				'type' => Type::string(),
-				'description' => 'Description of the setting',
-			],
 			'rate' => [
 				'type' => Type::int(),
 				'description' => 'Description of the setting',

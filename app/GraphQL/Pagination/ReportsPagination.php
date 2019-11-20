@@ -58,6 +58,11 @@ class ReportsPagination extends PaginationType {
 				'description' => 'Description of the setting',
 				'is_relation' => true,
 			],
+			'terminal' => [
+				'type' => GraphQL::type('setting'),
+				'description' => 'Description of the setting',
+				'is_relation' => true,
+			],
 
 			'account' => [
 				'type' => GraphQL::type('account'),
@@ -86,7 +91,7 @@ class ReportsPagination extends PaginationType {
 				'description' => 'The type of setting',
 			],
 			'discount' => [
-				'type' => Type::string(),
+				'type' => GraphQL::type('discount'),
 				'description' => 'The type of setting',
 			],
 			'discount_amount' => [

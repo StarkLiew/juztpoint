@@ -10,8 +10,8 @@ import moment from 'moment'
 export const state = {
     items: [],
     summary: {
-       count: 0,
-       sum: 0,
+        count: 0,
+        sum: 0,
     },
     count: 0,
 }
@@ -26,9 +26,14 @@ export const mutations = {
         state.summary = items.summary
         state.count = items.data.total
     },
+    [types.VOID_RECEIPT](state, { receipt }) {
+        const index = state.items.data.findIndex(r => r.reference === receipt.reference)
+        state.items.data[index] = receipt
+        Vue.set(state.items.data, index, receipt)
+    },
     [types.FETCH_RECEIPT_FAILURE](state) {
         state.item = null
-        state.summary = { count: 0, sum: 0}
+        state.summary = { count: 0, sum: 0 }
         state.items = []
         state.count = 0
     },
@@ -70,16 +75,23 @@ export const actions = {
 
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
             const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{data{${fields}}, total, per_page}, summary{count, sum}}}` } })
-           
+
             if (noCommit) {
                 return data.data.reports
             }
-        
+
             commit(types.FILL_RECEIPT_ITEMS, { items: data.data.reports })
 
         } catch (e) {
             commit(types.FETCH_RECEIPT_FAILURE)
         }
+    },
+    async voidReceipt({ commit, rootState }, receipt) {
+        receipt.status = 'void'
+        const { reference } = receipt
+        await axios.get(graphql.path('query'), { params: { query: `mutation receipts { voidReceipt(reference: "${reference}") {id}}` } })
+        commit(types.VOID_RECEIPT, { receipt })
+
     },
 
 

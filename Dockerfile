@@ -34,6 +34,7 @@ USER root
     curl \
     wkhtmltopdf xvfb
 
+
 ADD https://git.archlinux.org/svntogit/packages.git/plain/trunk/freetype.patch?h=packages/php /tmp/freetype.patch
 RUN docker-php-source extract; \
   cd /usr/src/php; \

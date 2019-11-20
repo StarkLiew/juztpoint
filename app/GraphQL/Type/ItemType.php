@@ -58,11 +58,14 @@ class ItemType extends GraphQLType {
 			'discount' => [
 				'type' => GraphQL::type('discount'),
 				'description' => 'A list of the item',
-				'is_relation' => true,
 			],
 			'discount_amount' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',
+			],
+			'tax' => [
+				'type' => GraphQL::type('setting'),
+				'description' => 'Description of the setting',
 			],
 			'tax_id' => [
 				'type' => Type::nonNull(Type::int()),

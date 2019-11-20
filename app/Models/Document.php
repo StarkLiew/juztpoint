@@ -51,7 +51,7 @@ class Document extends Model {
 	];
 
 	public function items() {
-		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'item');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->with(['tax'])->where('type', 'item');
 	}
 	public function payments() {
 		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'payment');
@@ -63,7 +63,7 @@ class Document extends Model {
 		return $this->belongsTo('App\Models\Setting', 'store_id')->where('type', 'store');
 	}
 	public function terminal() {
-		return $this->belongsTo('App\Models\Setting', 'terminal_id');
+		return $this->belongsTo('App\Models\Setting', 'terminal_id')->where('type', 'terminal');
 	}
 
 	public function customer() {

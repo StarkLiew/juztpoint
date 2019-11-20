@@ -2,21 +2,110 @@
     <v-container>
         <viewer :title="selected.title" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false">
             <template v-slot:item.action="{item}">
-                <v-icon small class="mr-2" @click="print(item)">
+                <v-icon class="mr-2" @click="print(item)" color="blue darken-1">
                     print
                 </v-icon>
-                <v-icon small @click="">
-                    money_off
-                </v-icon>
-                <v-icon small @click="">
-                    cancel
-                </v-icon>
+                <v-dialog v-model="sendDialog" persistent max-width="600px">
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon dark v-on="on">
+                            <v-icon @click="" color="green darken-1">
+                                mail
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">
+                                <v-icon color="green darken-1">mail</v-icon>Send Receipt
+                            </span>
+                            <v-spacer></v-spacer>
+                            <v-btn fab light small top right @click="closeDialog">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-form ref="form" @submit.prevent="sendEmail(item)" lazy-validation v-model="valid">
+                                    <v-row>
+                                        <v-text-field label="Recipient email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading"></v-text-field>
+                                    </v-row>
+                                    <v-layout row class="mt-4 mx-0">
+                                        <v-spacer></v-spacer>
+                                        <v-btn type="submit" :loading="loading" :disabled="loading || !valid" color="primary" class="ml-4">
+                                            Send
+                                        </v-btn>
+                                    </v-layout>
+                                </v-form>
+                            </v-container>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="refundDialog" persistent max-width="600px">
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon dark v-on="on" :disabled="item.status === 'void'">
+                            <v-icon @click="" color="orange darken-1">
+                                money_off
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">
+                                <v-icon color="orange darken-1">money_off</v-icon>Refund Receipt
+                            </span>
+                            <v-spacer></v-spacer>
+                            <v-btn fab light small top right @click="closeDialog">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                 <p>
+                                    To refund customer, please use the Terminal that transact this receipt.
+                                 </p>
+                            </v-container>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="voidDialog" persistent max-width="600px">
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon dark v-on="on" @click="selectItem(item)" :disabled="item.status === 'void'">
+                            <v-icon @click="" color="red darken-1">
+                                cancel
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">
+                                <v-icon color="red darken-1">cancel</v-icon>Void Receipt {{ selectedItem ? selectedItem.reference : '' }}
+                            </span>
+                            <v-spacer></v-spacer>
+                            <v-btn fab light small top right @click="closeDialog">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-text-field label="Enter receipt reference to confirm." v-model="form.ref" :disabled="loading"></v-text-field>
+                                </v-row>
+                                <v-layout row class="mt-4 mx-0">
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="voidReceipt(selectedItem)" :loading="loading" :disabled="loading" color="primary" class="ml-4">
+                                        Confirm
+                                    </v-btn>
+                                </v-layout>
+                            </v-container>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
             </template>
             <template v-slot:item.date="{item, header}">
-                    <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY hh:mmA') }}</span>
+                <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY hh:mmA') }}</span>
             </template>
         </viewer>
-        <vue-easy-print v-if="selectedItem" tableShow style="display: block" ref="receipt">
+        <vue-easy-print v-if="selectedItem" tableShow style="display: none" ref="receipt">
             <template slot-scope="func">
                 <receipt v-model="selectedItem" :header="{company, store: selectedItem.store}"></receipt>
             </template>
@@ -28,8 +117,12 @@ import { mapGetters } from 'vuex'
 import Viewer from '../shared/Viewer'
 import vueEasyPrint from 'vue-easy-print'
 import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
+import Form from '~~/mixins/form'
+import axios from 'axios'
+import { api } from '~~/config'
 
 export default {
+    mixins: [Form],
     components: {
         Viewer,
         vueEasyPrint,
@@ -47,16 +140,19 @@ export default {
             selected: {
                 title: 'Receipts',
                 name: 'receipts',
-                fields: `id, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name},
-                         teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, 
-                         note,refund, items{id, line, item_id, discount{type, rate, amount}, discount_amount, tax_id, tax_amount, qty, refund_qty, 
+                fields: `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name}, terminal{id, name}, store{id, name}, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, 
+                         note,refund, items{id, line, item_id, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, 
                          refund_amount, total_amount, saleBy{id, name}, properties{price}}, payments{id, line, item_id, total_amount},properties{name}, note`,
                 headers: [
+                    { text: 'Store', value: 'store.name', sortable: true },
+                    { text: 'Terminal', value: 'terminal.name', sortable: true },
+                    { text: 'Teller', value: 'teller.name', sortable: true },
                     { text: 'Reference', value: 'reference', sortable: true },
                     { text: 'Date', value: 'date', sortable: true, custom: true },
                     { text: 'Customer', value: 'customer.name', sortable: true },
                     { text: 'Amount', value: 'charge', sortable: true, align: 'end', currency: true },
                     { text: 'Refund', value: 'refund', sortable: true, align: 'end', currency: true },
+                    { text: 'Status', value: 'status', sortable: true },
                     { text: 'Actions', value: 'action', sortable: false, custom: true },
                 ],
                 exports: {
@@ -78,8 +174,17 @@ export default {
             headers: [],
             loading: false,
             company: null,
+            sendDialog: false,
+            refundDialog: false,
+            voidDialog: false,
             store: null,
             selectedItem: null,
+            passwordHidden: true,
+            form: {
+                email: '',
+                name: '',
+                ref: '',
+            }
 
         }
     },
@@ -93,10 +198,17 @@ export default {
     },
     methods: {
         async print(item) {
-
+            this.$emit('overlay', true)
             this.selectedItem = item
-            console.log(item)
-            // this.$refs.receipt.print()
+            setTimeout(() => {
+
+                this.$refs.receipt.print()
+                this.$emit('overlay', false)
+                this.selectedItem = null
+            }, 3000)
+
+
+
         },
 
         async retrieve(filter, options, noCommit = false) {
@@ -122,6 +234,55 @@ export default {
             this.headers = item.headers
             this.exportFields = item.exports
         },
+        selectItem(item) {
+            this.selectedItem = item
+        },
+        closeDialog() {
+            this.sendDialog = false
+            this.voidDialog = false
+            this.refundDialog = false
+            this.selectedItem = null
+            this.reset()
+        },
+        reset() {
+            this.form.name = ''
+            this.form.email = ''
+            this.form.ref = ''
+        },
+        async voidReceipt(item) {
+            if (item.reference === this.form.ref) {
+                await this.$store.dispatch('receipt/voidReceipt', item)
+                this.$toast.success(item.reference + ' receipt has been voided.')
+                this.closeDialog()
+            } else {
+                this.$toast.error('Wrong receipt reference.')
+            }
+            this.reset()
+        },
+        async sendEmail(item) {
+            if (this.$refs.form.validate()) {
+                this.loading = true
+                const form = {
+                   id: item.id,
+                   to: this.form.email,
+                   name: 'Mr/Ms',
+                }
+
+
+                await axios.post(api.path('receipt'), form)
+                    .then(res => {
+                        this.$toast.success('You have been successfully registered!')
+                        this.$emit('success')
+                    })
+                    .catch(err => {
+                        this.handleErrors(err.response.data.errors)
+                    })
+                    .then(() => {
+                        this.loading = false
+                    })
+            }
+        },
+
 
 
     }

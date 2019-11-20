@@ -1,10 +1,12 @@
 <template>
     <div>
+         <div class="stamp" v-if="value.status === 'void'">{{ value.status }}</div>
         <div class="title">{{ header.company.name }}</div>
         <div class="title">{{ header.company.properties.address }}</div>
         <br />
         <br />
         <div class="title">Receipt/Tax Invoice</div>
+       
         <br />
         <br />
         <div class="caption" v-if="value.customer">{{ value.customer.name }}</div>
@@ -140,6 +142,17 @@ export default {
         list-style-type: none;
         font-family: "arial";
         font-size: 8px;
+    }
+    .stamp {
+
+        font-weight: bold;
+        font-size: 30px;
+        position:fixed;
+        left: -12px;
+        top: -12px;
+        text-transform: uppercase;
+         transform: rotate(-45deg);
+
     }
 
     .title {

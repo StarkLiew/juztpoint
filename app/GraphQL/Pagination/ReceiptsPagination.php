@@ -71,7 +71,7 @@ class ReceiptsPagination extends Pagination {
 				'description' => 'The type of setting',
 			],
 			'discount' => [
-				'type' => Type::string(),
+				'type' => GraphQL::type('discount'),
 				'description' => 'The type of setting',
 			],
 			'discount_amount' => [

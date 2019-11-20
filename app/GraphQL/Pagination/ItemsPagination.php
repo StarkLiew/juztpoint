@@ -50,7 +50,7 @@ class ItemsPagination extends PaginationType {
 				'is_relation' => true,
 			],
 			'discount' => [
-				'type' => Type::string(),
+				'type' => GraphQL::type('discount'),
 				'description' => 'The type of setting',
 			],
 			'discount_amount' => [

@@ -30,7 +30,6 @@ export default {
 
   methods: {
       overlayShow(value) {
-
           this.overlay = value
       },
 

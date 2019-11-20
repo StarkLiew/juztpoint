@@ -3,7 +3,7 @@
         <v-layout row justify-center wrap>
             <v-flex lg10 sm12 xs12>
                 <transition name="fade" mode="out-in">
-                    <router-view></router-view>
+                    <router-view @overlay="setOverlay"></router-view>
                 </transition>
             </v-flex>
         </v-layout>
@@ -29,7 +29,11 @@ export default {
     methods: {
         async initialize() {
 
+        },
+        setOverlay(value) {
+            this.overlay = value
         }
+
     }
 }
 

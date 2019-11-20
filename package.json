@@ -40,6 +40,7 @@
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "moment-timezone": "^0.5.27",
+    "node-thermal-printer": "^4.1.0",
     "vue-avatar-cropper": "^1.0.5",
     "vue-cookies": "^1.5.13",
     "vue-currency-filter": "^3.4.3",
@@ -47,6 +48,7 @@
     "vue-json-excel": "^0.2.98",
     "vue-lodash": "^2.0.2",
     "vue-moment": "^4.0.0",
+    "vue-qrcode-reader": "^2.1.1",
     "vuex-persist": "^2.1.0"
   }
 }
