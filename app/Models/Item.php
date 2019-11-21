@@ -22,6 +22,7 @@ class Item extends Model {
 	public $incrementing = true;
 	protected $casts = [
 		'properties' => 'array',
+		'discount' => 'array',
 	];
 	/**
 	 * The attributes that are mass assignable.
@@ -60,9 +61,6 @@ class Item extends Model {
 	}
 	public function commission() {
 		return $this->belongsTo('App\Models\Setting', 'item_id')->where('type', 'commission');
-	}
-	public function payment() {
-		return $this->belongsTo('App\Models\Setting', 'item_id')->where('type', 'payment');
 	}
 	public function tax() {
 		return $this->belongsTo('App\Models\Setting', 'tax_id')->where('type', 'tax');

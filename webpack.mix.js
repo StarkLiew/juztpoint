@@ -14,6 +14,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 mix.js('resources/pos/app.js', 'public/pos')
    .js('resources/backoffice/app.js', 'public/backoffice')
+   .js('resources/backoffice/receipt.js', 'public/backoffice')
    .sass('resources/styles/app.sass', 'public/css')
     
 

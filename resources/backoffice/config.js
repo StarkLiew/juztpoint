@@ -41,11 +41,12 @@ export const graphql = Object.assign(new URL(''), {
 
 export const api = Object.assign(new URL(apiUrl), {
     url: '',
-    
+
     login: {
         url: 'auth/login',
         refresh: 'refresh'
     },
+    receipt: 'receipt',
 
     logout: 'auth/logout',
 

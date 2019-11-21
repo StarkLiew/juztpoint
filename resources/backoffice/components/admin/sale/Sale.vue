@@ -27,6 +27,9 @@
                             <v-container>
                                 <v-form ref="form" @submit.prevent="sendEmail(item)" lazy-validation v-model="valid">
                                     <v-row>
+                                        <v-text-field label="Recipient name" v-model="form.name" type="name" :error-messages="errors.name" :rules="[rules.required('name')]" :disabled="loading"></v-text-field>
+                                    </v-row>
+                                    <v-row>
                                         <v-text-field label="Recipient email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading"></v-text-field>
                                     </v-row>
                                     <v-layout row class="mt-4 mx-0">
@@ -60,9 +63,9 @@
                         </v-card-title>
                         <v-card-text>
                             <v-container>
-                                 <p>
+                                <p>
                                     To refund customer, please use the Terminal that transact this receipt.
-                                 </p>
+                                </p>
                             </v-container>
                         </v-card-text>
                     </v-card>
@@ -140,9 +143,9 @@ export default {
             selected: {
                 title: 'Receipts',
                 name: 'receipts',
-                fields: `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name}, terminal{id, name}, store{id, name}, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, 
-                         note,refund, items{id, line, item_id, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, 
-                         refund_amount, total_amount, saleBy{id, name}, properties{price}}, payments{id, line, item_id, total_amount},properties{name}, note`,
+                fields: `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name}, terminal{id, name}, store{id, name}, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change,
+                         note,refund, items{id, line, item_id, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, 
+                         refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`,
                 headers: [
                     { text: 'Store', value: 'store.name', sortable: true },
                     { text: 'Terminal', value: 'terminal.name', sortable: true },
@@ -263,13 +266,13 @@ export default {
             if (this.$refs.form.validate()) {
                 this.loading = true
                 const form = {
-                   id: item.id,
-                   to: this.form.email,
-                   name: 'Mr/Ms',
+                    id: item.id,
+                    to: this.form.email,
+                    name:  this.form.name,
                 }
 
 
-                await axios.post(api.path('receipt'), form)
+                await axios.get(api.path('receipt'), form)
                     .then(res => {
                         this.$toast.success('You have been successfully registered!')
                         this.$emit('success')

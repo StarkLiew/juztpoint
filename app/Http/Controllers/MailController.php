@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 use App\Models\Document;
 use App\Models\Setting;
-use Input;
+use Illuminate\Support\Facades\Input;
+use Mail;
 
 class MailController extends Controller {
 
-	public function sendReceipt(Request $request) {
+	public function sendReceipt() {
 		$id = Input::get("id");
 		$to = Input::get("to");
 		$name = Input::get("name");
@@ -21,11 +22,9 @@ class MailController extends Controller {
 
 		$data = array('name' => $name, 'value' => $value, 'header' => ['company' => $company, 'store' => $value['store']]);
 
-		return view('mail.receipt', $data);
-
-		/* Mail::send('mail.receipt', $data, function ($message) {
+		return Mail::send('mail.receipt', $data, function ($message) use ($to, $name, $company) {
 			$message->to($to, $name)->subject('Receipt');
 			$message->from('sales@test.com', $company['name']);
-		}); */
+		});
 	}
 }

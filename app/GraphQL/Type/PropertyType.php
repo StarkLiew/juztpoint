@@ -133,12 +133,19 @@ class PropertyType extends GraphQLType {
 			],
 			'shareWith' => [
 				'type' => Type::int(),
-				'description' => 'The type of setting',
+				'description' => 'A list of the item',
+
 			],
 			'stocks' => [
 				'type' => Type::listOf(GraphQL::type('variant_stock')),
 				'description' => 'The type of setting',
 			],
+			'performBy' => [
+				'type' => GraphQL::type('user'),
+				'description' => 'A list of the servicesBy',
+				'is_relation' => false,
+			],
+
 			'servicesBy' => [
 				'type' => Type::listOf(GraphQL::type('services_by')),
 				'description' => 'A list of the servicesBy',

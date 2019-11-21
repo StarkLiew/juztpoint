@@ -32,7 +32,12 @@ USER root
     unzip \
     git \
     curl \
-    wkhtmltopdf xvfb
+    wkhtmltopdf xvfb \
+    && git clone https://github.com/nodejs/node.git \
+    && cd node \
+    && ./configure \
+    && make \
+    && sudo make install
 
 
 ADD https://git.archlinux.org/svntogit/packages.git/plain/trunk/freetype.patch?h=packages/php /tmp/freetype.patch

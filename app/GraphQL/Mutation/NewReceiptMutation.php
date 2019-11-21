@@ -186,14 +186,17 @@ class NewReceiptMutation extends Mutation {
 
 			} else {
 				$document = Document::create($args);
-				$document->items()->createMany($args['items']);
+				foreach ($args['items'] as $item) {
+					$item['properties'] = json_decode($item['properties']);
+					$document->items()->create($item);
+				}
 
 			}
 
 			$document->commissions()->createMany($commissions);
 			$document->items()->createMany($stocks);
 			// $document->items()->save($args->items);
-			// $document->payments()->save($args->payments);
+			$document->payments()->createMany($args['payments']);
 			// $document->commissions()->save($args->commissions);
 
 			DB::commit();

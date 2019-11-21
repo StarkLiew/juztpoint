@@ -30,6 +30,10 @@ class ItemsPagination extends PaginationType {
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',
 			],
+			'name' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
 			'item_id' => [
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'Description of the setting',
@@ -92,6 +96,12 @@ class ItemsPagination extends PaginationType {
 			],
 
 		];
+	}
+	protected function resolveNameField($root, $args) {
+		return $root['product']['name'];
+	}
+	protected function resolveQtyField($root, $args) {
+		return abs($root['qty']);
 	}
 
 }

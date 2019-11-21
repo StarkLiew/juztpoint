@@ -2,6 +2,8 @@
 namespace App\GraphQL\Type;
 
 use App\Models\Item;
+use App\Models\Product;
+use App\Models\user;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
@@ -25,6 +27,14 @@ class ItemType extends GraphQLType {
 			],
 			'type' => [
 				'type' => Type::string(),
+				'description' => 'The type of setting',
+			],
+			'name' => [
+				'type' => Type::string(),
+				'description' => 'The type of setting',
+			],
+			'price' => [
+				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
 			'trxn_id' => [
@@ -91,9 +101,23 @@ class ItemType extends GraphQLType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'amount' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'note' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',
+			],
+			'composites' => [
+				'type' => Type::listOf(GraphQL::type('property')),
+				'description' => 'A list of the item',
+				'is_relation' => false,
+			],
+			'shareWith' => [
+				'type' => GraphQL::type('user'),
+				'description' => 'A list of the item',
+				'is_relation' => false,
 			],
 			'properties' => [
 				'type' => GraphQL::type('property'),
@@ -103,5 +127,43 @@ class ItemType extends GraphQLType {
 
 		];
 	}
+	protected function resolveNameField($root, $args) {
+		if ($root['type'] === 'payment') {
+			$names = ['CASH', 'CARD', 'BANK', 'BOOST'];
+			return $names[(int) $root['item_id'] - 1];
+		}
+		return $root['product']['name'];
+	}
+	protected function resolveQtyField($root, $args) {
+		return abs($root['qty']);
+	}
+	protected function resolveAmountField($root, $args) {
+		return $root['total_amount'];
+	}
+	protected function resolveShareWithField($root, $args) {
+		if (!isset($root['properties']['shareWith'])) {
+			return null;
+		}
 
+		$user = User::find($root['properties']['shareWith']);
+		if (!$user) {
+			return null;
+		}
+		return $user;
+	}
+
+	protected function resolveCompositesField($root, $args) {
+		if (!isset($root['properties']['composites'])) {
+			return [];
+		}
+		$composites = [];
+		foreach ($root['properties']['composites'] as $composite) {
+			$comp = Product::find($composite['item_id']);
+			if ($comp) {
+				$comp['performBy'] = User::find($composite['perform_by']);
+				$composites[] = $comp;
+			}
+		}
+		return $composites;
+	}
 }

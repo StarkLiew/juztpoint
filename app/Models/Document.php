@@ -22,6 +22,7 @@ class Document extends Model {
 	public $incrementing = true;
 	protected $casts = [
 		'properties' => 'array',
+		'discount' => 'array',
 	];
 	/**
 	 * The attributes that are mass assignable.

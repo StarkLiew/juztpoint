@@ -49,6 +49,7 @@
     "vue-lodash": "^2.0.2",
     "vue-moment": "^4.0.0",
     "vue-qrcode-reader": "^2.1.1",
+    "vue-webble": "^0.1.0",
     "vuex-persist": "^2.1.0"
   }
 }

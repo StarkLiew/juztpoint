@@ -16,7 +16,7 @@ class UserType extends GraphQLType {
 	public function fields(): array{
 		return [
 			'id' => [
-				'type' => Type::nonNull(Type::int()),
+				'type' => Type::int(),
 				'description' => 'The id of the user',
 			],
 			'avatar' => [

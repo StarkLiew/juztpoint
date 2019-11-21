@@ -155,7 +155,7 @@ export const actions = {
                 }
 
 
-                const props = `{\\"shareWith\\":${shareWith} ${variant} ${composites}}`
+                const props = `{\\"price\\": ${item.properties.price}, \\"shareWith\\":${shareWith} ${variant} ${composites}}`
 
 
                 const cast = `{line: ${line + 1}, 
