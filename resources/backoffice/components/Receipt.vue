@@ -1,7 +1,8 @@
 <template>
     <v-app id="app">
         <div>
-             <receipt v-model="item" :header="{company, store}"></receipt>
+            <h1>helloo</h1>
+      
         </div>
     </v-app>
 </template>

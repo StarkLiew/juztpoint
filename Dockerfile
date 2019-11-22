@@ -1,5 +1,6 @@
 FROM php:7.3.7-fpm
 
+
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
 
@@ -18,6 +19,7 @@ USER root
 # Install dependencies
  RUN apt-get update && apt-get install -y \
     build-essential \
+    openssl \
     mariadb-client \
     libzip-dev \
     libpng-dev \
@@ -32,13 +34,9 @@ USER root
     unzip \
     git \
     curl \
-    wkhtmltopdf xvfb \
-    && git clone https://github.com/nodejs/node.git \
-    && cd node \
-    && ./configure \
-    && make \
-    && sudo make install
-
+    git-core \
+    libssl-dev \
+    wkhtmltopdf xvfb 
 
 ADD https://git.archlinux.org/svntogit/packages.git/plain/trunk/freetype.patch?h=packages/php /tmp/freetype.patch
 RUN docker-php-source extract; \
@@ -56,12 +54,16 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # RUN mv wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-RUN docker-php-ext-install gd
+ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+ RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+ RUN docker-php-ext-install gd
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup | bash - && \
+  apt-get install -y nodejs
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
 

@@ -24,6 +24,7 @@
         "orchid/platform": "^5.2",
         "rebing/graphql-laravel": "^2.0",
         "simplesoftwareio/simple-qrcode": "^2.0",
+        "spatie/laravel-server-side-rendering": "^1.3",
         "staudenmeir/eloquent-json-relations": "^1.1"
     },
 

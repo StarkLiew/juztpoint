@@ -103,6 +103,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -12459,22 +12460,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("v-app", { attrs: { id: "app" } }, [
-    _c(
-      "div",
-      [
-        _c("receipt", {
-          attrs: { header: { company: _vm.company, store: _vm.store } },
-          model: {
-            value: _vm.item,
-            callback: function($$v) {
-              _vm.item = $$v
-            },
-            expression: "item"
-          }
-        })
-      ],
-      1
-    )
+    _c("div", [_c("h1", [_vm._v("helloo")])])
   ])
 }
 var staticRenderFns = []

@@ -37,9 +37,12 @@
                 'apiUrl' => config('app.url') . '/api'
             ]) !!};
         </script>
+<script defer src="{{ mix('/backoffice/receipt.js') }}"></script>
     </head>
     <body>
-        <div id="app"></div>
-        <script src="{{ mix('/backoffice/receipt.js') }}"></script>
+      <div id="app">
+            {!! ssr('backoffice/receipt.js')->render() !!}
+        </div>
+
       </body>
 </html>
