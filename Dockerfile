@@ -75,6 +75,9 @@ RUN npm install
 # Copy existing application directory contents
 COPY . /var/www
 
+RUN composer install
+RUN npm install
+
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 RUN chmod -R 777 /var/www/storage
