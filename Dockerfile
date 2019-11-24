@@ -16,11 +16,12 @@ WORKDIR /var/www
 USER root
 
 # Install dependencies
- RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     build-essential \
     openssl \
     mariadb-client \
     libxml2-dev \
+    libbz2-dev \    
     libzip-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -55,7 +56,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # RUN mv wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
 # Install extensions
-RUN docker-php-ext-install gd pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-install gd pdo_mysql mbstring zip exif pcntl bz2
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 
 
@@ -65,7 +66,7 @@ RUN apt-get -y install nodejs
 RUN npm install
 
 # Install composer
-# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
 
@@ -81,6 +82,8 @@ RUN chmod -R 777 /var/www/storage
 RUN chmod -R 755 /var/www/bootstrap/cache
 # RUN chown -R www:www /var/www
 
+# COPY ./run.sh /tmp
+# RUN chmod +x /tmp/run.sh
 
 USER www-data
 
@@ -89,10 +92,7 @@ EXPOSE 3307
 EXPOSE 9000
 CMD ["php-fpm"]
 
-CMD bash -c "composer install && npm install && php artisan migrate && php artisan passport:install"
+#CMD bash -c "composer install && npm install"
 
-
-# RUN php artisan migrate
-# RUN php artisan passport:install
-copy ./run.sh /tmp
-ENTRYPOINT ["/tmp/run.sh"]
+# ENTRYPOINT ["/tmp/run.sh"]
+ENTRYPOINT []
