@@ -75,9 +75,6 @@ RUN npm install
 # Copy existing application directory contents
 COPY . /var/www
 
-RUN composer install
-RUN npm install
-
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www
 RUN chmod -R 777 /var/www/storage
@@ -92,7 +89,10 @@ EXPOSE 3307
 EXPOSE 9000
 CMD ["php-fpm"]
 
+CMD bash -c "composer install && npm install && php artisan migrate && php artisan passport:install"
+
+
 # RUN php artisan migrate
 # RUN php artisan passport:install
-
-ENTRYPOINT []
+copy ./run.sh /tmp
+ENTRYPOINT ["/tmp/run.sh"]
