@@ -50,7 +50,7 @@ export const api = Object.assign(new URL(apiUrl), {
 
     logout: 'auth/logout',
 
-    register: 'register',
+    register: 'auth/register',
 
     password: {
         url: 'password',
