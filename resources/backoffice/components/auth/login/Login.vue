@@ -1,6 +1,5 @@
 <template>
     <v-flex sm8 md6 lg4>
-        <h1 class="display-3">{{ siteName }}</h1>
         <v-card v-if="!hasToken()">
             <v-toolbar dark color="primary" flat>
                 <v-toolbar-title>Back Office Login</v-toolbar-title>
@@ -16,13 +15,11 @@ import { mapGetters } from 'vuex'
 import LoginForm from './LoginForm'
 import VueCookies from 'vue-cookies'
 
-
 export default {
     components: {
         LoginForm,
     },
     data: () => ({
-     
     }),
 
     methods: {

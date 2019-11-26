@@ -72,7 +72,7 @@ class RegisterController extends Controller {
 		$user->properties = json_decode('{"role":"MGR","backoffice":"1"}');
 
 		$user->save();
-
 		return $user;
+
 	}
 }

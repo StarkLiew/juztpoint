@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller {
 	/**
@@ -18,23 +19,37 @@ class AuthController extends Controller {
 	 * @param  [string] password_confirmation
 	 * @return [string] message
 	 */
-	public function signup(Request $request) {
+	public function register(Request $request) {
+
 		$request->validate([
 			'name' => 'required|string',
-			'email' => 'required|string|email|unique:users',
-			'password' => 'required|string|confirmed',
+			'companyname' => 'required|string',
+			'email' => 'required|string|email',
+			'password' => 'required|string',
+			'password_confirmation' => 'required|string',
 		]);
-		$user = new User([
-			'name' => $request->name,
-			'email' => $request->email,
-			'password' => bcrypt($request->password),
-			'permissions' => '{"platform.systems.announcement":"1","platform.systems.attachment":"1","platform.systems.commissions":"1","platform.systems.company":"1","platform.systems.payments":"1","platform.systems.roles":"1","platform.systems.stores":"1","platform.systems.taxes":"1","platform.systems.users":"1","platform.categories":"1","platform.customers":"1","platform.index":"1","platform.products":"1","platform.services":"1","platform.systems.index":"1","platform.systems":"1","platform.vendors":"1","platform.sales":"1","platform.inventory":"1","platform.receives":"1","platform.reports":"1"}',
-		]);
+		$data = request(['name', 'companyname', 'email', 'password', 'password_confirmation']);
 
-		$user->save();
-		return response()->json([
-			'message' => 'Successfully created user!',
-		], 201);
+		$user = new User;
+		$user->company_name = $data['companyname'];
+		$user->name = $data['name'];
+		$user->email = $data['email'];
+		$user->pin = '0123'; //Default pin to login to App
+		$user->password = Hash::make($data['password']);
+		$user->level = 0;
+
+		$user->properties = json_decode('{"role":"MGR","backoffice":"1"}');
+		try {
+			$user->save();
+			return response()->json([
+				'message' => 'Successfully created account!',
+			], 201);
+		} catch (\PDOException $e) {
+			return response()->json([
+				'message' => 'Registration new account unsuccessful. Account may already exist.',
+			], 401);
+		}
+
 	}
 
 	/**

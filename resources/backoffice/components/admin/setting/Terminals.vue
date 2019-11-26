@@ -6,6 +6,10 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                     </v-col>
+                    <v-col class="text-center" cols="6" sm="12" md="6" lg="6" v-if="editedItem.properties.device_id">
+                        <vue-qr :text="editedItem.properties.device_id" :size="200"></vue-qr>
+                        <p>{{ editedItem.properties.device_id }}</p>
+                    </v-col>
                 </v-row>
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
@@ -21,6 +25,7 @@
                         </v-col>
                 </v-row>
 
+
           
             </v-container>
         </template>
@@ -29,9 +34,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
+import VueQr from 'vue-qr'
+
 export default {
     components: {
         Crud,
+        VueQr,
     },
     data() {
         return {

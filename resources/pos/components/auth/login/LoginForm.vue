@@ -2,7 +2,12 @@
     <v-form ref="form" @submit.prevent="submit" lazy-validation v-model="valid">
         <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading" prepend-icon="person"></v-text-field>
         <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="lock"></v-text-field>
-        <v-text-field :label="labels.device_id" v-model="form.device_id" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (device_idHidden = !device_idHidden)" :type="device_idHidden ? 'device_id' : 'text'" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" prepend-icon="tv"></v-text-field>
+        <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerHidden = !scannerHidden)" :error-messages="errors.device_id" :disabled="loading || !scannerHidden" :rules="[rules.required('device_id')]" append-icon="camera" prepend-icon="tv"></v-text-field>
+        <div v-if="!scannerHidden">
+            <qrcode-stream @decode="onDecode"></qrcode-stream>
+            <qrcode-drop-zone @decode="onDecode"></qrcode-drop-zone>
+            <qrcode-capture @decode="onDecode"></qrcode-capture>
+        </div>
         <v-layout class="mt-4 mx-0">
             <v-spacer></v-spacer>
             <v-btn text :disabled="loading" :to="{ name: 'forgot', query: {email: form.email} }" color="grey darken-2">
@@ -18,12 +23,18 @@
 import axios from 'axios'
 import { api } from '~/config'
 import Form from '~/mixins/form'
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 
 export default {
     mixins: [Form],
-
+    components: {
+        QrcodeStream,
+        QrcodeDropZone,
+        QrcodeCapture
+    },
     data: () => ({
         passwordHidden: true,
+        scannerHidden: true,
         device_idHidden: true,
         form: {
             email: null,
@@ -49,14 +60,14 @@ export default {
 
                 await axios.post(api.path('login'), this.form)
                     .then(async res => {
-                     
+
                         const data = res.data
-              
+
                         await this.$store.dispatch('auth/saveToken', data)
                         // await this.$store.dispatch('auth/setUser', data)
 
                         /* Fetch latest data */
-                        this.sync(this.$store) 
+                        this.sync(this.$store)
 
                         this.$toast.success('Welcome back!')
                         this.$emit('success', res.data)
@@ -71,6 +82,10 @@ export default {
 
 
             }
+        },
+        onDecode(decodedString) {
+            this.form.device_id = decodedString
+            this.scannerHidden = true
         },
         scanFingerprint() {
             return new Promise((resolve, reject) => {

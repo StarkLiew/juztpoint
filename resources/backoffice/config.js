@@ -2,7 +2,8 @@ const siteUrl = Laravel.siteUrl,
     apiUrl = Laravel.apiUrl
 
 export const settings = {
-    siteName: Laravel.siteName
+    siteName: Laravel.siteName,
+    siteUrl: Laravel.siteUrl,
 }
 
 class URL {
@@ -48,12 +49,18 @@ export const api = Object.assign(new URL(apiUrl), {
     },
     receipt: 'receipt',
 
-    logout: 'auth/logout',
+    logout: {
+        url: 'auth/logout',
+        refresh: 'refresh'
+    },
 
-    register: 'auth/register',
+    register: {
+        url: 'auth/register',
+        refresh: 'refresh'
+    },
 
     password: {
-        url: 'password',
+        url: 'auth/password',
         forgot: 'email',
         reset: 'reset'
     },

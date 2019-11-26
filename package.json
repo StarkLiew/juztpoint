@@ -18,6 +18,7 @@
     "browser-sync": "^2.26.7",
     "browser-sync-webpack-plugin": "2.0.1",
     "cross-env": "^5.2.1",
+    "html-webpack-plugin": "^3.2.0",
     "laravel-mix": "^4.1.4",
     "resolve-url-loader": "2.3.1",
     "sass": "^1.23.0",
@@ -48,7 +49,9 @@
     "vue-json-excel": "^0.2.98",
     "vue-lodash": "^2.0.2",
     "vue-moment": "^4.0.0",
+    "vue-qr": "^2.2.1",
     "vue-qrcode-reader": "^2.1.1",
+    "vue-server-renderer": "^2.6.10",
     "vue-webble": "^0.1.0",
     "vuex-persist": "^2.1.0"
   }

@@ -19,7 +19,7 @@ class UserCreateItems extends Migration {
 			$table->string('type');
 			$table->bigInteger('trxn_id')->unsigned();
 			$table->bigInteger('item_id')->unsigned();
-			$table->float('price');
+			$table->float('price')->nullable();
 			$table->json('discount');
 			$table->float('discount_amount');
 			$table->bigInteger('tax_id');

@@ -1,5 +1,5 @@
 <template>
-    <v-flex sm8 md6 lg4>
+    <v-flex sm8 md6 lg6>
         <v-card>
             <v-toolbar dark color="primary" flat>
                 <v-toolbar-title>Register company account
@@ -21,9 +21,7 @@ export default {
 
     methods: {
         success(data) {
-            this.$store.dispatch('auth/saveToken', data)
-            this.$store.dispatch('auth/setUser', data)
-            this.$router.push({ name: 'index' })
+            this.$router.push({ name: 'login' })
         }
     }
 }
