@@ -13106,8 +13106,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\dev\juxtpoint\resources\receipt\app-client.js */"./resources/receipt/app-client.js");
-module.exports = __webpack_require__(/*! C:\dev\juxtpoint\resources\styles\app.sass */"./resources/styles/app.sass");
+__webpack_require__(/*! /Users/starkliew/Project/juztpoint/resources/receipt/app-client.js */"./resources/receipt/app-client.js");
+module.exports = __webpack_require__(/*! /Users/starkliew/Project/juztpoint/resources/styles/app.sass */"./resources/styles/app.sass");
 
 
 /***/ })
