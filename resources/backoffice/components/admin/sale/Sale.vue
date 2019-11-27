@@ -123,6 +123,7 @@ import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
 import Form from '~~/mixins/form'
 import axios from 'axios'
 import { api } from '~~/config'
+import { bus } from '~~/app';
 
 export default {
     mixins: [Form],
@@ -236,10 +237,12 @@ export default {
             this.selected = item
             this.headers = item.headers
             this.exportFields = item.exports
+
         },
         async selectItem(item) {
             this.selectedItem = item
             const company = this.company
+            bus.$emit('select', {item, company})
          
         },
         closeDialog() {
@@ -272,7 +275,7 @@ export default {
                     to: this.form.email,
                     name: this.form.name,
                 }
-                this.$emit('selected-receipt', { item: this.selectedItem, company: this.company })
+
                 await axios.get(api.path('receipt'), form)
                     .then(res => {
                         this.$toast.success('You have been successfully registered!')

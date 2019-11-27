@@ -8,17 +8,21 @@
 import receipt from "../../pos/components/sales/shared/ReceiptTemplate"
 
 import { mapGetters } from 'vuex'
+import { bus } from '../../backoffice/app';
 
 export default {
     components: {
         receipt
     },
+    created() {
+        $bus.$on('selected', (data) => {
+            this.selected = data;
+        })
+    },
     data: () => ({
         selected: null,
     }),
-    mounted() {
-        this.$on("selected-receipt", message => this.selected = message)
-    }
+
 
 }
 

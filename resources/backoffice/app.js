@@ -9,7 +9,7 @@ import vuetify from '~~//plugins/vuetify'
 import VueLodash from 'vue-lodash'
 
 
-const eventsHub = new Vue()
+export const bus = new Vue()
 
 const options = { name: 'lodash' } // customize the way you want to call it
 
