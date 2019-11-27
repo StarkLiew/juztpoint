@@ -1,22 +1,25 @@
 <template>
-    <v-app id="app">
-        <div>
-            <h1>helloo</h1>
-      
-        </div>
-    </v-app>
+    <div>
+        <!-- <receipt v-model="selected.item" :header="{company: selected.company, store: selected.item.store}"></receipt> -->
+        {{ selected }}
+    </div>
 </template>
 <script>
-// import receipt from "../../pos/components/sales/shared/ReceiptTemplate"
+import receipt from "../../pos/components/sales/shared/ReceiptTemplate"
+
+import { mapGetters } from 'vuex'
+
 export default {
     components: {
-        
+        receipt
     },
     data: () => ({
-        company: null,
-        store: null,
-        item: null,
+        selected: null,
     }),
+    mounted() {
+        this.$on("selected-receipt", message => this.selected = message)
+    }
+
 }
 
 </script>

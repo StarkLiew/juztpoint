@@ -12,23 +12,16 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
  | file for the application as well as bundling up all the JS files.
  |
  */
-mixSsr.js('resources/receipt/app-client.js', 'public/receipt')
-    .js('resources/receipt/app-server.js', 'public/receipt')
-    .options({
-        extractVueStyles: 'public/css/app.css',
-    }).webpackConfig({
-        resolve: {
-            extensions: ['.js', '.json', '.vue'],
-            alias: {
-                '~~~': path.join(__dirname, './resources/receipt'),
-                '$receipt': path.join(__dirname, './resources/receipt/components'),
-            }
-        },
-    })
+
 
 mix.js('resources/pos/app.js', 'public/pos')
     .js('resources/backoffice/app.js', 'public/backoffice')
+    .js('resources/receipt/app-client.js', 'public/receipt')
+    .js('resources/receipt/app-server.js', 'public/receipt')
     .sass('resources/styles/app.sass', 'public/css')
+    .options({
+        extractVueStyles: 'public/css/app.css',
+    })
     .webpackConfig({
         resolve: {
             extensions: ['.js', '.json', '.vue'],
@@ -37,6 +30,8 @@ mix.js('resources/pos/app.js', 'public/pos')
                 '~~': path.join(__dirname, './resources/backoffice'),
                 '$pos': path.join(__dirname, './resources/pos/components'),
                 '$backoffice': path.join(__dirname, './resources/backoffice/components'),
+                '~~~': path.join(__dirname, './resources/receipt'),
+                '$receipt': path.join(__dirname, './resources/receipt'),
             }
         },
         plugins: [

@@ -38,6 +38,15 @@ class HomeController extends Controller {
 		return view('pos');
 	}
 
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
+	public function receipt() {
+		return view('mail.receipt');
+	}
+
 	public function backoffice() {
 		return view('backoffice');
 	}

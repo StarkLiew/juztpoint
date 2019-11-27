@@ -8,6 +8,7 @@ import '~~//plugins/index'
 import vuetify from '~~//plugins/vuetify'
 import VueLodash from 'vue-lodash'
 
+
 const eventsHub = new Vue()
 
 const options = { name: 'lodash' } // customize the way you want to call it
@@ -24,3 +25,4 @@ export const app = new Vue({
     vuetify,
     render: h => h(App),
 }).$mount('#app')
+

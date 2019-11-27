@@ -18,6 +18,7 @@
                 'apiUrl' => config('app.url') . '/api'
             ]) !!};
         </script>
+
     </head>
     <body>
         <div id="app"></div>

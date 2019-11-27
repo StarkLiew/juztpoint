@@ -22,8 +22,6 @@ class MailController extends Controller {
 
 		$data = array('name' => $name, 'value' => $value, 'header' => ['company' => $company, 'store' => $value['store']]);
 
-		// return view('mail.receipt');
-
 		return Mail::send('mail.receipt', $data, function ($message) use ($to, $name, $company) {
 			$message->to('customer@example.com', 'test')->subject('Receipt');
 			$message->from('sales@example.com', $company['name']);

@@ -45,7 +45,7 @@
                 </v-dialog>
                 <v-dialog v-model="refundDialog" persistent max-width="600px">
                     <template v-slot:activator="{ on }">
-                        <v-btn icon dark v-on="on" :disabled="item.status === 'void'">
+                        <v-btn icon dark v-on="on" :disabled="item.status === 'void'" style="display:none">
                             <v-icon @click="" color="orange darken-1">
                                 money_off
                             </v-icon>
@@ -237,8 +237,10 @@ export default {
             this.headers = item.headers
             this.exportFields = item.exports
         },
-        selectItem(item) {
+        async selectItem(item) {
             this.selectedItem = item
+            const company = this.company
+         
         },
         closeDialog() {
             this.sendDialog = false
@@ -268,10 +270,9 @@ export default {
                 const form = {
                     id: item.id,
                     to: this.form.email,
-                    name:  this.form.name,
+                    name: this.form.name,
                 }
-
-
+                this.$emit('selected-receipt', { item: this.selectedItem, company: this.company })
                 await axios.get(api.path('receipt'), form)
                     .then(res => {
                         this.$toast.success('You have been successfully registered!')

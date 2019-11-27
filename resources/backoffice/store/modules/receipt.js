@@ -14,6 +14,10 @@ export const state = {
         sum: 0,
     },
     count: 0,
+    selected: {
+        item: null,
+        company: null,
+    }
 }
 
 /**
@@ -36,6 +40,9 @@ export const mutations = {
         state.summary = { count: 0, sum: 0 }
         state.items = []
         state.count = 0
+    },
+    [types.SELECTED_RECEIPT](state, {item, company}) {
+        this.selected = {item, company}
     },
 }
 
@@ -93,6 +100,10 @@ export const actions = {
         commit(types.VOID_RECEIPT, { receipt })
 
     },
+    selectItem(item, company) {
+
+       commit(types.SELECTED_RECEIPT, { item, company })
+    }
 
 
 
@@ -106,5 +117,6 @@ export const getters = {
     items: state => state.items,
     summary: state => state.summary,
     count: state => state.count,
+    selected: state => state.selected,
 
 }
