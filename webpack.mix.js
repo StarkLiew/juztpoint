@@ -20,7 +20,7 @@ mix.js('resources/pos/app.js', 'public/pos')
     .js('resources/receipt/app-server.js', 'public/receipt')
     .sass('resources/styles/app.sass', 'public/css')
     .options({
-        extractVueStyles: 'public/css/app.css',
+        extractVueStyles: 'public/css/vue.css',
     })
     .webpackConfig({
         resolve: {

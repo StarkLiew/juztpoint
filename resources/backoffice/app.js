@@ -8,8 +8,7 @@ import '~~//plugins/index'
 import vuetify from '~~//plugins/vuetify'
 import VueLodash from 'vue-lodash'
 
-
-export const bus = new Vue()
+import {bus} from '$receipt/bus'
 
 const options = { name: 'lodash' } // customize the way you want to call it
 
@@ -19,7 +18,10 @@ Vue.mixin({
     methods: {}
 })
 
+
+
 export const app = new Vue({
+	bus,
     router,
     store,
     vuetify,

@@ -47,5 +47,5 @@ Route::group([
 
 Route::middleware('auth:api')->group(function () {
 	Route::get('me', 'Auth\AuthController@user');
-	Route::get('receipt', 'MailController@sendReceipt');
+	Route::post('receipt', 'MailController@sendReceipt');
 });

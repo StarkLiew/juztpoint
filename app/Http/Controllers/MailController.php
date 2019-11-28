@@ -12,6 +12,7 @@ class MailController extends Controller {
 		$id = Input::get("id");
 		$to = Input::get("to");
 		$name = Input::get("name");
+		$receipt = Input::get("data");
 
 		$value = Document::with(['items', 'store', 'teller', 'customer', 'payments'])
 			->withTrashed()
@@ -20,9 +21,9 @@ class MailController extends Controller {
 
 		$company = Setting::where('type', 'company')->first();
 
-		$data = array('name' => $name, 'value' => $value, 'header' => ['company' => $company, 'store' => $value['store']]);
+		$data = array('name' => 'Hllow', 'data' => $receipt);
 
-		return view('mail.receipt');
+		// return view('mail.receipt', $data);
 
 		return Mail::send('mail.receipt', $data, function ($message) use ($to, $name, $company) {
 			$message->to('customer@example.com', 'test')->subject('Receipt');
