@@ -1,6 +1,6 @@
 <template>
     <v-app-bar dark :clipped-left="$vuetify.breakpoint.mdAndUp" fixed app color="primary">
-        <v-app-bar-nav-icon @click.stop="navToggle"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon v-if="$vuetify.breakpoint.smAndDown" @click.stop="navToggle"></v-app-bar-nav-icon>
         <v-toolbar-title class="white--text">{{ siteName }} BackOffice</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-title class="white--text" v-if="auth">
@@ -53,11 +53,10 @@ export default {
             await this.$store.dispatch('auth/logout')
             this.$toast.success('Logged out!')
             this.$router.push({ name: 'login' })
-           
 
         },
         navToggle() {
-            this.$emit('nav-toggle')
+            this.$emit('navToggle')
         }
     }
 }

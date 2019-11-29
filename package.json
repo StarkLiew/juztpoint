@@ -43,6 +43,7 @@
     "moment-timezone": "^0.5.27",
     "node-thermal-printer": "^4.1.0",
     "vue-avatar-cropper": "^1.0.5",
+    "vue-barcode-scanner": "^0.6.0",
     "vue-cookies": "^1.5.13",
     "vue-currency-filter": "^3.4.3",
     "vue-easy-print": "0.0.8",

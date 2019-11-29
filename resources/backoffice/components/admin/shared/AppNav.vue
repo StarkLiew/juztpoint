@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer  absolute v-model="mini" :permanent="$vuetify.breakpoint.mdAndUp" light :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :clipped="$vuetify.breakpoint.mdAndUp" width="300" @input="inputChange" expand-on-hover>
+ <div>
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -9,7 +9,7 @@
                 </v-list-item-icon>
                 <v-list-item-content>
                 </v-list-item-content>
-                <v-list-item-icon>
+                <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && !mini">
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
@@ -44,7 +44,7 @@
                 </v-list-item>
             </template>
         </v-list>
-    </v-navigation-drawer>
+   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -70,11 +70,8 @@ export default {
         this.name = this.auth.name
     },
     methods: {
-        inputChange(val) {
-           // this.$emit('status-changed', val)
-        },
         navToggle() {
-            this.$emit('nav-toggle')
+            this.$emit('navToggle')
         },
 
         async logout() {

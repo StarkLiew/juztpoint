@@ -74,9 +74,11 @@ export default {
             }
         },
         mini(val) {
+
             this.$emit('nav-toggle-update', val)
         },
         minified(val) {
+
             this.mini = val
         },
     },

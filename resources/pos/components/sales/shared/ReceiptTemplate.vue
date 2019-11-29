@@ -119,15 +119,23 @@
                 </div>
             </tbody>
         </table>
+        <div>
+           
+        </div>
         <br />
         <br />
         <div class="title">Thank you!</div>
     </div>
 </template>
 <script>
+
+
 export default {
     data() {
         return {}
+    },
+    components: {
+   
     },
     props: ['value', 'header'],
 }
@@ -139,7 +147,7 @@ export default {
     margin: 5mm;
 }
 
-@media print {
+@media screen and print {
 
     * {
         width: 70mm;

@@ -1,7 +1,9 @@
 <template>
     <div class="fill-height">
-        <app-nav @overlay="onOverlay" :mini.sync="mini" @nav-toggle="navToggle" @status-changed="status"></app-nav>
-        <top-menu @nav-toggle="navToggle" @overlay="onOverlay"></top-menu>
+        <v-navigation-drawer app v-model="show" :mini-variant.sync="$vuetify.breakpoint.mdAndUp && mini" :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" width="300">
+            <app-nav @overlay="onOverlay" :mini="mini" @navToggle="onMiniToggle"></app-nav>
+        </v-navigation-drawer>
+        <top-menu @navToggle="onNavToggle" @overlay="onOverlay"></top-menu>
         <v-content>
             <v-container fluid>
                 <transition name="fade" mode="out-in">
@@ -23,6 +25,7 @@ import AppFooter from './shared/AppFooter'
 export default {
     data: () => ({
         mini: true,
+        show: true,
         overlay: false
     }),
 
@@ -33,14 +36,21 @@ export default {
     },
 
     methods: {
-        status(val) {
-            this.mini = val
+        onNavToggle() {
+            this.show = !this.show
+
+
         },
-        navToggle() {
+        onMiniToggle() {
+
             this.mini = !this.mini
+
         },
         onOverlay(status) {
             this.overlay = status
+        },
+        onMinified(val) {
+            this.mini = val
         }
 
     }

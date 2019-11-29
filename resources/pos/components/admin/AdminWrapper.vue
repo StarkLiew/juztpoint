@@ -22,7 +22,7 @@ import AppFooter from './shared/AppFooter'
 
 export default {
     data: () => ({
-        mini: true,
+        mini: false,
         overlay: false
     }),
 
@@ -34,6 +34,7 @@ export default {
 
     methods: {
         navToggle() {
+
             this.mini = !this.mini
         },
         navToggleUpdate(val) {

@@ -23,12 +23,15 @@ export const mutations = {
     },
 
     [types.LOGOUT](state) {
-        const expire = new Date() //expire now
         state.access = false
+        state.store = null
         state.user = null
-        state.token = null
+        const expire = new Date() //expire now
         VueCookies.set('JXPTBCK', '', expire, true)
 
+        VueCookies.remove('JXPTBCK')
+
+       
 
     },
 

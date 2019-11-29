@@ -1,8 +1,8 @@
 <template>
     <v-layout justify-center>
-   
-            <v-container fluid grid-list-sm style="width:200px">
-                <v-layout wrap style="width:200px">
+        <v-flex xs8 sm4>
+            <v-container fluid grid-list-sm>
+                <v-layout wrap>
                     <v-flex v-for="(key, i) in keys" :key="i" xs4 @click="touched(key)">
                         <v-img :src="``" :lazy-src="``" aspect-ratio="1" v-ripple class="blue lighten-2 v-btn">
                             <template v-slot:placeholder>
@@ -12,7 +12,7 @@
                             <v-layout pa-4 column fill-height class="lightbox white--text text-center justify-center">
                                 <v-spacer></v-spacer>
                                 <v-flex>
-                                    <div class="v-icon text-wrap"  v-if="key.length < 2">{{ key }}</div>
+                                    <div class="v-icon text-wrap" v-if="key.length < 2">{{ key }}</div>
                                     <v-icon v-if="key.length > 1" color="white">{{key}}</v-icon>
                                 </v-flex>
                             </v-layout>
@@ -20,7 +20,7 @@
                     </v-flex>
                 </v-layout>
             </v-container>
-    
+        </v-flex>
     </v-layout>
 </template>
 <script>

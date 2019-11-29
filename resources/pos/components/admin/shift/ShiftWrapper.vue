@@ -1,6 +1,6 @@
 <template>
     <v-layout justify-center class="fill-height">
-        <v-card class="mx-auto" flat color="#222" width="50%" v-if="auth && auth.properties.role !== 'MGR'">
+        <v-card class="mx-auto"  width="300" flat color="#222" v-if="auth && auth.properties.role !== 'MGR'">
             <v-card-text>
                 <v-list-item three-line>
                     <v-list-item-content>
@@ -12,7 +12,7 @@
                 
             </v-card-text>
         </v-card>
-        <v-card class="mx-auto" flat color="#222" width="50%" v-if="auth && auth.properties.role === 'MGR'">
+        <v-card class="mx-auto"  flat color="#222" v-if="auth && auth.properties.role === 'MGR'">
             <v-card-text>
                 <v-list-item three-line>
                     <v-list-item-content>
@@ -28,10 +28,12 @@
                     </v-col>
                 </v-row>
                 <v-divider></v-divider>
-                <numeric-key @clear="amount = 0.00" @done="done" @change="amountChange" :decimal="2" :show="true">
-                </numeric-key>
+
+
     
             </v-card-text>
+            <numeric-key @clear="amount = 0.00" @done="done" @change="amountChange" :decimal="2" :show="true">
+                </numeric-key>
         </v-card>
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
             <v-card tile>
