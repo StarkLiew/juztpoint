@@ -2,10 +2,20 @@
     <v-form ref="form" @submit.prevent="submit" lazy-validation v-model="valid">
         <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading" prepend-icon="person"></v-text-field>
         <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="lock"></v-text-field>
-        <v-layout class="mt-4 mx-0" v-if="!scannerHidden">
+        <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerHidden = !scannerHidden)" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" :append-icon="scannerShow ? 'camera' : 'videocam_off'" prepend-icon="tv"></v-text-field>
+        <v-dialog v-model="scannerShow" fullscreen hide-overlay transition="dialog-bottom-transition">
+            <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialog = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn dark text @click="dialog = false">Save</v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
             <qrcode-stream :track="true" @decode="onDecode"></qrcode-stream>
-        </v-layout>
-        <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerHidden = !scannerHidden)" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" :append-icon="scannerHidden ? 'camera' : 'videocam_off'"  prepend-icon="tv"></v-text-field>
+        </v-dialog>
         <v-layout class="mt-4 mx-0">
             <v-spacer></v-spacer>
             <v-btn text :disabled="loading" :to="{ name: 'forgot', query: {email: form.email} }" color="grey darken-2">
