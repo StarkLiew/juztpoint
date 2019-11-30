@@ -4,18 +4,19 @@
         <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="lock"></v-text-field>
         <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerShow = !scannerShow)" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" :append-icon="scannerShow ? 'videocam_off' : 'camera'" prepend-icon="tv"></v-text-field>
         <v-dialog v-model="scannerShow" fullscreen hide-overlay transition="dialog-bottom-transition">
-
-             <v-card>
-                            <v-toolbar dark color="primary">
-                <v-toolbar-title>Scan Code</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn icon dark @click="scannerShow = false">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-            </v-toolbar>
-            
-            <qrcode-stream :track="true" @decode="onDecode"></qrcode-stream>
-        </v-card>
+            <v-card>
+                <v-toolbar dark color="primary">
+                    <v-toolbar-title>Scan Terminal ID</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark @click="scannerShow = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>
+                <v-card-text>
+                    <qrcode-stream :track="repaint" @decode="onDecode">
+                    </qrcode-stream>
+                </v-card-text>
+            </v-card>
         </v-dialog>
         <v-layout class="mt-4 mx-0">
             <v-spacer></v-spacer>
@@ -58,6 +59,29 @@ export default {
     },
 
     methods: {
+        repaint(location, ctx) {
+            const {
+                topLeftCorner,
+                topRightCorner,
+                bottomLeftCorner,
+                bottomRightCorner,
+                // topLeftFinderPattern,
+                // topRightFinderPattern,
+                // bottomLeftFinderPattern
+            } = location
+
+            ctx.strokeStyle = 'red' // instead of red
+
+            ctx.beginPath()
+            ctx.moveTo(topLeftCorner.x, topLeftCorner.y)
+            ctx.lineTo(bottomLeftCorner.x, bottomLeftCorner.y)
+            ctx.lineTo(bottomRightCorner.x, bottomRightCorner.y)
+            ctx.lineTo(topRightCorner.x, topRightCorner.y)
+            ctx.lineTo(topLeftCorner.x, topLeftCorner.y)
+            ctx.closePath()
+
+            ctx.stroke()
+        },
         async submit() {
             if (this.$refs.form.validate()) {
                 this.loading = true

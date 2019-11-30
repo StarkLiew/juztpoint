@@ -8,8 +8,8 @@
                     </v-btn>
                 </v-list-item-icon>
                 <v-list-item-content>
-                    <v-list-item-title>{{ store.name }}</v-list-item-title>
-                    <v-list-item-title class="caption">{{ terminal.name }}</v-list-item-title>
+                    <v-list-item-title>{{ store ? store.name : '' }}</v-list-item-title>
+                    <v-list-item-title class="caption">{{ terminal ? terminal.name : ''}}</v-list-item-title>
                     <v-list-item-title class="caption">Version 1.0.1</v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-icon>

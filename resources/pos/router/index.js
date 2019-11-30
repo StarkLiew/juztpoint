@@ -26,11 +26,13 @@ router.beforeEach(async (to, from, next) => {
     }
 })
 
+
+
 const rules = {
     // guest: { fail: 'index', check: () => (!store.getters['auth/check']) },
-    guest: { fail: 'pin', check: () => (!store.getters['auth/registered']) },
     auth: { fail: 'login', check: () => (store.getters['auth/registered']) },
-    pin: { fail: 'pin', check: () => (store.getters['auth/check']) },
+    guest: { fail: 'pin', check: () => (!store.getters['auth/registered'])},
+    pin: { fail: 'pin', check: () => (store.getters['auth/registered'] && store.getters['auth/check']) },
     // pin: { fail: 'pin', check: () => (store.getters['auth/check']) }
 }
 
@@ -44,6 +46,7 @@ function reroute(to) {
             let checks = []
             for (let i in rule) {
                 checks[i] = rules[rule[i]].check()
+
                 check = check || checks[i]
             }
             if (!check && !failRoute) {
@@ -51,6 +54,8 @@ function reroute(to) {
             }
         } else {
             check = rules[rule].check()
+        
+
             if (!check && !failRoute) {
                 failRoute = rules[rule].fail
             }

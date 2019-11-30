@@ -74,19 +74,19 @@ export const actions = {
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             const mutation = `mutation accounts{
-                             newAccount(
+                             newCustomer(
                                  name: "${name}",
                                  uid: "${uid}",
                                  status: "active",
                                  type: "customer",
                                  properties: "${props}"
-                             ) {id, name, status, properties{email, mobile}}}`
+                             ) {id, name, uid, status, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
 
 
 
-            customer = data.data.newAccount
+            customer = data.data.newCustomer
 
 
             commit(types.ADD_CUSTOMER, { customer })

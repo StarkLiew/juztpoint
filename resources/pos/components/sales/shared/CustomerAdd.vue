@@ -49,6 +49,7 @@ export default {
         },
         save() {
             const { name, email, mobile } = this
+
             this.$emit('save', { name, email, properties: { mobile } })
             this.reset()
         },

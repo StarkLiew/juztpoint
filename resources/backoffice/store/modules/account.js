@@ -85,7 +85,7 @@ export const actions = {
                                     type: "${type}",
                                     status: "${status}",
                                     properties: "${props}"
-                             ) {id, name, type, properties{email, mobile}}}`
+                             ) {id, uid, name, type, properties{email, mobile}}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
 

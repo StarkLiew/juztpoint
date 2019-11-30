@@ -10,6 +10,7 @@ export const state = {
     user: null,
     access: false,
     terminal: null,
+    registered: false,
     store: null,
     //token: window.localStorage.getItem('token')
     token: VueCookies.get('JXPT'),
@@ -30,13 +31,15 @@ export const mutations = {
     },
 
     [types.DEREGISTER](state) {
-  
+
         state.access = false
         state.user = null
+        state.registered = false
         state.store = null
-        state.terminal = null
-        // state.token = null
+        state.terminal = null // state.token = null
         //window.localStorage.removeItem('token')
+        const expire = new Date() //expire now
+        VueCookies.set('JXPT', '', expire, true)
         VueCookies.remove('JXPT')
     },
 
@@ -51,10 +54,10 @@ export const mutations = {
     [types.SET_TOKEN](state, { token, expires_at, store, terminal }) {
         // state.token = token
         // window.localStorage.setItem('token', token)
-
-        const expire = new Date(expires_at)
+        state.registered = true
         state.store = store
         state.terminal = terminal
+        const expire = new Date(expires_at)
         VueCookies.set('JXPT', token, expire, true)
 
     }
@@ -65,7 +68,7 @@ export const mutations = {
  */
 export const actions = {
     saveToken({ commit }, payload) {
-    
+
         commit(types.SET_TOKEN, payload)
     },
 
@@ -104,7 +107,8 @@ export const actions = {
 export const getters = {
     user: state => state.user,
     check: state => state.access,
-    registered: state => VueCookies.get('JXPT') !== null,
+    // registered: state => VueCookies.get('JXPT') !== null,
+    registered: state => VueCookies.get('JXPT') ? true : false,
     token: state => VueCookies.get('JXPT'),
     terminal: state => state.terminal,
     store: state => state.store,

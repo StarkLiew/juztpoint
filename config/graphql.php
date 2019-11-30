@@ -107,7 +107,7 @@ return [
 			],
 			'mutation' => [
 				// 'example_mutation'  => ExampleMutation::class,
-				'newAccount' => App\GraphQL\Mutation\NewAccountMutation::class,
+				'newCustomer' => App\GraphQL\Mutation\NewCustomerMutation::class,
 				'newReceipt' => App\GraphQL\Mutation\NewReceiptMutation::class,
 				'newAppointment' => App\GraphQL\Mutation\NewAppointmentMutation::class,
 				'voidReceipt' => App\GraphQL\Mutation\VoidReceiptMutation::class,
