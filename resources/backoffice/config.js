@@ -50,8 +50,7 @@ export const api = Object.assign(new URL(apiUrl), {
     receipt: 'receipt',
 
     logout: {
-        url: 'auth/logout',
-        refresh: 'refresh'
+        url: 'auth/logout'
     },
 
     register: {

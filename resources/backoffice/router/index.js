@@ -17,7 +17,7 @@ router.beforeEach(async (to, from, next) => {
          await store.dispatch('auth/fetchUser')
        } catch (e) {}
      } 
-
+    console.log(to)
     let route = reroute(to)
     if (route) {
         next(route)
