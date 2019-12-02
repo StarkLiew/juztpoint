@@ -31,8 +31,10 @@ export const mutations = {
 
         if (index > -1) {
             Vue.set(state.items, index, item)
+
         } else {
-            state.items.push(item)
+           state.items.push(item)
+
         }
     },
     [types.REMOVE_ACCOUNT](state, { item }) {
@@ -62,7 +64,7 @@ export const actions = {
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
-            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, name, type, properties{mobile, email}}, total,per_page}}` } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{accounts(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{id, name, type, status, properties{mobile, email}}, total,per_page}}` } })
 
             if (noCommit) {
 

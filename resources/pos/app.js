@@ -147,6 +147,7 @@ export const app = new Vue({
     vuetify,
     render: h => h(App),
     async onIdle() {
+        
         await this.$store.dispatch('auth/logout')
         this.$toast.info('You are logged out.')
         this.$router.push({ name: 'login' })

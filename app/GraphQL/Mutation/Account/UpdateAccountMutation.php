@@ -44,6 +44,7 @@ class UpdateAccountMutation extends Mutation {
 	public function resolve($root, $args) {
 
 		$args['properties'] = json_decode($args['properties']);
+
 		$account = Account::find($args['id']);
 		if (!$account->update($args)) {
 			return null;

@@ -11,12 +11,18 @@ const router = new VueRouter({
     routes
 })
 
+
+
+
 router.beforeEach(async (to, from, next) => {
-    /* if (store.getters['auth/token'] && !store.getters['auth/check']) {
+    await store.restored
+    if (store.getters['auth/token'] && !store.getters['auth/registered']) {
        try {
-         await store.dispatch('auth/fetchUser')
+           // await store.dispatch('auth/register')
        } catch (e) {}
-     } */
+     } 
+
+
 
     let route = reroute(to)
     if (route) {
@@ -29,16 +35,16 @@ router.beforeEach(async (to, from, next) => {
 
 
 const rules = {
-    // guest: { fail: 'index', check: () => (!store.getters['auth/check']) },
-    auth: { fail: 'login', check: () => (store.getters['auth/registered']) },
+        
     guest: { fail: 'pin', check: () => (!store.getters['auth/registered'])},
-    pin: { fail: 'pin', check: () => (store.getters['auth/registered'] && store.getters['auth/check']) },
-    // pin: { fail: 'pin', check: () => (store.getters['auth/check']) }
+    auth: { fail: 'login', check: () => (store.getters['auth/registered']) },
+    pin: { fail: 'pin', check: () => (store.getters['auth/check'])},
 }
 
 function reroute(to) {
     let failRoute = false,
         checkResult = false
+ 
 
     to.meta.rules && to.meta.rules.forEach(rule => {
         let check = false
@@ -65,6 +71,7 @@ function reroute(to) {
     })
 
     if (!checkResult && failRoute) {
+
         return { name: failRoute }
     }
 

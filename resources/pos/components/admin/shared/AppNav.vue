@@ -95,8 +95,8 @@ export default {
 
         async logout() {
             await this.$store.dispatch('auth/logout')
+            this.$router.push({ name: 'pin' })
             this.$toast.info('You are logged out.')
-            this.$router.push({ name: 'login' })
         },
         async refresh() {
 

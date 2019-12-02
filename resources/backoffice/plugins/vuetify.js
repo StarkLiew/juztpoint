@@ -3,6 +3,7 @@ import Vuetify, { VSnackbar, VBtn, VIcon } from 'vuetify/lib'
 import VuetifyToast from 'vuetify-toast-snackbar'
 import VueCurrencyFilter from 'vue-currency-filter'
 import VueMoment from 'vue-moment'
+import VueTheMask from 'vue-the-mask'
 import moment from 'moment-timezone'
 
 
@@ -16,6 +17,8 @@ Vue.use(VueCurrencyFilter, {
     symbolPosition: 'front',
     symbolSpacing: true
 })
+
+Vue.use(VueTheMask)
 
 Vue.use(VueMoment, { moment })
 

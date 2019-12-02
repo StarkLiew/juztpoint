@@ -133,8 +133,10 @@ export default {
             }
             await this.$store.dispatch('auth/deregister')
             this.$router.push({ name: 'login' })
-
             this.logoutDialogShow = false
+   
+
+         
         },
 
         settings() {

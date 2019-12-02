@@ -9,8 +9,10 @@ Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
     storage: localforage,
+    asyncStorage: true,
     saveState: (key, state, storage) => Promise.resolve(storage.setItem(key, state)),
-    restoreState: (key, storage) => Promise.resolve(storage.getItem(key))
+    restoreState: (key, storage) => Promise.resolve(storage.getItem(key)),
+    
 });
 
 

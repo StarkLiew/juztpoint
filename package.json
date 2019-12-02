@@ -53,6 +53,7 @@
     "vue-qr": "^2.2.1",
     "vue-qrcode-reader": "^2.1.1",
     "vue-server-renderer": "^2.6.10",
+    "vue-the-mask": "^0.11.1",
     "vue-webble": "^0.1.0",
     "vuex-persist": "^2.1.0"
   }

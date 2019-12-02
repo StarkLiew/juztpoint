@@ -107,8 +107,7 @@ export const actions = {
 export const getters = {
     user: state => state.user,
     check: state => state.access,
-    // registered: state => VueCookies.get('JXPT') !== null,
-    registered: state => VueCookies.get('JXPT') ? true : false,
+    registered: state => state.registered,
     token: state => VueCookies.get('JXPT'),
     terminal: state => state.terminal,
     store: state => state.store,

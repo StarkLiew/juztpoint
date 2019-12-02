@@ -121,7 +121,7 @@ export default {
         this.initialize()
     },
     props: {
-        items: {},
+        items: {type: Array, default: []},
         title: { type: String, default: '' },
         headers: { type: Array, default: [] },
         sortBy: { type: String, default: '' },
@@ -152,6 +152,8 @@ export default {
             },
             deep: true,
         },
+
+
     },
     methods: {
         initialize() {
@@ -186,7 +188,8 @@ export default {
             this.saving = true
             if (this.$refs.form.validate()) {
                 await this.saveMethod(this.editedItem)
-                this.close()
+                if(this.items.length === 1) this.reset()
+                this.close() 
             }
             this.saving = false
         },

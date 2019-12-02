@@ -117,6 +117,7 @@ return [
 				'newUser' => App\GraphQL\Mutation\User\NewUserMutation::class,
 				'updateUser' => App\GraphQL\Mutation\User\UpdateUserMutation::class,
 				'trashUser' => App\GraphQL\Mutation\User\TrashUserMutation::class,
+				'assignPin' => App\GraphQL\Mutation\User\AssignPinMutation::class,
 
 				//ACCOUNT
 				'newAccount' => App\GraphQL\Mutation\Account\NewAccountMutation::class,

@@ -93,7 +93,7 @@ export const actions = {
             const { id, name, properties } = user
 
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
-       
+
             const mutation = `mutation users{
                                updateUser(
                                     id: ${id},
@@ -107,6 +107,18 @@ export const actions = {
             commit(types.ADD_USER, { user })
 
             return user
+        } catch (e) {
+
+            return e
+        }
+    },
+    async updatePin({ commit }, user) {
+        try {
+            const { id, pin } = user
+            const mutation = `mutation users{assignPin(id:${id}, pin:"${pin}"){id, name}}`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation }})
+            return data
+
         } catch (e) {
 
             return e
