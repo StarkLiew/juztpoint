@@ -102,7 +102,9 @@ export const actions = {
             if (type === 'terminal') fields = terminalFields
             if (type === 'company') fields = companyFields
 
-            const props = JSON.stringify(properties).replace(/"/g, '\\"')
+            const props = JSON.stringify(properties).replace(/"/g, '\\"').replace(/\\n/g, '\\\\n')
+
+       
 
             const mutation = `mutation settings{
                                 newSetting(
@@ -142,7 +144,8 @@ export const actions = {
             if (type === 'company') fields = companyFields
 
  
-            const props = JSON.stringify(properties).replace(/"/g, '\\"')
+            const props = JSON.stringify(properties).replace(/"/g, '\\"').replace(/\\n/g, '\\\\n')
+           console.log(props)
 
             const mutation = `mutation settings{
                                updateSetting(

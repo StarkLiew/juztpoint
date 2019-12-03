@@ -25,7 +25,7 @@
                         </v-row>
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
                         <v-text-field v-model="editedItem.sku" :rules="[v => !!v || 'SKU is required',]" required label="Stock Keeping Unit (SKU)"></v-text-field>
-                        <v-textarea clearable v-model="editedItem.note" clear-icon="cancel" label="Description"></v-textarea>
+                        <v-textarea clearable v-model="editedItem.note" clear-icon="mdi-close" label="Description"></v-textarea>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-select :loading="loading" :rules="[v => !!v || 'Category is required',]" required item-text="name" item-value="id" v-model="editedItem.cat_id" :items="categories" label="Category"></v-select>

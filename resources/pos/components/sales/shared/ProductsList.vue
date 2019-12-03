@@ -26,7 +26,7 @@
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
                                         <div class="caption text-wrap">
-                                            <v-icon>build</v-icon><br />Service
+                                            <v-icon>mdi-wrench</v-icon><br />Service
                                         </div>
                                     </v-overlay>
                                 </v-flex>
@@ -42,7 +42,7 @@
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
                                         <div class="caption text-wrap">
-                                            <v-icon>watch</v-icon><br />Product
+                                            <v-icon>mdi-watch</v-icon><br />Product
                                         </div>
                                     </v-overlay>
                                 </v-flex>
@@ -58,7 +58,7 @@
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
                                         <div class="caption text-wrap">
-                                            <v-icon>all_inbox</v-icon><br />Category
+                                            <v-icon>mdi-shape</v-icon><br />Category
                                         </div>
                                     </v-overlay>
                                 </v-flex>
@@ -102,7 +102,7 @@
                                 <v-flex shrink>
                                     <v-overlay absolute color="grey darken-3">
                                         <div class="caption text-wrap">
-                                            <v-icon>backspace</v-icon>
+                                            <v-icon>mdi-backspace</v-icon>
                                         </div>
                                     </v-overlay>
                                 </v-flex>

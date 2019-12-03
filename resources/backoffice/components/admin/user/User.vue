@@ -23,7 +23,7 @@
             </v-avatar>
         </template>
         <template v-slot:item.properties.backoffice="{item}">
-            <v-icon color="success" v-if="item.properties.backoffice === 1">check</v-icon>
+            <v-icon color="success" v-if="item.properties.backoffice === 1">mdi-check</v-icon>
         </template>
         <template v-slot:item.properties.role="{item}">
             <span class="caption">{{ item.properties.role === 'MGR' ? 'MANAGER' : 'CASHIER' }}</span>

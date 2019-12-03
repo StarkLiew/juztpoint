@@ -27,9 +27,6 @@ export default [
 
     ...applyRules(['auth', 'pin'], [
         { path: '/sales', name: 'sales', component: require('$pos/sales/SalesWrapper').default },
-        { path: '/trxn', name: 'trxn', component: require('$pos/trxn/TrxnWrapper').default },
-        { path: '/receipt', name: 'receipts', component: require('$pos/admin/receipt/ReceiptWrapper').default },
-
         {
             path: '/',
             component: require('$pos/admin/AdminWrapper').default,
@@ -49,6 +46,7 @@ export default [
 
             ]
         },
+        { path: '/receipts', name: 'receipts', component: require('$pos/admin/receipt/ReceiptWrapper').default },
     ]),
     { path: '*', redirect: { name: 'index' } }
 ]

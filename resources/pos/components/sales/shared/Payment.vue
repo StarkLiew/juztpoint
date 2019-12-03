@@ -3,7 +3,7 @@
         <v-container v-if="!paid">
             <v-toolbar>
                 <v-btn icon @click="back()">
-                    <v-icon>arrow_back</v-icon>
+                    <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
@@ -21,7 +21,7 @@
                         <v-divider></v-divider>
                         <v-list-item @click="editCash()" v-if="payementMethod.cash">
                             <v-list-item-icon>
-                                <v-icon>attach_money</v-icon>
+                                <v-icon>mdi-cash</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>Cash</v-list-item-title>
@@ -31,7 +31,7 @@
                         <v-divider></v-divider>
                         <v-list-item @click="editCard()" v-if="payementMethod.card">
                             <v-list-item-icon>
-                                <v-icon>credit_card</v-icon>
+                                <v-icon>mdi-credit-card</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>Card</v-list-item-title>
@@ -41,7 +41,7 @@
                         <v-divider></v-divider>
                         <v-list-item @click="editTransfer()" v-if="payementMethod.transfer">
                             <v-list-item-icon>
-                                <v-icon>account_balance</v-icon>
+                                <v-icon>mdi-bank-transfer</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>Transfer</v-list-item-title>
@@ -51,7 +51,7 @@
                         <v-divider></v-divider>
                         <v-list-item @click="editBoost()" v-if="payementMethod.boost">
                             <v-list-item-icon>
-                                <v-icon>account_balance_wallet</v-icon>
+                                <v-icon>mdi-wallet</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>Boost</v-list-item-title>
@@ -130,7 +130,7 @@
                             Received {{ parseFloat(this.cash.amount) + parseFloat(this.card.amount) + parseFloat(this.transfer.amount) + parseFloat(this.boost.amount) | currency}}
                         </v-list-item-content>
                         <v-btn dark large fab color="teal" @click="save()" :disabled="valid()">
-                            <v-icon>arrow_forward</v-icon>
+                            <v-icon>mdi-arrow-right</v-icon>
                         </v-btn>
                     </v-list-item>
                 </v-list>
@@ -181,16 +181,16 @@
                             Print
                         </v-list-item-content>
                         <v-btn @click="print()">
-                            <v-icon>print</v-icon>
+                            <v-icon>mdi-printer</v-icon>
                         </v-btn>
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-text-field label="Email" prepend-inner-icon="email"></v-text-field>
+                            <v-text-field label="Email" prepend-inner-icon="mdi-email"></v-text-field>
                         </v-list-item-content>
                         <v-btn>
-                            <v-icon>send</v-icon>
+                            <v-icon>mdi-send</v-icon>
                         </v-btn>
                     </v-list-item>
                 </v-list>

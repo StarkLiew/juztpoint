@@ -15,8 +15,8 @@
             </v-container>
         </template>
         <template v-slot:item.status="{item}">
-            <v-icon color="success" v-if="item.status === 'active'">check</v-icon>
-            <v-icon color="danger" v-if="item.status === 'inactive'">time</v-icon>
+            <v-icon color="success" v-if="item.status === 'active'">mdi-check</v-icon>
+            <v-icon color="danger" v-if="item.status === 'inactive'">mdi-close</v-icon>
         </template>
     </crud>
 </template>

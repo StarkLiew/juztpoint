@@ -27,7 +27,8 @@
 
         <title>{{ config('app.name') }}</title>
 
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
+        <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet"> -->
+
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
         <link href="{{ mix('/css/vue.css') }}" rel="stylesheet">
 
@@ -43,7 +44,7 @@
         <div id="app"></div>
 
         <script src="{{ mix('/pos/app.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+        <script src="/js/fingerprint2.min.js"></script>
         <script>
 
             if ('serviceWorker' in navigator && 'PushManager' in window) {

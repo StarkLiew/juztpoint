@@ -4,5 +4,6 @@
     "/pos/app.js": "/pos/app.js",
     "/css/app.css": "/css/app.css",
     "/receipt/app-client.js": "/receipt/app-client.js",
-    "/receipt/app-server.js": "/receipt/app-server.js"
+    "/receipt/app-server.js": "/receipt/app-server.js",
+    "/js/fingerprint2.min.js": "/js/fingerprint2.min.js"
 }

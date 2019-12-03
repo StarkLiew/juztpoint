@@ -462,7 +462,7 @@
 }
 
 .mdi-alpha-a::before {
-  content: "A";
+  content: "\41";
 }
 
 .mdi-alpha-a-box::before {
@@ -482,7 +482,7 @@
 }
 
 .mdi-alpha-b::before {
-  content: "B";
+  content: "\42";
 }
 
 .mdi-alpha-b-box::before {
@@ -502,7 +502,7 @@
 }
 
 .mdi-alpha-c::before {
-  content: "C";
+  content: "\43";
 }
 
 .mdi-alpha-c-box::before {
@@ -522,7 +522,7 @@
 }
 
 .mdi-alpha-d::before {
-  content: "D";
+  content: "\44";
 }
 
 .mdi-alpha-d-box::before {
@@ -542,7 +542,7 @@
 }
 
 .mdi-alpha-e::before {
-  content: "E";
+  content: "\45";
 }
 
 .mdi-alpha-e-box::before {
@@ -562,7 +562,7 @@
 }
 
 .mdi-alpha-f::before {
-  content: "F";
+  content: "\46";
 }
 
 .mdi-alpha-f-box::before {
@@ -582,7 +582,7 @@
 }
 
 .mdi-alpha-g::before {
-  content: "G";
+  content: "\47";
 }
 
 .mdi-alpha-g-box::before {
@@ -602,7 +602,7 @@
 }
 
 .mdi-alpha-h::before {
-  content: "H";
+  content: "\48";
 }
 
 .mdi-alpha-h-box::before {
@@ -622,7 +622,7 @@
 }
 
 .mdi-alpha-i::before {
-  content: "I";
+  content: "\49";
 }
 
 .mdi-alpha-i-box::before {
@@ -642,7 +642,7 @@
 }
 
 .mdi-alpha-j::before {
-  content: "J";
+  content: "\4A";
 }
 
 .mdi-alpha-j-box::before {
@@ -662,7 +662,7 @@
 }
 
 .mdi-alpha-k::before {
-  content: "K";
+  content: "\4B";
 }
 
 .mdi-alpha-k-box::before {
@@ -682,7 +682,7 @@
 }
 
 .mdi-alpha-l::before {
-  content: "L";
+  content: "\4C";
 }
 
 .mdi-alpha-l-box::before {
@@ -702,7 +702,7 @@
 }
 
 .mdi-alpha-m::before {
-  content: "M";
+  content: "\4D";
 }
 
 .mdi-alpha-m-box::before {
@@ -722,7 +722,7 @@
 }
 
 .mdi-alpha-n::before {
-  content: "N";
+  content: "\4E";
 }
 
 .mdi-alpha-n-box::before {
@@ -742,7 +742,7 @@
 }
 
 .mdi-alpha-o::before {
-  content: "O";
+  content: "\4F";
 }
 
 .mdi-alpha-o-box::before {
@@ -762,7 +762,7 @@
 }
 
 .mdi-alpha-p::before {
-  content: "P";
+  content: "\50";
 }
 
 .mdi-alpha-p-box::before {
@@ -782,7 +782,7 @@
 }
 
 .mdi-alpha-q::before {
-  content: "Q";
+  content: "\51";
 }
 
 .mdi-alpha-q-box::before {
@@ -802,7 +802,7 @@
 }
 
 .mdi-alpha-r::before {
-  content: "R";
+  content: "\52";
 }
 
 .mdi-alpha-r-box::before {
@@ -822,7 +822,7 @@
 }
 
 .mdi-alpha-s::before {
-  content: "S";
+  content: "\53";
 }
 
 .mdi-alpha-s-box::before {
@@ -842,7 +842,7 @@
 }
 
 .mdi-alpha-t::before {
-  content: "T";
+  content: "\54";
 }
 
 .mdi-alpha-t-box::before {
@@ -862,7 +862,7 @@
 }
 
 .mdi-alpha-u::before {
-  content: "U";
+  content: "\55";
 }
 
 .mdi-alpha-u-box::before {
@@ -882,7 +882,7 @@
 }
 
 .mdi-alpha-v::before {
-  content: "V";
+  content: "\56";
 }
 
 .mdi-alpha-v-box::before {
@@ -902,7 +902,7 @@
 }
 
 .mdi-alpha-w::before {
-  content: "W";
+  content: "\57";
 }
 
 .mdi-alpha-w-box::before {
@@ -922,7 +922,7 @@
 }
 
 .mdi-alpha-x::before {
-  content: "X";
+  content: "\58";
 }
 
 .mdi-alpha-x-box::before {
@@ -942,7 +942,7 @@
 }
 
 .mdi-alpha-y::before {
-  content: "Y";
+  content: "\59";
 }
 
 .mdi-alpha-y-box::before {
@@ -962,7 +962,7 @@
 }
 
 .mdi-alpha-z::before {
-  content: "Z";
+  content: "\5A";
 }
 
 .mdi-alpha-z-box::before {
@@ -10590,7 +10590,7 @@
 }
 
 .mdi-numeric-0::before {
-  content: "0";
+  content: "\30";
 }
 
 .mdi-numeric-0-box::before {
@@ -10618,7 +10618,7 @@
 }
 
 .mdi-numeric-1::before {
-  content: "1";
+  content: "\31";
 }
 
 .mdi-numeric-1-box::before {
@@ -10654,7 +10654,7 @@
 }
 
 .mdi-numeric-2::before {
-  content: "2";
+  content: "\32";
 }
 
 .mdi-numeric-2-box::before {
@@ -10682,7 +10682,7 @@
 }
 
 .mdi-numeric-3::before {
-  content: "3";
+  content: "\33";
 }
 
 .mdi-numeric-3-box::before {
@@ -10710,7 +10710,7 @@
 }
 
 .mdi-numeric-4::before {
-  content: "4";
+  content: "\34";
 }
 
 .mdi-numeric-4-box::before {
@@ -10738,7 +10738,7 @@
 }
 
 .mdi-numeric-5::before {
-  content: "5";
+  content: "\35";
 }
 
 .mdi-numeric-5-box::before {
@@ -10766,7 +10766,7 @@
 }
 
 .mdi-numeric-6::before {
-  content: "6";
+  content: "\36";
 }
 
 .mdi-numeric-6-box::before {
@@ -10794,7 +10794,7 @@
 }
 
 .mdi-numeric-7::before {
-  content: "7";
+  content: "\37";
 }
 
 .mdi-numeric-7-box::before {
@@ -10822,7 +10822,7 @@
 }
 
 .mdi-numeric-8::before {
-  content: "8";
+  content: "\38";
 }
 
 .mdi-numeric-8-box::before {
@@ -10850,7 +10850,7 @@
 }
 
 .mdi-numeric-9::before {
-  content: "9";
+  content: "\39";
 }
 
 .mdi-numeric-9-box::before {
@@ -16010,7 +16010,7 @@
 }
 
 .mdi-blank::before {
-  content: "\F68C";
+  content: "";
   visibility: hidden;
 }
 
@@ -19748,7 +19748,7 @@ video {
 .v-application code:before,
 .v-application kbd:after,
 .v-application kbd:before {
-  content: "\A0";
+  content: " ";
   letter-spacing: -1px;
 }
 

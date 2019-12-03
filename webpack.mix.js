@@ -18,9 +18,10 @@ mix.js('resources/pos/app.js', 'public/pos')
     .js('resources/backoffice/app.js', 'public/backoffice')
     .js('resources/receipt/app-client.js', 'public/receipt')
     .js('resources/receipt/app-server.js', 'public/receipt')
+    .copy('node_modules/fingerprintjs2/dist/fingerprint2.min.js', 'public/js')
     .sass('resources/styles/app.sass', 'public/css')
     .options({
-        extractVueStyles: 'public/css/vue.css',
+        extractVueStyles: 'public/css/vue.css'
     })
     .webpackConfig({
         resolve: {

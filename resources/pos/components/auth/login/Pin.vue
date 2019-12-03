@@ -10,10 +10,10 @@
                     <h3 class="subtitle-1" v-if="!shift">Shift is close</h3>
                 </v-layout>
                 <v-layout justify-center mb-5>
-                    <v-icon :color="val.length >= 1 ? 'red' : 'dark'">fiber_manual_record</v-icon>
-                    <v-icon :color="val.length >= 2 ? 'red' : 'dark'">fiber_manual_record</v-icon>
-                    <v-icon :color="val.length >= 3 ? 'red' : 'dark'">fiber_manual_record</v-icon>
-                    <v-icon :color="val.length >= 4 ? 'red' : 'dark'">fiber_manual_record</v-icon>
+                    <v-icon :color="val.length >= 1 ? 'red' : 'dark'">mdi-circle</v-icon>
+                    <v-icon :color="val.length >= 2 ? 'red' : 'dark'">mdi-circle</v-icon>
+                    <v-icon :color="val.length >= 3 ? 'red' : 'dark'">mdi-circle</v-icon>
+                    <v-icon :color="val.length >= 4 ? 'red' : 'dark'">mdi-circle</v-icon>
                 </v-layout>
                 <v-container fluid grid-list-sm>
                     <v-layout wrap>
@@ -50,7 +50,7 @@ import { mapGetters } from 'vuex'
 export default {
 
     data: () => ({
-        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'backspace', ],
+        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'mdi-close', '0', 'mdi-backspace', ],
         val: '',
         overlay: false,
         isShake: false,
@@ -70,12 +70,12 @@ export default {
     methods: {
         async touched(key) {
 
-            if (key == 'clear') {
+            if (key == 'mdi-close') {
                 this.val = ''
                 this.$emit('clear')
                 return
             }
-            if (key == 'backspace') {
+            if (key == 'mdi-backspace') {
                 this.val = this.val.slice(0, -(this.val.length - 1))
                 return
             }

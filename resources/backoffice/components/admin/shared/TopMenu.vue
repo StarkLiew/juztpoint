@@ -8,14 +8,14 @@
                 <template v-slot:badge>
                     <span v-if="messages > 0"></span>
                 </template>
-                <v-icon>notifications</v-icon>
+                <v-icon>mdi-bell</v-icon>
             </v-badge>
         </v-toolbar-title>
         <v-toolbar-title class="white--text" v-if="auth">
             <v-menu bottom left>
                 <template v-slot:activator="{ on }">
                     <v-btn dark icon v-on="on">
-                        <v-icon>perm_identity</v-icon>
+                        <v-icon>mdi-account-box</v-icon>
                     </v-btn>
                 </template>
                 <v-list>

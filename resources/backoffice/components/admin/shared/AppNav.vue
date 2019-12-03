@@ -4,14 +4,14 @@
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
-                        <v-icon>chevron_right</v-icon>
+                        <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                 </v-list-item-icon>
                 <v-list-item-content>
                 </v-list-item-content>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && !mini">
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
-                        <v-icon>chevron_left</v-icon>
+                        <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
                 </v-list-item-icon>
             </v-list-item>
@@ -101,34 +101,34 @@ export default {
 
         navigation() {
             const inventory = [
-                { title: 'Suppliers', icon: 'shopping_cart', to: { name: 'vendors' }, exact: true, disabled: false },
-                { title: 'Stock Card', icon: 'assignment', to: { name: 'stockcard' }, exact: true, disabled: true },
-                { title: 'Stock Take', icon: 'check_box', to: { name: 'stocktake' }, exact: true, disabled: true },
+                { title: 'Suppliers', icon: 'mdi-truck', to: { name: 'vendors' }, exact: true, disabled: false },
+                { title: 'Stock Card', icon: 'mdi-clipboard-text', to: { name: 'stockcard' }, exact: true, disabled: true },
+                { title: 'Stock Take', icon: 'mdi-format-list-checks', to: { name: 'stocktake' }, exact: true, disabled: true },
             ]
             const products = [
-                { title: 'Standard Product', icon: 'view_array', to: { name: 'products' }, exact: true, disabled: false },
-                { title: 'Variant Product', icon: 'view_array', to: { name: 'variants' }, exact: true, disabled: false },
-                { title: 'Composite Product', icon: 'view_array', to: { name: 'composites' }, exact: true, disabled: false },
+                { title: 'Standard Product', icon: 'mdi-package', to: { name: 'products' }, exact: true, disabled: false },
+                { title: 'Variant Product', icon: 'mdi-package', to: { name: 'variants' }, exact: true, disabled: false },
+                { title: 'Composite Product', icon: 'mdi-package', to: { name: 'composites' }, exact: true, disabled: false },
             ]
             const services = [
-                { title: 'Standard Service', icon: 'face', to: { name: 'services.standard' }, exact: true, disabled: false },
-                { title: 'Variant Service', icon: 'face', to: { name: 'services.variant' }, exact: true, disabled: false },
-                { title: 'Composite Service', icon: 'face', to: { name: 'services.composite' }, exact: true, disabled: false },
+                { title: 'Standard Service', icon: 'mdi-face', to: { name: 'services.standard' }, exact: true, disabled: false },
+                { title: 'Variant Service', icon: 'mdi-face', to: { name: 'services.variant' }, exact: true, disabled: false },
+                { title: 'Composite Service', icon: 'mdi-face', to: { name: 'services.composite' }, exact: true, disabled: false },
             ]
 
             this.items = [
                 [
-                    { title: 'Home', icon: 'store', to: { name: 'home' }, exact: true, disabled: false }
+                    { title: 'Home', icon: 'mdi-store', to: { name: 'home' }, exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Appointment', icon: 'calendar_today', to: { name: 'appointments' }, exact: true, disabled: true }
+                    { title: 'Appointment', icon: 'mdi-calendar-today', to: { name: 'appointments' }, exact: true, disabled: true }
                 ],
                 [
-                    { title: 'Transaction', icon: 'shopping_cart', to: { name: 'sales' }, exact: true, disabled: false }
+                    { title: 'Transaction', icon: 'mdi-receipt', to: { name: 'sales' }, exact: true, disabled: false }
                 ],
                 [{
                     title: 'Inventory',
-                    icon: 'assignment_turned_in',
+                    icon: 'mdi-package-down',
                     items: inventory,
                     action: () => {
                         this.$emit('status-changed', false)
@@ -136,11 +136,11 @@ export default {
                     exact: true, disabled: false
                 }],
                 [
-                    { title: 'Customers', icon: 'account_box', to: { name: 'customers' }, role: 'MGR', exact: true, disabled: false }
+                    { title: 'Customers', icon: 'mdi-account-box', to: { name: 'customers' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [{
                     title: 'Products',
-                    icon: 'view_array',
+                    icon: 'mdi-package',
                     items: products,
                     action: () => {
                         this.$emit('status-changed', false)
@@ -149,7 +149,7 @@ export default {
                 }],
                 [{
                     title: 'Services',
-                    icon: 'face',
+                    icon: 'mdi-face',
                     items: services,
                     action: () => {
                         this.$emit('status-changed', false)
@@ -157,13 +157,13 @@ export default {
                     exact: true, disabled: false
                 }],
                 [
-                    { title: 'Employees', icon: 'person', to: { name: 'users' }, role: 'MGR', exact: true, disabled: false }
+                    { title: 'Employees', icon: 'mdi-worker', to: { name: 'users' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Reports', icon: 'bar_chart', to: { name: 'reports' }, role: 'MGR', exact: true, disabled: false }
+                    { title: 'Reports', icon: 'mdi-file-chart', to: { name: 'reports' }, role: 'MGR', exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Setting', icon: 'settings', to: { name: 'setting' }, role: 'MGR', exact: true, disabled: false }
+                    { title: 'Setting', icon: 'mdi-settings', to: { name: 'setting' }, role: 'MGR', exact: true, disabled: false }
                 ],
             ]
         }

@@ -1,8 +1,8 @@
 <template>
     <v-form ref="form" @submit.prevent="submit" lazy-validation v-model="valid">
-        <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading" prepend-icon="person"></v-text-field>
-        <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="lock"></v-text-field>
-        <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerShow = !scannerShow)" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" :append-icon="scannerShow ? 'videocam_off' : 'camera'" prepend-icon="tv"></v-text-field>
+        <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading" prepend-icon="mdi-account"></v-text-field>
+        <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" prepend-icon="mdi-lock"></v-text-field>
+        <v-text-field :label="labels.device_id" v-model="form.device_id" @click:append="() => (scannerShow = !scannerShow)" :error-messages="errors.device_id" :disabled="loading" :rules="[rules.required('device_id')]" :append-icon="scannerShow ? 'mdi-camera-off' : 'mdi-qrcode-scan'" prepend-icon="mdi-qrcode"></v-text-field>
         <v-dialog v-model="scannerShow" fullscreen hide-overlay transition="dialog-bottom-transition">
             <v-card>
                 <v-toolbar dark color="primary">

@@ -4,7 +4,8 @@
         <v-toolbar-title class="white--text">{{ siteName }} of Sales</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-title class="white--text" v-if="auth">
-            <v-icon>perm_identity</v-icon>{{ auth.name }}
+            <v-icon>mdi-account-circle</v-icon>
+            <span class="white--text caption">{{ auth.name }}</span>
         </v-toolbar-title>
     </v-app-bar>
 </template>

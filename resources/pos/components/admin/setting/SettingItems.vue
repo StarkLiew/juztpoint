@@ -37,7 +37,7 @@
             <v-divider inset></v-divider>
             <v-list-item>
                 <v-list-item-avatar>
-                    <v-icon>phonelink_off</v-icon>
+                    <v-icon>mdi-cellphone-link</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
                     <v-list-item-title>Exit Terminal</v-list-item-title>
@@ -47,7 +47,7 @@
                     <v-dialog v-model="logoutDialogShow" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                         <template v-slot:activator="{ on }">
                             <v-btn dark v-on="on">
-                                <v-icon color="red lighten-1">exit_to_app</v-icon>
+                                <v-icon color="red lighten-1">mdi-exit-to-app</v-icon>
                             </v-btn>
                         </template>
                         <v-card tile>
@@ -55,7 +55,7 @@
                                 <v-toolbar-title>Confirm to exit terminal?</v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-btn @click="logoutDialogShow=false">
-                                    <v-icon>close</v-icon>
+                                    <v-icon>mdi-close</v-icon>
                                 </v-btn>
                             </v-toolbar>
                             <v-card-text class="text-center">
@@ -141,15 +141,15 @@ export default {
 
         settings() {
             this.items = [
-                { icon: 'wifi_off', iconClass: 'grey lighten-1 white--text', title: 'Offline', subtitle: 'Allow receive cash as payment', input: { type: 'switch', model: this.offline, change: this.setOffline } },
-                { icon: 'refresh', iconClass: 'primary lighten-1 white--text', title: 'Sync', subtitle: 'Sync to Backoffice', input: { type: 'button', click: this.refresh } },
+                { icon: 'mdi-wifi-off', iconClass: 'grey lighten-1 white--text', title: 'Offline', subtitle: 'Allow receive cash as payment', input: { type: 'switch', model: this.offline, change: this.setOffline } },
+                { icon: 'mdi-refresh', iconClass: 'primary lighten-1 white--text', title: 'Sync', subtitle: 'Sync to Backoffice', input: { type: 'button', click: this.refresh } },
             ]
 
             this.payments = [
-                { icon: 'attach_money', iconClass: 'grey lighten-1 white--text', title: 'Cash', subtitle: 'Allow receive debit or credit card as payment', input: { type: 'switch', model: this.payment_method.cash, change: this.setCash } },
-                { icon: 'credit_card', iconClass: 'grey lighten-1 white--text', title: 'Debit or Credit Card', subtitle: 'Allow payment with Debit/Credit card transaction', input: { type: 'switch', model: this.payment_method.card, change: this.setCard } },
-                { icon: 'account_balance', iconClass: 'grey lighten-1 white--text', title: 'Transfer', subtitle: 'Allow payment via IBG/GIRO Transfer', input: { type: 'switch', model: this.payment_method.transfer, change: this.setTransfer } },
-                { icon: 'account_balance_wallet', iconClass: 'grey lighten-1 white--text', title: 'Boost', subtitle: 'Allow use Boost e-Wallet as payment', input: { type: 'switch', model: this.payment_method.boost, change: this.setBoost } },
+                { icon: 'mdi-currency-usd', iconClass: 'grey lighten-1 white--text', title: 'Cash', subtitle: 'Allow receive debit or credit card as payment', input: { type: 'switch', model: this.payment_method.cash, change: this.setCash } },
+                { icon: 'mdi-credit-card', iconClass: 'grey lighten-1 white--text', title: 'Debit or Credit Card', subtitle: 'Allow payment with Debit/Credit card transaction', input: { type: 'switch', model: this.payment_method.card, change: this.setCard } },
+                { icon: 'mdi-bank-transfer', iconClass: 'grey lighten-1 white--text', title: 'Transfer', subtitle: 'Allow payment via IBG/GIRO Transfer', input: { type: 'switch', model: this.payment_method.transfer, change: this.setTransfer } },
+                { icon: 'mdi-wallet', iconClass: 'grey lighten-1 white--text', title: 'Boost', subtitle: 'Allow use Boost e-Wallet as payment', input: { type: 'switch', model: this.payment_method.boost, change: this.setBoost } },
 
 
             ]

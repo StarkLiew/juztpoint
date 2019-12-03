@@ -5,7 +5,7 @@
          
                 <v-flex xs8 sm3>
                     <v-toolbar flat>
-                        <v-text-field class="headline mt-6 ml-2 mr-2 input-right" append-icon="clear" @click:append="val = '0'" v-model="val" :label="label" dense readonly></v-text-field>
+                        <v-text-field class="headline mt-6 ml-2 mr-2 input-right" append-icon="mdi-close" @click:append="val = '0'" v-model="val" :label="label" dense readonly></v-text-field>
                     </v-toolbar>
                     <v-container fluid grid-list-sm>
                         <v-layout wrap>
@@ -39,7 +39,7 @@ export default {
         tab: 'tab-1',
         val: '0',
         showDialog: false,
-        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'done', ],
+        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'mdi-close', '0', 'mdi-check', ],
     }),
     mounted() {
         this.showDialog = this.show
@@ -57,13 +57,13 @@ export default {
     methods: {
         touched(key) {
 
-            if (key == 'clear') {
+            if (key == 'mdi-close') {
                 this.val = '0'
                 //this.$emit('clear')
                 this.$emit('done')
                 return
             }
-            if (key == 'done') {
+            if (key == 'mdi-check') {
                 this.$emit('change', this.val)
                 this.val = '0'
                 this.$emit('done')

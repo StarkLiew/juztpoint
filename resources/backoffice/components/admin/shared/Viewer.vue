@@ -11,7 +11,7 @@
         <template v-slot:group.header="{ group, groupedBy, items, headers, toggle }">
             <td :colspan="headers.length" class="text-start">
                 <v-btn fab icon @click="toggle">
-                    <v-icon>remove</v-icon>
+                    <v-icon>mdi-minus</v-icon>
                 </v-btn>
                 {{ groupBy }} - {{ groupText(items) }}
             </td>
@@ -25,7 +25,7 @@
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
                 <v-btn color="primary" dark @click="$emit('closed')" :disabled="loading">
-                    <v-icon>arrow_back</v-icon>
+                    <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -33,7 +33,7 @@
                 <v-menu>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
-                            <v-icon>arrow_downward</v-icon>
+                            <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
                     </template>
                     <v-list>
@@ -58,7 +58,7 @@
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading">
-                            <v-icon>filter_list</v-icon>
+                            <v-icon>mdi-filter</v-icon>
                         </v-btn>
                     </template>
                     <v-form ref="form" lazy-validation>
@@ -82,7 +82,7 @@
                             <v-card-text>
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="filter.dates" transition="scale-transition" offset-y min-width="290px">
                                     <template v-slot:activator="{ on }">
-                                        <v-text-field class="mt-5 ml-2 mr-2" v-model="dateRangeText" label="Date range" prepend-icon="event" readonly v-on="on"></v-text-field>
+                                        <v-text-field class="mt-5 ml-2 mr-2" v-model="dateRangeText" label="Date range" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
                                     </template>
                                     <v-date-picker v-model="filter.dates" no-title range scrollable></v-date-picker>
                                     <v-spacer></v-spacer>
@@ -90,16 +90,16 @@
                                     <v-btn text color="primary" @click="filterData">OK</v-btn>
                                     </v-date-picker>
                                 </v-menu>
-                                <v-select v-model="filter.store" :items="stores" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="clear" label="Store"></v-select>
-                                <v-select v-model="filter.terminal" :items="terminals" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="clear" label="Terminal"></v-select>
-                                <v-select v-model="filter.user" :items="users" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="clear" label="Employee"></v-select>
+                                <v-select v-model="filter.store" :items="stores" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="mdi-close" label="Store"></v-select>
+                                <v-select v-model="filter.terminal" :items="terminals" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="mdi-close" label="Terminal"></v-select>
+                                <v-select v-model="filter.user" :items="users" item-text="name" item-value="id" :loading="filling" class="mt-5 ml-2 mr-2" clearable clear-icon="mdi-close" label="Employee"></v-select>
                             </v-card-text>
                         </v-card>
                     </v-form>
                 </v-dialog>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
-                    <v-icon>refresh</v-icon>
+                    <v-icon>mdi-refresh</v-icon>
                 </v-btn>
                 <div class="flex-grow-1"></div>
                 <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>

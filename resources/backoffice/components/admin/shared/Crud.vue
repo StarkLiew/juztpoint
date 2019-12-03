@@ -4,7 +4,7 @@
         <template v-slot:group.header="{ group, groupedBy, items, headers, toggle }">
             <td :colspan="headers.length" class="text-start">
                 <v-btn fab icon @click="toggle">
-                    <v-icon>remove</v-icon>
+                    <v-icon>mdi-minus</v-icon>
                 </v-btn>
                 {{ groupBy }} - {{ groupText(items) }}
             </td>
@@ -19,18 +19,18 @@
             <v-toolbar flat dark color="primary">
                 <slot name="filter" :options="mutateOptions" :refresh="reset"></slot>
                 <v-btn color="primary" class="mb-2" @click="filter" :disabled="loading">
-                    <v-icon>search</v-icon>
+                    <v-icon>mdi-magnify</v-icon>
                 </v-btn>
                 <v-text-field type="search" class="mt-5 ml-2 mr-2" v-model="search" name="search" label="Search ..." :disabled="loading" :clearable="true" @click:clear="reset" :clear-icon="'remove'"></v-text-field>
                 <v-btn color="primary" class="mb-2" @click="reset" :disabled="loading">
-                    <v-icon>refresh</v-icon>
+                    <v-icon>mdi-refresh</v-icon>
                 </v-btn>
                 <div class="flex-grow-1"></div>
-                <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="clear" :items="groups" label="Group By"></v-select>
+                <v-select item-text="name" item-value="value" v-if="!!groups" :loading="loading" class="mt-5 ml-2 mr-2" v-model="groupBy" clearable clear-icon="mdi-close" :items="groups" label="Group By"></v-select>
                 <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!hideAdd">
-                            <v-icon>add</v-icon>
+                            <v-icon>mdi-plus</v-icon>
                         </v-btn>
                     </template>
                     <v-form ref="form" v-model="valid" lazy-validation>
@@ -60,7 +60,7 @@
                 <v-menu>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
-                            <v-icon>arrow_downward</v-icon>
+                            <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
                     </template>
                     <v-list>
@@ -84,10 +84,10 @@
         </template>
         <template v-slot:item.action="{ item, header }">
             <v-icon small class="mr-2" @click="editItem(item)">
-                edit
+                mdi-pencil
             </v-icon>
             <v-icon small @click="deleteItem(item)" v-if="!header.hideTrash || item[header.hideTrash]">
-                delete
+                mdi-delete
             </v-icon>
         </template>
         <template v-slot:no-data>

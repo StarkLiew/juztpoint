@@ -3,27 +3,27 @@
         <v-menu transition="slide-x-transition" bottom right>
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on">
-                    <v-icon>more_vert</v-icon>
+                    <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
             </template>
             <v-list>
                 <v-list-item @click="resetDialog = true">
                     <v-list-item-icon>
-                        <v-icon>add</v-icon>
+                        <v-icon>mdi-plus</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>New Sale</v-list-item-content>
                 </v-list-item>
                 <v-list-item to="{name: 'pos'}">
                     <v-list-item-icon>
-                        <v-icon>close</v-icon>
+                        <v-icon>mdi-close</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>Exit</v-list-item-content>
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-text-field hide-details v-model="searchText" prepend-icon="search" @change="search()" single-line></v-text-field>
+        <v-text-field hide-details v-model="searchText" prepend-icon="mdi-magnify" @change="search()" single-line></v-text-field>
         <span>
-            <v-icon>perm_identity</v-icon>{{ auth ? auth.name : ''}}
+            <v-icon>mdi-account</v-icon><span class="caption">{{ auth ? auth.name : ''}}</span>
         </span>
         <v-spacer></v-spacer>
         <v-dialog v-model="resetDialog" persistent max-width="290">

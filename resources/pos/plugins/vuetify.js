@@ -32,7 +32,7 @@ Vue.use(VuetifyToast)
 
 export default new Vuetify({
     theme: {
-
+   
         dark: true,
 
     },

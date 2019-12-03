@@ -4,7 +4,7 @@
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
-                        <v-icon>chevron_right</v-icon>
+                        <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                 </v-list-item-icon>
                 <v-list-item-content>
@@ -14,7 +14,7 @@
                 </v-list-item-content>
                 <v-list-item-icon>
                     <v-btn small icon @click.native.stop="navToggle" class="mx-0">
-                        <v-icon>chevron_left</v-icon>
+                        <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
                 </v-list-item-icon>
             </v-list-item>
@@ -121,19 +121,19 @@ export default {
         navigation() {
             this.items = [
                 [
-                    { title: 'Sales', icon: 'shopping_cart', to: { name: 'sales' }, exact: true }
+                    { title: 'Sales', icon: 'mdi-cart', to: { name: 'sales' }, exact: true }
                 ],
                 [
-                    { title: 'Receipts', icon: 'receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
+                    { title: 'Receipts', icon: 'mdi-receipt', to: { name: 'receipts' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Open/Close Shift', icon: 'store', to: { name: 'shift' }, role: 'MGR', exact: true }
+                    { title: 'Open/Close Shift', icon: 'mdi-store', to: { name: 'shift' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Shift Report', icon: 'notes', to: { name: 'report' }, role: 'MGR', exact: true }
+                    { title: 'Shift Report', icon: 'mdi-file-chart', to: { name: 'report' }, role: 'MGR', exact: true }
                 ],
                 [
-                    { title: 'Settings', icon: 'settings', to: { name: 'settings' }, role: 'MGR', exact: true }
+                    { title: 'Settings', icon: 'mdi-settings', to: { name: 'settings' }, role: 'MGR', exact: true }
                 ],
                 [
                     //{ title: 'Profile', icon: 'person', to: {name: 'profile'}, exact: true }
@@ -146,7 +146,7 @@ export default {
                     // { title: 'Refresh', icon: 'refresh', action: this.refresh, role:'MGR' }
                 ],
                 [
-                    { title: 'Logout', icon: 'power_settings_new', action: this.logout }
+                    { title: 'Logout', icon: 'mdi-logout', action: this.logout }
                 ]
             ]
         }

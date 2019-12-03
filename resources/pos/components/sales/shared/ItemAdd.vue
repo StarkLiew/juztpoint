@@ -5,7 +5,7 @@
                 <v-form ref="form" v-model="valid" :lazy-validation="lazy">
                     <v-toolbar flat dark color="primary">
                         <v-btn icon dark @click="cancel()">
-                            <v-icon>close</v-icon>
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
                         <v-toolbar-title>{{item.name}}</v-toolbar-title>
                         <v-spacer></v-spacer>
@@ -15,13 +15,13 @@
                     </v-toolbar>
                     <v-toolbar flat>
                         <v-btn color="success" large dark @click="inc(1, 'qty')">
-                            <v-icon>add</v-icon>
+                            <v-icon>mdi-plus</v-icon>
                         </v-btn>
                         <v-spacer></v-spacer>
                         <v-toolbar-title @click="showKeyboard = true; inputLabel = 'Quantity'" class="display-1">{{ item.qty }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-btn color="success" large dark @click="inc(-1, 'qty')">
-                            <v-icon>remove</v-icon>
+                            <v-icon>mdi-minus</v-icon>
                         </v-btn>
                     </v-toolbar>
                     <v-toolbar v-if="item.variants" v-for="(variant, vindex) in item.variants" :key="vindex">
@@ -30,7 +30,7 @@
                     <v-toolbar flat>
                         <v-spacer></v-spacer>
                         <v-flex class="subheader">
-                            <v-icon>money</v-icon>Price
+                            <v-icon>mdi-currency-usd</v-icon>Price
                         </v-flex>
                         <v-flex class="display-1" @click="showKeyboard = true; ; inputLabel = 'Price'">
                             {{item.properties.price | currency({fractionCount: 2})}}

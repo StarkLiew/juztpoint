@@ -2,7 +2,7 @@
     <v-card>
         <v-toolbar flat dark color="primary">
             <v-btn icon dark @click="cancel()">
-                <v-icon>close</v-icon>
+                <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-toolbar-title>{{item.name}}</v-toolbar-title>
@@ -13,13 +13,13 @@
         </v-toolbar>
         <v-toolbar flat>
             <v-btn color="success" large dark @click="inc(1, 'qty')">
-                <v-icon>add</v-icon>
+                <v-icon>mdi-plus</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-toolbar-title class="display-1">{{ qty }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn color="success" large dark @click="inc(-1, 'qty')">
-                <v-icon>remove</v-icon>
+                <v-icon>mdi-minus</v-icon>
             </v-btn>
         </v-toolbar>
     </v-card>

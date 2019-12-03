@@ -30,7 +30,7 @@ export default {
         lazy: false,
         tab: 'tab-1',
         val: '0',
-        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'clear', '0', 'done', ],
+        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'mdi-close', '0', 'mdi-check', ],
     }),
     mounted() {
 
@@ -42,12 +42,12 @@ export default {
     methods: {
         touched(key) {
 
-            if (key == 'clear') {
+            if (key == 'mdi-close') {
                 this.val = '0'
                 this.$emit('clear')
                 return
             }
-            if (key == 'done') {
+            if (key == 'mdi-check') {
                 this.val = '0'
                 this.$emit('done')
                 return

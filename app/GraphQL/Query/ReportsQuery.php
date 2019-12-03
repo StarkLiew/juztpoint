@@ -181,4 +181,15 @@ class ReportsQuery extends Query {
 
 	}
 
+	public function sales_six($args, Closure $getSelectFields) {
+
+		$results = Document::select(DB::raw('YEAR(`date`) AS year, MONTH(`date`) AS month, SUM(`charge`) AS total_amount'))->where('date', '>', DB::raw('DATE_SUB(now(), INTERVAL 12 MONTH)'))
+			->groupBy(DB::raw('YEAR(`date`)'))
+			->groupBy(DB::raw('MONTH(`date`)'))
+			->paginate();
+
+		return ['summary' => ['count' => 0, 'sum' => 0], 'data' => $results];
+
+	}
+
 }

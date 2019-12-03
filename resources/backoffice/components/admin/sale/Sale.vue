@@ -3,24 +3,24 @@
         <viewer :title="selected.title" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false">
             <template v-slot:item.action="{item}">
                 <v-icon class="mr-2" @click="print(item)" color="blue darken-1">
-                    print
+                    mdi-printer
                 </v-icon>
                 <v-dialog v-model="sendDialog" persistent max-width="600px">
                     <template v-slot:activator="{ on }">
                         <v-btn icon dark v-on="on">
                             <v-icon @click="" color="green darken-1">
-                                mail
+                                mdi-email
                             </v-icon>
                         </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
                             <span class="headline">
-                                <v-icon color="green darken-1">mail</v-icon>Send Receipt
+                                <v-icon color="green darken-1">mdi-email</v-icon>Send Receipt
                             </span>
                             <v-spacer></v-spacer>
                             <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>close</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-card-title>
                         <v-card-text>
@@ -47,18 +47,18 @@
                     <template v-slot:activator="{ on }">
                         <v-btn icon dark v-on="on" :disabled="item.status === 'void'" style="display:none">
                             <v-icon @click="" color="orange darken-1">
-                                money_off
+                                mdi-currency-usd-off
                             </v-icon>
                         </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
                             <span class="headline">
-                                <v-icon color="orange darken-1">money_off</v-icon>Refund Receipt
+                                <v-icon color="orange darken-1">mdi-currency-usd-off</v-icon>Refund Receipt
                             </span>
                             <v-spacer></v-spacer>
                             <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>close</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-card-title>
                         <v-card-text>
@@ -74,18 +74,18 @@
                     <template v-slot:activator="{ on }">
                         <v-btn icon dark v-on="on" @click="selectItem(item)" :disabled="item.status === 'void'">
                             <v-icon @click="" color="red darken-1">
-                                cancel
+                                mdi-cancel
                             </v-icon>
                         </v-btn>
                     </template>
                     <v-card>
                         <v-card-title>
                             <span class="headline">
-                                <v-icon color="red darken-1">cancel</v-icon>Void Receipt {{ selectedItem ? selectedItem.reference : '' }}
+                                <v-icon color="red darken-1">mdi-cancel</v-icon>Void Receipt {{ selectedItem ? selectedItem.reference : '' }}
                             </span>
                             <v-spacer></v-spacer>
                             <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>close</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-card-title>
                         <v-card-text>

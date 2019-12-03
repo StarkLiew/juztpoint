@@ -3,7 +3,7 @@
         <v-text-field :label="labels.name" v-model="form.name" :error-messages="errors.name" :rules="[rules.required('name')]" :disabled="loading"></v-text-field>
         <v-text-field :label="labels.company" v-model="form.companyname" :error-messages="errors.companyname" :rules="[rules.required('companyname')]" :disabled="loading"></v-text-field>
         <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading"></v-text-field>
-        <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'visibility_off' : 'visibility'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" hint="At least 6 characters"></v-text-field>
+        <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" hint="At least 6 characters"></v-text-field>
         <v-text-field :label="labels.password_confirmation" v-model="form.password_confirmation" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password_confirmation" :disabled="loading" :rules="[rules.required('password_confirmation')]"></v-text-field>
         <v-layout row class="mt-4 mx-0">
             <v-spacer></v-spacer>

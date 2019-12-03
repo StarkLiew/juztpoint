@@ -31,7 +31,7 @@
                         <v-switch :true-value="1" :false-value="0" v-model="editedItem.allow_assistant" inset :label="`Allow Share Commission`"></v-switch>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
-                        <v-textarea clearable v-model="editedItem.note" clear-icon="cancel" label="Description"></v-textarea>
+                        <v-textarea clearable v-model="editedItem.note" clear-icon="mdi-close" label="Description"></v-textarea>
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Price from"></v-text-field>
                         <v-text-field v-if="editedItem.stockable" prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>

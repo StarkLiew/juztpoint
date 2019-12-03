@@ -5,7 +5,7 @@
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
-                        <v-textarea clearable v-model="editedItem.properties.address" clear-icon="cancel" label="Address"></v-textarea>
+                        <v-textarea clearable v-model="editedItem.properties.address" clear-icon="mdi-close" label="Address"></v-textarea>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.description" label="Desciption"></v-text-field>

@@ -101,17 +101,17 @@
             <v-bottom-navigation horizontal>
                 <v-btn value="recent" @click="print()">
                     <span>Reprint</span>
-                    <v-icon>print</v-icon>
+                    <v-icon>mdi-printer</v-icon>
                 </v-btn>
                 <v-btn value="favorites">
                     <span>Resend</span>
-                    <v-icon>email</v-icon>
+                    <v-icon>mdi-email</v-icon>
                 </v-btn>
                 <v-dialog v-model="refundDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                     <template v-slot:activator="{ on }">
                         <v-btn dark v-on="on" :disabled="refundDisabled">
                             <span>Refund</span>
-                            <v-icon>money_off</v-icon>
+                            <v-icon>mdi-currency-usd-off</v-icon>
                         </v-btn>
                     </template>
                     <v-card tile>
@@ -119,7 +119,7 @@
                             <v-toolbar-title>Confirm refund to customer?</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn @click="refundDialog=false">
-                                <v-icon>close</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar>
                         <v-card-text class="text-center">
@@ -134,7 +134,7 @@
                     <template v-slot:activator="{ on }">
                         <v-btn dark v-on="on">
                             <span>Void</span>
-                            <v-icon>cancel</v-icon>
+                            <v-icon>mdi-close-circle</v-icon>
                         </v-btn>
                     </template>
                     <v-card tile>
@@ -142,7 +142,7 @@
                             <v-toolbar-title>Confirm to void this receipt?</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn @click="voidDialog=false">
-                                <v-icon>close</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar>
                         <v-card-text class="text-center">

@@ -3,13 +3,13 @@
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
                 <v-btn icon to="{name: 'pos'}">
-                    <v-icon>close</v-icon>
+                    <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-toolbar-title class="white--text">Receipts</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon>
-                    <v-icon>search</v-icon>
+                    <v-icon>mdi-magnify</v-icon>
                 </v-btn>
    
             </v-toolbar>

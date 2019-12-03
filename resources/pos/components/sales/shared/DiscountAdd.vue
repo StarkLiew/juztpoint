@@ -2,7 +2,7 @@
     <v-card>
         <v-toolbar flat dark color="primary">
             <v-btn icon dark @click="cancel()">
-                <v-icon>close</v-icon>
+                <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <span>Discount</span>
@@ -15,7 +15,7 @@
         <v-toolbar flat>
             <v-spacer></v-spacer>
             <v-flex class="subheader">
-                <v-icon>label</v-icon>Discount
+                <v-icon>mdi-label</v-icon>Discount
             </v-flex>
             <v-flex class="display-1" @click="showKeyboard = true">
                 {{discountRate | currency({fractionCount: decimal})}}

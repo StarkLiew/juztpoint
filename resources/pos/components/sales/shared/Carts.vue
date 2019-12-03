@@ -3,31 +3,31 @@
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
                 <v-btn icon v-if="show" @click="show = false">
-                    <v-icon>close</v-icon>
+                    <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                        <v-icon :color="offline ? 'grey' : 'green'" dark v-on="on">{{ offline ? 'wifi_off' : 'wifi'}}</v-icon>
+                        <v-icon :color="offline ? 'grey' : 'green'" dark v-on="on">{{ offline ? 'mdi-wifi-off' : 'mdi-wifi'}}</v-icon>
                     </template>
-                    <span>{{ offline ? 'Offline Mode' : 'Online Mode'}}</span>
+                    <span class="white--text caption">{{ offline ? 'Offline Mode' : 'Online Mode'}}</span>
                 </v-tooltip>
                 <v-spacer></v-spacer>
                 <v-toolbar-title class="white--text">{{count}}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn icon @click="enableRemoveItem()">
-                    <v-icon>delete</v-icon>
+                    <v-icon>mdi-delete-forever</v-icon>
                 </v-btn>
             </v-toolbar>
             <v-list-item two-line>
                 <v-btn icon @click="customerToggle()">
-                    <v-icon>person_add</v-icon>
+                    <v-icon>mdi-account-plus</v-icon>
                 </v-btn>
                 <v-list-item-content>
                     <v-list-item-title v-if="!customer">Add Customer</v-list-item-title>
                     <v-list-item-title v-if="customer">{{ customer.name }}</v-list-item-title>
                 </v-list-item-content>
                 <v-btn icon @click="removeCustomer()">
-                    <v-icon>remove</v-icon>
+                    <v-icon>mdi-account-remove</v-icon>
                 </v-btn>
             </v-list-item>
             <v-divider></v-divider>
@@ -78,7 +78,7 @@
                 </v-list-item-content>
                 <v-btn icon>{{item.amount | currency}}</v-btn>
                 <v-btn icon v-if="allowRemoveItem" @click="removeItem(index)">
-                    <v-icon>remove</v-icon>
+                    <v-icon>mdi-minus</v-icon>
                 </v-btn>
             </v-list-item>
             <v-divider></v-divider>

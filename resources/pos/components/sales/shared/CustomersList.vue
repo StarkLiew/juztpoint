@@ -3,7 +3,7 @@
         <v-card class="mx-auto" style="height:90vh;">
             <v-toolbar flat dark color="primary">
                 <v-btn icon dark @click="close()">
-                    <v-icon>close</v-icon>
+                    <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn icon dark text @click="showAdd = true">
@@ -16,7 +16,7 @@
                     <v-list-item-group v-model="customer" color="primary">
                         <v-list-item v-for="(customer, i) in mapCustomers(a)" :key="i" @click="selected(customer)">
                             <v-list-item-icon>
-                                <v-icon v-text="'people'"></v-icon>
+                                <v-icon>mdi-account</v-icon>
                             </v-list-item-icon>
                             <v-list-item-content>
                                 <v-list-item-title>{{ customer.name }}</v-list-item-title>
