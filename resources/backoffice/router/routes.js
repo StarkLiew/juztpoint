@@ -37,6 +37,14 @@ export default [
                 ]
             },
             {
+                path: '/appointments',
+                component: require('$backoffice/admin/appointment/AppointmentWrapper').default,
+                children: [
+                    { path: '', name: 'appointments', component: require('$backoffice/admin/appointment/Appointment').default },
+
+                ]
+            },
+            {
                 path: '/sales',
                 component: require('$backoffice/admin/sale/SaleWrapper').default,
                 children: [
@@ -57,6 +65,14 @@ export default [
                 component: require('$backoffice/admin/vendor/VendorWrapper').default,
                 children: [
                     { path: '', name: 'vendors', component: require('$backoffice/admin/vendor/Vendor').default },
+
+                ]
+            },
+            {
+                path: '/purchases',
+                component: require('$backoffice/admin/purchase/PurchaseWrapper').default,
+                children: [
+                    { path: '', name: 'purchases', component: require('$backoffice/admin/purchase/Purchase').default },
 
                 ]
             },

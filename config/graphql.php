@@ -129,6 +129,12 @@ return [
 				'updateProduct' => App\GraphQL\Mutation\Product\UpdateProductMutation::class,
 				'trashProduct' => App\GraphQL\Mutation\Product\TrashProductMutation::class,
 
+				//DOCUMENT
+				'newDocument' => App\GraphQL\Mutation\Document\NewDocumentMutation::class,
+				'updateDocument' => App\GraphQL\Mutation\Document\UpdateDocumentMutation::class,
+				'updateDocumentStatus' => App\GraphQL\Mutation\Document\UpdateDocumentStatusMutation::class,
+				'trashDocument' => App\GraphQL\Mutation\Document\TrashDocumentMutation::class,
+
 				//SETTING
 				'newSetting' => App\GraphQL\Mutation\Setting\NewSettingMutation::class,
 				'updateSetting' => App\GraphQL\Mutation\Setting\UpdateSettingMutation::class,

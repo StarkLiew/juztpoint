@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <viewer :title="selected.title" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false">
+        <viewer :title="selected.title" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true">
             <template v-slot:item.action="{item}">
                 <v-icon class="mr-2" @click="print(item)" color="blue darken-1">
                     mdi-printer

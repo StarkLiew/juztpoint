@@ -4,9 +4,27 @@ const { reactiveProp } = mixins
 export default {
     extends: Bar,
     mixins: [reactiveProp],
-    props: ['options'],
+    data: () => ({
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                labels: {
+                    fontColor: 'white'
+                }
+            }
+        }
+    }),
+    watch: {
+        chartData(val) {
+
+            this.chartData = val
+            this.renderChart(val, this.options)
+        }
+    },
     mounted() {
-        this.renderChart(this.chartdata, this.options)
+
+        this.renderChart(this.chartData, this.options)
     }
 }
 /* data: () => ({

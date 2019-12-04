@@ -2,17 +2,17 @@
     <v-container>
         <v-row>
             <v-col col="6" lg="6" md="6" sm="12" v-for="(item, i) in items" :key="i">
-                <v-card min-width="300" class="mx-auto mx-2" color="grey lighten-4" max-width="600">
+                <v-card min-width="300" class="mx-auto mx-2" color="black lighten-4" max-width="600">
                     <v-card-title class="caption text-uppercase">
                         {{ item.title }}
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" @click="retrieve()">
+                        <v-btn color="primary" @click="retrieve(item)" :loading="item.loading">
                             <v-icon>mdi-refresh</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-sheet color="transparent">
-                        <bar-chart :chart-data="datacollection" v-if="item.chart === 'bar' && !loading"></bar-chart>
-                        <line-chart :chart-data="datacollection" v-if="item.chart === 'line' && !loading"></line-chart>
+                    <v-sheet color="black lighten-4" height="350">
+                        <bar-chart :styles="chartStyles" :chartData="item.datacollection" v-if="item.chart === 'bar' && !item.loading"></bar-chart>
+                        <line-chart :styles="chartStyles" :chart-data="item.datacollection" v-if="item.chart === 'line' && !item.loading"></line-chart>
                     </v-sheet>
                 </v-card>
             </v-col>
@@ -34,54 +34,62 @@ export default {
         return {
             datacollection: null,
             checking: false,
-            loading: true,
+            loading: false,
             heartbeats: [],
             items: [],
+            chartOptions: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
         }
     },
     computed: {
 
+        chartStyles() {
+            return {
+                height: '350px',
+                position: 'relative',
+            }
+        },
+
     },
     async mounted() {
-        this.retrieve()
+
         this.initialize()
+        for (const item of this.items) {
+            await this.retrieve(item)
+        }
     },
     methods: {
         initialize() {
             this.items = [
-                { title: 'Recent Sales', chart: 'bar' },
-                { title: 'Top Services', chart: '' },
-                { title: 'Top Products', chart: '' },
-                { title: 'Top Employee', chart: '' },
+                { title: 'Recent Sales', chart: 'bar', loading: false, datacollection: null },
+                { title: 'Top Services', chart: '', loading: false, datacollection: null },
+                { title: 'Top Products', chart: '', loading: false, datacollection: null },
+                { title: 'Top Employee', chart: '', loading: false, datacollection: null },
             ]
         },
-        async retrieve(filter, options, noCommit = false) {
+        async retrieve(item) {
 
             // this.loading = true
             // const { sortBy, sortDesc, page, itemsPerPage } = options
-            this.loading = true
-            const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `year, month, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+            item.loading = true
+            try {
+                const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                item.datacollection = {
+                    labels: results.data.data.map(r => r.mth),
+                    datasets: [{
+                        label: 'Sales',
+                        backgroundColor: '#779ecb',
+                        data: results.data.data.map(r => r.total_amount)
+                    }]
+                }
 
 
-
-            this.datacollection = {
-                labels: results.data.data.map(r => r.month),
-                datasets: [{
-                    label: 'Sales',
-                    backgroundColor: '#f87979',
-                    data: results.data.data.map(r => r.total_amount)
-                }]
+            } catch (e) {
+                item.loading = false
             }
-    
-            this.loading = false
-
-            //const mapped = results.reports.data.data.map(data => total_amount)
-            //console.log(mapped)
-            // return mapped
-            //this.loading = false
-
-
-            // if (noCommit) return results
+            item.loading = false
         },
         fillData() {
             this.datacollection = {

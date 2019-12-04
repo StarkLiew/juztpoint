@@ -25,6 +25,14 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::int(),
 				'description' => 'The id of the user',
 			],
+			'md' => [
+				'type' => Type::string(),
+				'description' => 'The id of the user',
+			],
+			'mth' => [
+				'type' => Type::string(),
+				'description' => 'The id of the user',
+			],
 			'month' => [
 				'type' => Type::int(),
 				'description' => 'The id of the user',

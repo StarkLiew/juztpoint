@@ -24,12 +24,42 @@
         </template>
         <template v-slot:top>
             <v-toolbar flat dark color="primary">
-                <v-btn color="primary" dark @click="$emit('closed')" :disabled="loading">
+                <v-btn color="primary" dark @click="$emit('closed')" :disabled="loading" v-if="!hideBack">
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
-                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-divider class="mx-4" inset vertical v-if="!hideBack"></v-divider>
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-dialog v-model="editDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable v-if="!!showAdd">
+                    <template v-slot:activator="{ on }">
+                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!hideAdd">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-form ref="form" v-model="valid" lazy-validation>
+                        <v-card tile>
+                            <v-toolbar flat dark color="primary" max-height="68">
+                                <v-btn icon dark @click="close" :disabled="saving">
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                                <v-toolbar-title>{{ title }}</v-toolbar-title>
+                                <div class="flex-grow-1"></div>
+                                <v-toolbar-items>
+                                    <v-btn dark text @click="save" :loading="saving" :disabled="saving || !valid">
+                                        Save
+                                    </v-btn>
+                                </v-toolbar-items>
+                                </v-menu>
+                            </v-toolbar>
+                            <v-card-title>
+                                <span class="headline">{{ formTitle }}</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <slot name="dialog" :editedItem="editedItem"></slot>
+                            </v-card-text>
+                        </v-card>
+                    </v-form>
+                </v-dialog>
                 <v-menu>
                     <template v-slot:activator="{ on }">
                         <v-btn color="primary" dark v-on="on" class="mb-2" :disabled="loading">
@@ -133,6 +163,7 @@ export default {
                 terminal: null,
             },
             showGroupBy: false,
+            editDialog: false,
             dialog: false,
             search: '',
             mutateOptions: this.options,
@@ -148,7 +179,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary'],
+    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -214,6 +245,7 @@ export default {
         },
         close() {
             this.dialog = false
+            this.editDialog = false
         },
         remove() {
 

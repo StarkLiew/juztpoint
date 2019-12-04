@@ -1,5 +1,5 @@
 <template>
- <div>
+    <div>
         <v-list class="py-0">
             <v-list-item>
                 <v-list-item-icon v-show="$vuetify.breakpoint.mdAndUp && mini">
@@ -26,12 +26,12 @@
                         </v-list-item-content>
                     </template>
                     <v-list-item v-for="subItem in item.items" :key="subItem.title" @click="subItem.action ? subItem.action() : false" :to="subItem.to" ripple :exact="subItem.exact !== undefined ? subItem.exact : true" :disabled="subItem.disabled">
-                        <v-list-item-content class="pl-2">
-                            <v-list-item-title>{{ subItem.title }}</v-list-item-title>
-                        </v-list-item-content>
                         <v-list-item-icon>
                             <v-icon>{{ subItem.icon }}</v-icon>
                         </v-list-item-icon>
+                        <v-list-item-content class="pl-2">
+                            <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+                        </v-list-item-content>
                     </v-list-item>
                 </v-list-group>
                 <v-list-item v-else @click.native="item.action ? item.action() : false" :disabled="(item.role && auth && item.role !== auth.properties.role) || item.disabled" href="javascript:void(0)" :to="item.to" ripple :exact="item.exact !== undefined ? item.exact : true" :key="item.title">
@@ -44,7 +44,7 @@
                 </v-list-item>
             </template>
         </v-list>
-   </div>
+    </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -102,18 +102,17 @@ export default {
         navigation() {
             const inventory = [
                 { title: 'Suppliers', icon: 'mdi-truck', to: { name: 'vendors' }, exact: true, disabled: false },
-                { title: 'Stock Card', icon: 'mdi-clipboard-text', to: { name: 'stockcard' }, exact: true, disabled: true },
-                { title: 'Stock Take', icon: 'mdi-format-list-checks', to: { name: 'stocktake' }, exact: true, disabled: true },
+                { title: 'Purchase', icon: 'mdi-clipboard-text', to: { name: 'purchases' }, exact: true, disabled: false },
             ]
             const products = [
-                { title: 'Standard Product', icon: 'mdi-package', to: { name: 'products' }, exact: true, disabled: false },
-                { title: 'Variant Product', icon: 'mdi-package', to: { name: 'variants' }, exact: true, disabled: false },
-                { title: 'Composite Product', icon: 'mdi-package', to: { name: 'composites' }, exact: true, disabled: false },
+                { title: 'Standard Product', icon: 'mdi-alpha-s-box-outline', to: { name: 'products' }, exact: true, disabled: false },
+                { title: 'Variant Product', icon: 'mdi-alpha-v-box-outline', to: { name: 'variants' }, exact: true, disabled: false },
+                { title: 'Composite Product', icon: 'mdi-alpha-c-box-outline', to: { name: 'composites' }, exact: true, disabled: false },
             ]
             const services = [
-                { title: 'Standard Service', icon: 'mdi-face', to: { name: 'services.standard' }, exact: true, disabled: false },
-                { title: 'Variant Service', icon: 'mdi-face', to: { name: 'services.variant' }, exact: true, disabled: false },
-                { title: 'Composite Service', icon: 'mdi-face', to: { name: 'services.composite' }, exact: true, disabled: false },
+                { title: 'Standard Service', icon: 'mdi-alpha-s-circle-outline', to: { name: 'services.standard' }, exact: true, disabled: false },
+                { title: 'Variant Service', icon: 'mdi-alpha-v-circle-outline', to: { name: 'services.variant' }, exact: true, disabled: false },
+                { title: 'Composite Service', icon: 'mdi-alpha-c-circle-outline', to: { name: 'services.composite' }, exact: true, disabled: false },
             ]
 
             this.items = [
@@ -121,7 +120,7 @@ export default {
                     { title: 'Home', icon: 'mdi-store', to: { name: 'home' }, exact: true, disabled: false }
                 ],
                 [
-                    { title: 'Appointment', icon: 'mdi-calendar-today', to: { name: 'appointments' }, exact: true, disabled: true }
+                    { title: 'Appointment', icon: 'mdi-calendar-today', to: { name: 'appointments' }, exact: true, disabled: false }
                 ],
                 [
                     { title: 'Transaction', icon: 'mdi-receipt', to: { name: 'sales' }, exact: true, disabled: false }
@@ -133,7 +132,8 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true, disabled: false
+                    exact: true,
+                    disabled: false
                 }],
                 [
                     { title: 'Customers', icon: 'mdi-account-box', to: { name: 'customers' }, role: 'MGR', exact: true, disabled: false }
@@ -145,7 +145,8 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true, disabled: false
+                    exact: true,
+                    disabled: false
                 }],
                 [{
                     title: 'Services',
@@ -154,7 +155,8 @@ export default {
                     action: () => {
                         this.$emit('status-changed', false)
                     },
-                    exact: true, disabled: false
+                    exact: true,
+                    disabled: false
                 }],
                 [
                     { title: 'Employees', icon: 'mdi-worker', to: { name: 'users' }, role: 'MGR', exact: true, disabled: false }
