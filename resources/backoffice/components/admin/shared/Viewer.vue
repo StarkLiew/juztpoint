@@ -32,7 +32,7 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="editDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable v-if="!!showAdd">
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!hideAdd">
+                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!!showAdd">
                             <v-icon>mdi-plus</v-icon>
                         </v-btn>
                     </template>
@@ -154,7 +154,9 @@ import JsonExcel from 'vue-json-excel'
 export default {
     data() {
         return {
+            editedItem: {},
             groupBy: null,
+            valid: true,
             menu: false,
             filter: {
                 dates: [],
@@ -171,6 +173,7 @@ export default {
             terminals: [],
             stores: [],
             filling: false,
+            saving: false,
         }
     },
     components: {
@@ -179,7 +182,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd'],
+    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd', 'defaultItem'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -213,6 +216,9 @@ export default {
     },
     methods: {
         initialize() {
+            this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+        },
+        async save() {
 
         },
         async filterData() {

@@ -1,17 +1,8 @@
 <template>
     <v-container>
-        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true">
+        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem">
             <template v-slot:dialog="{ valid, editedItem }">
-                <v-container>
-                    <v-row>
-                        <v-col cols="12" sm="12" md="6" lg="6">
-             
-                        </v-col>
-                        <v-col cols="12" sm="12" md="6" lg="6">
-
-                        </v-col>
-                    </v-row>
-                </v-container>
+                 <purchase-form></purchase-form>
             </template>
             <template v-slot:item.action="{item}">
                 <v-icon class="mr-2" @click="print(item)" color="blue darken-1">
@@ -132,6 +123,7 @@ import { mapGetters } from 'vuex'
 import Viewer from '../shared/Viewer'
 import vueEasyPrint from 'vue-easy-print'
 import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
+import PurchaseForm from "./PurchaseForm"
 import Form from '~~/mixins/form'
 import axios from 'axios'
 import { api } from '~~/config'
@@ -140,6 +132,7 @@ import { bus } from '$receipt/bus'
 export default {
     mixins: [Form],
     components: {
+        PurchaseForm,
         Viewer,
         vueEasyPrint,
         receipt,
@@ -153,6 +146,32 @@ export default {
     data() {
         return {
             reports: [],
+            showDatePicker: false,
+            defaultItem: {
+                account_id: '',
+                note: '',
+                reference: '',
+                properties: {
+                    so: '',
+                },
+                items: [],
+                formData: null,
+            },
+            editLine: {
+                item_id: '',
+                line: 1,
+                type: 'po',
+                trxn_id: '',
+                item: {},
+                note: '',
+                qty: 0,
+                price: 0,
+                discount: {},
+                discount_amount: 0,
+                tax_id: 0,
+                tax_amount: {},
+                total_amount: 0,
+            },
             selected: {
                 title: 'Receipts',
                 name: 'receipts',
@@ -199,9 +218,13 @@ export default {
                 email: '',
                 name: '',
                 ref: '',
-            }
+            },
+     
 
         }
+    },
+    watch: {
+
     },
     computed: mapGetters({
         items: 'receipt/items',
@@ -209,7 +232,7 @@ export default {
         count: 'receipt/count',
     }),
     async mounted() {
-
+         this.loadSuppliers()
     },
     methods: {
         async print(item) {
@@ -225,16 +248,23 @@ export default {
 
 
         },
+        async loadSuppliers() {
+
+            this.isSupplierLoading = true
+
+            this.supplierItems = await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true, })
+            console.log(this.supplierItems)
+
+            this.isSupplierLoading = false
+        },
 
         async retrieve(filter, options, noCommit = false) {
 
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
-            const com = await this.$store.dispatch('setting/fetch', { type: 'company', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true })
-            this.company = com[0]
 
-            const results = await this.$store.dispatch('receipt/fetch', { name: this.selected.name, fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('receipt/fetch', { name: 'purchase', fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
 
@@ -302,9 +332,8 @@ export default {
             }
         },
 
-
-
     }
+
 }
 
 </script>
