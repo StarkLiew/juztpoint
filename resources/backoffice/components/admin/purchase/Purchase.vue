@@ -2,110 +2,15 @@
     <v-container>
         <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem">
             <template v-slot:dialog="{ valid, editedItem }">
-                 <purchase-form></purchase-form>
+                <purchase-form></purchase-form>
             </template>
             <template v-slot:item.action="{item}">
-                <v-icon class="mr-2" @click="print(item)" color="blue darken-1">
-                    mdi-printer
+                <v-icon class="mr-2" @click="" color="blue darken-1">
+                    mdi-pencil
                 </v-icon>
-                <v-dialog v-model="sendDialog" persistent max-width="600px">
-                    <template v-slot:activator="{ on }">
-                        <v-btn icon dark v-on="on">
-                            <v-icon @click="" color="green darken-1">
-                                mdi-email
-                            </v-icon>
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">
-                                <v-icon color="green darken-1">mdi-email</v-icon>Send Receipt
-                            </span>
-                            <v-spacer></v-spacer>
-                            <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <v-form ref="form" @submit.prevent="sendEmail(item)" lazy-validation v-model="valid">
-                                    <v-row>
-                                        <v-text-field label="Recipient name" v-model="form.name" type="name" :error-messages="errors.name" :rules="[rules.required('name')]" :disabled="loading"></v-text-field>
-                                    </v-row>
-                                    <v-row>
-                                        <v-text-field label="Recipient email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading"></v-text-field>
-                                    </v-row>
-                                    <v-layout row class="mt-4 mx-0">
-                                        <v-spacer></v-spacer>
-                                        <v-btn type="submit" :loading="loading" :disabled="loading || !valid" color="primary" class="ml-4">
-                                            Send
-                                        </v-btn>
-                                    </v-layout>
-                                </v-form>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="refundDialog" persistent max-width="600px">
-                    <template v-slot:activator="{ on }">
-                        <v-btn icon dark v-on="on" :disabled="item.status === 'void'" style="display:none">
-                            <v-icon @click="" color="orange darken-1">
-                                mdi-currency-usd-off
-                            </v-icon>
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">
-                                <v-icon color="orange darken-1">mdi-currency-usd-off</v-icon>Refund Receipt
-                            </span>
-                            <v-spacer></v-spacer>
-                            <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <p>
-                                    To refund customer, please use the Terminal that transact this receipt.
-                                </p>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-                <v-dialog v-model="voidDialog" persistent max-width="600px">
-                    <template v-slot:activator="{ on }">
-                        <v-btn icon dark v-on="on" @click="selectItem(item)" :disabled="item.status === 'void'">
-                            <v-icon @click="" color="red darken-1">
-                                mdi-cancel
-                            </v-icon>
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">
-                                <v-icon color="red darken-1">mdi-cancel</v-icon>Void Receipt {{ selectedItem ? selectedItem.reference : '' }}
-                            </span>
-                            <v-spacer></v-spacer>
-                            <v-btn fab light small top right @click="closeDialog">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-text-field label="Enter receipt reference to confirm." v-model="form.ref" :disabled="loading"></v-text-field>
-                                </v-row>
-                                <v-layout row class="mt-4 mx-0">
-                                    <v-spacer></v-spacer>
-                                    <v-btn @click="voidReceipt(selectedItem)" :loading="loading" :disabled="loading" color="primary" class="ml-4">
-                                        Confirm
-                                    </v-btn>
-                                </v-layout>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
+                <v-icon class="mr-2" @click="" color="red darken-1">
+                    mdi-close
+                </v-icon>
             </template>
             <template v-slot:item.date="{item, header}">
                 <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY hh:mmA') }}</span>
@@ -219,7 +124,7 @@ export default {
                 name: '',
                 ref: '',
             },
-     
+
 
         }
     },
@@ -232,7 +137,7 @@ export default {
         count: 'receipt/count',
     }),
     async mounted() {
-         this.loadSuppliers()
+
     },
     methods: {
         async print(item) {
@@ -253,7 +158,7 @@ export default {
             this.isSupplierLoading = true
 
             this.supplierItems = await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true, })
-            console.log(this.supplierItems)
+
 
             this.isSupplierLoading = false
         },
