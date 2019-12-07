@@ -36,7 +36,7 @@
                             <v-icon>mdi-plus</v-icon>
                         </v-btn>
                     </template>
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-form ref="form" v-model="valid">
                         <v-card tile>
                             <v-toolbar flat dark color="primary" max-height="68">
                                 <v-btn icon dark @click="close" :disabled="saving">

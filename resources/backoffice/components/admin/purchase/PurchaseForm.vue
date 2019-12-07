@@ -5,13 +5,13 @@
                 <v-autocomplete v-model="editedItem.account" :items="vendors" :rules="[v => !!v || 'Account is required',]" required :loading="loading" item-text="name" label="Supplier" placeholder="Choose" prepend-icon="mdi-truck" return-object></v-autocomplete>
                 <v-menu ref="menu" v-model="showDatePicker" :close-on-content-click="false" transition="scale-transition" offset-y min-width="290px">
                     <template v-slot:activator="{ on }">
-                        <v-text-field class="" v-model="editedItem.date" label="Date" prepend-icon="mdi-calendar" v-on="on" readonly></v-text-field>
+                        <v-text-field class="" v-model="editedItem.date" label="Date" prepend-icon="mdi-calendar" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
                     </template>
                     <v-date-picker @input="showDatePicker = false" v-model="editedItem.date"></v-date-picker>
                 </v-menu>
             </v-col>
             <v-col cols="12" sm="12" md="4" lg="4">
-                <v-text-field label="PO #" v-model="editedItem.reference"></v-text-field>
+                <v-text-field label="PO #" v-model="editedItem.reference" :rules="[v => !!v || 'PO number is required',]" required></v-text-field>
                 <v-text-field label="SO #" v-model="editedItem.properties.so"></v-text-field>
             </v-col>
             <v-col cols="12" sm="12" md="4" lg="4">
@@ -21,11 +21,11 @@
         <v-row>
             <v-col cols="12" sm="12" md="12" lg="12">
                 <v-data-table hide-default-footer disable-pagination :headers="itemHeaders" :items="editedItem.items" class="elevation-1">
-                    <template v-slot:item.action="{item}">
-                        <v-icon class="mr-2" @click="" color="blue darken-1" @click="edit(item)">
+                    <template v-slot:item.action="{item, index}">
+                        <v-icon class="mr-2" @click="" color="blue darken-1" @click="edit(index)">
                             mdi-pencil
                         </v-icon>
-                        <v-icon class="mr-2" @click="" color="red darken-1">
+                        <v-icon class="mr-2" @click="" color="red darken-1" @click="remove(index)">
                             mdi-close
                         </v-icon>
                     </template>
@@ -51,6 +51,7 @@
     </v-container>
 </template>
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import PurchaseLine from './PurchaseLine'
 
@@ -64,7 +65,6 @@ export default {
     data: () => {
         return {
             showDatePicker: false,
-
             editedItem: {
                 account_id: '',
                 account: '',
@@ -77,6 +77,7 @@ export default {
                 formData: null,
             },
             selectedLine: null,
+            selectedIndex: -1,
             searchSuppliers: null,
             supplierItems: [],
             loading: false,
@@ -108,13 +109,25 @@ export default {
             this.loading = false
         },
         updateItems(line) {
-            this.editedItem.items.push(line)
-            this.selectedLine = null
+            if (this.selectedIndex > -1) {
+                Vue.set(this.editedItem.items, index, { ...line })
+                this.selectedIndex = -1
+                this.selectedLine = null
+            } else {
+                this.editedItem.items.push({ ...line })
+            }
             this.editItemDialog = false
         },
-        edit(item) {
-            this.selectedLine = item
+        edit(index) {
+            this.selectedIndex = index
+            this.selectedLine = this.editedItem.items[index]
             this.editItemDialog = true
+        },
+        remove(index) {
+
+            this.editedItem.items.splice(index, 1)
+
+
         },
         pickedDate() {
 

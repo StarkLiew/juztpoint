@@ -84,12 +84,12 @@
                     {{ config('app.name') }}
                 </div>
                 <div class="subtitle m-b-md">
-                      Business Frontline Management Software come with quick deployable Point-of-Sales System.
+                      Free Business Frontline Management Software come with quick deployable Point-of-Sales System.
                 </div>
 
                 <div class="links">
 
-                    <a href="http://backoffice.juxtpoint.com/register">SIGN UP FOR FREE</a>
+                    <a href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}/register">SIGN UP FOR FREE</a>
                     <a href="#demo">LIVE DEMO</a>
                 </div>
 

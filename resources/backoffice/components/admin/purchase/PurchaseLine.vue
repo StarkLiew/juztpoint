@@ -1,14 +1,14 @@
 <template>
     <v-card>
         <v-card-title>
-            <v-toolbar flat dark color="primary" max-height="68" :disabled="loading">
+            <v-toolbar flat dark color="primary" max-height="68" :disabled="loading || saving">
                 <v-btn icon dark @click="close">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>New Item</v-toolbar-title>
                 <div class="flex-grow-1"></div>
                 <v-toolbar-items>
-                    <v-btn dark text @click="save" :disabled="!valid" :loading="saving">
+                    <v-btn dark text @click="save" :disabled="loading || !lineValid" :loading="saving">
                         <v-icon>mdi-check</v-icon>
                         Save
                     </v-btn>
@@ -16,12 +16,12 @@
                 </v-menu>
             </v-toolbar>
         </v-card-title>
-        <v-card-text>
-            <v-container>
-                <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="lineform" v-model="lineValid">
+            <v-card-text>
+                <v-container>
                     <v-row>
                         <v-col cols="12" sm="12" md="6" lg="6">
-                            <v-autocomplete v-model="editedLine.item" :items="products" :loading="loading" hide-selected item-text="name" item-value="id" label="Item" placeholder="Choose" prepend-icon="mdi-package" :rules="[v => !!v || 'Item is required',]" required return-object @input="updateDescription"></v-autocomplete>
+                            <v-autocomplete v-model="editedLine.item" :items="products" :loading="loading" hide-selected item-text="name" item-value="id" label="Item" placeholder="Choose" prepend-icon="mdi-package" return-object @input="updateDescription" :rules="[v => !!v || 'Item is required',]" required></v-autocomplete>
                         </v-col>
                         <v-col cols="12" sm="12" md="6" lg="6">
                             <v-text-field label="Description" :rules="[v => !!v || 'Description is required',]" required v-model="editedLine.note"></v-text-field>
@@ -44,10 +44,9 @@
                             <h1 class="display-1">{{editedLine.total_amount | currency}}</h1>
                         </v-col>
                     </v-row>
-                    {{ line }}
-                </v-form>
-            </v-container>
-        </v-card-text>
+                </v-container>
+            </v-card-text>
+        </v-form>
     </v-card>
 </template>
 <script>
@@ -58,7 +57,7 @@ export default {
         return {
             loading: false,
             taxes: [],
-            valid: false,
+            lineValid: false,
             saving: false,
             editedLine: {
                 item: null,
@@ -66,7 +65,6 @@ export default {
                 line: 1,
                 type: 'po',
                 trxn_id: '',
-                item: {},
                 note: '',
                 qty: null,
                 price: null,
@@ -82,8 +80,11 @@ export default {
     watch: {
         line: {
             handler(val) {
-                this.editedLine = JSON.parse(JSON.stringify(val))
-                console.log(this.editedLine)
+                if (!!val) {
+                    this.editedLine = JSON.parse(JSON.stringify(val))
+                }
+
+
             },
             deep: true
         }
@@ -125,16 +126,20 @@ export default {
 
         },
         updateDescription() {
-            this.editedLine.note = this.editedLine.item.name
+            if (!!this.editedLine && !!this.editedLine.item) {
+                this.editedLine.note = this.editedLine.item.name
+            }
         },
         reset() {
+
+            this.$refs.lineform.reset()
+            this.$refs.lineform.resetValidation()
             this.editedLine = {
                 item: null,
                 item_id: -1,
                 line: 1,
                 type: 'po',
                 trxn_id: '',
-                item: {},
                 note: '',
                 qty: null,
                 price: null,
@@ -146,14 +151,18 @@ export default {
             }
         },
         close() {
+
             this.reset()
             this.$emit('close')
         },
         async save() {
-            this.saving = true
-            this.$emit('save', this.editedLine)
-            this.reset()
-            this.saving = false
+            if (this.$refs.lineform.validate()) {
+                this.saving = true
+                this.$emit('save', this.editedLine)
+                this.reset()
+                this.saving = false
+            }
+
         }
     }
 }
