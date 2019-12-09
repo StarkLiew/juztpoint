@@ -153,16 +153,6 @@ export default {
 
 
         },
-        async loadSuppliers() {
-
-            this.isSupplierLoading = true
-
-            this.supplierItems = await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true, })
-
-
-            this.isSupplierLoading = false
-        },
-
         async retrieve(filter, options, noCommit = false) {
 
             this.loading = true

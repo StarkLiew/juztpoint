@@ -62,7 +62,7 @@ export default {
             editedLine: {
                 item: null,
                 item_id: -1,
-                line: 1,
+                line: -1,
                 type: 'po',
                 trxn_id: '',
                 note: '',
@@ -137,7 +137,7 @@ export default {
             this.editedLine = {
                 item: null,
                 item_id: -1,
-                line: 1,
+                line: -1,
                 type: 'po',
                 trxn_id: '',
                 note: '',

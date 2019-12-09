@@ -21,11 +21,11 @@
         <v-row>
             <v-col cols="12" sm="12" md="12" lg="12">
                 <v-data-table hide-default-footer disable-pagination :headers="itemHeaders" :items="editedItem.items" class="elevation-1">
-                    <template v-slot:item.action="{item, index}">
-                        <v-icon class="mr-2" @click="" color="blue darken-1" @click="edit(index)">
+                    <template v-slot:item.action="{item}">
+                        <v-icon class="mr-2" color="blue darken-1" @click="edit(item)">
                             mdi-pencil
                         </v-icon>
-                        <v-icon class="mr-2" @click="" color="red darken-1" @click="remove(index)">
+                        <v-icon class="mr-2" color="red darken-1" @click="remove(item)">
                             mdi-close
                         </v-icon>
                     </template>
@@ -38,7 +38,7 @@
                                         Add a new item
                                     </v-btn>
                                 </template>
-                                <purchase-line :line="selectedLine" @close="editItemDialog = false" @save="updateItems"></purchase-line>
+                                <purchase-line :line="selectedLine" :collection="editedItem.items" @close="editItemDialog = false" @save="updateItems"></purchase-line>
                             </v-dialog>
                             <v-spacer></v-spacer>
                             <v-toolbar-title>Total</v-toolbar-title>
@@ -77,11 +77,11 @@ export default {
                 formData: null,
             },
             selectedLine: null,
-            selectedIndex: -1,
             searchSuppliers: null,
             supplierItems: [],
             loading: false,
             itemHeaders: [
+
                 { text: 'Item', value: 'item.sku' },
                 { text: 'Description value', value: 'note' },
                 { text: 'Price', value: 'qty', align: 'end' },
@@ -109,22 +109,29 @@ export default {
             this.loading = false
         },
         updateItems(line) {
-            if (this.selectedIndex > -1) {
-                Vue.set(this.editedItem.items, index, { ...line })
-                this.selectedIndex = -1
-                this.selectedLine = null
-            } else {
+            if (!this.selectedLine) {
+                if (this.editedItem.items.length < 1) line.line = 1
+                else {
+                    const last = this.editedItem.items[this.editedItem.items.length - 1]
+                    line.line = last.line + 1
+                }
+
+
                 this.editedItem.items.push({ ...line })
+            } else {
+                const index = this.editedItem.items.findIndex(v => v.line === line.line)
+                Vue.set(this.editedItem.items, index, { ...line })
+                this.selectedLine = null
+
             }
             this.editItemDialog = false
         },
-        edit(index) {
-            this.selectedIndex = index
-            this.selectedLine = this.editedItem.items[index]
+        edit(line) {
+            this.selectedLine = line
             this.editItemDialog = true
         },
-        remove(index) {
-
+        remove(line) {
+            const index = this.editedItem.items.findIndex(v => v.line === line.line)
             this.editedItem.items.splice(index, 1)
 
 

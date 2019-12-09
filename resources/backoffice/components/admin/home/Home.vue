@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col col="6" lg="6" md="6" sm="12" v-for="(item, i) in items" :key="i">
-                <v-card min-width="300" class="mx-auto mx-2" color="black lighten-4" max-width="600">
+                <v-card min-width="300" class="mx-auto mx-2" color="white" max-width="600">
                     <v-card-title class="caption text-uppercase">
                         {{ item.title }}
                         <v-spacer></v-spacer>
@@ -10,7 +10,7 @@
                             <v-icon>mdi-refresh</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-sheet color="black lighten-4" height="350">
+                    <v-sheet color="white" height="350">
                         <bar-chart :styles="chartStyles" :chartData="item.datacollection" v-if="item.chart === 'bar' && !item.loading"></bar-chart>
                         <line-chart :styles="chartStyles" :chart-data="item.datacollection" v-if="item.chart === 'line' && !item.loading"></line-chart>
                     </v-sheet>
@@ -80,7 +80,7 @@ export default {
                     labels: results.data.data.map(r => r.mth),
                     datasets: [{
                         label: 'Sales',
-                        backgroundColor: '#779ecb',
+                        backgroundColor: '#136ACD',
                         data: results.data.data.map(r => r.total_amount)
                     }]
                 }

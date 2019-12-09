@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grid-list-xl>
+    <v-container  fluid grid-list-xl>
         <v-layout row justify-center wrap>
             <v-flex lg10 sm12 xs12>
                 <transition name="fade" mode="out-in">
