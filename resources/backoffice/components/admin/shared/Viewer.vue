@@ -32,7 +32,7 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="editDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable v-if="!!showAdd">
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" dark class="mb-2" v-on="on" :disabled="loading" v-if="!!showAdd">
+                        <v-btn color="primary" @click="$emit('appendNew')" dark class="mb-2" v-on="on" :disabled="loading" v-if="!!showAdd">
                             <v-icon>mdi-plus</v-icon>
                         </v-btn>
                     </template>
@@ -182,7 +182,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'defaultItem', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd', 'defaultItem'],
+    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd', 'defaultItem'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -219,7 +219,13 @@ export default {
             this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
         },
         async save() {
-
+            this.saving = true
+            if (this.$refs.form.validate()) {
+                await this.saveMethod(this.editedItem)
+                if (this.items.length === 1) this.reset()
+                this.close()
+            }
+            this.saving = false
         },
         async filterData() {
             if (this.menu) {
@@ -252,6 +258,11 @@ export default {
         close() {
             this.dialog = false
             this.editDialog = false
+            setTimeout(() => {
+                this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+                this.editedIndex = -1
+                this.$refs.form.reset()
+            }, 300)
         },
         remove() {
 

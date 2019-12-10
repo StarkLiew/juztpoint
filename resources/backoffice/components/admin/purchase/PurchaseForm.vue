@@ -62,20 +62,11 @@ export default {
     components: {
         PurchaseLine,
     },
+    props: ['defaultItem'],
     data: () => {
         return {
+            editedItem: {},
             showDatePicker: false,
-            editedItem: {
-                account_id: '',
-                account: '',
-                note: '',
-                reference: '',
-                properties: {
-                    so: '',
-                },
-                items: [],
-                formData: null,
-            },
             selectedLine: null,
             searchSuppliers: null,
             supplierItems: [],
@@ -95,13 +86,14 @@ export default {
 
         }
     },
-    async mounted() {
+    created() {
         this.initialize()
     },
     methods: {
         async initialize() {
 
             this.loading = true
+            this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
 
             await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
 

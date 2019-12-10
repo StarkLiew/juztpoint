@@ -60,7 +60,7 @@ export const actions = {
     },
     async fetch({ commit }, { type, search, limit, page, sort, desc, noCommit }) {
 
-        if (!noCommit) commit(types.FETCH_ACCOUNT_FAILURE) //reset
+        if (!noCommit) commit(types.FETCH_DOCUMENT_FAILURE) //reset
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
@@ -68,7 +68,7 @@ export const actions = {
 
             if (noCommit) {
 
-                return data.data.accounts.data
+                return data.data.documents.data
             }
             commit(types.FILL_DOCUMENTS, { items: data.data.documents })
 
@@ -78,24 +78,22 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { reference, account_id, terminal_id, store_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = item
+            const { reference, account, transact_by, terminal_id, store_id, shiftId, type, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             for (const [line, item] of items.entries()) {
                 const item_id = item.id
                 const item_line = item.line
-                const commission = item.commission.properties
-                const comm_id = item.commission.id
-
                 const user_id = item.saleBy.id
                 const qty = item.qty
-                const tax_id = item.tax.id
+                const tax_id = item.tax_id
+                const discount_amount = item.discount_amount
                 const tax_amount = item.tax_amount
                 const total_amount = item.amount
                 const note = item.note
 
-                const discount_amount = item.discount.amount
-                const props = `{\\"price\\": ${item.properties.price}, \\"shareWith\\":${shareWith} ${variant} ${composites}}`
+             
+                const props = `{\\"price\\": ${item.properties.price}`
 
                 const cast = `{line: ${line + 1}, 
                          type: "item", 
@@ -104,13 +102,13 @@ export const actions = {
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
                          qty: ${qty},
-                         refund_qty: ${ item.refund ? parseFloat(item.qty) : 0.00},
-                         refund_amount: ${ item.refund ? parseFloat(item.amount) : 0.00},
+                         refund_qty: 0,
+                         refund_amount: 0.00,
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
-                         terminal_id: ${terminal_id},
-                         store_id: ${store_id},
-                         shift_id: ${shiftId},
+                         terminal_id: 'web',
+                         store_id: -1,
+                         shift_id: -1,
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
                          properties:"${props}"
@@ -124,25 +122,23 @@ export const actions = {
                                  reference: "${reference}",
                                  status: "active",
                                  type: "${type}",
-                                 terminal_id: ${terminal_id},
-                                 store_id: ${store_id},
-                                 account_id: "${account_id}",
-                                 transact_by: ${teller.id},
-                                 shift_id: ${shiftId},
+                                 terminal_id: -1,
+                                 store_id: -1,
+                                 account_id: "${account.id}",
+                                 transact_by: ${transact_by},
+                                 shift_id: -1,
                                  date: "${date}",
-                                 discount: "${JSON.stringify(discount).replace(/"/g, '\\"')}",
-                                 discount_amount: ${parseFloat(discount_amount)},
+                                 discount: "{}",
+                                 discount_amount: 0.00,
                                  tax_amount: ${parseFloat(tax_total)},
-                                 service_charge: ${parseFloat(service_charge)},
-                                 rounding: ${parseFloat(rounding)},
-                                 charge: ${parseFloat(charge)},
-                                 received: ${parseFloat(received)},
-                                 change: ${parseFloat(change)},
-                                 refund: ${parseFloat(refund)},
+                                 service_charge: 0.00,
+                                 rounding: 0.00,
+                                 charge: 0.00,
+                                 received: 0.00,
+                                 change: 0.00,
+                                 refund: 0.00,
                                  note: "${note}",
                                  items: [${castItems}],
-                                 payments: [${castPayments}],
-                                 commissions: [],
                              ) {id}}`
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })

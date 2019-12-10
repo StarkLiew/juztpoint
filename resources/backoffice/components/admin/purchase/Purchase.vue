@@ -1,8 +1,57 @@
 <template>
     <v-container>
-        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem">
+        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem" @appendNew="appendNewItem" :saveMethod="saveItem">
             <template v-slot:dialog="{ valid, editedItem }">
-                <purchase-form></purchase-form>
+                <v-container>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="4" lg="4">
+                            <v-autocomplete v-model="editedItem.account" :items="vendors" :rules="[v => !!v || 'Account is required',]" required :loading="loading" item-text="name" label="Supplier" placeholder="Choose" prepend-icon="mdi-truck" return-object></v-autocomplete>
+                            <v-menu ref="menu" v-model="showDatePicker" :close-on-content-click="false" transition="scale-transition" offset-y min-width="290px">
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field class="" v-model="editedItem.date" label="Date" prepend-icon="mdi-calendar" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
+                                </template>
+                                <v-date-picker @input="showDatePicker = false" v-model="editedItem.date"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="4" lg="4">
+                            <v-text-field label="PO #" v-model="editedItem.reference" :rules="[v => !!v || 'PO number is required',]" required></v-text-field>
+                            <v-text-field label="SO #" v-model="editedItem.properties.so"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="4" lg="4">
+                            <v-textarea solo name="input-7-4" v-model="editedItem.note" label="Note"></v-textarea>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" sm="12" md="12" lg="12">
+                            <v-data-table hide-default-footer disable-pagination :headers="itemHeaders" :items="editedItem.items" class="elevation-1">
+                                <template v-slot:item.action="{item}">
+                                    <v-icon class="mr-2" color="blue darken-1" @click="editLine(item, editedItem)">
+                                        mdi-pencil
+                                    </v-icon>
+                                    <v-icon class="mr-2" color="red darken-1" @click="removeLine(item, editedItem)">
+                                        mdi-close
+                                    </v-icon>
+                                </template>
+                                <template v-slot:footer="{pagination}">
+                                    <v-toolbar>
+                                        <v-dialog v-model="editItemDialog" fullscreen persistent max-width="600px">
+                                            <template v-slot:activator="{ on }">
+                                                <v-btn text v-on="on" small color="primary">
+                                                    <v-icon>mdi-plus-circle-outline</v-icon>
+                                                    Add a new item
+                                                </v-btn>
+                                            </template>
+                                            <purchase-line :line="selectedLine" :collection="editedItem.items" @close="editItemDialog = false" @save="updateItems(editedItem, ...arguments)"></purchase-line>
+                                        </v-dialog>
+                                        <v-spacer></v-spacer>
+                                        <v-toolbar-title>Total</v-toolbar-title>
+                                        <v-toolbar-title>{{ 0 | currency }}</v-toolbar-title>
+                                    </v-toolbar>
+                                </template>
+                            </v-data-table>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </template>
             <template v-slot:item.action="{item}">
                 <v-icon class="mr-2" @click="" color="blue darken-1">
@@ -24,11 +73,12 @@
     </v-container>
 </template>
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import Viewer from '../shared/Viewer'
 import vueEasyPrint from 'vue-easy-print'
 import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
-import PurchaseForm from "./PurchaseForm"
+import PurchaseLine from './PurchaseLine'
 import Form from '~~/mixins/form'
 import axios from 'axios'
 import { api } from '~~/config'
@@ -37,7 +87,7 @@ import { bus } from '$receipt/bus'
 export default {
     mixins: [Form],
     components: {
-        PurchaseForm,
+        PurchaseLine,
         Viewer,
         vueEasyPrint,
         receipt,
@@ -54,6 +104,8 @@ export default {
             showDatePicker: false,
             defaultItem: {
                 account_id: '',
+                account: '',
+                transact_by: -1,
                 note: '',
                 reference: '',
                 properties: {
@@ -62,20 +114,27 @@ export default {
                 items: [],
                 formData: null,
             },
-            editLine: {
-                item_id: '',
-                line: 1,
+            editedLine: {
+                item: null,
+                item_id: -1,
+                line: -1,
                 type: 'po',
-                trxn_id: '',
-                item: {},
+                trxn_id: -1,
+                user_id: -1,
                 note: '',
-                qty: 0,
-                price: 0,
-                discount: {},
+                qty: null,
+                discount: {
+                    rate: 0,
+                    type: 'percent',
+                    amount: 0,
+                },
                 discount_amount: 0,
-                tax_id: 0,
-                tax_amount: {},
+                tax_id: null,
+                tax_amount: 0,
                 total_amount: 0,
+                properties: {
+                    price: null,
+                }
             },
             selected: {
                 title: 'Receipts',
@@ -125,6 +184,22 @@ export default {
                 ref: '',
             },
 
+            selectedLine: null,
+            supplierItems: [],
+            itemHeaders: [
+
+                { text: 'Item', value: 'item.sku' },
+                { text: 'Description value', value: 'note' },
+                { text: 'Price', value: 'qty', align: 'end' },
+                { text: 'Price', value: 'price', align: 'end', currency: true },
+                { text: 'Discount', value: 'discount_rate', align: 'end' },
+                { text: 'Tax', value: 'tax.name' },
+                { text: 'Amount', value: 'total_amount', align: 'end', currency: true },
+                { text: 'Actions', value: 'action', sortable: false },
+            ],
+            editItemDialog: false,
+
+
 
         }
     },
@@ -132,9 +207,11 @@ export default {
 
     },
     computed: mapGetters({
+        auth: 'auth/user',
         items: 'receipt/items',
         summary: 'receipt/summary',
         count: 'receipt/count',
+        vendors: 'account/items',
     }),
     async mounted() {
 
@@ -159,7 +236,10 @@ export default {
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
 
-            const results = await this.$store.dispatch('receipt/fetch', { name: 'purchase', fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
+
+            const results = await this.$store.dispatch('document/fetch', { name: 'po', fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+
 
             this.loading = false
 
@@ -168,6 +248,32 @@ export default {
         },
         applyFilter(filter) {
 
+        },
+        appendNewItem() {
+            if (this.items.length > 0) {
+                const last = this.items[this.items.length - 1]
+                const numOnly = parseInt(last.reference.replace(/\D/g, '')) || 0
+                this.defaultItem.reference = numOnly + 1
+            } else {
+                this.defaultItem.reference = ''
+            }
+
+
+        },
+        async saveItem(item) {
+
+            this.loading = true
+            if (!item.id) {
+                item.transact_by = this.auth.id
+                item.type = 'po'
+                await this.$store.dispatch('document/add', item)
+            } else {
+
+                await this.$store.dispatch('document/update', item)
+            }
+
+
+            this.loading = false
         },
         select(item) {
             this.selected = item
@@ -178,7 +284,6 @@ export default {
         async selectItem(item) {
             this.selectedItem = item
             const company = this.company
-
 
         },
         closeDialog() {
@@ -226,6 +331,36 @@ export default {
                     })
             }
         },
+        updateItems(editedItem, line) {
+            if (!this.selectedLine) {
+                if (editedItem.items.length < 1) line.line = 1
+                else {
+                    const last = editedItem.items[editedItem.items.length - 1]
+                    line.line = last.line + 1
+                }
+                editedItem.items.push({ ...line })
+            } else {
+                const index = editedItem.items.findIndex(v => v.line === line.line)
+                Vue.set(editedItem.items, index, { ...line })
+                this.selectedLine = null
+
+            }
+            this.editItemDialog = false
+        },
+        editLine(line) {
+            this.selectedLine = line
+            this.editItemDialog = true
+        },
+        removeLine(line, editedItem) {
+            const index = editedItem.items.findIndex(v => v.line === line.line)
+            editedItem.items.splice(index, 1)
+
+
+        },
+        pickedDate() {
+
+            this.showDatePicker = false
+        }
 
     }
 

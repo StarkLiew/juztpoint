@@ -32,13 +32,13 @@
                             <v-text-field type="number" label="Qty" v-model="editedLine.qty" :rules="[v => !!v || 'Qty is required',]" required @input="calc"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="6" lg="3">
-                            <v-text-field type="number" label="Price" v-model="editedLine.price" :rules="[v => !!v || 'Price is required',]" required @input="calc"></v-text-field>
+                            <v-text-field type="number" label="Price" v-model="editedLine.properties.price" :rules="[v => !!v || 'Price is required',]" required @input="calc"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4" md="4" lg="2">
-                            <v-text-field type="number" label="Discount" v-model="editedLine.discount_rate" :rules="[v => !!v || 'Discount is required',]" required @input="calc"></v-text-field>
+                            <v-text-field type="number" label="Discount" v-model="editedLine.discount.rate" :rules="[v => !!v || 'Discount is required',]" required @input="calc"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4" md="4" lg="2">
-                            <v-autocomplete v-model="editedLine.tax" :items="taxes" :loading="loading" hide-selected item-text="name" item-value="id" label="Tax" placeholder="Choose" prepend-icon="mdi-curreny-usd" return-object @input="calc" :rules="[v => !!v || 'Tax is required',]" required></v-autocomplete>
+                            <v-autocomplete v-model="editedLine.tax_id" :items="taxes" :loading="loading" hide-selected item-text="name" item-value="id" label="Tax" placeholder="Choose" prepend-icon="mdi-curreny-usd" return-object @input="calc" :rules="[v => !!v || 'Tax is required',]" required></v-autocomplete>
                         </v-col>
                         <v-col cols="12" sm="4" md="4" lg="3" class="text-right">
                             <h1 class="display-1">{{editedLine.total_amount | currency}}</h1>
@@ -64,15 +64,22 @@ export default {
                 item_id: -1,
                 line: -1,
                 type: 'po',
-                trxn_id: '',
+                trxn_id: -1,
+                user_id: -1,
                 note: '',
                 qty: null,
-                price: null,
-                discount_rate: null,
+                discount: {
+                    rate: 0,
+                    type: 'percent',
+                    amount: 0,
+                },
                 discount_amount: 0,
-                tax: null,
+                tax_id: null,
                 tax_amount: 0,
                 total_amount: 0,
+                properties: {
+                    price: null,
+                }
             },
         }
 
@@ -83,14 +90,13 @@ export default {
                 if (!!val) {
                     this.editedLine = JSON.parse(JSON.stringify(val))
                 }
-
-
             },
             deep: true
         }
     },
     computed: {
         ...mapGetters({
+            auth: 'auth/user',
             products: 'product/items',
         }),
 
@@ -101,21 +107,18 @@ export default {
     },
     methods: {
         async initialize() {
-
             this.loading = true
 
             this.taxes = await this.$store.dispatch('setting/fetch', { type: 'tax', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
 
-
-
             await this.$store.dispatch('product/fetch', { type: 'product', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
-
 
             this.loading = false
         },
         calc() {
 
-            this.editedLine.total_amount = this.editedLine.qty * this.editedLine.price
+console.log(this.editedLine.properties.price)
+            this.editedLine.total_amount = this.editedLine.qty * this.editedLine.properties.price
             this.editedLine.discount_amount = this.editedLine.total_amount * this.editedLine.discount_rate / 100
             this.editedLine.total_amount = this.editedLine.total_amount - this.editedLine.discount_amount
             if (this.editedLine.tax) {
@@ -139,25 +142,32 @@ export default {
                 item_id: -1,
                 line: -1,
                 type: 'po',
-                trxn_id: '',
+                trxn_id: -1,
+                user_id: -1,
                 note: '',
                 qty: null,
-                price: null,
-                discount_rate: null,
+                discount: {
+                    rate: 0,
+                    type: 'percent',
+                    amount: 0,
+                },
                 discount_amount: 0,
-                tax: null,
+                tax_id: null,
                 tax_amount: 0,
                 total_amount: 0,
+                properties: {
+                    price: null,
+                }
             }
         },
         close() {
-
             this.reset()
             this.$emit('close')
         },
         async save() {
             if (this.$refs.lineform.validate()) {
                 this.saving = true
+                this.editedLine.user_id = this.auth.id
                 this.$emit('save', this.editedLine)
                 this.reset()
                 this.saving = false
