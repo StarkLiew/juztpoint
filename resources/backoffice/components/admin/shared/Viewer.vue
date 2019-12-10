@@ -219,8 +219,10 @@ export default {
             this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
         },
         async save() {
+
             this.saving = true
             if (this.$refs.form.validate()) {
+
                 await this.saveMethod(this.editedItem)
                 if (this.items.length === 1) this.reset()
                 this.close()

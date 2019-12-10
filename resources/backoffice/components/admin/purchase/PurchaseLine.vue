@@ -38,7 +38,7 @@
                             <v-text-field type="number" label="Discount" v-model="editedLine.discount.rate" :rules="[v => !!v || 'Discount is required',]" required @input="calc"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4" md="4" lg="2">
-                            <v-autocomplete v-model="editedLine.tax_id" :items="taxes" :loading="loading" hide-selected item-text="name" item-value="id" label="Tax" placeholder="Choose" prepend-icon="mdi-curreny-usd" return-object @input="calc" :rules="[v => !!v || 'Tax is required',]" required></v-autocomplete>
+                            <v-autocomplete v-model="editedLine.tax" :items="taxes" :loading="loading" hide-selected item-text="name" item-value="id" label="Tax" placeholder="Choose" prepend-icon="mdi-curreny-usd" return-object @input="calc" :rules="[v => !!v || 'Tax is required',]" required></v-autocomplete>
                         </v-col>
                         <v-col cols="12" sm="4" md="4" lg="3" class="text-right">
                             <h1 class="display-1">{{editedLine.total_amount | currency}}</h1>
@@ -74,7 +74,8 @@ export default {
                     amount: 0,
                 },
                 discount_amount: 0,
-                tax_id: null,
+                tax_id: -1,
+                tax: null,
                 tax_amount: 0,
                 total_amount: 0,
                 properties: {
@@ -117,9 +118,11 @@ export default {
         },
         calc() {
 
-console.log(this.editedLine.properties.price)
+
             this.editedLine.total_amount = this.editedLine.qty * this.editedLine.properties.price
-            this.editedLine.discount_amount = this.editedLine.total_amount * this.editedLine.discount_rate / 100
+
+
+            this.editedLine.discount_amount = this.editedLine.total_amount * this.editedLine.discount.rate / 100
             this.editedLine.total_amount = this.editedLine.total_amount - this.editedLine.discount_amount
             if (this.editedLine.tax) {
                 this.editedLine.tax_amount = this.editedLine.total_amount * this.editedLine.tax.properties.rate / 100

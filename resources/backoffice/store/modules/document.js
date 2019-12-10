@@ -78,7 +78,8 @@ export const actions = {
     },
     async add({ commit }, item) {
         try {
-            const { reference, account, transact_by, terminal_id, store_id, shiftId, type, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = item
+
+            const { reference, account, transact_by, type, date, note, items } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             for (const [line, item] of items.entries()) {
@@ -86,7 +87,7 @@ export const actions = {
                 const item_line = item.line
                 const user_id = item.saleBy.id
                 const qty = item.qty
-                const tax_id = item.tax_id
+                const tax_id = item.tax.id
                 const discount_amount = item.discount_amount
                 const tax_amount = item.tax_amount
                 const total_amount = item.amount

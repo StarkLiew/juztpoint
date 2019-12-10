@@ -129,7 +129,8 @@ export default {
                     amount: 0,
                 },
                 discount_amount: 0,
-                tax_id: null,
+                tax_id: -1,
+                tax: null,
                 tax_amount: 0,
                 total_amount: 0,
                 properties: {
@@ -187,12 +188,11 @@ export default {
             selectedLine: null,
             supplierItems: [],
             itemHeaders: [
-
                 { text: 'Item', value: 'item.sku' },
                 { text: 'Description value', value: 'note' },
-                { text: 'Price', value: 'qty', align: 'end' },
-                { text: 'Price', value: 'price', align: 'end', currency: true },
-                { text: 'Discount', value: 'discount_rate', align: 'end' },
+                { text: 'Quantity', value: 'qty', align: 'end' },
+                { text: 'Price', value: 'properties.price', align: 'end', currency: true },
+                { text: 'Discount', value: 'discount.rate', align: 'end', currency: true },
                 { text: 'Tax', value: 'tax.name' },
                 { text: 'Amount', value: 'total_amount', align: 'end', currency: true },
                 { text: 'Actions', value: 'action', sortable: false },
