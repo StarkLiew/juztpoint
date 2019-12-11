@@ -209,9 +209,9 @@ class ReportsQuery extends Query {
 
 		$results = Document::with(array_keys($fields->getRelations()))
 			->withTrashed()
-			->where('type', 'purchase')
+			->where('type', 'po')
 			->where($where)
-			->orderBy('date', 'desc')
+			->orderBy('id', 'desc')
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
 		return ['summary' => ['count' => 0, 'sum' => 0], 'data' => $results];
 

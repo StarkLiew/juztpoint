@@ -52,7 +52,9 @@ class Document extends Model {
 	];
 
 	public function items() {
-		return $this->hasMany('App\Models\Item', 'trxn_id')->with(['tax'])->where('type', 'item');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->with(['tax'])->where(function ($query) {
+			$query->where('type', 'item')->orWhere('type', 'pitem');
+		});
 	}
 	public function payments() {
 		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'payment');
@@ -66,7 +68,9 @@ class Document extends Model {
 	public function terminal() {
 		return $this->belongsTo('App\Models\Setting', 'terminal_id')->where('type', 'terminal');
 	}
-
+	public function account() {
+		return $this->belongsTo('App\Models\Account', 'account_id');
+	}
 	public function customer() {
 		return $this->belongsTo('App\Models\Account', 'account_id');
 	}

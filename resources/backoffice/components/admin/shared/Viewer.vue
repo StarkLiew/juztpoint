@@ -32,7 +32,7 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="editDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable v-if="!!showAdd">
                     <template v-slot:activator="{ on }">
-                        <v-btn color="primary" @click="$emit('appendNew')" dark class="mb-2" v-on="on" :disabled="loading" v-if="!!showAdd">
+                        <v-btn color="primary" @click="appendNew" dark class="mb-2" :disabled="loading" v-if="!!showAdd">
                             <v-icon>mdi-plus</v-icon>
                         </v-btn>
                     </template>
@@ -141,6 +141,14 @@
                 </v-chip>
             </v-toolbar>
         </template>
+        <template v-slot:item.action="{ item, header }">
+            <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteItem(item)" v-if="!header.hideTrash || item[header.hideTrash]">
+                mdi-delete
+            </v-icon>
+        </template>
         <template v-slot:no-data>
             <v-container class="mt-5 mb-5">
                 <h1 class="title">Empty data</h1>
@@ -182,7 +190,7 @@ export default {
     created() {
         this.initialize()
     },
-    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd', 'defaultItem'],
+    props: ['title', 'headers', 'summary', 'items', 'sortBy', 'options', 'loading', 'serverItemsLength', 'refresh', 'saveMethod', 'removeMethod', 'exportFields', 'groups', 'hasSummary', 'hideBack', 'showAdd', 'defaultItem', 'beforeAppendNew'],
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
@@ -216,7 +224,10 @@ export default {
     },
     methods: {
         initialize() {
-            this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+            if (!!this.defaultItem) {
+                this.editedItem = JSON.parse(JSON.stringify(this.defaultItem))
+            }
+
         },
         async save() {
 
@@ -227,7 +238,9 @@ export default {
                 if (this.items.length === 1) this.reset()
                 this.close()
             }
+
             this.saving = false
+            await this.refresh(this.filter, this.mutateOptions)
         },
         async filterData() {
             if (this.menu) {
@@ -251,6 +264,11 @@ export default {
             const results = await this.refresh(this.filter.dates, options, true)
 
             return results.data.data
+        },
+        async appendNew() {
+            await this.beforeAppendNew(this.editedItem, this.items.data)
+            this.editDialog = true
+
         },
         filterDone() {
             this.dialog = false
@@ -288,7 +306,18 @@ export default {
                 else return items[0][this.groupBy][item.text]
             }
             return ''
-        }
+        },
+        editItem(item) {
+
+            this.editedIndex = this.items.data.indexOf(item)
+            this.editedItem = JSON.parse(JSON.stringify(item))
+            this.editDialog = true
+
+        },
+        async deleteItem(item) {
+            const index = this.items.data.indexOf(item)
+            confirm('Are you sure you want to delete this item?') && await this.removeMethod(item)
+        },
 
     }
 }

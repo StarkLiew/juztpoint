@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem" @appendNew="appendNewItem" :saveMethod="saveItem">
+        <viewer title="Purchase Orders" :headers="selected.headers" :items.sync='items' sort-by="reference" :refresh="retrieve" :summary="summary" :options.sync="options" :server-items-length="count" :loading="loading" loading-text="Loading..." @apply-filter="applyFilter" :export-fields="selected.exportFields" :groups="[]" @closed="selected = null" :hasSummary="false" :hideBack="true" :showAdd="true" :default-item="defaultItem" :beforeAppendNew="appendNewItem" :saveMethod="saveItem">
             <template v-slot:dialog="{ valid, editedItem }">
                 <v-container>
                     <v-row>
@@ -25,7 +25,7 @@
                         <v-col cols="12" sm="12" md="12" lg="12">
                             <v-data-table hide-default-footer disable-pagination :headers="itemHeaders" :items="editedItem.items" class="elevation-1">
                                 <template v-slot:item.action="{item}">
-                                    <v-icon class="mr-2" color="blue darken-1" @click="editLine(item, editedItem)">
+                                    <v-icon class="mr-2" color="blue darken-1" @click="editLine(item)">
                                         mdi-pencil
                                     </v-icon>
                                     <v-icon class="mr-2" color="red darken-1" @click="removeLine(item, editedItem)">
@@ -41,7 +41,7 @@
                                                     Add a new item
                                                 </v-btn>
                                             </template>
-                                            <purchase-line :line="selectedLine" :collection="editedItem.items" @close="editItemDialog = false" @save="updateItems(editedItem, ...arguments)"></purchase-line>
+                                            <purchase-line :line="selectedLine" :collection="editedItem.items" @close="closeDialogLine" @save="updateItems(editedItem, ...arguments)"></purchase-line>
                                         </v-dialog>
                                         <v-spacer></v-spacer>
                                         <v-toolbar-title>Total</v-toolbar-title>
@@ -52,14 +52,6 @@
                         </v-col>
                     </v-row>
                 </v-container>
-            </template>
-            <template v-slot:item.action="{item}">
-                <v-icon class="mr-2" @click="" color="blue darken-1">
-                    mdi-pencil
-                </v-icon>
-                <v-icon class="mr-2" @click="" color="red darken-1">
-                    mdi-close
-                </v-icon>
             </template>
             <template v-slot:item.date="{item, header}">
                 <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY hh:mmA') }}</span>
@@ -112,6 +104,8 @@ export default {
                     so: '',
                 },
                 items: [],
+                charge: 0,
+                tax_amount: 0,
                 formData: null,
             },
             editedLine: {
@@ -134,23 +128,22 @@ export default {
                 tax_amount: 0,
                 total_amount: 0,
                 properties: {
-                    price: null,
+                    price: 0,
                 }
             },
             selected: {
                 title: 'Receipts',
                 name: 'receipts',
-                fields: `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, customer{name}, terminal{id, name}, store{id, name}, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change,
-                         note,refund, items{id, line, item_id, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, 
+                fields: `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{so},
+                         note,refund, items{id, line, item_id, item{id, name, sku}, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, 
                          refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`,
                 headers: [
-                    { text: 'Store', value: 'store.name', sortable: true },
-                    { text: 'Terminal', value: 'terminal.name', sortable: true },
-                    { text: 'Teller', value: 'teller.name', sortable: true },
+
                     { text: 'Reference', value: 'reference', sortable: true },
                     { text: 'Date', value: 'date', sortable: true, custom: true },
                     { text: 'Supplier', value: 'customer.name', sortable: true },
                     { text: 'Amount', value: 'charge', sortable: true, align: 'end', currency: true },
+                    { text: 'Issued by', value: 'teller.name', sortable: true },
                     { text: 'Status', value: 'status', sortable: true },
                     { text: 'Actions', value: 'action', sortable: false, custom: true },
                 ],
@@ -213,8 +206,8 @@ export default {
         count: 'receipt/count',
         vendors: 'account/items',
     }),
-    async mounted() {
-
+    async created() {
+        await this.$store.dispatch('receipt/reset')
     },
     methods: {
         async print(item) {
@@ -238,8 +231,7 @@ export default {
 
             await this.$store.dispatch('account/fetch', { type: 'vendor', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
 
-            const results = await this.$store.dispatch('document/fetch', { name: 'po', fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
-
+            const results = await this.$store.dispatch('receipt/fetch', { name: 'purchase', fields: this.selected.fields, filter, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
 
@@ -249,23 +241,39 @@ export default {
         applyFilter(filter) {
 
         },
-        appendNewItem() {
-            if (this.items.length > 0) {
-                const last = this.items[this.items.length - 1]
-                const numOnly = parseInt(last.reference.replace(/\D/g, '')) || 0
-                this.defaultItem.reference = numOnly + 1
+        appendNewItem(editedItem, items) {
+
+            if (items.length > 0) {
+                // const last = items[items.length - 1]
+                const last = items[0]
+                const numStr = last.reference.replace(/\D/g, '')
+                const flag = last.reference.match(/^\D+/g, '')
+
+
+                const parsedNum = (parseInt(numStr) + 1 || 0) + ''
+                let padded = ''
+                if (numStr.length > 0) {
+                    padded = new Array((parsedNum.length - 1) + (/\./.test(parsedNum) ? 2 : 1)).join('0') + parsedNum
+                }
+
+                editedItem.reference = flag + padded
+
             } else {
-                this.defaultItem.reference = ''
+                editedItem.reference = ''
             }
+
 
 
         },
         async saveItem(item) {
 
             this.loading = true
+
             if (!item.id) {
+
                 item.transact_by = this.auth.id
                 item.type = 'po'
+
                 await this.$store.dispatch('document/add', item)
             } else {
 
@@ -332,16 +340,17 @@ export default {
             }
         },
         updateItems(editedItem, line) {
+
             if (!this.selectedLine) {
                 if (editedItem.items.length < 1) line.line = 1
                 else {
                     const last = editedItem.items[editedItem.items.length - 1]
                     line.line = last.line + 1
                 }
-                editedItem.items.push({ ...line })
+                editedItem.items.push(JSON.parse(JSON.stringify(line)))
             } else {
                 const index = editedItem.items.findIndex(v => v.line === line.line)
-                Vue.set(editedItem.items, index, { ...line })
+                Vue.set(editedItem.items, index, JSON.parse(JSON.stringify(line)))
                 this.selectedLine = null
 
             }
@@ -355,12 +364,15 @@ export default {
             const index = editedItem.items.findIndex(v => v.line === line.line)
             editedItem.items.splice(index, 1)
 
-
+        },
+        closeDialogLine() {
+            this.selectedLine = null
+            this.editItemDialog = false
         },
         pickedDate() {
-
             this.showDatePicker = false
-        }
+        },
+
 
     }
 

@@ -50,7 +50,7 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-    async reset() {
+    async reset({ commit }) {
         commit(types.FETCH_RECEIPT_FAILURE)
     },
     async fetch({ commit }, { name, fields, filter, location, user, terminal, limit, page, sort, desc, noCommit }) {

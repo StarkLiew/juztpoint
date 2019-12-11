@@ -79,7 +79,7 @@ export default {
                 tax_amount: 0,
                 total_amount: 0,
                 properties: {
-                    price: null,
+                    price: 0,
                 }
             },
         }
@@ -88,12 +88,17 @@ export default {
     watch: {
         line: {
             handler(val) {
+               console.log(val)
                 if (!!val) {
+
                     this.editedLine = JSON.parse(JSON.stringify(val))
                 }
             },
             deep: true
-        }
+
+        },
+
+
     },
     computed: {
         ...mapGetters({
@@ -103,8 +108,13 @@ export default {
 
     },
     props: ['line'],
-    async mounted() {
+    async created() {
+        if (this.line) {
+            console.log(this.line)
+            this.editedLine = JSON.parse(JSON.stringify(this.line))
+        }
         await this.initialize()
+
     },
     methods: {
         async initialize() {
@@ -159,7 +169,7 @@ export default {
                 tax_amount: 0,
                 total_amount: 0,
                 properties: {
-                    price: null,
+                    price: 0,
                 }
             }
         },
@@ -170,8 +180,10 @@ export default {
         async save() {
             if (this.$refs.lineform.validate()) {
                 this.saving = true
+
                 this.editedLine.user_id = this.auth.id
-                this.$emit('save', this.editedLine)
+
+                this.$emit('save', { ...this.editedLine })
                 this.reset()
                 this.saving = false
             }

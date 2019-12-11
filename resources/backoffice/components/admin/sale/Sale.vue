@@ -123,7 +123,7 @@ import receipt from "../../../../pos/components/sales/shared/ReceiptTemplate"
 import Form from '~~/mixins/form'
 import axios from 'axios'
 import { api } from '~~/config'
-import {bus} from '$receipt/bus'
+import { bus } from '$receipt/bus'
 
 export default {
     mixins: [Form],
@@ -197,8 +197,8 @@ export default {
         summary: 'receipt/summary',
         count: 'receipt/count',
     }),
-    async mounted() {
-
+    async created() {
+        await this.$store.dispatch('receipt/reset')
     },
     methods: {
         async print(item) {
@@ -243,7 +243,7 @@ export default {
             this.selectedItem = item
             const company = this.company
 
-         
+
         },
         closeDialog() {
             this.sendDialog = false
@@ -274,9 +274,9 @@ export default {
                     id: item.id,
                     to: this.form.email,
                     name: this.form.name,
-                    data: {item,company: this.company}
+                    data: { item, company: this.company }
                 }
-     
+
                 await axios.post(api.path('receipt'), form)
                     .then(res => {
                         this.$toast.success('You have been successfully registered!')

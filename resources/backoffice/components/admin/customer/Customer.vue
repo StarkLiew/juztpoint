@@ -77,19 +77,14 @@ export default {
     },
     methods: {
         async retrieve(search, options, noCommit = false) {
-
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
-
-
             const results = await this.$store.dispatch('account/fetch', { type: 'customer', search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
-
             if (noCommit) return results
         },
         async save(item) {
-
             this.loading = true
             if (!item.id) {
                 item.type = 'customer'
@@ -98,19 +93,12 @@ export default {
 
                 await this.$store.dispatch('account/update', item)
             }
-
-
             this.loading = false
         },
         async remove(item) {
-
             this.loading = true
-
             await this.$store.dispatch('account/trash', item)
-
             this.loading = false
-
-
 
         }
     },

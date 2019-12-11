@@ -45,6 +45,11 @@ class ItemType extends GraphQLType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'Description of the setting',
 			],
+			'item' => [
+				'type' => GraphQL::type('product'),
+				'description' => 'A list of the item',
+				'is_relation' => true,
+			],
 			'product' => [
 				'type' => GraphQL::type('product'),
 				'description' => 'A list of the item',

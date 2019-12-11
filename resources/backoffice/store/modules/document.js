@@ -79,27 +79,28 @@ export const actions = {
     async add({ commit }, item) {
         try {
 
-            const { reference, account, transact_by, type, date, note, items } = item
-            const props = JSON.stringify(properties).replace(/"/g, '\\"')
+            const { reference, account, transact_by, type, date, note, items, properties, charge, tax_amount } = item
+            let castItems = ''
 
-            for (const [line, item] of items.entries()) {
-                const item_id = item.id
-                const item_line = item.line
-                const user_id = item.saleBy.id
-                const qty = item.qty
-                const tax_id = item.tax.id
-                const discount_amount = item.discount_amount
-                const tax_amount = item.tax_amount
-                const total_amount = item.amount
-                const note = item.note
+            for (const [seq, line] of items.entries()) {
 
-             
-                const props = `{\\"price\\": ${item.properties.price}`
+                const item_id = line.item.id
+                const user_id = line.user_id
+                const qty = line.qty
+                const tax_id = line.tax.id
+                const discount_amount = line.discount_amount
+                const tax_amount = line.tax_amount
+                const total_amount = line.total_amount
+                const note = line.note
+                const price = line.properties.price
+               
 
-                const cast = `{line: ${line + 1}, 
-                         type: "item", 
+                const line_props = `{\\"price\\": ${price}}`
+
+                const cast = `{line: ${seq + 1}, 
+                         type: "pitem", 
                          item_id: ${item_id},
-                         discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
+                         discount: "${JSON.stringify(line.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
                          qty: ${qty},
@@ -107,42 +108,44 @@ export const actions = {
                          refund_amount: 0.00,
                          tax_amount: ${parseFloat(tax_amount)}, 
                          user_id: ${user_id},
-                         terminal_id: 'web',
-                         store_id: -1,
-                         shift_id: -1,
+                         terminal_id: 0,
+                         store_id: 0,
+                         shift_id: 0,
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
-                         properties:"${props}"
+                         properties:"${line_props}"
                         },`
 
                 castItems += cast
             }
 
-            const mutation = `{
-                             newDocument(
+            const props = JSON.stringify(properties).replace(/"/g, '\\"')
+
+            const mutation = `{newDocument(
                                  reference: "${reference}",
                                  status: "active",
                                  type: "${type}",
-                                 terminal_id: -1,
-                                 store_id: -1,
+                                 terminal_id: 0,
+                                 store_id: 0,
                                  account_id: "${account.id}",
                                  transact_by: ${transact_by},
-                                 shift_id: -1,
+                                 shift_id: 0,
                                  date: "${date}",
                                  discount: "{}",
                                  discount_amount: 0.00,
-                                 tax_amount: ${parseFloat(tax_total)},
+                                 tax_amount: ${parseFloat(tax_amount)},
                                  service_charge: 0.00,
                                  rounding: 0.00,
-                                 charge: 0.00,
+                                 charge: ${parseFloat(charge)},
                                  received: 0.00,
                                  change: 0.00,
                                  refund: 0.00,
                                  note: "${note}",
                                  items: [${castItems}],
+                                 properties:"${props}"
                              ) {id}}`
 
-            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+            const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation documents' + mutation.replace(/[,]\s+/g, ',') } })
 
             item = data.data.newDocument
 
@@ -150,7 +153,7 @@ export const actions = {
 
             return item
         } catch (e) {
-
+            console.log(e)
             return e
         }
     },

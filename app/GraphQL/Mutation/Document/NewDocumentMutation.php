@@ -8,7 +8,7 @@ use Rebing\GraphQL\Support\Mutation;
 
 class NewDocumentMutation extends Mutation {
 	protected $attributes = [
-		'name' => 'NewReceipt',
+		'name' => 'NewDocument',
 	];
 	public function type(): Type {
 		return GraphQL::type('receipt');
@@ -126,18 +126,24 @@ class NewDocumentMutation extends Mutation {
 			if ($document) {
 				//permenantly remove all ccommission
 
-				$document->commissions()->where('type', 'commission')->forceDelete();
 				$document->items()->where('type', 'item')->forceDelete();
+				$args['properties'] = json_decode($args['properties']);
 				$document->update($args);
-				$document->items()->createMany($args['items']);
-
-			} else {
-				$document = Document::create($args);
 				foreach ($args['items'] as $item) {
+					$item['discount'] = json_decode($item['discount']);
 					$item['properties'] = json_decode($item['properties']);
 					$document->items()->create($item);
 				}
 
+			} else {
+				$args['properties'] = json_decode($args['properties']);
+				$document = Document::create($args);
+				foreach ($args['items'] as $item) {
+					$item['discount'] = json_decode($item['discount']);
+					$item['properties'] = json_decode($item['properties']);
+
+					$document->items()->create($item);
+				}
 			}
 
 			DB::commit();
