@@ -132,7 +132,7 @@ export default {
             this.loading = true
             const { sortBy, sortDesc, page, itemsPerPage } = options
 
-            const results = await this.$store.dispatch('user/fetchUsers', { search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
+            const results = await this.$store.dispatch('user/fetch', { search, limit: itemsPerPage, page, sort: sortBy, desc: sortDesc, noCommit })
 
             this.loading = false
 

@@ -25,6 +25,15 @@ class ItemType extends GraphQLType {
 				'type' => Type::nonNull(Type::int()),
 				'description' => 'The id of the user',
 			],
+			'store' => [
+				'type' => GraphQL::type('setting'),
+				'description' => 'Description of the setting',
+				'is_relation' => true,
+			],
+			'store_id' => [
+				'type' => Type::int(),
+				'description' => 'The type of setting',
+			],
 			'type' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',
@@ -56,6 +65,11 @@ class ItemType extends GraphQLType {
 				'is_relation' => true,
 			],
 			'saleBy' => [
+				'type' => GraphQL::type('user'),
+				'description' => 'A list of the item',
+				'is_relation' => true,
+			],
+			'user' => [
 				'type' => GraphQL::type('user'),
 				'description' => 'A list of the item',
 				'is_relation' => true,
@@ -124,8 +138,17 @@ class ItemType extends GraphQLType {
 				'description' => 'A list of the item',
 				'is_relation' => false,
 			],
+			'user_id' => [
+				'type' => Type::nonNull(Type::int()),
+				'description' => 'Description of the setting',
+			],
 			'properties' => [
 				'type' => GraphQL::type('property'),
+				'description' => 'A list of the property',
+				'is_relation' => false,
+			],
+			'receives' => [
+				'type' => Type::listOf(GraphQL::type('item')),
 				'description' => 'A list of the property',
 				'is_relation' => false,
 			],

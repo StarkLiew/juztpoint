@@ -1,6 +1,7 @@
 <?php
 namespace App\GraphQL\Mutation\Document;
-use App\Models\Account;
+use App\Models\Document;
+use DB;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
@@ -28,12 +29,28 @@ class TrashDocumentMutation extends Mutation {
 		];
 	}
 	public function resolve($root, $args) {
+		$success = false;
+		$error = null;
+		DB::beginTransaction();
+		try {
+			$document = Document::find($args['id']);
+			if ($document) {
 
-		$account = Account::find($args['id']);
+				$document->items()->forceDelete();
+				$document->forceDelete();
+				DB::commit();
+				$success = true;
+			}
 
-		if (!$account->delete()) {
-			return null;
+		} catch (\Exception $e) {
+			$success = false;
+			$error = $e;
+			DB::rollback();
 		}
-		return $account;
+
+		if (!$success) {
+			return $error;
+		}
+		return $document;
 	}
 }

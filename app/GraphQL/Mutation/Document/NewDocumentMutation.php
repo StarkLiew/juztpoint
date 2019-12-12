@@ -115,35 +115,17 @@ class NewDocumentMutation extends Mutation {
 		$success = false;
 		$error = null;
 
-		$commissions = [];
-		$stocks = [];
-
 		DB::beginTransaction();
 		try {
 
-			$document = Document::where('reference', $args['reference'])->first();
+			$args['properties'] = json_decode($args['properties']);
 
-			if ($document) {
-				//permenantly remove all ccommission
+			$document = Document::create($args);
+			foreach ($args['items'] as $item) {
+				$item['discount'] = json_decode($item['discount']);
+				$item['properties'] = json_decode($item['properties']);
 
-				$document->items()->where('type', 'item')->forceDelete();
-				$args['properties'] = json_decode($args['properties']);
-				$document->update($args);
-				foreach ($args['items'] as $item) {
-					$item['discount'] = json_decode($item['discount']);
-					$item['properties'] = json_decode($item['properties']);
-					$document->items()->create($item);
-				}
-
-			} else {
-				$args['properties'] = json_decode($args['properties']);
-				$document = Document::create($args);
-				foreach ($args['items'] as $item) {
-					$item['discount'] = json_decode($item['discount']);
-					$item['properties'] = json_decode($item['properties']);
-
-					$document->items()->create($item);
-				}
+				$document->items()->create($item);
 			}
 
 			DB::commit();

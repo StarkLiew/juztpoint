@@ -59,6 +59,10 @@ class Item extends Model {
 		return $this->belongsTo('App\Models\Product', 'item_id');
 
 	}
+	public function receives() {
+		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'receive');
+
+	}
 	public function product() {
 		return $this->belongsTo('App\Models\Product', 'item_id');
 
@@ -75,5 +79,7 @@ class Item extends Model {
 	public function user() {
 		return $this->belongsTo('App\Models\User', 'user_id');
 	}
-
+	public function store() {
+		return $this->belongsTo('App\Models\Setting', 'store_id');
+	}
 }

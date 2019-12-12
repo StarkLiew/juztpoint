@@ -26,6 +26,14 @@ class PropertyType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'Description of the setting',
 			],
+			'do' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
+			'date' => [
+				'type' => Type::string(),
+				'description' => 'Description of the setting',
+			],
 
 			'type' => [
 				'type' => Type::int(),

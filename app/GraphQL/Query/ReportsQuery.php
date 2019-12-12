@@ -208,7 +208,6 @@ class ReportsQuery extends Query {
 		$fields = $getSelectFields();
 
 		$results = Document::with(array_keys($fields->getRelations()))
-			->withTrashed()
 			->where('type', 'po')
 			->where($where)
 			->orderBy('id', 'desc')

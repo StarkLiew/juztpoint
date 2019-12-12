@@ -49,7 +49,7 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-    async fetchUsers({ commit }, { search, limit, page, sort, desc, noCommit }) {
+    async fetch({ commit }, { search, limit, page, sort, desc, noCommit }) {
         try {
             const filter = `search: "${search}"`
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`

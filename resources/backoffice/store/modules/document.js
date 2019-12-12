@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Vue from 'Vue'
+import moment from 'moment'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'
 
@@ -93,7 +94,7 @@ export const actions = {
                 const total_amount = line.total_amount
                 const note = line.note
                 const price = line.properties.price
-               
+
 
                 const line_props = `{\\"price\\": ${price}}`
 
@@ -123,7 +124,7 @@ export const actions = {
 
             const mutation = `{newDocument(
                                  reference: "${reference}",
-                                 status: "active",
+                                 status: "ordered",
                                  type: "${type}",
                                  terminal_id: 0,
                                  store_id: 0,
@@ -159,25 +160,83 @@ export const actions = {
     },
     async update({ commit }, item) {
         try {
-            const { id, name, properties } = item
+
+            const { id, reference, account, transact_by, type, date, note, items, status, properties, charge, tax_amount } = item
+            let castItems = ''
+
+            for (const [seq, line] of items.entries()) {
+
+                const item_id = line.item.id
+                const user_id = line.user_id
+                const qty = line.qty
+                const tax_id = line.tax.id
+                const discount_amount = line.discount_amount
+                const tax_amount = line.tax_amount
+                const total_amount = line.total_amount
+                const note = line.note
+                const price = line.properties.price
+
+
+                const line_props = `{\\"price\\": ${price}}`
+
+                const cast = `{line: ${seq + 1}, 
+                         type: "pitem", 
+                         item_id: ${item_id},
+                         discount: "${JSON.stringify(line.discount).replace(/"/g, '\\"')}", 
+                         discount_amount: ${parseFloat(discount_amount)}, 
+                         tax_id: ${tax_id}, 
+                         qty: ${qty},
+                         refund_qty: 0,
+                         refund_amount: 0.00,
+                         tax_amount: ${parseFloat(tax_amount)}, 
+                         user_id: ${user_id},
+                         terminal_id: 0,
+                         store_id: 0,
+                         shift_id: 0,
+                         total_amount: ${parseFloat(total_amount)}, 
+                         note: "${note}",
+                         properties:"${line_props}"
+                        },`
+
+                castItems += cast
+            }
 
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            const mutation = `mutation documents{
-                               updateDocument(
-                                    id: ${id},
-                                    name: "${name}",
-                                    properties: "${props}"
-                             ) {id, name,type, properties{mobile, email}}}`
+            const mutation = `{updateDocument(
+                                 id: ${id},
+                                 reference: "${reference}",
+                                 status: "${status}",
+                                 type: "${type}",
+                                 terminal_id: 0,
+                                 store_id: 0,
+                                 account_id: "${account.id}",
+                                 transact_by: ${transact_by},
+                                 shift_id: 0,
+                                 date: "${moment(date).format('YYYY-MM-DD')}",
+                                 discount: "{}",
+                                 discount_amount: 0.00,
+                                 tax_amount: ${parseFloat(tax_amount)},
+                                 service_charge: 0.00,
+                                 rounding: 0.00,
+                                 charge: ${parseFloat(charge)},
+                                 received: 0.00,
+                                 change: 0.00,
+                                 refund: 0.00,
+                                 note: "${note}",
+                                 items: [${castItems}],
+                                 properties:"${props}"
+                             ) {id}}`
 
-            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
-            item = data.data.updateDocument
+            const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation documents' + mutation.replace(/[,]\s+/g, ',') } })
+
+            item = data.data.newDocument
 
             commit(types.ADD_DOCUMENT, { item })
 
             return item
         } catch (e) {
-
+            console.log(e)
             return e
         }
     },

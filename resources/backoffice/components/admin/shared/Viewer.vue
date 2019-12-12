@@ -112,7 +112,7 @@
                             <v-card-text>
                                 <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="filter.dates" transition="scale-transition" offset-y min-width="290px">
                                     <template v-slot:activator="{ on }">
-                                        <v-text-field class="mt-5 ml-2 mr-2" v-model="dateRangeText" label="Date range" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+                                        <v-text-field class="mt-5 ml-2 mr-2" :value="dateRangeText" label="Date range" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
                                     </template>
                                     <v-date-picker v-model="filter.dates" no-title range scrollable></v-date-picker>
                                     <v-spacer></v-spacer>
@@ -208,7 +208,7 @@ export default {
                 this.filling = true
                 this.terminals = await this.$store.dispatch('setting/fetch', { type: 'terminal', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true })
                 this.stores = await this.$store.dispatch('setting/fetch', { type: 'store', search: '', limit: 0, page: 1, sort: 'name', desc: '', noCommit: true })
-                this.users = await this.$store.dispatch('user/fetchUsers', { search: '', limit: 0, page: 1, sort: '', desc: '', noCommit: true })
+                this.users = await this.$store.dispatch('user/fetch', { search: '', limit: 0, page: 1, sort: '', desc: '', noCommit: true })
                 this.filling = false
 
             }
@@ -317,6 +317,7 @@ export default {
         async deleteItem(item) {
             const index = this.items.data.indexOf(item)
             confirm('Are you sure you want to delete this item?') && await this.removeMethod(item)
+            await this.refresh(this.filter, this.mutateOptions)
         },
 
     }

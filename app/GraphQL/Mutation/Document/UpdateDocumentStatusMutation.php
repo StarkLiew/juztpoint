@@ -1,6 +1,6 @@
 <?php
 namespace App\GraphQL\Mutation\Document;
-use App\Models\Account;
+
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
@@ -27,6 +27,10 @@ class UpdateDocumentStatusMutation extends Mutation {
 			'status' => [
 				'name' => 'status',
 				'type' => Type::string(),
+			],
+			'receives' => [
+				'name' => 'receives',
+				'type' => Type::listOf(GraphQL::type('ItemInput')),
 			],
 			'properties' => [
 				'name' => 'properties',
