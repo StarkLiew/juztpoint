@@ -240,12 +240,72 @@ export const actions = {
             return e
         }
     },
+
+    async receive({ commit }, { line, receivedItem }) {
+        try {
+      
+            const { id, refund_qty } = line
+
+            const props = JSON.stringify(receivedItem.properties).replace(/"/g, '\\"')
+
+
+            const receiveLine = `{
+                         line: 1, 
+                         type: "ritem", 
+                         item_id: ${line.item_id},
+                         discount_amount: 0, 
+                         discount: "{}", 
+                         tax_id: 0, 
+                         qty: ${receivedItem.qty},
+                         refund_qty: 0,
+                         refund_amount: 0.00,
+                         tax_amount: 0, 
+                         user_id: ${receivedItem.user.id},
+                         terminal_id: 0,
+                         store_id: ${receivedItem.store.id},
+                         shift_id: 0,
+                         total_amount: 0, 
+                         note: "",
+                         properties:"${props}"
+                    },`
+
+
+            const mutation = `mutation document{updateDocumentStatus(id: ${id}, qty: ${refund_qty}, receive: ${receiveLine}) {id}}`
+
+            const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
+
+            return data.data.updateDocumentStatus
+
+        } catch (e) {
+
+            return e
+        }
+    },
+    async undo({ commit }, { line, receivedItem }) {
+        try {
+
+            const { id, refund_qty } = line
+
+
+
+
+            const mutation = `mutation document{removeDocumentStatus(id: ${id}, qty: ${refund_qty}, receive_id: ${receivedItem.id}) {id }}`
+
+            await axios.get(graphql.path('query'), { params: { query: mutation } })
+
+
+            return item
+        } catch (e) {
+
+            return e
+        }
+    },
     async trash({ commit }, item) {
         try {
 
             const { id } = item
 
-            const mutation = `mutation document{trashDocument(id: "${id}") {id, name }}`
+            const mutation = `mutation document{trashDocument(id: ${id}) {id, name }}`
 
             await axios.get(graphql.path('query'), { params: { query: mutation } })
 

@@ -60,7 +60,7 @@ class Item extends Model {
 
 	}
 	public function receives() {
-		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'receive');
+		return $this->hasMany('App\Models\Item', 'trxn_id')->where('type', 'ritem');
 
 	}
 	public function product() {

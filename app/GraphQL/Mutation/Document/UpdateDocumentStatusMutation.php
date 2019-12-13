@@ -1,6 +1,9 @@
 <?php
 namespace App\GraphQL\Mutation\Document;
 
+use App\Models\Document;
+use App\Models\Item;
+use DB;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
@@ -19,22 +22,13 @@ class UpdateDocumentStatusMutation extends Mutation {
 				'type' => Type::int(),
 				'rules' => ['required'],
 			],
-			'name' => [
-				'name' => 'name',
-				'type' => Type::string(),
-				'rules' => ['required'],
+			'qty' => [
+				'name' => 'qty',
+				'type' => Type::float(),
 			],
-			'status' => [
-				'name' => 'status',
-				'type' => Type::string(),
-			],
-			'receives' => [
-				'name' => 'receives',
-				'type' => Type::listOf(GraphQL::type('ItemInput')),
-			],
-			'properties' => [
-				'name' => 'properties',
-				'type' => Type::string(),
+			'receive' => [
+				'name' => 'receive',
+				'type' => GraphQL::type('ItemInput'),
 			],
 		];
 	}
@@ -42,17 +36,42 @@ class UpdateDocumentStatusMutation extends Mutation {
 	{
 		return [
 			'id.required' => 'Id required',
-			'name.required' => 'Please enter your full name',
+			'name.required' => 'Line Id is required',
 		];
 	}
 	public function resolve($root, $args) {
+		$success = false;
+		$error = null;
 
-		$args['properties'] = json_decode($args['properties']);
+		DB::beginTransaction();
+		try {
+			$line = Item::find($args['id']);
+			$args['receive']['properties'] = json_decode($args['receive']['properties']);
+			$args['receive']['trxn_id'] = $line['id'];
 
-		$account = Account::find($args['id']);
-		if (!$account->update($args)) {
-			return null;
+			$received = Item::create($args['receive']);
+
+			$line->refund_qty = $args['qty'];
+			$line->save();
+			$result = Item::select(DB::raw('SUM(qty) - SUM(refund_qty) as balance'))->where('trxn_id', $line['trxn_id'])->first();
+			if ($result['balance'] <= 0) {
+				$document = Document::find($line['trxn_id']);
+				$document->status = 'completed';
+				$document->save();
+			}
+
+			DB::commit();
+
+		} catch (\Exception $e) {
+			$success = false;
+			$error = $e;
+
+			DB::rollback();
 		}
-		return $account;
+
+		if (!$success) {
+			return $error;
+		}
+		return $received;
 	}
 }

@@ -11,8 +11,8 @@
                         </v-btn>
                     </v-card-title>
                     <v-sheet color="white" height="350">
-                        <bar-chart :styles="chartStyles" :chartData="item.datacollection" v-if="item.chart === 'bar' && !item.loading"></bar-chart>
-                        <line-chart :styles="chartStyles" :chart-data="item.datacollection" v-if="item.chart === 'line' && !item.loading"></line-chart>
+                        <v-chart  :options="polar" />
+                        
                     </v-sheet>
                 </v-card>
             </v-col>
@@ -21,27 +21,65 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { Bar } from 'vue-chartjs'
-import LineChart from './LineChart.js'
-import BarChart from './BarChart.js'
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/component/polar'
 
 export default {
     components: {
-        LineChart,
-        BarChart
+        'v-chart': ECharts,
     },
     data() {
-        return {
-            datacollection: null,
-            checking: false,
-            loading: false,
-            heartbeats: [],
-            items: [],
-            chartOptions: {
-                responsive: true,
-                maintainAspectRatio: false,
-            }
+
+
+
+        let data = []
+
+        for (let i = 0; i <= 360; i++) {
+            let t = i / 180 * Math.PI
+            let r = Math.sin(2 * t) * Math.cos(2 * t)
+            data.push([r, i])
         }
+
+        return {
+            polar: {
+                title: {
+                    text: 'Polar'
+                },
+                legend: {
+                    data: ['line']
+                },
+                polar: {
+                    center: ['50%', '54%']
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                angleAxis: {
+                    type: 'value',
+                    startAngle: 0
+                },
+                radiusAxis: {
+                    min: 0
+                },
+                series: [{
+                    coordinateSystem: 'polar',
+                    name: 'line',
+                    type: 'line',
+                    showSymbol: false,
+                    data: data
+                }],
+                animationDuration: 2000
+            },
+            items: [],
+        }
+
+
+
+
     },
     computed: {
 
@@ -113,3 +151,14 @@ export default {
 }
 
 </script>
+<style>
+/**
+ * The default size is 600px×400px, for responsive charts
+ * you may need to set percentage values as follows (also
+ * don't forget to provide a size for the container).
+ */
+.echarts {
+  width: 100%;
+  height: 100%;
+}
+</style>

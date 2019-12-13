@@ -65,7 +65,7 @@
                     <v-card>
                         <v-card-title primary-title>
                             <v-toolbar dark color="primary">
-                                <v-btn icon @click="receiveDialogClose">
+                                <v-btn icon @click="receiveDialogClose" :disabled="saving">
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                                 <v-toolbar-title>
@@ -78,10 +78,6 @@
                                 <v-toolbar-title>
                                     ~ {{ item.date | moment('DD/MM/YYYY') }}
                                 </v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-btn icon @click="receiveDialogSave">
-                                    <v-icon>mdi-check</v-icon>
-                                </v-btn>
                             </v-toolbar>
                         </v-card-title>
                         <v-card-text>
@@ -117,16 +113,16 @@
                                                         <v-text-field v-model="receivedItem.properties.do" :rules="[v => !!v || 'D/O # is required',]" required dense label="D/O"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="3" lg="3" md="3" sm="12">
-                                                        <v-autocomplete dense v-model="receivedItem.store_id" :items="stores" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Store" placeholder="Choose"></v-autocomplete>
+                                                        <v-autocomplete dense v-model="receivedItem.store" :items="stores" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Store" placeholder="Choose" return-object></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="3" lg="3" md="3" sm="12">
-                                                        <v-autocomplete dense v-model="receivedItem.user_id" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" placeholder="Choose"></v-autocomplete>
+                                                        <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
                                                         <v-text-field dense v-model="receivedItem.qty" :rules="[v => !!v || 'Quantity is required',]" required label="Quantity"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-btn :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
+                                                        <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
                                                             <v-icon>mdi-plus-circle</v-icon>
                                                         </v-btn>
                                                     </v-col>
@@ -139,16 +135,16 @@
                                                         {{ received.properties.do }}
                                                     </v-col>
                                                     <v-col cols="3" lg="3" md="3" sm="12">
-                                                        {{ received.store_id }}
+                                                        {{ received.store.name }}
                                                     </v-col>
                                                     <v-col cols="3" lg="3" md="3" sm="12">
-                                                        {{ received.user_id }}
+                                                        {{ received.user.name }}
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
                                                         {{ received.qty }}
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-btn icon small color="red darken-1" @click="removeReceiveItem(line, rIndex)">
+                                                        <v-btn icon small color="red darken-1" @click="removeReceiveItem(line, rIndex)" :disabled="saving">
                                                             <v-icon>mdi-close</v-icon>
                                                         </v-btn>
                                                     </v-col>
@@ -305,6 +301,7 @@ export default {
             exportFields: {},
             headers: [],
             loading: false,
+            saving: false,
             company: null,
             sendDialog: false,
             refundDialog: false,
@@ -403,12 +400,8 @@ export default {
             } else {
                 editedItem.reference = ''
             }
-
-
-
         },
         async saveItem(item) {
-
             this.loading = true
 
             if (!item.id) {
@@ -421,7 +414,6 @@ export default {
 
                 await this.$store.dispatch('document/update', item)
             }
-
 
             this.loading = false
         },
@@ -488,7 +480,6 @@ export default {
             }
         },
         updateItems(editedItem, line) {
-
             if (!this.selectedLine) {
                 if (editedItem.items.length < 1) line.line = 1
                 else {
@@ -524,7 +515,6 @@ export default {
             const index = editedItem.items.findIndex(v => v.line === line.line)
             confirm('Are you sure you want to delete this item?') && editedItem.items.splice(index, 1)
             this.recalc(editedItem)
-
         },
         closeDialogLine() {
             this.selectedLine = null
@@ -570,15 +560,33 @@ export default {
                 }
             }
         },
-        addReceiveItem(line) {
-            line.receives.push(this.receivedItem)
-            line.refund_qty = this.calcReceivedQty(line.receives)
-            this.receivedItemReset()
-        },
-        removeReceiveItem(line, rIndex) {
+        async addReceiveItem(line) {
+            this.saving = true
 
-            confirm('Are you sure you want to delete this item?') && line.receives.splice(rIndex, 1)
-            line.refund_qty = this.calcReceivedQty(line.receives)
+            line.refund_qty = this.calcReceivedQty(line.receives) + parseFloat(this.receivedItem.qty)
+            const {receivedItem} = this 
+
+            const result = await this.$store.dispatch('document/receive', { line, receivedItem })
+
+            if (result) {
+
+                this.receivedItem.id = result.id
+                line.receives.push(this.receivedItem)
+            }
+           //  this.receivedItemReset()
+            this.saving = false
+        },
+        async removeReceiveItem(line, rIndex) {
+            this.saving = true
+            if (confirm('Are you sure you want to delete this item?')) {
+                const receivedItem = line.receives[rIndex] 
+
+                await this.$store.dispatch('document/undo', { line, receivedItem })
+
+                line.receives.splice(rIndex, 1)
+                line.refund_qty = this.calcReceivedQty(line.receives)
+            }
+            this.saving = false
         },
         calcReceivedQty(receives) {
             let total = 0
@@ -586,14 +594,12 @@ export default {
                 total += parseFloat(receive.qty)
             }
             return total
-
         },
         receiveDialogClose() {
             this.receivedItemReset()
             this.updateDialog = false
         },
         receiveDialogSave() {
-
             this.receivedItemReset()
             this.updateDialog = false
         },

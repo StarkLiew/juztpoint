@@ -30,8 +30,8 @@ Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com'))->group(func
 
 // Wildcard subdomain
 Route::domain(env('APP_URL', 'www.juztpoint.com'))->group(function ($router) {
-	Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-	Route::post('register', 'Auth\RegisterController@register');
+	// Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+	// Route::post('register', 'Auth\RegisterController@register');
 
 	Route::get('/', 'HomeController@welcome')->name('welcome');
 

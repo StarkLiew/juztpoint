@@ -5,6 +5,9 @@
         <v-text-field :label="labels.email" v-model="form.email" type="email" :error-messages="errors.email" :rules="[rules.required('email')]" :disabled="loading"></v-text-field>
         <v-text-field :label="labels.password" v-model="form.password" :append-icon="passwordHidden ? 'mdi-eye-off' : 'mdi-eye'" @click:append="() => (passwordHidden = !passwordHidden)" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password" :disabled="loading" :rules="[rules.required('password')]" hint="At least 6 characters"></v-text-field>
         <v-text-field :label="labels.password_confirmation" v-model="form.password_confirmation" :type="passwordHidden ? 'password' : 'text'" :error-messages="errors.password_confirmation" :disabled="loading" :rules="[rules.required('password_confirmation')]"></v-text-field>
+ <div><strong>Change: color / mode (math) / resolve (only digit) </strong></div>
+
+ 
         <v-layout row class="mt-4 mx-0">
             <v-spacer></v-spacer>
             <v-btn text :disabled="loading" :to="{ name: 'login' }" color="grey darken-2" exact>
@@ -25,7 +28,9 @@ import Form from '~~/mixins/form'
 
 export default {
     mixins: [Form],
-
+    components: {
+   
+    },
     data: () => ({
         passwordHidden: true,
         labels: {
@@ -61,6 +66,9 @@ export default {
                     })
             }
         },
+        captchaBtn() {
+
+        }
     }
 }
 
