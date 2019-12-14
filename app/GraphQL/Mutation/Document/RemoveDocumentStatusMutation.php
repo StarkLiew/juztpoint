@@ -13,7 +13,7 @@ class RemoveDocumentStatusMutation extends Mutation {
 		'name' => 'RemoveDocumentStatus',
 	];
 	public function type(): Type {
-		return GraphQL::type('account');
+		return GraphQL::type('item');
 	}
 	public function args(): array{
 		return [
@@ -62,6 +62,7 @@ class RemoveDocumentStatusMutation extends Mutation {
 				$document->save();
 			}
 			DB::commit();
+			$success = true;
 
 		} catch (\Exception $e) {
 			$success = false;

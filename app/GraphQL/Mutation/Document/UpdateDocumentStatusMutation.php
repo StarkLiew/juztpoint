@@ -13,7 +13,7 @@ class UpdateDocumentStatusMutation extends Mutation {
 		'name' => 'UpdateDocumentStatus',
 	];
 	public function type(): Type {
-		return GraphQL::type('account');
+		return GraphQL::type('item');
 	}
 	public function args(): array{
 		return [
@@ -61,7 +61,7 @@ class UpdateDocumentStatusMutation extends Mutation {
 			}
 
 			DB::commit();
-
+			$success = true;
 		} catch (\Exception $e) {
 			$success = false;
 			$error = $e;
@@ -72,6 +72,7 @@ class UpdateDocumentStatusMutation extends Mutation {
 		if (!$success) {
 			return $error;
 		}
+
 		return $received;
 	}
 }

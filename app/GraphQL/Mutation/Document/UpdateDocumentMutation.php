@@ -11,7 +11,7 @@ class UpdateDocumentMutation extends Mutation {
 		'name' => 'UpdateDocument',
 	];
 	public function type(): Type {
-		return GraphQL::type('account');
+		return GraphQL::type('receipt');
 	}
 	public function args(): array{
 		return [

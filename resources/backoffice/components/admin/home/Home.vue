@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col col="6" lg="6" md="6" sm="12" v-for="(item, i) in items" :key="i">
-                <v-card min-width="300" class="mx-auto mx-2" color="white" max-width="600">
+                <v-card width="450" class="mx-auto mx-2" color="white" max-width="450">
                     <v-card-title class="caption text-uppercase">
                         {{ item.title }}
                         <v-spacer></v-spacer>
@@ -10,9 +10,8 @@
                             <v-icon>mdi-refresh</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-sheet color="white" height="350">
-                        <v-chart  :options="polar" />
-                        
+                    <v-sheet color="white" height="300">
+                        <apexchart v-if="item.chart === 'bar' && item.datacollection" width="420" type="bar" :options="item.datacollection.options" :series="item.datacollection.series"></apexchart>
                     </v-sheet>
                 </v-card>
             </v-col>
@@ -21,64 +20,18 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import ECharts from 'vue-echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
+import VueApexCharts from 'vue-apexcharts'
 
 export default {
     components: {
-        'v-chart': ECharts,
+        'apexchart': VueApexCharts
     },
     data() {
 
-
-
-        let data = []
-
-        for (let i = 0; i <= 360; i++) {
-            let t = i / 180 * Math.PI
-            let r = Math.sin(2 * t) * Math.cos(2 * t)
-            data.push([r, i])
-        }
-
         return {
-            polar: {
-                title: {
-                    text: 'Polar'
-                },
-                legend: {
-                    data: ['line']
-                },
-                polar: {
-                    center: ['50%', '54%']
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross'
-                    }
-                },
-                angleAxis: {
-                    type: 'value',
-                    startAngle: 0
-                },
-                radiusAxis: {
-                    min: 0
-                },
-                series: [{
-                    coordinateSystem: 'polar',
-                    name: 'line',
-                    type: 'line',
-                    showSymbol: false,
-                    data: data
-                }],
-                animationDuration: 2000
-            },
+
             items: [],
         }
-
-
-
 
     },
     computed: {
@@ -91,7 +44,7 @@ export default {
         },
 
     },
-    async mounted() {
+    async created() {
 
         this.initialize()
         for (const item of this.items) {
@@ -112,15 +65,30 @@ export default {
             // this.loading = true
             // const { sortBy, sortDesc, page, itemsPerPage } = options
             item.loading = true
+             item.datacollection = null
             try {
+
                 const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+
                 item.datacollection = {
-                    labels: results.data.data.map(r => r.mth),
-                    datasets: [{
-                        label: 'Sales',
-                        backgroundColor: '#136ACD',
+                    options: {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                        chart: {
+                            id: 'vuechart-example'
+                        },
+                        xaxis: {
+                            categories: results.data.data.map(r => r.mth),
+                        }
+                    },
+                    series: [{
+                        name: 'Sale',
                         data: results.data.data.map(r => r.total_amount)
-                    }]
+                    }],
                 }
 
 
@@ -158,7 +126,8 @@ export default {
  * don't forget to provide a size for the container).
  */
 .echarts {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
+
 </style>
