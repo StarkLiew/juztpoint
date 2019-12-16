@@ -289,12 +289,12 @@ export const actions = {
 
 
 
-            const mutation = `mutation document{removeDocumentStatus(id: ${id}, qty: ${refund_qty}, receive_id: ${receivedItem.id}) {id }}`
+            const mutation = `mutation document{removeDocumentStatus(id: ${id}, qty: ${refund_qty}, receive_id: ${receivedItem.id}) {id, status }}`
 
-            await axios.get(graphql.path('query'), { params: { query: mutation } })
+            const data = await axios.get(graphql.path('query'), { params: { query: mutation } })
 
 
-            return item
+            return data.data.data.removeDocumentStatus
         } catch (e) {
 
             return e

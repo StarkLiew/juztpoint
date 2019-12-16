@@ -13,7 +13,7 @@ class RemoveDocumentStatusMutation extends Mutation {
 		'name' => 'RemoveDocumentStatus',
 	];
 	public function type(): Type {
-		return GraphQL::type('item');
+		return GraphQL::type('receipt');
 	}
 	public function args(): array{
 		return [
@@ -49,21 +49,22 @@ class RemoveDocumentStatusMutation extends Mutation {
 			$received = Item::find($args['receive_id']);
 			$received->forceDelete();
 
-			$line = Item::find($args['id']);
+			$line = Item::find($received['trxn_id']);
 			$line->refund_qty = $args['qty'];
 			$line->save();
-			$result = Item::select(DB::raw('SUM(qty) - SUM(refund_qty) as balance'))->where('trxn_id', $line['trxn_id'])->first();
+
+			$result = Item::select(DB::raw('SUM(qty) - SUM(refund_qty) as balance'))->where('trxn_id', $line['trxn_id'])->where('type', 'pitem')->first();
 			$document = Document::find($line['trxn_id']);
+
 			if ($result['balance'] <= 0) {
 				$document->status = 'completed';
 				$document->save();
 			} else {
-				$document->status = 'ordered';
+				$document->status = 'shipping';
 				$document->save();
 			}
 			DB::commit();
 			$success = true;
-
 		} catch (\Exception $e) {
 			$success = false;
 			$error = $e;
@@ -73,6 +74,6 @@ class RemoveDocumentStatusMutation extends Mutation {
 		if (!$success) {
 			return $error;
 		}
-		return $received;
+		return $document;
 	}
 }

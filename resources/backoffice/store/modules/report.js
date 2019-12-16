@@ -10,8 +10,8 @@ import moment from 'moment'
 export const state = {
     items: [],
     summary: {
-       count: 0,
-       sum: 0,
+        count: 0,
+        sum: 0,
     },
     count: 0,
 }
@@ -26,12 +26,18 @@ export const mutations = {
         state.summary = items.summary
         state.count = items.data.total
     },
+    [types.UPDATE_DOCUMENT_STATUS](state, { id, status }) {
+
+        let index = state.items.findIndex(o => o.id === id)
+        state.items[index].status = status
+    },
     [types.FETCH_REPORT_FAILURE](state) {
         state.item = null
-        state.summary = { count: 0, sum: 0}
+        state.summary = { count: 0, sum: 0 }
         state.items = []
         state.count = 0
     },
+
 }
 
 /**
@@ -70,7 +76,7 @@ export const actions = {
 
             const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
             const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{data{${fields}}, total, per_page}, summary{count, sum}}}` } })
-    
+
             if (noCommit) {
                 return data.data.reports
             }
@@ -81,6 +87,10 @@ export const actions = {
             commit(types.FETCH_REPORT_FAILURE)
         }
     },
+    updateDocumentStatus({ commit }, {id, status}) {
+
+        commit(types.UPDATE_DOCUMENT_STATUS, {id, status})
+    }
 
 
 

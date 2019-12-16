@@ -85,7 +85,7 @@
                                 <v-form ref="receiveForm" v-model="validReceive">
                                     <v-expansion-panels accordion>
                                         <v-expansion-panel v-for="(line,index) in item.items" :key="index">
-                                            <v-expansion-panel-header>
+                                            <v-expansion-panel-header @click="receivedItemReset()">
                                                 <v-toolbar flat tile>
                                                     <v-toolbar-title>{{ line.item.name }}</v-toolbar-title>
                                                     <v-spacer></v-spacer>
@@ -562,16 +562,14 @@ export default {
         },
         async addReceiveItem(line) {
             this.saving = true
-
+            
             line.refund_qty = this.calcReceivedQty(line.receives) + parseFloat(this.receivedItem.qty)
             const {receivedItem} = this 
-
             const result = await this.$store.dispatch('document/receive', { line, receivedItem })
-
+           
             if (result) {
-
                 this.receivedItem.id = result.id
-                line.receives.push(this.receivedItem)
+                line.receives.push({ ...receivedItem })
             }
            //  this.receivedItemReset()
             this.saving = false
@@ -580,11 +578,11 @@ export default {
             this.saving = true
             if (confirm('Are you sure you want to delete this item?')) {
                 const receivedItem = line.receives[rIndex] 
-
-                await this.$store.dispatch('document/undo', { line, receivedItem })
-
                 line.receives.splice(rIndex, 1)
                 line.refund_qty = this.calcReceivedQty(line.receives)
+                const doc = await this.$store.dispatch('document/undo', { line, receivedItem })
+                this.$store.dispatch('report/updateDocumentStatus', {id: doc.id, status: doc.status})
+         
             }
             this.saving = false
         },

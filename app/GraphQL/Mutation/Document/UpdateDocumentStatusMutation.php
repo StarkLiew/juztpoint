@@ -13,7 +13,7 @@ class UpdateDocumentStatusMutation extends Mutation {
 		'name' => 'UpdateDocumentStatus',
 	];
 	public function type(): Type {
-		return GraphQL::type('item');
+		return GraphQL::type('receipt');
 	}
 	public function args(): array{
 		return [
@@ -52,11 +52,16 @@ class UpdateDocumentStatusMutation extends Mutation {
 			$received = Item::create($args['receive']);
 
 			$line->refund_qty = $args['qty'];
+
 			$line->save();
-			$result = Item::select(DB::raw('SUM(qty) - SUM(refund_qty) as balance'))->where('trxn_id', $line['trxn_id'])->first();
+			$result = Item::select(DB::raw('SUM(qty) - SUM(refund_qty) as balance'))->where('trxn_id', $line['trxn_id'])->where('type', 'pitem')->first();
+			$document = Document::find($line['trxn_id']);
 			if ($result['balance'] <= 0) {
-				$document = Document::find($line['trxn_id']);
+
 				$document->status = 'completed';
+				$document->save();
+			} else {
+				$document->status = 'shipping';
 				$document->save();
 			}
 
@@ -73,6 +78,6 @@ class UpdateDocumentStatusMutation extends Mutation {
 			return $error;
 		}
 
-		return $received;
+		return $document;
 	}
 }

@@ -38,10 +38,11 @@ export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
 
 
 /**
- * user.js
+ * report.js
  */
 export const FILL_REPORT_ITEMS = 'FILL_REPORT_ITEMS'
 export const FETCH_REPORT_FAILURE = 'FETCH_REPORT_FAILURE'
+export const UPDATE_DOCUMENT_STATUS = 'UPDATE_DOCUMENT_STATUS'
 
 /**
  * receipt.js
