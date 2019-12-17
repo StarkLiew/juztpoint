@@ -26,8 +26,6 @@ export const mutations = {
         state.count = items.total
     },
     [types.ADD_DOCUMENT](state, { item }) {
-
-
         const index = state.items.findIndex(u => u.id === item.id)
 
         if (index > -1) {
@@ -274,7 +272,7 @@ export const actions = {
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
 
-            return data.data.updateDocumentStatus
+            return data.data.data.updateDocumentStatus
 
         } catch (e) {
 
@@ -286,11 +284,7 @@ export const actions = {
 
             const { id, refund_qty } = line
 
-
-
-
             const mutation = `mutation document{removeDocumentStatus(id: ${id}, qty: ${refund_qty}, receive_id: ${receivedItem.id}) {id, status }}`
-
             const data = await axios.get(graphql.path('query'), { params: { query: mutation } })
 
 

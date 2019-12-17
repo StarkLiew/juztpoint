@@ -90,12 +90,12 @@
                                                     <v-toolbar-title>{{ line.item.name }}</v-toolbar-title>
                                                     <v-spacer></v-spacer>
                                                     <v-toolbar-title>{{ line.qty }}</v-toolbar-title>
-                                                    <v-btn v-if="line.qty === line.refund_qty" icon>
+                                                    <v-toolbar-title v-if="line.qty === line.refund_qty">
                                                         <v-icon color="green darken-1">mdi-equal</v-icon>
-                                                    </v-btn>
-                                                    <v-btn v-if="line.qty !== line.refund_qty" icon>
+                                                    </v-toolbar-title>
+                                                    <v-toolbar-title v-if="line.qty !== line.refund_qty">
                                                         <v-icon color="orange darken-1">mdi-not-equal-variant</v-icon>
-                                                    </v-btn>
+                                                    </v-toolbar-title>
                                                     <v-toolbar-title>{{ line.refund_qty }}</v-toolbar-title>
                                                 </v-toolbar>
                                             </v-expansion-panel-header>
@@ -119,7 +119,7 @@
                                                         <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-text-field dense v-model="receivedItem.qty" :rules="[v => !!v || 'Quantity is required',]" required label="Quantity"></v-text-field>
+                                                        <v-text-field dense v-money="maskQty" v-model="receivedItem.qty" :rules="[v => !!v || 'Quantity is required',]" required label="Quantity"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
                                                         <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
@@ -330,6 +330,22 @@ export default {
             editItemDialog: false,
             updateDialog: false,
             validReceive: false,
+            maskMoney: {
+                decimal: '.',
+                thousands: ',',
+                prefix: '',
+                suffix: '',
+                precision: 2,
+                masked: false
+            },
+            maskQty: {
+                decimal: '.',
+                thousands: ',',
+                prefix: '',
+                suffix: '',
+                precision: 1,
+                masked: false
+            },
 
 
         }
@@ -562,27 +578,42 @@ export default {
         },
         async addReceiveItem(line) {
             this.saving = true
-            
+
             line.refund_qty = this.calcReceivedQty(line.receives) + parseFloat(this.receivedItem.qty)
-            const {receivedItem} = this 
+            const { receivedItem } = this
             const result = await this.$store.dispatch('document/receive', { line, receivedItem })
-           
+  
             if (result) {
+
                 this.receivedItem.id = result.id
                 line.receives.push({ ...receivedItem })
+
+
+            } else {
+                this.$toast.error('Fail to save received item!')
             }
-           //  this.receivedItemReset()
+            this.receivedItemReset()
             this.saving = false
         },
         async removeReceiveItem(line, rIndex) {
             this.saving = true
+            this.receivedItemReset()
             if (confirm('Are you sure you want to delete this item?')) {
-                const receivedItem = line.receives[rIndex] 
+                const receivedItem = { ...line.receives[rIndex] }
                 line.receives.splice(rIndex, 1)
                 line.refund_qty = this.calcReceivedQty(line.receives)
                 const doc = await this.$store.dispatch('document/undo', { line, receivedItem })
-                this.$store.dispatch('report/updateDocumentStatus', {id: doc.id, status: doc.status})
-         
+
+
+                if (doc) {
+              
+                   // this.$store.dispatch('report/updateDocumentStatus', { id: doc.id, status: doc.status })
+
+                } else {
+                    line.receives.push(rIndex, receivedItem)
+                    this.$toast.error('Fail to remove received item.')
+                }
+
             }
             this.saving = false
         },

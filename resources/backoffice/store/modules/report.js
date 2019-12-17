@@ -28,8 +28,9 @@ export const mutations = {
     },
     [types.UPDATE_DOCUMENT_STATUS](state, { id, status }) {
 
-        let index = state.items.findIndex(o => o.id === id)
-        state.items[index].status = status
+        // let index = state.items.findIndex(o => o.id === id)
+           
+         // state.items[index].status = status
     },
     [types.FETCH_REPORT_FAILURE](state) {
         state.item = null
@@ -89,7 +90,8 @@ export const actions = {
     },
     updateDocumentStatus({ commit }, {id, status}) {
 
-        commit(types.UPDATE_DOCUMENT_STATUS, {id, status})
+        commit(types.UPDATE_DOCUMENT_STATUS, {id: id, status: status})
+
     }
 
 

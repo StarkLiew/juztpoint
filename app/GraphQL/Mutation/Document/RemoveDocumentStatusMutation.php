@@ -74,6 +74,7 @@ class RemoveDocumentStatusMutation extends Mutation {
 		if (!$success) {
 			return $error;
 		}
+
 		return $document;
 	}
 }

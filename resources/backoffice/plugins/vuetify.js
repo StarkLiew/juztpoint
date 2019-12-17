@@ -4,7 +4,9 @@ import VuetifyToast from 'vuetify-toast-snackbar'
 import VueCurrencyFilter from 'vue-currency-filter'
 import VueMoment from 'vue-moment'
 import VueTheMask from 'vue-the-mask'
+import money from 'v-money'
 import moment from 'moment-timezone'
+
 
 
 
@@ -17,6 +19,8 @@ Vue.use(VueCurrencyFilter, {
     symbolPosition: 'front',
     symbolSpacing: true
 })
+
+Vue.use(money, {precision: 4})
 
 Vue.use(VueTheMask)
 
