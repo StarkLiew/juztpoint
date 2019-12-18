@@ -100,7 +100,7 @@
                                                 </v-toolbar>
                                             </v-expansion-panel-header>
                                             <v-expansion-panel-content>
-                                                <v-row>
+                                                <v-row  v-if="receivedItem">
                                                     <v-col cols="2" lg="2" md="2" sm="12">
                                                         <v-menu ref="menu" :close-on-content-click="true" transition="scale-transition" offset-y min-width="290px">
                                                             <template v-slot:activator="{ on }">
@@ -119,7 +119,7 @@
                                                         <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-text-field dense v-money="maskQty" v-model="receivedItem.qty" :rules="[v => !!v || 'Quantity is required',]" required label="Quantity"></v-text-field>
+                                                        <v-text-field dense v-model="receivedItem.qty" v-money="maskQty" :rules="[v => !!v || 'Quantity is required',]"  required label="Quantity"></v-text-field>
                                                     </v-col>
                                                     <v-col cols="1" lg="1" md="1" sm="12">
                                                         <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
@@ -249,7 +249,7 @@ export default {
                 trxn_id: -1,
                 user_id: -1,
                 note: '',
-                qty: null,
+                qty: 0,
                 discount: {
                     rate: 0,
                     type: 'percent',
@@ -558,7 +558,7 @@ export default {
                 trxn_id: -1,
                 user_id: -1,
                 note: '',
-                qty: null,
+                qty: 0,
                 discount: {
                     rate: 0,
                     type: 'percent',
