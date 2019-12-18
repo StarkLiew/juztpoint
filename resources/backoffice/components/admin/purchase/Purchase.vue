@@ -343,7 +343,7 @@ export default {
                 thousands: ',',
                 prefix: '',
                 suffix: '',
-                precision: 1,
+                precision: 0,
                 masked: false
             },
 

@@ -1,19 +1,79 @@
 <template>
     <v-container>
+        <h1 class="display-1">Dashboard</h1>
         <v-row>
-            <v-col col="6" lg="6" md="6" sm="12" v-for="(item, i) in items" :key="i">
-                <v-card width="450" class="mx-auto mx-2" color="white" max-width="450">
-                    <v-card-title class="caption text-uppercase">
+            <v-col cols="4" lgb="4" md="4" sm="12">
+                <v-card class="mx-auto mb-3" max-width="400">
+                    <v-list-item two-line>
+                        <v-list-item-content>
+                            <v-list-item-title class="Title">THIS WEEK</v-list-item-title>
+                            <v-list-item-subtitle>{{ week.start | moment('MMM D') }} ~ {{ week.end | moment('MMM D') }}</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-card-text>
+                        <v-row align="center">
+                            <v-col class="text-center" cols="12">
+                                <span class="display-3 font-weight-black black--text">0</span><br />
+                                <span class="title">Appointments</span>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-btn text>View Schedule</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card class="mx-auto" max-width="400">
+                    <v-list-item two-line>
+                        <v-list-item-content>
+                            <v-list-item-title class="title">Things to do</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list flat>
+                        <v-list-item-group color="primary">
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Add a Product</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Add a Service</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Add a Customer</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Add a Supplier</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-content>
+                                    <v-list-item-title>Add a Customer</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list-item-group>
+                    </v-list>
+                </v-card>
+            </v-col>
+            <v-col cols="8" lg="8" md="8" sm="12">
+                <v-card v-for="(item, i) in items" :key="i" class="mx-auto mb-3" color="white" max-width="600">
+                    <v-card-title class="title">
                         {{ item.title }}
                         <v-spacer></v-spacer>
                         <v-btn color="primary" @click="retrieve(item)" :loading="item.loading">
                             <v-icon>mdi-refresh</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-sheet color="white" height="300">
-                        <apexchart v-if="item.chart === 'bar' && item.datacollection" width="420" type="bar" :options="item.datacollection.options" :series="item.datacollection.series"></apexchart>
+                    <v-sheet color="white">
+                        <apexchart v-if="item.chart === 'bar' && item.datacollection" width="549" height="344" type="bar" :options="item.datacollection.options" :series="item.datacollection.series"></apexchart>
                     </v-sheet>
                 </v-card>
+            </v-col>
             </v-col>
         </v-row>
     </v-container>
@@ -29,7 +89,7 @@ export default {
     data() {
 
         return {
-
+            week: {start:'', end: ''},
             items: [],
         }
 
@@ -54,18 +114,24 @@ export default {
     methods: {
         initialize() {
             this.items = [
-                { title: 'Recent Sales', chart: 'bar', loading: false, datacollection: null },
+                { title: 'Recent Sales Performance', chart: 'bar', loading: false, datacollection: null },
                 { title: 'Top Services', chart: '', loading: false, datacollection: null },
                 { title: 'Top Products', chart: '', loading: false, datacollection: null },
                 { title: 'Top Employee', chart: '', loading: false, datacollection: null },
             ]
+
+            const today = this.$moment()
+            this.week.start = today.startOf('week').toString()
+            this.week.end  = today.endOf('week').toString()
+       
+
         },
         async retrieve(item) {
 
             // this.loading = true
             // const { sortBy, sortDesc, page, itemsPerPage } = options
             item.loading = true
-             item.datacollection = null
+            item.datacollection = null
             try {
 
                 const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
