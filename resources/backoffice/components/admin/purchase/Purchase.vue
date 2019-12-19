@@ -83,6 +83,7 @@
                         <v-card-text>
                             <v-container>
                                 <v-form ref="receiveForm" v-model="validReceive">
+                 
                                     <v-expansion-panels accordion>
                                         <v-expansion-panel v-for="(line,index) in item.items" :key="index">
                                             <v-expansion-panel-header @click="receivedItemReset()">
@@ -100,33 +101,33 @@
                                                 </v-toolbar>
                                             </v-expansion-panel-header>
                                             <v-expansion-panel-content>
-                                                <v-row  v-if="receivedItem">
-                                                    <v-col cols="2" lg="2" md="2" sm="12">
-                                                        <v-menu ref="menu" :close-on-content-click="true" transition="scale-transition" offset-y min-width="290px">
-                                                            <template v-slot:activator="{ on }">
-                                                                <v-text-field dense class="" :value="$moment(receivedItem.properties.date).format('YYYY-MM-DD')" label="Date" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
-                                                            </template>
-                                                            <v-date-picker @input="pickedReceivedDate(receivedItem, ...arguments)" :value="$moment(receivedItem.properties.date).format('YYYY-MM-DD')"></v-date-picker>
-                                                        </v-menu>
-                                                    </v-col>
-                                                    <v-col cols="2" lg="2" md="2" sm="12">
-                                                        <v-text-field v-model="receivedItem.properties.do" :rules="[v => !!v || 'D/O # is required',]" required dense label="D/O"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="3" lg="3" md="3" sm="12">
-                                                        <v-autocomplete dense v-model="receivedItem.store" :items="stores" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Store" placeholder="Choose" return-object></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col cols="3" lg="3" md="3" sm="12">
-                                                        <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
-                                                    </v-col>
-                                                    <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-text-field dense v-model="receivedItem.qty" v-money="maskQty" :rules="[v => !!v || 'Quantity is required',]"  required label="Quantity"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
-                                                            <v-icon>mdi-plus-circle</v-icon>
-                                                        </v-btn>
-                                                    </v-col>
-                                                </v-row>
+                                           <v-row>
+                                            <v-col cols="2" lg="2" md="2" sm="12">
+                                                <v-menu ref="menu" :close-on-content-click="true" transition="scale-transition" offset-y min-width="290px">
+                                                    <template v-slot:activator="{ on }">
+                                                        <v-text-field dense class="" :value="$moment(receivedItem.properties.date).format('YYYY-MM-DD')" label="Date" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
+                                                    </template>
+                                                    <v-date-picker @input="pickedReceivedDate(receivedItem, ...arguments)" :value="$moment(receivedItem.properties.date).format('YYYY-MM-DD')"></v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                            <v-col cols="2" lg="2" md="2" sm="12">
+                                                <v-text-field v-model="receivedItem.properties.do" :rules="[v => !!v || 'D/O # is required',]" required dense label="D/O"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="3" lg="3" md="3" sm="12">
+                                                <v-autocomplete dense v-model="receivedItem.store" :items="stores" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Store" placeholder="Choose" return-object></v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="3" lg="3" md="3" sm="12">
+                                                <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="1" lg="1" md="1" sm="12">
+                                                <v-text-field dense v-model="receivedItem.qty" :rules="[v => !!v.match(/^[0-9]+(\.[0-9]{1,2})?$/g) || 'Quantity is required',]" required label="Quantity"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="1" lg="1" md="1" sm="12">
+                                                <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
+                                                    <v-icon>mdi-plus-circle</v-icon>
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
                                                 <v-row v-for="(received, rIndex) in line.receives" :key="rIndex">
                                                     <v-col cols="2" lg="2" md="2" sm="12">
                                                         {{ received.properties.date | moment('YYYY-MM-DD') }}
@@ -346,6 +347,7 @@ export default {
                 precision: 0,
                 masked: false
             },
+            showReceiveItemDialog: false,
 
 
         }
@@ -545,6 +547,7 @@ export default {
             this.showReceivedDatePicker = false
         },
         receivedItemReset() {
+
             this.$refs.receiveForm.reset()
             this.$refs.receiveForm.resetValidation()
             this.validReceive = false
@@ -582,7 +585,7 @@ export default {
             line.refund_qty = this.calcReceivedQty(line.receives) + parseFloat(this.receivedItem.qty)
             const { receivedItem } = this
             const result = await this.$store.dispatch('document/receive', { line, receivedItem })
-  
+
             if (result) {
 
                 this.receivedItem.id = result.id
@@ -606,8 +609,8 @@ export default {
 
 
                 if (doc) {
-              
-                   // this.$store.dispatch('report/updateDocumentStatus', { id: doc.id, status: doc.status })
+
+                    // this.$store.dispatch('report/updateDocumentStatus', { id: doc.id, status: doc.status })
 
                 } else {
                     line.receives.push(rIndex, receivedItem)

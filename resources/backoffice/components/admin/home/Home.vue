@@ -89,7 +89,7 @@ export default {
     data() {
 
         return {
-            week: {start:'', end: ''},
+            week: { start: '', end: '' },
             items: [],
         }
 
@@ -122,8 +122,8 @@ export default {
 
             const today = this.$moment()
             this.week.start = today.startOf('week').toString()
-            this.week.end  = today.endOf('week').toString()
-       
+            this.week.end = today.endOf('week').toString()
+
 
         },
         async retrieve(item) {
@@ -135,6 +135,8 @@ export default {
             try {
 
                 const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+
+                const fmt = 'MMM'
 
                 item.datacollection = {
                     options: {
@@ -148,9 +150,14 @@ export default {
                             id: 'vuechart-example'
                         },
                         xaxis: {
-                            categories: results.data.data.map(r => r.mth),
+                            categories: results.data.data.map(r => this.$moment(r.md).format(fmt)),
+                            labels: {
+                                trim: false,
+                            },
+
                         }
                     },
+
                     series: [{
                         name: 'Sale',
                         data: results.data.data.map(r => r.total_amount)
@@ -191,9 +198,10 @@ export default {
  * you may need to set percentage values as follows (also
  * don't forget to provide a size for the container).
  */
-.echarts {
-    width: 100%;
-    height: 100%;
+
+.wrapXLabel {
+    word-break: break-all;
+    word-wrap: break-word;
 }
 
 </style>
