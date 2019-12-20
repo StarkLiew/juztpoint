@@ -149,6 +149,11 @@ class PropertyType extends GraphQLType {
 				'description' => 'A list of the item',
 
 			],
+			'duration' => [
+				'type' => Type::int(),
+				'description' => 'A list of the item',
+
+			],
 			'stocks' => [
 				'type' => Type::listOf(GraphQL::type('variant_stock')),
 				'description' => 'The type of setting',
@@ -164,6 +169,7 @@ class PropertyType extends GraphQLType {
 				'description' => 'A list of the servicesBy',
 				'is_relation' => false,
 			],
+
 		];
 	}
 	protected function resolveVariantField($root, $args) {

@@ -107,6 +107,7 @@
                                 <v-text-field v-model="props.item.price" label="From Price" prefix="$"></v-text-field>
                             </template>
                         </v-data-table>
+                        <v-select item-text="name" item-value="value" v-model="editedItem.properties.duration" :items="durations" label="Duration"></v-select>
                     </v-col>
                 </v-row>
             </v-container>
@@ -137,6 +138,7 @@ import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
 import AvatarCropper from 'vue-avatar-cropper'
 import Vue from 'Vue'
+import { durations } from '~~/config'
 
 export default {
     components: {
@@ -219,6 +221,7 @@ export default {
                 'mobile': 'properties.mobile',
                 'email': 'properties.email',
             },
+            durations: durations,
         }
     },
     computed: mapGetters({

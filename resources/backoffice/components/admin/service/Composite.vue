@@ -29,8 +29,9 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Selling Price"></v-text-field>
+                        <v-select item-text="name" item-value="value" v-model="editedItem.properties.duration" :items="durations" label="Duration"></v-select>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
-                        <v-data-table :loading="loading"  disable-pagination :headers="compositeHeaders" :items="editedItem.composites" class="elevation-1">
+                        <v-data-table :loading="loading" disable-pagination :headers="compositeHeaders" :items="editedItem.composites" class="elevation-1">
                             <template v-slot:item.value="{ item }">
                                 <v-chip color="primary" v-for="value in item.value" :key="value" dark>{{ value }}</v-chip>
                             </template>
@@ -74,8 +75,7 @@
                                 </v-toolbar>
                             </template>
                             <template v-slot:item.variant="{ item }">
-            
-                                      {{ castVariant(item.variant) }}
+                                {{ castVariant(item.variant) }}
                             </template>
                             <template v-slot:item.action="{ item }">
                                 <v-icon small @click="deleteCompositeItem(editedItem, item)">
@@ -118,6 +118,7 @@
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
 import AvatarCropper from 'vue-avatar-cropper'
+import { durations } from '~~/config'
 
 export default {
     components: {
@@ -204,6 +205,7 @@ export default {
                 'mobile': 'properties.mobile',
                 'email': 'properties.email',
             },
+            durations: durations,
         }
     },
     computed: mapGetters({
@@ -311,7 +313,7 @@ export default {
 
         },
         castVariant(variant) {
-            if(typeof variant === 'string')  {
+            if (typeof variant === 'string') {
                 try {
                     variant = JSON.parse(variant)
                 } catch (e) {
@@ -319,7 +321,7 @@ export default {
                 }
             }
 
-            if(!variant) return ''
+            if (!variant) return ''
             let values = []
             for (let [key, v] of Object.entries(variant)) {
                 values.push(v)

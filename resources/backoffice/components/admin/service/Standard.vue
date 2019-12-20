@@ -33,6 +33,7 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-textarea clearable v-model="editedItem.note" clear-icon="mdi-close" label="Description"></v-textarea>
                         <v-text-field prefix="$" v-model="editedItem.properties.price" label="Price from"></v-text-field>
+                        <v-select item-text="name" item-value="value" v-model="editedItem.properties.duration" :items="durations" label="Duration"></v-select>
                         <v-text-field v-if="editedItem.stockable" prefix="$" v-model="editedItem.properties.cost" label="Cost"></v-text-field>
                         <v-switch :true-value="'active'" :false-value="'inactive'" v-model="editedItem.status" inset :label="`Active`"></v-switch>
                     </v-col>
@@ -60,6 +61,7 @@
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
 import AvatarCropper from 'vue-avatar-cropper'
+import { durations } from '~~/config'
 
 export default {
     components: {
@@ -103,6 +105,7 @@ export default {
                     cost: 0.00,
                     color: '',
                     opening: 0.00,
+                    duration: 0.0,
                 },
                 formData: null,
             },
@@ -119,6 +122,8 @@ export default {
                 'mobile': 'properties.mobile',
                 'email': 'properties.email',
             },
+            durations: durations,
+
         }
     },
     computed: mapGetters({
