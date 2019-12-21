@@ -13,7 +13,8 @@
                     <v-card-text>
                         <v-row align="center">
                             <v-col class="text-center" cols="12">
-                                <span class="display-3 font-weight-black black--text">0</span><br />
+                                <v-progress-circular v-if="loading" indeterminate color="green"></v-progress-circular>
+                                <span v-if="!loading" class="display-3 font-weight-black black--text">{{ appointments.summary.count }}</span><br />
                                 <span class="title">Appointments</span>
                             </v-col>
                         </v-row>
@@ -89,6 +90,12 @@ export default {
     data() {
 
         return {
+            loading: false,
+            appointments: {
+                summary: {
+                    count: 0
+                }
+            },
             week: { start: '', end: '' },
             items: [],
         }
@@ -128,13 +135,25 @@ export default {
         },
         async retrieve(item) {
 
-            // this.loading = true
+            this.loading = true
             // const { sortBy, sortDesc, page, itemsPerPage } = options
             item.loading = true
             item.datacollection = null
             try {
 
                 const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+
+
+                this.appointments = await this.$store.dispatch('report/fetch', {
+                    name: 'week_appointment_count',
+                    fields: `total_amount`,
+                    filter: [this.week.start, this.week.end],
+                    limit: 0,
+                    page: 1,
+                    sort: [],
+                    desc: [],
+                    noCommit: true
+                })
 
                 const fmt = 'MMM'
 
@@ -169,6 +188,7 @@ export default {
                 item.loading = false
             }
             item.loading = false
+            this.loading = false
         },
         fillData() {
             this.datacollection = {

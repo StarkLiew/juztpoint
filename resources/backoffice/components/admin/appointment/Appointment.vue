@@ -173,7 +173,7 @@ export default {
         timePickerShow: false,
         selectedDate: null,
         selectedTime: null,
-        type: 'week',
+        type: '4day',
         typeToLabel: {
             month: 'Month',
             week: 'Week',
@@ -312,28 +312,32 @@ export default {
             this.end = end
             this.loading = true
 
-            const filter = { from: start, to: end }
+            const filter = { dates: [start.date, end.date] }
+
+            console.log(filter)
 
             const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime}, note,refund, items{id, line, item_id, item{id, name, sku}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
 
 
             const results = await this.$store.dispatch('receipt/fetch', { name: 'appointment', fields, filter, limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+            if (results) {
+                this.events = results.data.data.map(d => {
 
-            this.events = results.data.data.map(d => {
+                    let details = ''
+                    for (const line of d.items) {
+                        details += line.item.name + '<br />'
+                    }
 
-                let details = ''
-                for (const line of d.items) {
-                    details += line.item.name + '<br />'
-                }
+                    return {
+                        name: d.account.name,
+                        details,
+                        start: d.properties.startDateTime,
+                        end: d.properties.endDateTime,
+                        color: 'pink',
+                    }
+                })
+            }
 
-                return {
-                    name: d.account.name,
-                    details,
-                    start: d.properties.startDateTime,
-                    end: d.properties.endDateTime,
-                    color: 'pink',
-                }
-            })
 
 
             this.loading = false
