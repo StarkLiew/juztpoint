@@ -31,22 +31,25 @@ export const mutations = {
 
         VueCookies.remove('JXPTBCK')
 
-       
+
 
     },
 
 
     [types.FETCH_USER_FAILURE](state) {
+        state.access = false
         state.user = null
         state.store = null
         state.terminal = null
+        const expire = new Date() //expire now
+        VueCookies.set('JXPTBCK', '', expire, true)
         VueCookies.remove('JXPTBCK')
     },
 
     [types.SET_TOKEN](state, { token, expires_at, store, user }) {
         // state.token = token
         // window.localStorage.setItem('token', token)
-        
+
         const expire = new Date(expires_at)
         state.access = true
         state.store = store
