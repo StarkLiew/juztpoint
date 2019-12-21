@@ -63,7 +63,7 @@
                 </v-card>
             </v-menu>
         </v-sheet>
-        <v-dialog v-model="newAppDialog" scrollable fullscreen persistent max-width="500px" transition="dialog-transition">
+        <v-dialog v-model="formDialog" scrollable fullscreen persistent max-width="500px" transition="dialog-transition">
             <template v-slot:activator="{on}">
                 <v-fab-transition>
                     <v-btn v-on="on" color="pink" dark fixed bottom right large fab>
@@ -74,75 +74,81 @@
             <v-card>
                 <v-card-title primary-title>
                     <v-toolbar dark color="primary">
-                        <v-btn icon @click="newAppDialog = false" :disabled="saving">
+                        <v-btn icon @click="closeForm" :disabled="saving">
                             <v-icon>mdi-close</v-icon>
                         </v-btn>
                         <v-toolbar-title>
                             New Appointment
                         </v-toolbar-title>
                         <v-spacer></v-spacer>
-                        <v-btn text @click="newAppDialog = false" :disabled="saving">
+                        <v-btn text @click="saveForm" :disabled="saving">
                             Save
                         </v-btn>
                     </v-toolbar>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-row>
-                            <v-col cols="6" lg="6" md="6" sm="12">
-                                <v-autocomplete dense v-model="form.customer" :items="customers" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Customer" placeholder="Choose one" return-object></v-autocomplete>
-                                <v-autocomplete dense v-model="form.user" :items="users" :rules="[v => !!v || 'Consultant is required',]" required :loading="loading" item-text="name" label="Consultant" placeholder="Choose one" return-object></v-autocomplete>
-                                <v-textarea clearable v-model="form.note" clear-icon="mdi-close" label="Note"></v-textarea>
-                            </v-col>
-                            <v-col cols="6" lg="6" md="6" sm="12">
-                                <v-dialog v-model="pickerDialog" :close-on-content-click="false" transition="scale-transition" offset-y full-screen>
-                                    <template v-slot:activator="{ on }">
-                                        <v-text-field dense class="" v-model="form.selectedDate" :value="$moment(form.startDate).format('YYYY-MM-DD hh:mm')" label="Date" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
-                                    </template>
-                                    <v-card>
-                                        <v-row>
-                                            <v-col cols="7" sm="12">
-                                                <v-date-picker v-model="selectedDate" full-width>
+                        <v-form ref="appForm" v-model="validForm">
+                            <v-row>
+                                <v-col cols="6" lg="6" md="6" sm="12">
+                                    <v-autocomplete v-model="form.customer" :items="customers" :rules="[v => !!v || 'Customer is required',]" required :loading="loading" item-text="name" label="Customer" placeholder="Choose one" return-object></v-autocomplete>
+                                    <v-autocomplete v-model="form.user" :items="users" :rules="[v => !!v || 'Consultant is required',]" required :loading="loading" item-text="name" label="Consultant" placeholder="Choose one" return-object></v-autocomplete>
+                                    <v-textarea clearable v-model="form.note" clear-icon="mdi-close" label="Note"></v-textarea>
+                                </v-col>
+                                <v-col cols="6" lg="6" md="6" sm="12">
+                                    <v-row>
+                                        <v-col cols="7" lg="7" md="7" sm="7">
+                                            <v-menu v-model="datePickerShow" :close-on-content-click="false" transition="scale-transition" offset-y min-width="344" max-width="400">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field class="" v-model="form.startDate" :value="$moment(form.startDate).format('YYYY-MM-DD hh:mm')" label="Start Date" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
+                                                </template>
+                                                <v-date-picker @input="closeDatePicker" v-model="form.startDate" full-width>
                                                 </v-date-picker>
-                                            </v-col>
-                                            <v-col cols="5" sm="12">
-                                                <v-time-picker v-model="selectedTime" format="ampm" ampm-in-title full-width>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="5" lg="5" md="5" sm="5">
+                                            <v-menu v-model="timePickerShow" :close-on-content-click="false" transition="scale-transition" offset-y min-width="344" max-width="400">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-text-field class="" v-model="form.startTime" :value="$moment(form.startTime).format('YYYY-MM-DD hh:mm')" label="Start Time" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
+                                                </template>
+                                                <v-time-picker @input="closeTimePicker" v-model="form.startTime" format="ampm" ampm-in-title full-width>
                                                 </v-time-picker>
-                                                <v-spacer></v-spacer>
-                                                <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn color="primary" @click="e6 = 3">Done</v-btn>
-                                                    <v-btn text>Cancel</v-btn>
-                                                </v-card-actions>
+                                            </v-menu>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="8" lg="8" md="8" sm="8">
+                                            <v-text-field v-model="form.endDate" label="End Date" disabled readonly></v-text-field>
+                                        </v-col>
+                                        <v-col cols="4" lg="4" md="4" sm="4">
+                                            <v-text-field v-model="form.endTime" label="End Time" disabled readonly></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="10">
+                                                <v-autocomplete dense v-model="itemForm.item" :items="services" required :loading="loading" item-text="name" label="Service requested" placeholder="Choose one" return-object clearable></v-autocomplete>
+                                            </v-col>
+                                            <v-col cols="2">
+                                                <v-btn icon text :disabled="!itemForm.item && !form.user" fab small color="green darken-1" @click="addRequest">
+                                                    <v-icon>mdi-plus</v-icon>
+                                                </v-btn>
                                             </v-col>
                                         </v-row>
-                                    </v-card>
-                                </v-dialog>
-                                <v-text-field v-model="form.endTime" label="Estimate End Time" readonly></v-text-field>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="10">
-                                            <v-autocomplete dense v-model="itemForm.product" :items="services" :rules="[v => !!v || 'Service is required',]" required :loading="loading" item-text="name" label="Service requested" placeholder="Choose one" return-object></v-autocomplete>
-                                        </v-col>
-                                        <v-col cols="2">
-                                            <v-btn icon text fab small color="green darken-1" @click="addRequest">
-                                                <v-icon>mdi-plus</v-icon>
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row v-for="(item, index) in form.items" :key="index">
-                                        <v-col cols="10">
-                                            {{ item.product.name }}
-                                        </v-col>
-                                        <v-col cols="2">
-                                            <v-btn icon text fab small color="red darken-1" @click="removeRequest(index)">
-                                                <v-icon>mdi-close</v-icon>
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-col>
-                        </v-row>
+                                        <v-row v-for="(item, index) in form.items" :key="index">
+                                            <v-col cols="10">
+                                                {{ item.item.name }}
+                                            </v-col>
+                                            <v-col cols="2">
+                                                <v-btn icon text fab small color="red darken-1" @click="removeRequest(index)">
+                                                    <v-icon>mdi-close</v-icon>
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </v-col>
+                            </v-row>
+                        </v-form>
                     </v-container>
                 </v-card-text>
             </v-card>
@@ -156,12 +162,15 @@ import { mapGetters } from 'vuex'
 export default {
     data: () => ({
         e6: 1,
-        newAppDialog: false,
+        formDialog: false,
         pickerDialog: false,
+        validForm: false,
         loading: false,
         saving: false,
         today: '',
         focus: '',
+        datePickerShow: false,
+        timePickerShow: false,
         selectedDate: null,
         selectedTime: null,
         type: 'week',
@@ -172,8 +181,9 @@ export default {
             '4day': '4 Days',
         },
         form: {
-            startDateTime: null,
+            startDate: null,
             startTime: '',
+            endDate: null,
             endTime: '',
             note: '',
             customer: '',
@@ -182,139 +192,14 @@ export default {
             items: [],
         },
         itemForm: {
-            product: null,
+            item: null,
         },
         start: null,
         end: null,
         selectedEvent: {},
         selectedElement: null,
         selectedOpen: false,
-        events: [{
-                name: 'Vacation',
-                details: 'Going to the beach!',
-                start: '2018-12-29',
-                end: '2019-01-01',
-                color: 'blue',
-            },
-            {
-                name: 'Meeting',
-                details: 'Spending time on how we do not have enough time',
-                start: '2019-01-07 09:00',
-                end: '2019-01-07 09:30',
-                color: 'indigo',
-            },
-            {
-                name: 'Large Event',
-                details: 'This starts in the middle of an event and spans over multiple events',
-                start: '2018-12-31',
-                end: '2019-01-04',
-                color: 'deep-purple',
-            },
-            {
-                name: '3rd to 7th',
-                details: 'Testing',
-                start: '2019-01-03',
-                end: '2019-01-07',
-                color: 'cyan',
-            },
-            {
-                name: 'Big Meeting',
-                details: 'A very important meeting about nothing',
-                start: '2019-01-07 08:00',
-                end: '2019-01-07 11:30',
-                color: 'red',
-            },
-            {
-                name: 'Another Meeting',
-                details: 'Another important meeting about nothing',
-                start: '2019-01-07 10:00',
-                end: '2019-01-07 13:30',
-                color: 'brown',
-            },
-            {
-                name: '7th to 8th',
-                start: '2019-01-07',
-                end: '2019-01-08',
-                color: 'blue',
-            },
-            {
-                name: 'Lunch',
-                details: 'Time to feed',
-                start: '2019-01-07 12:00',
-                end: '2019-01-07 15:00',
-                color: 'deep-orange',
-            },
-            {
-                name: '30th Birthday',
-                details: 'Celebrate responsibly',
-                start: '2019-01-03',
-                color: 'teal',
-            },
-            {
-                name: 'New Year',
-                details: 'Eat chocolate until you pass out',
-                start: '2019-01-01',
-                end: '2019-01-02',
-                color: 'green',
-            },
-            {
-                name: 'Conference',
-                details: 'The best time of my life',
-                start: '2019-01-21',
-                end: '2019-01-28',
-                color: 'grey darken-1',
-            },
-            {
-                name: 'Hackathon',
-                details: 'Code like there is no tommorrow',
-                start: '2019-01-30 23:00',
-                end: '2019-02-01 08:00',
-                color: 'black',
-            },
-            {
-                name: 'event 1',
-                start: '2019-01-14 18:00',
-                end: '2019-01-14 19:00',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 2',
-                start: '2019-01-14 18:00',
-                end: '2019-01-14 19:00',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 5',
-                start: '2019-01-14 18:00',
-                end: '2019-01-14 19:00',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 3',
-                start: '2019-01-14 18:30',
-                end: '2019-01-14 20:30',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 4',
-                start: '2019-01-14 19:00',
-                end: '2019-01-14 20:00',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 6',
-                start: '2019-01-14 21:00',
-                end: '2019-01-14 23:00',
-                color: '#4285F4',
-            },
-            {
-                name: 'event 7',
-                start: '2019-01-14 22:00',
-                end: '2019-01-14 23:00',
-                color: '#4285F4',
-            },
-
-        ],
+        events: [],
     }),
     computed: {
         ...mapGetters({
@@ -364,14 +249,13 @@ export default {
         this.retrieve()
         this.today = this.$moment().format('YYYY-MM-DD').toString()
         this.focus = this.$moment().format('YYYY-MM-DD').toString()
-        this.form.startDateTime = this.$moment().format('YYYY-MM-DD hh:mm')
-        this.form.selectedDate = this.$moment().format('YYYY-MM-DD')
-        this.form.selectedTime = this.$moment().format('hh:mm')
+
     },
     mounted() {
         this.$refs.calendar.checkChange()
 
     },
+
     methods: {
 
         async retrieve() {
@@ -383,6 +267,9 @@ export default {
             await this.$store.dispatch('account/fetch', { type: 'customer', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
 
             await this.$store.dispatch('product/fetch', { type: 'service', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
+
+
+
 
             this.loading = false
         },
@@ -419,10 +306,39 @@ export default {
 
             nativeEvent.stopPropagation()
         },
-        updateRange({ start, end }) {
+        async updateRange({ start, end }) {
             // You could load events from an outside source (like database) now that we have the start and end dates on the calendar
             this.start = start
             this.end = end
+            this.loading = true
+
+            const filter = { from: start, to: end }
+
+            const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime}, note,refund, items{id, line, item_id, item{id, name, sku}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
+
+
+            const results = await this.$store.dispatch('receipt/fetch', { name: 'appointment', fields, filter, limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+
+            this.events = results.data.data.map(d => {
+
+                let details = ''
+                for (const line of d.items) {
+                    details += line.item.name + '<br />'
+                }
+
+                return {
+                    name: d.account.name,
+                    details,
+                    start: d.properties.startDateTime,
+                    end: d.properties.endDateTime,
+                    color: 'pink',
+                }
+            })
+
+
+            this.loading = false
+
+
         },
         nth(d) {
             return d > 3 && d < 21 ?
@@ -433,14 +349,31 @@ export default {
             this.showDatePicker = false
         },
         addRequest() {
-            if (this.itemForm.product) {
+            if (this.itemForm.item && this.form.user) {
 
-                const { id, name, properties } = this.itemForm.product
+                const { id, name, properties } = this.itemForm.item
+                const item = {
+                    item: {
+                        id,
+                        name,
+                    },
+                    user_id: this.form.user.id,
+                    qty: 1,
+                    tax: { id: 0 },
+                    tax_id: 0,
+                    discount: {},
+                    discount_amount: 0.00,
+                    tax_amount: 0.00,
+                    total_amount: 0.00,
+                    note: '',
+                    properties: { price: 0.00, ...properties }
+                }
 
-                this.form.items.push({ product: { id, name, properties: { ...properties } } })
+
+                this.form.items.push({ ...item })
                 this.estEndTime()
             }
-            this.itemForm.product = null
+            this.itemForm.item = null
 
         },
         removeRequest(index) {
@@ -453,13 +386,80 @@ export default {
         estEndTime() {
             let est = 0
             for (const item of this.form.items) {
-
-                est += parseInt(item.product.properties.duration)
+                est += parseInt(item.properties.duration)
             }
             const startDateTime = this.form.startDate + 'T' + this.form.startTime
+            const endDateTime = this.$moment(startDateTime).add(est, 'minutes')
+            this.form.endDate = endDateTime.format('YYYY-MM-DD').toString()
+            this.form.endTime = endDateTime.format('H:mm').toString()
+        },
+        closeForm() {
+            this.resetForm()
+            this.formDialog = false
+        },
+        resetForm() {
+            this.$refs.appForm.reset()
+            this.$refs.appForm.resetValidation()
+            this.validForm = false
+            this.form = {
+                startDate: null,
+                startTime: '',
+                endDate: null,
+                endTime: '',
+                note: '',
+                customer: '',
+                user: '',
+                status: '',
+                items: [],
+            }
+        },
+        async saveForm() {
+            if (this.$refs.appForm.validate()) {
+                this.saving = true
+                this.estEndTime()
+                const { customer, user, startDate, startTime, endDate, endTime, status, note, items } = this.form
+                let item = {
+                    date: this.$moment(startDate).format('YYYY-MM-DD').toString(),
+                    account: customer,
+                    transact_by: user.id,
+                    type: 'appointment',
+                    status: 'set',
+                    reference: this.generateUID(),
+                    charge: 0.00,
+                    tax_amount: 0.00,
+                    items,
+                    properties: {
+                        startDateTime: this.$moment(startDate + 'T' + startTime).format('YYYY-MM-DD H:mm').toString(),
+                        endDateTime: this.$moment(endDate + 'T' + endTime).format('YYYY-MM-DD H:mm').toString(),
+                    },
+                    note,
 
-            this.form.endTime = this.$moment(startDateTime).add(est, 'minutes').format('H:mm').toString()
+                }
 
+
+
+                await this.$store.dispatch('document/add', item)
+                this.closeForm()
+                this.saving = false
+            }
+
+        },
+        closeDatePicker() {
+            this.estEndTime()
+            this.datePickerShow = false
+        },
+        closeTimePicker() {
+            this.estEndTime()
+            this.timePickerShow = false
+        },
+        generateUID() {
+            // I generate the UID from two parts here 
+            // to ensure the random number provide enough bits.
+            var firstPart = (Math.random() * 46656) | 0;
+            var secondPart = (Math.random() * 46656) | 0;
+            firstPart = ("000" + firstPart.toString(36)).slice(-3);
+            secondPart = ("000" + secondPart.toString(36)).slice(-3);
+            return firstPart + secondPart;
         }
     },
 
