@@ -36,7 +36,8 @@
             </v-menu>
         </v-toolbar>
         <v-sheet>
-            <v-calendar ref="calendar" v-model="focus" color="primary" :events="events" :event-color="getEventColor" :event-margin-bottom="3" :now="today" :type="type" @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="updateRange"></v-calendar>
+            <v-calendar ref="calendar" v-model="focus" color="primary" :events="events" :event-color="getEventColor" :event-margin-bottom="3" :now="today" :type="type" @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="updateRange">
+            </v-calendar>
             <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" full-width offset-x>
                 <v-card color="grey lighten-4" min-width="350px" flat>
                     <v-toolbar :color="selectedEvent.color" dark>
@@ -45,20 +46,21 @@
                         </v-btn>
                         <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                         <v-spacer></v-spacer>
-                        <v-btn icon>
-                            <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-                        <v-btn icon>
-                            <v-icon>mdi-dots-vertical</v-icon>
+                        <v-btn icon @click="selectedOpen = false">
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
                     </v-toolbar>
                     <v-card-text>
-                        <span v-html="selectedEvent.details"></span>
+                        <span class="my-4 subtitle-1 black--text" v-html="selectedEvent.details"></span>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn text color="secondary" @click="selectedOpen = false">
-                            Cancel
-                        </v-btn>
+                        <v-chip-group mandatory active-class="primary--text">
+                            <v-chip>Arrived</v-chip>
+                            <v-chip>Started</v-chip>
+                            <v-chip>Completed</v-chip>
+                            <v-chip>No Show</v-chip>
+                            <v-chip>Cancel</v-chip>
+                        </v-chip-group>
                     </v-card-actions>
                 </v-card>
             </v-menu>
@@ -93,6 +95,7 @@
                                 <v-col cols="6" lg="6" md="6" sm="12">
                                     <v-autocomplete v-model="form.customer" :items="customers" :rules="[v => !!v || 'Customer is required',]" required :loading="loading" item-text="name" label="Customer" placeholder="Choose one" return-object></v-autocomplete>
                                     <v-autocomplete v-model="form.user" :items="users" :rules="[v => !!v || 'Consultant is required',]" required :loading="loading" item-text="name" label="Consultant" placeholder="Choose one" return-object></v-autocomplete>
+                                    <v-autocomplete v-model="form.store" :items="stores" :rules="[v => !!v || 'Store is required',]" required :loading="loading" item-text="name" label="Store" placeholder="Choose one" return-object></v-autocomplete>
                                     <v-textarea clearable v-model="form.note" clear-icon="mdi-close" label="Note"></v-textarea>
                                 </v-col>
                                 <v-col cols="6" lg="6" md="6" sm="12">
@@ -111,7 +114,7 @@
                                                 <template v-slot:activator="{ on }">
                                                     <v-text-field class="" v-model="form.startTime" :value="$moment(form.startTime).format('YYYY-MM-DD hh:mm')" label="Start Time" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
                                                 </template>
-                                                <v-time-picker @input="closeTimePicker" v-model="form.startTime" format="ampm" ampm-in-title full-width>
+                                                <v-time-picker :allowed-minutes="allowMinutes" @input="closeTimePicker" v-model="form.startTime" format="ampm" ampm-in-title full-width>
                                                 </v-time-picker>
                                             </v-menu>
                                         </v-col>
@@ -187,6 +190,7 @@ export default {
             endTime: '',
             note: '',
             customer: '',
+            store: '',
             user: '',
             status: '',
             items: [],
@@ -199,15 +203,18 @@ export default {
         selectedEvent: {},
         selectedElement: null,
         selectedOpen: false,
+        allowMinutes: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
         events: [],
+        stores: [],
+        customers: [],
+        services: [],
+        users: [],
     }),
     computed: {
         ...mapGetters({
             auth: 'auth/user',
             items: 'receipt/items',
-            customers: 'account/items',
-            users: 'user/users',
-            services: 'product/items',
+
 
         }),
         title() {
@@ -262,11 +269,14 @@ export default {
 
             this.loading = true
 
-            await this.$store.dispatch('user/fetch', { type: 'user', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
+            this.users = await this.$store.dispatch('user/fetch', { type: 'user', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true, })
 
-            await this.$store.dispatch('account/fetch', { type: 'customer', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
+            this.customers = await this.$store.dispatch('account/fetch', { type: 'customer', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true, })
 
-            await this.$store.dispatch('product/fetch', { type: 'service', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: false, })
+            this.stores = await this.$store.dispatch('setting/fetch', { type: 'store', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true, })
+
+
+            this.services = await this.$store.dispatch('product/fetch', { type: 'service', search: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true, })
 
 
 
@@ -316,7 +326,7 @@ export default {
 
             console.log(filter)
 
-            const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime}, note,refund, items{id, line, item_id, item{id, name, sku}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
+            const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime,color}, note,refund, items{id, line, item_id, item{id, name, sku}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
 
 
             const results = await this.$store.dispatch('receipt/fetch', { name: 'appointment', fields, filter, limit: 0, page: 1, sort: [], desc: [], noCommit: true })
@@ -324,16 +334,20 @@ export default {
                 this.events = results.data.data.map(d => {
 
                     let details = ''
-                    for (const line of d.items) {
-                        details += line.item.name + '<br />'
+                    details += 'Store: ' + (d.store ? d.store.name : '') + '<br />'
+                    details += 'Consultant: ' + d.teller.name + '<br /><br />'
+                    details += 'Services:<br />'
+                    details += '<ul>'
+                    for (const [index, line] of d.items.entries()) {
+                        details += '<li>' + line.item.name + '</li>'
                     }
-
+                    details += '</ul>'
                     return {
                         name: d.account.name,
                         details,
                         start: d.properties.startDateTime,
                         end: d.properties.endDateTime,
-                        color: 'pink',
+                        color: d.properties.color,
                     }
                 })
             }
@@ -412,6 +426,7 @@ export default {
                 endTime: '',
                 note: '',
                 customer: '',
+                store: '',
                 user: '',
                 status: '',
                 items: [],
@@ -421,10 +436,11 @@ export default {
             if (this.$refs.appForm.validate()) {
                 this.saving = true
                 this.estEndTime()
-                const { customer, user, startDate, startTime, endDate, endTime, status, note, items } = this.form
+                const { customer, user, store, startDate, startTime, endDate, endTime, status, note, items } = this.form
                 let item = {
                     date: this.$moment(startDate).format('YYYY-MM-DD').toString(),
                     account: customer,
+                    store: store,
                     transact_by: user.id,
                     type: 'appointment',
                     status: 'set',
@@ -435,12 +451,16 @@ export default {
                     properties: {
                         startDateTime: this.$moment(startDate + 'T' + startTime).format('YYYY-MM-DD H:mm').toString(),
                         endDateTime: this.$moment(endDate + 'T' + endTime).format('YYYY-MM-DD H:mm').toString(),
+                        color: 'green',
                     },
                     note,
 
                 }
 
-
+                if (item.endDateTime === 'invalid date') {
+                    this.$toast.error('End date is invalid')
+                    return
+                }
 
                 await this.$store.dispatch('document/add', item)
                 this.closeForm()

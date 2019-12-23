@@ -248,6 +248,7 @@ class ReportsQuery extends Query {
 			->where($where)
 			->orderBy('id', 'desc')
 			->paginate($args['limit'], ['*'], 'page', $args['page']);
+
 		return ['summary' => ['count' => 0, 'sum' => 0], 'data' => $results];
 
 	}

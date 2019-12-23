@@ -78,7 +78,7 @@ export const actions = {
     async add({ commit }, item) {
         try {
 
-            const { reference, account, transact_by, type, date, note, items, properties, charge, tax_amount } = item
+            const { reference, account, transact_by, type, date, note, items, properties, charge, store, tax_amount } = item
             let castItems = ''
 
             for (const [seq, line] of items.entries()) {
@@ -125,7 +125,7 @@ export const actions = {
                                  status: "ordered",
                                  type: "${type}",
                                  terminal_id: 0,
-                                 store_id: 0,
+                                 store_id: ${store ? store.id : 0},
                                  account_id: "${account.id}",
                                  transact_by: ${transact_by},
                                  shift_id: 0,
@@ -241,7 +241,7 @@ export const actions = {
 
     async receive({ commit }, { line, receivedItem }) {
         try {
-      
+
             const { id, refund_qty } = line
 
             const props = JSON.stringify(receivedItem.properties).replace(/"/g, '\\"')
