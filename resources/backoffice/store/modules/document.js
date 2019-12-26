@@ -86,15 +86,15 @@ export const actions = {
                 const item_id = line.item.id
                 const user_id = line.user_id
                 const qty = line.qty
-                const tax_id = line.tax.id
+                const tax_id = line.tax ? line.tax.id : 0
                 const discount_amount = line.discount_amount
                 const tax_amount = line.tax_amount
                 const total_amount = line.total_amount
                 const note = line.note
-                const price = line.properties.price
+                // const price = line.properties.price
+                const lineProps = JSON.stringify(line.properties).replace(/"/g, '\\"')
 
-
-                const line_props = `{\\"price\\": ${price}}`
+                // const line_props = `{\\"price\\": ${price}}`
 
                 const cast = `{line: ${seq + 1}, 
                          type: "pitem", 
@@ -112,7 +112,7 @@ export const actions = {
                          shift_id: 0,
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
-                         properties:"${line_props}"
+                         properties:"${lineProps}"
                         },`
 
                 castItems += cast
@@ -159,7 +159,7 @@ export const actions = {
     async update({ commit }, item) {
         try {
 
-            const { id, reference, account, transact_by, type, date, note, items, status, properties, charge, tax_amount } = item
+            const { id, reference, account, store, transact_by, type, date, note, items, status, properties, charge, tax_amount } = item
             let castItems = ''
 
             for (const [seq, line] of items.entries()) {
@@ -167,15 +167,15 @@ export const actions = {
                 const item_id = line.item.id
                 const user_id = line.user_id
                 const qty = line.qty
-                const tax_id = line.tax.id
+                const tax_id = line.tax ? line.tax.id : 0
                 const discount_amount = line.discount_amount
                 const tax_amount = line.tax_amount
                 const total_amount = line.total_amount
                 const note = line.note
-                const price = line.properties.price
+                // const price = line.properties.price
+                const lineProps = JSON.stringify(line.properties).replace(/"/g, '\\"')
 
-
-                const line_props = `{\\"price\\": ${price}}`
+                // const line_props = `{\\"price\\": ${price}}`
 
                 const cast = `{line: ${seq + 1}, 
                          type: "pitem", 
@@ -193,7 +193,7 @@ export const actions = {
                          shift_id: 0,
                          total_amount: ${parseFloat(total_amount)}, 
                          note: "${note}",
-                         properties:"${line_props}"
+                         properties:"${lineProps}"
                         },`
 
                 castItems += cast
@@ -207,7 +207,7 @@ export const actions = {
                                  status: "${status}",
                                  type: "${type}",
                                  terminal_id: 0,
-                                 store_id: 0,
+                                 store_id: ${store ? store.id : 0},
                                  account_id: "${account.id}",
                                  transact_by: ${transact_by},
                                  shift_id: 0,

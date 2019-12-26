@@ -41,7 +41,7 @@
             <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" full-width offset-x>
                 <v-card color="grey lighten-4" min-width="350px" flat>
                     <v-toolbar :color="selectedEvent.color" dark>
-                        <v-btn icon>
+                        <v-btn icon @click="editAppointment(selectedEvent)">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                         <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
@@ -184,6 +184,7 @@ export default {
             '4day': '4 Days',
         },
         form: {
+            id: null,
             startDate: null,
             startTime: '',
             endDate: null,
@@ -198,6 +199,7 @@ export default {
         itemForm: {
             item: null,
         },
+        results: [],
         start: null,
         end: null,
         selectedEvent: {},
@@ -209,6 +211,7 @@ export default {
         customers: [],
         services: [],
         users: [],
+        range: { start: '', end: '' },
     }),
     computed: {
         ...mapGetters({
@@ -318,20 +321,21 @@ export default {
         },
         async updateRange({ start, end }) {
             // You could load events from an outside source (like database) now that we have the start and end dates on the calendar
+            this.range = { start, end }
+            this.results = []
             this.start = start
             this.end = end
             this.loading = true
 
             const filter = { dates: [start.date, end.date] }
 
-            console.log(filter)
 
-            const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime,color}, note,refund, items{id, line, item_id, item{id, name, sku}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
+            const fields = `id, status, store{id, name, properties{timezone, currency}}, account_id, terminal_id, store_id, shift_id, reference, account{id, name}, terminal{id, name}, store{id, name}, transact_by, teller{id, name}, date, type, discount{type, rate, amount}, discount_amount,  tax_amount, service_charge, charge, rounding, received, change, properties{startDateTime, endDateTime,color}, note,refund, items{id, line, item_id, item{id, name, sku, properties{duration}}, user_id, note, name, discount{type, rate, amount}, discount_amount, tax{id, name, properties{rate, code}}, tax_id, tax_amount, qty, refund_qty, receives{id, store_id, store{id, name}, user{id, name}, qty, properties{do, date}}, refund_amount, total_amount, amount, saleBy{id, name}, shareWith{id, name}, composites{id, name, performBy{id, name}}, properties{price, duration}}, payments{id, name, line, item_id, total_amount},properties{name}, note`
 
 
-            const results = await this.$store.dispatch('receipt/fetch', { name: 'appointment', fields, filter, limit: 0, page: 1, sort: [], desc: [], noCommit: true })
-            if (results) {
-                this.events = results.data.data.map(d => {
+            this.results = await this.$store.dispatch('receipt/fetch', { name: 'DataAppointment', fields, filter, limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+            if (this.results) {
+                this.events = this.results.data.data.map(d => {
 
                     let details = ''
                     details += 'Store: ' + (d.store ? d.store.name : '') + '<br />'
@@ -343,6 +347,7 @@ export default {
                     }
                     details += '</ul>'
                     return {
+                        id: d.id,
                         name: d.account.name,
                         details,
                         start: d.properties.startDateTime,
@@ -384,7 +389,7 @@ export default {
                     tax_amount: 0.00,
                     total_amount: 0.00,
                     note: '',
-                    properties: { price: 0.00, ...properties }
+                    properties: { price: 0.00, duration: properties.duration }
                 }
 
 
@@ -403,16 +408,24 @@ export default {
         },
         estEndTime() {
             let est = 0
+
             for (const item of this.form.items) {
+
                 est += parseInt(item.properties.duration)
             }
-            const startDateTime = this.form.startDate + 'T' + this.form.startTime
+
+            const startDateTime = this.form.startDate + ' ' + this.form.startTime
+
             const endDateTime = this.$moment(startDateTime).add(est, 'minutes')
+
             this.form.endDate = endDateTime.format('YYYY-MM-DD').toString()
             this.form.endTime = endDateTime.format('H:mm').toString()
+
+
         },
         closeForm() {
             this.resetForm()
+            this.selectedEvent = {}
             this.formDialog = false
         },
         resetForm() {
@@ -420,6 +433,7 @@ export default {
             this.$refs.appForm.resetValidation()
             this.validForm = false
             this.form = {
+                id: null,
                 startDate: null,
                 startTime: '',
                 endDate: null,
@@ -437,6 +451,21 @@ export default {
                 this.saving = true
                 this.estEndTime()
                 const { customer, user, store, startDate, startTime, endDate, endTime, status, note, items } = this.form
+
+
+
+
+                if (endDate === 'Invalid date') {
+                    this.$toast.error('End date is invalid')
+                    return
+                }
+
+                if (endTime === 'Invalid date') {
+                    this.$toast.error('End date is invalid')
+                    return
+                }
+
+
                 let item = {
                     date: this.$moment(startDate).format('YYYY-MM-DD').toString(),
                     account: customer,
@@ -444,26 +473,33 @@ export default {
                     transact_by: user.id,
                     type: 'appointment',
                     status: 'set',
-                    reference: this.generateUID(),
                     charge: 0.00,
                     tax_amount: 0.00,
                     items,
                     properties: {
-                        startDateTime: this.$moment(startDate + 'T' + startTime).format('YYYY-MM-DD H:mm').toString(),
-                        endDateTime: this.$moment(endDate + 'T' + endTime).format('YYYY-MM-DD H:mm').toString(),
+                        startDateTime: this.$moment(startDate + ' ' + startTime).format('YYYY-MM-DD H:mm').toString(),
+                        endDateTime: this.$moment(endDate + ' ' + endTime).format('YYYY-MM-DD H:mm').toString(),
                         color: 'green',
                     },
                     note,
 
                 }
 
-                if (item.endDateTime === 'invalid date') {
-                    this.$toast.error('End date is invalid')
-                    return
-                }
 
-                await this.$store.dispatch('document/add', item)
+
+                if (this.form.id) {
+                    item.id = this.form.id
+                    item.reference = this.form.reference
+                     await this.$store.dispatch('document/update', item)
+
+
+                } else {
+                    item.reference = this.generateUID()
+                    await this.$store.dispatch('document/add', item)
+                }
+                this.updateRange(this.range)
                 this.closeForm()
+
                 this.saving = false
             }
 
@@ -484,6 +520,30 @@ export default {
             firstPart = ("000" + firstPart.toString(36)).slice(-3);
             secondPart = ("000" + secondPart.toString(36)).slice(-3);
             return firstPart + secondPart;
+        },
+        editAppointment(event) {
+            this.selectedEvent = event
+            const data = this.results.data.data.find(r => r.id === event.id)
+            const selected = JSON.parse(JSON.stringify(data))
+
+            this.form = {
+                id: selected.id,
+                reference: selected.reference,
+                startDate: this.$moment(selected.properties.startDateTime).format('YYYY-MM-DD').toString(),
+                startTime: this.$moment(selected.properties.startDateTime).format('H:mm').toString(),
+                endDate: this.$moment(selected.properties.endDateTime).format('YYYY-MM-DD').toString(),
+                endTime: this.$moment(selected.properties.endDateTime).format('H:mm').toString(),
+                note: selected.note,
+                customer: selected.account,
+                store: selected.store,
+                user: selected.teller,
+                status: selected.status,
+                items: selected.items,
+            }
+
+            this.formDialog = true
+
+
         }
     },
 

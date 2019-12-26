@@ -141,11 +141,11 @@ export default {
             item.datacollection = null
             try {
 
-                const results = await this.$store.dispatch('report/fetch', { name: 'sales_six', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                const results = await this.$store.dispatch('report/fetch', { name: 'ChartSalesSix', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
 
 
                 this.appointments = await this.$store.dispatch('report/fetch', {
-                    name: 'week_appointment_count',
+                    name: 'WeeklyAppointmentCount',
                     fields: `total_amount`,
                     filter: [this.week.start, this.week.end],
                     limit: 0,

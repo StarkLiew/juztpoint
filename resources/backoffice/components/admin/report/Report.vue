@@ -92,7 +92,7 @@ export default {
                         { title: 'Account Summary', fields: '"date", "item_name", "total_amount"', headers: [], exports: {}, disabled: false },
                         {
                             title: 'Payments Summary',
-                            name: 'payment_summary',
+                            name: 'ReportPaymentSummary',
                             fields: 'item_name, total_amount, refund_amount, net, count',
                             headers: [
                                 { text: 'Payment', value: 'item_name', sortable: false },
@@ -133,7 +133,7 @@ export default {
                     items: [
                     {
                             title: 'Daily Commission Summary',
-                            name: 'commission_daily_summary',
+                            name: 'ReportCommissionDailySummary',
                             fields: 'item_date, item_name, total_amount',
                             headers: [
                                 { text: 'Date', value: 'item_date', sortable: true },
