@@ -43,6 +43,11 @@ class ItemsPagination extends PaginationType {
 				'description' => 'A list of the item',
 				'is_relation' => true,
 			],
+			'service' => [
+				'type' => GraphQL::type('product'),
+				'description' => 'A list of the item',
+				'is_relation' => true,
+			],
 			'item' => [
 				'type' => GraphQL::type('product'),
 				'description' => 'A list of the item',

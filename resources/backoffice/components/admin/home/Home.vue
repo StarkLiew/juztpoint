@@ -2,7 +2,7 @@
     <v-container>
         <h1 class="display-1">Dashboard</h1>
         <v-row>
-            <v-col cols="4" lgb="4" md="4" sm="12">
+            <v-col cols="12" lg="4" md="4" sm="12">
                 <v-card class="mx-auto mb-3" max-width="400">
                     <v-list-item two-line>
                         <v-list-item-content>
@@ -61,20 +61,20 @@
                     </v-list>
                 </v-card>
             </v-col>
-            <v-col cols="8" lg="8" md="8" sm="12">
+            <v-col cols="12" lg="8" md="8" sm="12">
                 <v-card v-for="(item, i) in items" :key="i" class="mx-auto mb-3" color="white" max-width="600">
                     <v-card-title class="title">
                         {{ item.title }}
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" @click="retrieve(item)" :loading="item.loading">
+                        <v-btn color="primary" @click="item.refresh(item)" :loading="item.loading">
                             <v-icon>mdi-refresh</v-icon>
                         </v-btn>
                     </v-card-title>
                     <v-sheet color="white">
-                        <apexchart v-if="item.chart === 'bar' && item.datacollection" width="549" height="344" type="bar" :options="item.datacollection.options" :series="item.datacollection.series"></apexchart>
+                        <apexchart v-if="item.chart === 'bar' && item.data" width="549" height="344" type="bar" :options="item.data.options" :series="item.data.series"></apexchart>
+                        <apexchart v-if="item.chart === 'line' && item.data" width="549" height="344" type="line" :options="item.data.options" :series="item.data.series"></apexchart>
                     </v-sheet>
                 </v-card>
-            </v-col>
             </v-col>
         </v-row>
     </v-container>
@@ -101,30 +101,20 @@ export default {
         }
 
     },
-    computed: {
-
-        chartStyles() {
-            return {
-                height: '350px',
-                position: 'relative',
-            }
-        },
-
-    },
     async created() {
 
         this.initialize()
         for (const item of this.items) {
-            await this.retrieve(item)
+            if (item.refresh) await item.refresh(item)
         }
     },
     methods: {
         initialize() {
             this.items = [
-                { title: 'Recent Sales Performance', chart: 'bar', loading: false, datacollection: null },
-                { title: 'Top Services', chart: '', loading: false, datacollection: null },
-                { title: 'Top Products', chart: '', loading: false, datacollection: null },
-                { title: 'Top Employee', chart: '', loading: false, datacollection: null },
+                { title: 'Recent Sales Performance', chart: 'bar', loading: false, refresh: this.chartSalesSix, data: [] },
+                { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
+                { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
+                { title: 'Top Employee', chart: 'line', loading: false, refresh:  this.topEmployee, data: [] },
             ]
 
             const today = this.$moment()
@@ -141,7 +131,6 @@ export default {
             item.datacollection = null
             try {
 
-                const results = await this.$store.dispatch('report/fetch', { name: 'ChartSalesSix', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
 
 
                 this.appointments = await this.$store.dispatch('report/fetch', {
@@ -155,33 +144,6 @@ export default {
                     noCommit: true
                 })
 
-                const fmt = 'MMM'
-
-                item.datacollection = {
-                    options: {
-                        dataLabels: {
-                            enabled: false,
-                        },
-                        tooltip: {
-                            enabled: true,
-                        },
-                        chart: {
-                            id: 'vuechart-example'
-                        },
-                        xaxis: {
-                            categories: results.data.data.map(r => this.$moment(r.md).format(fmt)),
-                            labels: {
-                                trim: false,
-                            },
-
-                        }
-                    },
-
-                    series: [{
-                        name: 'Sale',
-                        data: results.data.data.map(r => r.total_amount)
-                    }],
-                }
 
 
             } catch (e) {
@@ -206,9 +168,162 @@ export default {
         },
         getRandomInt() {
             return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-        }
+        },
 
-    }
+
+        async chartSalesSix(item) {
+
+            item.loading = true
+            try {
+                const results = await this.$store.dispatch('report/fetch', { name: 'ChartSalesSix', fields: `md, mth, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                const fmt = 'MMM'
+
+                item.data = {
+                    options: {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                        chart: {
+                            id: 'vuechart-example'
+                        },
+                        xaxis: {
+                            categories: results.data.data.map(r => this.$moment(r.md).format(fmt)),
+                            labels: {
+                                trim: false,
+                            },
+
+                        }
+                    },
+
+                    series: [{
+                        name: 'Sale',
+                        data: results.data.data.map(r => r.total_amount)
+                    }],
+                }
+            } catch (e) {
+                item.loading = false
+            }
+            item.loading = false
+
+        },
+        async topProduct(item) {
+
+            item.loading = true
+            try {
+                const results = await this.$store.dispatch('report/fetch', { name: 'ChartTopProduct', fields: `product{id, name}, qty`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                const fmt = 'MMM'
+
+                item.data = {
+                    options: {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                        chart: {
+                            id: 'vuechart-example'
+                        },
+                        xaxis: {
+                            categories: results.data.data.map(r => r.product.name),
+                            labels: {
+                                trim: false,
+                            },
+
+                        }
+                    },
+
+                    series: [{
+                        name: 'Quantity',
+                        data: results.data.data.map(r => r.qty)
+                    }],
+                }
+            } catch (e) {
+                item.loading = false
+            }
+            item.loading = false
+        },
+        async topService(item) {
+
+            item.loading = true
+            try {
+                const results = await this.$store.dispatch('report/fetch', { name: 'ChartTopService', fields: `product{id, name}, qty`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                const fmt = 'MMM'
+
+                item.data = {
+                    options: {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                        chart: {
+                            id: 'vuechart-example'
+                        },
+                        xaxis: {
+                            categories: results.data.data.map(r => r.product.name),
+                            labels: {
+                                trim: false,
+                            },
+
+                        }
+                    },
+
+                    series: [{
+                        name: 'Quantity',
+                        data: results.data.data.map(r => r.qty)
+                    }],
+                }
+            } catch (e) {
+                item.loading = false
+            }
+            item.loading = false
+        },
+     async topEmployee(item) {
+
+            item.loading = true
+            try {
+                const results = await this.$store.dispatch('report/fetch', { name: 'ChartTopEmployee', fields: `md, item_name, total_amount`, filter: '', limit: 0, page: 1, sort: [], desc: [], noCommit: true })
+                const fmt = 'MMM'
+
+                item.data = {
+                    options: {
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        tooltip: {
+                            enabled: true,
+                        },
+                        chart: {
+                            id: 'vuechart-example'
+                        },
+                        xaxis: {
+                            categories: results.data.data.map(r => r.md),
+                            labels: {
+                                trim: false,
+                            },
+
+                        }
+                    },
+
+                    series: [{
+                        name: results.data.data.map(r => r.item_name),
+                        data: results.data.data.map(r => r.total_amount)
+                    }],
+                }
+            } catch (e) {
+                item.loading = false
+            }
+            item.loading = false
+        },
+    },
+
+
+
 }
 
 </script>

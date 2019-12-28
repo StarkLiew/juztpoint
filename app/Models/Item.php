@@ -65,8 +65,8 @@ class Item extends Model {
 	}
 	public function product() {
 		return $this->belongsTo('App\Models\Product', 'item_id');
-
 	}
+
 	public function commission() {
 		return $this->belongsTo('App\Models\Setting', 'item_id')->where('type', 'commission');
 	}
