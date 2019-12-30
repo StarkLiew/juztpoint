@@ -101,7 +101,7 @@ export const actions = {
             }
             if (!!composites) {
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
-                input += `composites: ${compositesCasted},`
+                input += `composites: "${compositesCasted}",`
             }
 
 
@@ -164,7 +164,7 @@ export const actions = {
             }
             if (!!composites) {
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
-                input += `composites: ${compositesCasted},`
+                input += `composites: "${compositesCasted}",`
             }
 
             if (!formData) {
