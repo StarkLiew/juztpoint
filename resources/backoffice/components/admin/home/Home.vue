@@ -114,7 +114,7 @@ export default {
                 { title: 'Recent Sales Performance', chart: 'bar', loading: false, refresh: this.chartSalesSix, data: [] },
                 { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
                 { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
-                { title: 'Top Employee', chart: 'line', loading: false, refresh:  this.topEmployee, data: [] },
+                { title: 'Top Employee', chart: 'bar', loading: false, refresh:  this.topEmployee, data: [] },
             ]
 
             const today = this.$moment()
@@ -311,7 +311,7 @@ export default {
                     },
 
                     series: [{
-                        name: results.data.data.map(r => r.item_name),
+                        name: results.data.data[0].name,
                         data: results.data.data.map(r => r.total_amount)
                     }],
                 }

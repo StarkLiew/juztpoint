@@ -47,16 +47,16 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="3" sm="3">
-                                <v-text-field style="text-align:center" :autofocus="true" ref="pin1" v-model="pinValues[0]" maxLength="1" solo @keydown="pinEntered(0, $event)" @input="pinNext(0)" :disabled="pinSaving"></v-text-field>
+                                <v-text-field autocomplete="off" style="text-align:center" :autofocus="true" ref="pin1" v-model="pinValues[0]" maxLength="1" solo @keydown="pinEntered(0, $event)" @input="pinNext(0)" :disabled="pinSaving"></v-text-field>
                             </v-col>
                             <v-col cols="3" sm="3">
-                                <v-text-field ref="pin2" v-model="pinValues[1]" maxLength="1" solo @keydown="pinEntered(1, $event)" @input="pinNext(1)" :disabled="pinSaving"></v-text-field>
+                                <v-text-field autocomplete="off" ref="pin2" v-model="pinValues[1]" maxLength="1" solo @keydown="pinEntered(1, $event)" @input="pinNext(1)" :disabled="pinSaving"></v-text-field>
                             </v-col>
                             <v-col cols="3" sm="3">
-                                <v-text-field ref="pin3" v-model="pinValues[2]" maxLength="1" solo @keydown="pinEntered(2, $event)" @input="pinNext(2)" :disabled="pinSaving"></v-text-field>
+                                <v-text-field autocomplete="off" ref="pin3" v-model="pinValues[2]" maxLength="1" solo @keydown="pinEntered(2, $event)" @input="pinNext(2)" :disabled="pinSaving"></v-text-field>
                             </v-col>
                             <v-col cols="3" sm="3">
-                                <v-text-field ref="pin4" v-model="pinValues[3]" maxLength="1" solo @keydown="pinEntered(3, $event)" @input="pinNext(3)" :disabled="pinSaving"></v-text-field>
+                                <v-text-field autocomplete="off" ref="pin4" v-model="pinValues[3]" maxLength="1" solo @keydown="pinEntered(3, $event)" @input="pinNext(3)" :disabled="pinSaving"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-card-text>

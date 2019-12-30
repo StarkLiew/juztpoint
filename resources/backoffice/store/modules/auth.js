@@ -28,7 +28,6 @@ export const mutations = {
         state.user = null
         const expire = new Date() //expire now
         VueCookies.set('JXPTBCK', '', expire, true)
-
         VueCookies.remove('JXPTBCK')
 
 

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import store from '~~/store/index'
 import routes from './routes'
 import { api } from '~~/config'
+import VueCookies from 'vue-cookies'
 
 Vue.use(VueRouter)
 
@@ -12,11 +13,16 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-     if (store.getters['auth/token'] && !store.getters['auth/check']) {
+
+     if (VueCookies.get('JXPTBCK') && store.getters['auth/check']) {
        try {
-         await store.dispatch('auth/fetchUser')
-       } catch (e) {}
-     } 
+           await store.dispatch('auth/fetchUser')
+       } catch (e) {
+                  await store.dispatch('auth/logout')
+       }
+     } else {
+           await store.dispatch('auth/logout')
+     }
  
     let route = reroute(to)
     if (route) {

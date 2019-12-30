@@ -145,8 +145,7 @@ export const actions = {
 
  
             const props = JSON.stringify(properties).replace(/"/g, '\\"').replace(/\\n/g, '\\\\n')
-           console.log(props)
-
+  
             const mutation = `mutation settings{
                                updateSetting(
                                     id: ${id},
@@ -168,6 +167,8 @@ export const actions = {
             return e
         }
     },
+
+    
     async trash({ commit }, item) {
         try {
 

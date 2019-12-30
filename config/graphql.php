@@ -134,6 +134,7 @@ return [
 				'updateDocument' => App\GraphQL\Mutation\Document\UpdateDocumentMutation::class,
 				'updateDocumentStatus' => App\GraphQL\Mutation\Document\UpdateDocumentStatusMutation::class,
 				'removeDocumentStatus' => App\GraphQL\Mutation\Document\RemoveDocumentStatusMutation::class,
+				'UpdateAppointmentStatus' => App\GraphQL\Mutation\Document\UpdateAppointmentStatusMutation::class,
 				'trashDocument' => App\GraphQL\Mutation\Document\TrashDocumentMutation::class,
 
 				//SETTING

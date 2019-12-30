@@ -97,7 +97,7 @@ export const actions = {
 
             if (!!variants) {
                 const variantsCasted = JSON.stringify(variants).replace(/"/g, '\\"')
-                input += `variants: "${variantsCasted}",`
+                input += `variants: ${variantsCasted},`
             }
             if (!!composites) {
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')

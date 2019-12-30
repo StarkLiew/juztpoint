@@ -86,9 +86,10 @@ class AuthController extends Controller {
 			], 401);
 		} else {
 
-			if (array_key_exists('fingerprint', $terminal['properties'])) {
+			if (array_key_exists('fingerprint', $terminal['properties']) && $device['fingerprint'] !== '') {
 				// compare fingerprint
 				$result = [];
+
 				$fingerprinted = json_decode($device['fingerprint']);
 				$existfingerprint = $terminal['properties']['fingerprint'];
 

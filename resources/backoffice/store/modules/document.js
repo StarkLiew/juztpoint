@@ -36,6 +36,12 @@ export const mutations = {
 
         }
     },
+    [types.UPDATE_DOCUMENT_STATUS](state, { item }) {
+        const index = state.items.findIndex(u => u.id === item.id)
+        state.items[index].status = item.status
+       // Vue.set(state.items, index, item)
+
+    },
     [types.REMOVE_DOCUMENT](state, { item }) {
         const index = state.items.findIndex(u => u.id === item.id)
         Vue.set(state.items, index, item)
@@ -228,15 +234,29 @@ export const actions = {
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation documents' + mutation.replace(/[,]\s+/g, ',') } })
 
-            item = data.data.newDocument
+            // item = data.data.updateDocument
 
-            commit(types.ADD_DOCUMENT, { item })
+            // commit(types.ADD_DOCUMENT, { item })
 
             return item
         } catch (e) {
             console.log(e)
             return e
         }
+    },
+
+    async updateAppointmentStatus({ commit }, { id, status }) {
+        try {
+            const mutation = `{UpdateAppointmentStatus(id: ${id}, status: "${status}") {id, status}}`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: 'mutation documents' + mutation.replace(/[,]\s+/g, ',') } })
+            const item = data.data.updateAppointmentStatus
+            commit(types.UPDATE_DOCUMENT_STATUS, { item })
+            return item
+        } catch (e) {
+            console.log(e)
+            return e
+        }
+
     },
 
     async receive({ commit }, { line, receivedItem }) {

@@ -4,10 +4,11 @@ namespace App\GraphQL\Query\Reports;
 use App\Helpers\TenantTable;
 use App\Models\Item;
 use Closure;
+use DB;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 
-class ReportPaymentSummary {
+class ReportCommissionDailySummary {
 
 	public function run($args, Closure $getSelectFields) {
 		$documents = TenantTable::parse('documents');

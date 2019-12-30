@@ -10,6 +10,9 @@
                         <vue-qr :text="editedItem.properties.device_id" :size="200"></vue-qr>
                         <p>{{ editedItem.properties.device_id }}</p>
                     </v-col>
+                    <v-col class="text-center" cols="6" sm="12" md="6" lg="6" v-if="editedItem.properties.fingerprint">
+                        <p>{{ editedItem.properties.fingerprint }}</p>
+                    </v-col>
                 </v-row>
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
@@ -20,14 +23,14 @@
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.description" label="Description"></v-text-field>
                     </v-col>
-                     <v-col cols="12" sm="12" md="6" lg="6">
-                                    <v-switch :true-value="1" :false-value="0" v-model="editedItem.properties.active" inset label="Active"></v-switch>
-                        </v-col>
+                    <v-col cols="12" sm="12" md="6" lg="6">
+                        <v-switch :true-value="1" :false-value="0" v-model="editedItem.properties.active" inset label="Active"></v-switch>
+                    </v-col>
                 </v-row>
-
-
-          
             </v-container>
+        </template>
+        <template v-slot:item.reset="{item}">
+            <v-btn @click="reset(item)" text small dark color="red darken-1">Reset</v-btn>
         </template>
     </crud>
 </template>
@@ -62,6 +65,7 @@ export default {
             headers: [
                 { text: 'Name', value: 'name' },
                 { text: 'Identifier', value: 'properties.device_id' },
+                { text: 'Reset', value: 'reset', sortable: false, custom: true },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
             exportFields: {
@@ -119,7 +123,12 @@ export default {
 
 
 
-        }
+        },
+        async reset(item) {
+                item.properties.fingerprint = ''
+                await this.save(item)
+        },
+
     },
 }
 

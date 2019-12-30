@@ -36,11 +36,11 @@
             </v-menu>
         </v-toolbar>
         <v-sheet>
-            <v-calendar ref="calendar" v-model="focus" color="primary" :events="events" :event-color="getEventColor" :event-margin-bottom="3" :now="today" :type="type" @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="updateRange">
+            <v-calendar ref="calendar" v-model="focus" color="primary" :events="events" :event-color="setColor" :event-margin-bottom="3" :now="today" :type="type" @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="updateRange">
             </v-calendar>
             <v-menu v-model="selectedOpen" :close-on-content-click="false" :activator="selectedElement" full-width offset-x>
                 <v-card color="grey lighten-4" min-width="350px" flat>
-                    <v-toolbar :color="selectedEvent.color" dark>
+                    <v-toolbar :color="setColor(selectedEvent)" dark>
                         <v-btn icon @click="editAppointment(selectedEvent)">
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
@@ -54,12 +54,10 @@
                         <span class="my-4 subtitle-1 black--text" v-html="selectedEvent.details"></span>
                     </v-card-text>
                     <v-card-actions>
-                        <v-chip-group mandatory active-class="primary--text">
-                            <v-chip>Arrived</v-chip>
-                            <v-chip>Started</v-chip>
-                            <v-chip>Completed</v-chip>
-                            <v-chip>No Show</v-chip>
-                            <v-chip>Cancel</v-chip>
+                        <v-chip-group mandatory v-model="selectedEvent.status" active-class="primary--text">
+                            <v-chip @click="updateStatus(selectedEvent, 'set')" value="set">Set</v-chip>
+                            <v-chip @click="updateStatus(selectedEvent, 'noshow')" value="noshow">No Show</v-chip>
+                            <v-chip @click="updateStatus(selectedEvent, 'cancel')" value="cancel">Cancel</v-chip>
                         </v-chip-group>
                     </v-card-actions>
                 </v-card>
@@ -349,6 +347,7 @@ export default {
                     return {
                         id: d.id,
                         name: d.account.name,
+                        status: d.status,
                         details,
                         start: d.properties.startDateTime,
                         end: d.properties.endDateTime,
@@ -490,7 +489,7 @@ export default {
                 if (this.form.id) {
                     item.id = this.form.id
                     item.reference = this.form.reference
-                     await this.$store.dispatch('document/update', item)
+                    await this.$store.dispatch('document/update', item)
 
 
                 } else {
@@ -502,6 +501,21 @@ export default {
 
                 this.saving = false
             }
+
+        },
+        async updateStatus(event, status) {
+            if (event.id) {
+                this.loading = true
+                await this.$store.dispatch('document/updateAppointmentStatus', { id: event.id, status })
+                this.loading = false
+            }
+
+        },
+        setColor(event) {
+            if (event.status === 'set') return 'blue darken-1'
+            if (event.status === 'noshow') return 'red darken-1'
+            if (event.status === 'cancel') return 'grey darken-1'
+            if (event.status === 'completed') return 'green darken-1'
 
         },
         closeDatePicker() {
