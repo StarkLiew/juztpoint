@@ -8,12 +8,12 @@
                 <v-toolbar dark color="primary">
                     <v-toolbar-title>Scan Terminal ID</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn icon dark @click="scannerShow = false">
+                    <v-btn icon dark @click="closeScanner">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                    <qrcode-stream :track="repaint" @decode="onDecode">
+                    <qrcode-stream :track="repaint" @decode="onDecode" v-if="scannerShow">
                     </qrcode-stream>
                 </v-card-text>
             </v-card>
@@ -118,6 +118,9 @@ export default {
         },
         onDecode(decodedString) {
             this.form.device_id = decodedString
+            this.scannerShow = false
+        },
+        closeScanner() {
             this.scannerShow = false
         },
         scanFingerprint() {
