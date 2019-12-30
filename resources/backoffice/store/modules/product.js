@@ -82,11 +82,7 @@ export const actions = {
             const { formData, thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note, variants, composites, qty } = item
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
-            let input = `name: "${name}",
-                           type: "${type}",
-                           status: "${status}",
-                           properties: "${props}",
-                           cat_id: ${cat_id},
+            let input = `name:"${name}",type:"${type}",status: "${status}",properties: "${props}",cat_id: ${cat_id},
                            sku: "${sku}",
                            tax_id: ${tax_id},
                            allow_assistant: ${allow_assistant},
@@ -97,7 +93,7 @@ export const actions = {
 
             if (!!variants) {
                 const variantsCasted = JSON.stringify(variants).replace(/"/g, '\\"')
-                input += `variants: ${variantsCasted},`
+                input += `variants: "${variantsCasted}",`
             }
             if (!!composites) {
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
@@ -112,9 +108,7 @@ export const actions = {
                 item = data.data.newProduct
 
             } else {
-                const mutation = `mutation products($thumbnail: Upload!){
-                               newProduct(
-                                    ${input}
+                const mutation = `mutation products($thumbnail: Upload!){newProduct(${input}
                                     thumbnail: $thumbnail
                              ) {${columns}}}`
 
@@ -159,10 +153,12 @@ export const actions = {
                            stockable: ${stockable},
                            note: "${note}",`
             if (!!variants) {
+
                 const variantsCasted = JSON.stringify(variants).replace(/"/g, '\\"')
-                input += `variants: ${variantsCasted},`
+                input += `variants: "${variantsCasted}",`
             }
             if (!!composites) {
+              
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
                 input += `composites: "${compositesCasted}",`
             }
@@ -187,6 +183,7 @@ export const actions = {
                                     ${input}
                                     thumbnail: $thumbnail,
                              ) {${columns}}}`
+
 
                 const files = formData.getAll('thumbnail')
                 formData.set('operations', JSON.stringify({

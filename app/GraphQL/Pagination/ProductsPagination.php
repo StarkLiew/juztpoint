@@ -121,5 +121,10 @@ class ProductsPagination extends Pagination {
 
 		];
 	}
+	protected function resolveThumbnailField($root, $args) {
+
+		return utf8_encode($root['thumbnail']);
+
+	}
 
 }

@@ -102,6 +102,7 @@ class UpdateProductMutation extends Mutation {
 
 		if (isset($args['thumbnail'])) {
 			$args['thumbnail'] = $args['thumbnail']->get();
+
 		}
 
 		if (isset($args['clear_image'])) {
@@ -111,18 +112,23 @@ class UpdateProductMutation extends Mutation {
 
 		if (isset($args['variants'])) {
 			$args['variants'] = json_decode($args['variants']);
+
 		}
 
 		if (isset($args['composites'])) {
 			$args['composites'] = json_decode($args['composites']);
+
 		}
 
 		DB::beginTransaction();
 		try {
 
 			$data = Product::find($args['id']);
+
 			if (!$data->update($args)) {
+
 				return null;
+
 			}
 
 			if ($data->type === 'product' && $data->stockable === 1) {
@@ -137,10 +143,11 @@ class UpdateProductMutation extends Mutation {
 			}
 
 			DB::commit();
+
 			return $data;
 		} catch (\Illuminate\Database\QueryException $e) {
 			DB::rollback();
-			return null;
+			return $e;
 		}
 
 	}

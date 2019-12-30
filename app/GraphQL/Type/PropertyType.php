@@ -153,7 +153,7 @@ class PropertyType extends GraphQLType {
 				'description' => 'Description of the setting',
 			],
 			'variant' => [
-				'type' => Type::string(),
+				'type' => Type::listOf(Type::string()),
 				'description' => 'Description of the setting',
 			],
 			'shareWith' => [
@@ -185,7 +185,9 @@ class PropertyType extends GraphQLType {
 		];
 	}
 	protected function resolveVariantField($root, $args) {
-		return json_encode($root['variant']);
+
+		return json_decode($root['variant']);
+
 	}
 
 }

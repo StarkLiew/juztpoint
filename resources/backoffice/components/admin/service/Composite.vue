@@ -276,6 +276,7 @@ export default {
             const form = { id: this.editedCompositeItem.item.id, name: this.editedCompositeItem.item.name, variant: this.editedCompositeItem.variant, qty: this.editedCompositeItem.qty }
 
             editedItem.composites.push(form)
+            
             this.closeCompositeEditDialog()
         },
         async closeCompositeEditDialog() {
