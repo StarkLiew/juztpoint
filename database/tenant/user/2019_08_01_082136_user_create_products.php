@@ -1,5 +1,6 @@
 <?php
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -55,6 +56,7 @@ class UserCreateProducts extends Migration {
 				->references('id')->on('users')
 				->onUpdate('cascade');
 		});
+		DB::statement("ALTER TABLE user_{$id}_products ADD thumbnail LONGBLOB");
 	}
 
 	/**

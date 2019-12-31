@@ -246,6 +246,7 @@ export default {
             if (!item.id) {
                 item.type = 'composite-service'
 
+
                 await this.$store.dispatch('product/add', item)
             } else {
                 await this.$store.dispatch('product/update', item)
@@ -276,7 +277,7 @@ export default {
             const form = { id: this.editedCompositeItem.item.id, name: this.editedCompositeItem.item.name, variant: this.editedCompositeItem.variant, qty: this.editedCompositeItem.qty }
 
             editedItem.composites.push(form)
-            
+
             this.closeCompositeEditDialog()
         },
         async closeCompositeEditDialog() {
@@ -291,15 +292,15 @@ export default {
             const avatar = this.$refs.cropper
 
             const croppedCanvas = await avatar.cropper.getCroppedCanvas()
-            editedItem.thumbnail = await croppedCanvas.toDataURL('image/jpeg')
+            editedItem.thumbnail = await croppedCanvas.toDataURL('image/jpeg', 0.9)
             await croppedCanvas.toBlob((blob) => {
+        
                 editedItem.formData = new FormData()
                 editedItem.formData.append('thumbnail', blob)
 
             })
 
             this.loading = false
-
 
         },
         editCompositeItem(editedItem, item) {

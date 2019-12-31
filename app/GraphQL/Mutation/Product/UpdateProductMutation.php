@@ -102,7 +102,6 @@ class UpdateProductMutation extends Mutation {
 
 		if (isset($args['thumbnail'])) {
 			$args['thumbnail'] = $args['thumbnail']->get();
-
 		}
 
 		if (isset($args['clear_image'])) {

@@ -80,6 +80,7 @@ export const actions = {
     async add({ commit }, item) {
         try {
             const { formData, thumbnail, name, type, properties, status, cat_id, sku, tax_id, commission_id, allow_assistant, discount, stockable, note, variants, composites, qty } = item
+
             const props = JSON.stringify(properties).replace(/"/g, '\\"')
 
             let input = `name:"${name}",type:"${type}",status: "${status}",properties: "${props}",cat_id: ${cat_id},
@@ -108,15 +109,11 @@ export const actions = {
                 item = data.data.newProduct
 
             } else {
-                const mutation = `mutation products($thumbnail: Upload!){newProduct(${input}
-                                    thumbnail: $thumbnail
-                             ) {${columns}}}`
-
+                const mutation = `mutation products($thumbnail: Upload!){newProduct(${input} thumbnail: $thumbnail) {${columns}}}`
                 const files = formData.getAll('thumbnail')
-                formData.set('operations', JSON.stringify({
-                    'query': mutation,
-                    'variables': { "thumbnail": files[0] }
-                }))
+
+
+                formData.set('operations', JSON.stringify({ 'query': mutation, 'variables': { "thumbnail": files[0] } }))
 
                 formData.set('map', JSON.stringify({ "thumbnail": ['variables.thumbnail'] }))
                 formData.set('operationName', null)
@@ -124,7 +121,7 @@ export const actions = {
                 const { data } = await axios.post(graphql.path('query'), formData, { 'Content-Type': 'multipart/form-data' })
                 item = data.data.newProduct
             }
-  
+
             commit(types.ADD_PRODUCT, { item })
 
             return item
@@ -158,7 +155,7 @@ export const actions = {
                 input += `variants: "${variantsCasted}",`
             }
             if (!!composites) {
-              
+
                 const compositesCasted = JSON.stringify(composites).replace(/"/g, '\\"')
                 input += `composites: "${compositesCasted}",`
             }
@@ -184,8 +181,8 @@ export const actions = {
                                     thumbnail: $thumbnail,
                              ) {${columns}}}`
 
-
                 const files = formData.getAll('thumbnail')
+
                 formData.set('operations', JSON.stringify({
                     'query': mutation,
                     'variables': { "thumbnail": files[0] }
@@ -225,6 +222,7 @@ export const actions = {
             return e
         }
     },
+
 
 
 }

@@ -264,11 +264,11 @@ return [
 	/*
 		     * Any headers that will be added to the response returned by the default controller
 	*/
-	'headers' => [],
+	'headers' => ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
 
 	/*
 		     * Any JSON encoding options when returning a response from the default controller
 		     * See http://php.net/manual/function.json-encode.php for the full list of options
 	*/
-	'json_encoding_options' => 0,
+	'json_encoding_options' => JSON_UNESCAPED_UNICODE,
 ];
