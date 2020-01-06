@@ -41,6 +41,10 @@ Route::group([
 	Route::post('pos/register', 'Auth\AuthController@machine');
 	Route::post('login', 'Auth\AuthController@login');
 	Route::post('register', 'Auth\AuthController@register');
+	Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+	Route::post('password/reset/{token}', 'Auth\ForgotPasswordController@showResetForm');
+	Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
 });
 
 // Route::post('user/register', ['as' => 'user.register', 'uses' => 'Logic\UserController@register']);

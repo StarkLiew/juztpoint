@@ -55,11 +55,11 @@
     "vue-easy-print": "0.0.8",
     "vue-json-excel": "^0.2.98",
     "vue-lodash": "^2.0.2",
-    "vue-moment": "^4.0.0",
+    "vue-moment": "^4.1.0",
     "vue-qr": "^2.2.1",
     "vue-qrcode-reader": "^2.1.1",
     "vue-recaptcha-v3": "^1.8.0",
-    "vue-server-renderer": "^2.6.10",
+    "vue-server-renderer": "^2.6.11",
     "vue-the-mask": "^0.11.1",
     "vue-webble": "^0.1.0",
     "vuex-persist": "^2.1.0"

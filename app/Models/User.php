@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Notifications\PasswordReset;
 use App\Observers\UserObserver;
 use App\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 use Orchestra\Tenanti\Tenantor;
-use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable {
 	use SoftDeletes, Notifiable, HasApiTokens, Billable;
@@ -97,6 +98,10 @@ class User extends Authenticatable {
 		}
 
 		return 'data:image/jpeg;base64,' . base64_encode($value);
+	}
+	public function sendPasswordResetNotification($token) {
+
+		$this->notify(new PasswordReset($token));
 	}
 
 }

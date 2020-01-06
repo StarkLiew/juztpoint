@@ -69,6 +69,13 @@
                     <v-list>
                         <v-list-item @click="">
                             <v-list-item-title>
+                                <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="pdf" name="data.pdf">
+                                    PDF
+                                </download-excel>
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                            <v-list-item-title>
                                 <download-excel class="btn" :fetch="allItems" :fields="exportFields" type="csv" name="data.csv">
                                     CSV
                                 </download-excel>
@@ -159,6 +166,7 @@
 <script>
 import JsonExcel from 'vue-json-excel'
 
+
 export default {
     data() {
         return {
@@ -186,6 +194,7 @@ export default {
     },
     components: {
         'downloadExcel': JsonExcel,
+
     },
     created() {
         this.initialize()

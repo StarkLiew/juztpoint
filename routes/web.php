@@ -25,7 +25,8 @@ Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com'))->group(func
 	Route::get('/services/{any}', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/products/{any}', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/setting/{any}', 'HomeController@backoffice')->name('backoffice');
-
+	Route::get('/password/{any}', 'HomeController@backoffice')->name('backoffice');
+	Route::get('/password/reset/{any}', 'HomeController@backoffice')->name('backoffice');
 });
 
 // Wildcard subdomain

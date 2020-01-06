@@ -19,15 +19,7 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-item @click="">
-                        <v-list-item-title>Profile</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="">
-                        <v-list-item-title>Account</v-list-item-title>
-                    </v-list-item>
-                    <v-divider></v-divider>
-                    <v-divider></v-divider>
-                    <v-list-item @click="logout">
+                     <v-list-item @click="logout">
                         <v-list-item-title>Log Out</v-list-item-title>
                     </v-list-item>
                 </v-list>

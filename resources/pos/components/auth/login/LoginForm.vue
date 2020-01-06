@@ -20,9 +20,6 @@
         </v-dialog>
         <v-layout class="mt-4 mx-0">
             <v-spacer></v-spacer>
-            <v-btn text :disabled="loading" :to="{ name: 'forgot', query: {email: form.email} }" color="grey darken-2">
-                Forgot password?
-            </v-btn>
             <v-btn type="submit" :loading="loading" :disabled="loading || !valid" color="primary" class="ml-4">
                 Login
             </v-btn>

@@ -232,7 +232,9 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'auth/register',
         refresh: 'refresh'
     },
-
+    forgot: {
+        url: 'auth/password/email',
+    },
     password: {
         url: 'auth/password',
         forgot: 'email',
