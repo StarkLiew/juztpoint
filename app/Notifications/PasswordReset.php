@@ -45,11 +45,13 @@ class PasswordReset extends ResetPassword// change extends from Notification to 
 	 */
 	public function toMail($notifiable) {
 
-		//$host = env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com');
-		$host = "";
+		$host = env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') . '/password/reset/' . $this->token;
+		$host .= '?email=' . request()->email;
+		//url('/password/reset', $this->token)
 
 		return (new MailMessage)
-			->view('vendor.notifications.email')
-			->action('Reset Password', url('/password/reset', $this->token)); // add this. this is $actionUrl
+			->subject('Password Reset')
+			->markdown('vendor.notifications.email')
+			->action('Reset Password', $host); // add this. this is $actionUrl
 	}
 }

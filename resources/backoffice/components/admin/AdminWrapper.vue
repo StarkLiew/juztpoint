@@ -6,6 +6,14 @@
         <top-menu @navToggle="onNavToggle" @overlay="onOverlay"></top-menu>
         <v-content>
             <v-container fluid>
+                <v-alert prominent type="error" v-if="!verified">
+                    <v-row align="center">
+                        <v-col class="grow">Unlock more feature by verify your email now. </v-col>
+                        <v-col class="shrink">
+                            <v-btn :loading="sending" :disabled="sending" @click="resend">Resend Email Verification</v-btn>
+                        </v-col>
+                    </v-row>
+                </v-alert>
                 <transition name="fade" mode="out-in">
                     <router-view></router-view>
                 </transition>
@@ -21,12 +29,16 @@
 import AppNav from './shared/AppNav'
 import TopMenu from './shared/TopMenu'
 import AppFooter from './shared/AppFooter'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
+import { api } from '~~/config'
 
 export default {
     data: () => ({
         mini: true,
         show: true,
-        overlay: false
+        overlay: false,
+        sending: false,
     }),
 
     components: {
@@ -34,7 +46,9 @@ export default {
         TopMenu,
         AppFooter
     },
-
+    computed: mapGetters({
+        verified: 'auth/verified',
+    }),
     methods: {
         onNavToggle() {
             this.show = !this.show
@@ -51,6 +65,22 @@ export default {
         },
         onMinified(val) {
             this.mini = val
+        },
+        async resend() {
+            this.sending = true
+            await axios.post(api.path('resend'), {})
+                .then((res) => {
+                    this.$toast.success('Email verification have been sent to your inbox.')
+                })
+                .catch(err => {
+                    this.handleErrors(err.response.data.errors)
+
+                })
+                .then(() => {
+                    this.sending = false
+                })
+            this.sending = false
+
         }
 
     }

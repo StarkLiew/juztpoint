@@ -34,13 +34,33 @@ export default {
         }
     }),
 
-    created() {
+    async created() {
         this.form.email = this.$route.query.email
         this.form.token = this.$route.params.token
+        await this.validateToken()
+
     },
 
     methods: {
-        submit() {
+        async validateToken() {
+            if (this.form.token) {
+                this.loading = true
+                axios.post(api.path('password.validate'), this.form)
+                    .then((res) => {
+
+                        if (!res.data.valid) {
+                            this.$router.push({ name: 'login', query: {}})
+                        }
+                    })
+                    .catch(err => {
+                        this.handleErrors(err.response.data.errors)
+                    })
+                    .then(() => {
+                        this.loading = false
+                    })
+            }
+        },
+        async submit() {
             if (this.$refs.form.validate()) {
                 this.loading = true
                 axios.post(api.path('password.reset'), this.form)

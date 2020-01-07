@@ -10,6 +10,7 @@ export const state = {
     user: null,
     access: false,
     store: null,
+    verified: false,
     //token: window.localStorage.getItem('token')
     token: null,
 }
@@ -25,6 +26,7 @@ export const mutations = {
     [types.LOGOUT](state) {
         state.access = false
         state.store = null
+        state.verified = false
         state.user = null
         const expire = new Date() //expire now
         VueCookies.set('JXPTBCK', '', expire, true)
@@ -39,13 +41,14 @@ export const mutations = {
         state.access = false
         state.user = null
         state.store = null
+        state.verified = false
         state.terminal = null
         const expire = new Date() //expire now
         VueCookies.set('JXPTBCK', '', expire, true)
         VueCookies.remove('JXPTBCK')
     },
 
-    [types.SET_TOKEN](state, { token, expires_at, store, user }) {
+    [types.SET_TOKEN](state, { token, expires_at, store, user, verified }) {
         // state.token = token
         // window.localStorage.setItem('token', token)
 
@@ -53,6 +56,7 @@ export const mutations = {
         state.access = true
         state.store = store
         state.user = user
+        state.verified = verified
         VueCookies.set('JXPTBCK', token, expire, true)
 
     }
@@ -96,4 +100,5 @@ export const getters = {
     token: state => VueCookies.get('JXPTBCK'),
     terminal: state => state.terminal,
     store: state => state.store,
+    verified: state => state.verified,
 }

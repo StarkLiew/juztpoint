@@ -1,5 +1,6 @@
 <template>
     <v-container>
+
         <h1 class="display-1">Dashboard</h1>
         <v-row>
             <v-col cols="12" lg="4" md="4" sm="12">
@@ -101,6 +102,7 @@ export default {
         }
 
     },
+
     async created() {
 
         this.initialize()
@@ -114,7 +116,7 @@ export default {
                 { title: 'Recent Sales Performance', chart: 'bar', loading: false, refresh: this.chartSalesSix, data: [] },
                 { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
                 { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
-                { title: 'Top Employee', chart: 'bar', loading: false, refresh:  this.topEmployee, data: [] },
+                { title: 'Top Employee', chart: 'bar', loading: false, refresh: this.topEmployee, data: [] },
             ]
 
             const today = this.$moment()
@@ -282,7 +284,7 @@ export default {
             }
             item.loading = false
         },
-     async topEmployee(item) {
+        async topEmployee(item) {
 
             item.loading = true
             try {

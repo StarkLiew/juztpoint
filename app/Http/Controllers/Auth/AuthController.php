@@ -5,11 +5,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller {
+
+	public function __construct(HasherContract $hasher) {
+		$this->hasher = $hasher;
+	}
+
 	/**
 	 * Create user
 	 *
@@ -41,6 +47,7 @@ class AuthController extends Controller {
 		$user->properties = json_decode('{"role":"MGR","backoffice":"1"}');
 		try {
 			$user->save();
+
 			return response()->json([
 				'message' => 'Successfully created account!',
 			], 201);
@@ -200,6 +207,7 @@ class AuthController extends Controller {
 
 		return response()->json([
 			'user' => $user,
+			'verified' => $user->verified,
 			'token' => $tokenResult->accessToken,
 			'token_type' => 'Bearer',
 			'expires_at' => Carbon::parse(
@@ -227,5 +235,37 @@ class AuthController extends Controller {
 	 */
 	public function user(Request $request) {
 		return response()->json(['user' => $request->user()]);
+	}
+
+	public function validPasswordResetToken(Request $request) {
+		$valid = true;
+		$reset = DB::table('password_resets')
+			->where('email', '=', $request->email)
+			->where('created_at', '>', Carbon::now()->subHours(2))
+			->first();
+
+		if (!$reset) {
+			$valid = false;
+		} else {
+			if (!$this->hasher->check($request->token, $reset->token)) {
+				$valid = false;
+			}
+		}
+
+		return response()->json([
+			'valid' => $valid,
+		]);
+	}
+
+	public function resendVerification() {
+
+		$auth = Auth::user();
+
+		$tid = $auth->id;
+		if ($auth->tenant) {
+			$tid = $auth->tenant;
+		}
+		$user = User::find($tid);
+		$user->sendEmailVerificationNotification();
 	}
 }

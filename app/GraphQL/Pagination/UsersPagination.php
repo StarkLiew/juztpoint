@@ -39,6 +39,10 @@ class UsersPagination extends Pagination {
 				'type' => Type::int(),
 				'description' => 'The name of the user',
 			],
+			'verified' => [
+				'type' => Type::boolean(),
+				'description' => 'The name of the user',
+			],
 			'properties' => [
 				'type' => GraphQL::type('property'),
 				'description' => 'A list of the property',
@@ -49,4 +53,5 @@ class UsersPagination extends Pagination {
 	protected function resolveEmailField($root, $args) {
 		return strtolower($root->email);
 	}
+
 }

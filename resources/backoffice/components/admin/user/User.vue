@@ -2,6 +2,7 @@
     <crud title="Employees" :headers="headers" :items='users' sort-by="name" :refresh="retrieve" :default-item="defaultItem" :options.sync="options" :save-method="save" :remove-method="remove" :server-items-length="userCount" :loading="loading" loading-text="Loading..." :export-fields="exportFields">
         <template v-slot:dialog="{ valid, editedItem }">
             <v-container>
+
                 <v-row>
                     <v-col cols="12" sm="12" md="6" lg="6">
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>

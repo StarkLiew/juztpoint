@@ -227,7 +227,9 @@ export const api = Object.assign(new URL(apiUrl), {
     logout: {
         url: 'auth/logout'
     },
-
+    resend: {
+        url: 'resend'
+    },
     register: {
         url: 'auth/register',
         refresh: 'refresh'
@@ -238,7 +240,8 @@ export const api = Object.assign(new URL(apiUrl), {
     password: {
         url: 'auth/password',
         forgot: 'email',
-        reset: 'reset'
+        reset: 'reset',
+        validate: 'validate',
     },
     me: 'me',
     users: {

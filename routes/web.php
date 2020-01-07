@@ -35,6 +35,13 @@ Route::domain(env('APP_URL', 'www.juztpoint.com'))->group(function ($router) {
 	// Route::post('register', 'Auth\RegisterController@register');
 
 	Route::get('/', 'HomeController@welcome')->name('welcome');
+	Route::get('/verified', 'HomeController@verified')->name('verified');
+	Route::get('/login', 'HomeController@login')->name('login');
+
+	Route::group(['prefix' => 'email'], function () {
+		Route::get('verify', 'Auth\VerificationController@show')->name('verification.notice');
+		Route::get('verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+	});
 
 	Route::middleware('auth:web')->group(function () {
 		Route::get('/home', 'HomeController@index')->name('home');

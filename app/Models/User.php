@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Notifications\PasswordReset;
 use App\Observers\UserObserver;
 use App\Scopes\TenantScope;
+use Auth;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,7 +15,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 use Orchestra\Tenanti\Tenantor;
 
-class User extends Authenticatable {
+class User extends Authenticatable implements MustVerifyEmail {
 	use SoftDeletes, Notifiable, HasApiTokens, Billable;
 
 	protected $appends = array('company_name');
@@ -102,6 +104,21 @@ class User extends Authenticatable {
 	public function sendPasswordResetNotification($token) {
 
 		$this->notify(new PasswordReset($token));
+	}
+
+	public function getVerifiedAttribute() {
+		$auth = Auth::user();
+		$tid = $auth->id;
+		if ($auth->tenant) {
+			$tid = $auth->tenant;
+		}
+		$user = User::find($tid);
+		if ($user) {
+			if ($user->email_verified_at) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

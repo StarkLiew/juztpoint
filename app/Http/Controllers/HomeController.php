@@ -28,7 +28,23 @@ class HomeController extends Controller {
 	public function welcome() {
 		return view('welcome');
 	}
-
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
+	public function verified() {
+		return view('verified');
+	}
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
+	public function login() {
+		$uri = env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') . '/login';
+		return redirect($uri);
+	}
 	/**
 	 * Show the application dashboard.
 	 *
