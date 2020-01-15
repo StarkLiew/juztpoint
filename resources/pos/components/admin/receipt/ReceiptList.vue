@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" :value="show" :width="350">
+    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="getDeviceWidth()">
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
                 <v-btn icon to="{name: 'pos'}">
@@ -11,7 +11,6 @@
                 <v-btn icon>
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
-   
             </v-toolbar>
         </template>
         <div v-for="(items, key) in receipts" :key="key">
@@ -42,13 +41,15 @@ import { mapGetters } from 'vuex'
 
 export default {
     data: () => ({
-
+        show: false,
     }),
-    props: ['show'],
+    props: ['showList'],
     components: {
 
     },
     mounted() {
+
+        if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) this.show = true
 
     },
     computed: mapGetters({
@@ -57,7 +58,13 @@ export default {
         store: 'auth/store',
     }),
     watch: {
+        showList(val) {
+            this.show = val
+        },
+        show(val) {
 
+            this.$emit('list-toggle', val)
+        },
     },
     methods: {
         isSameDate(item, index) {
@@ -66,7 +73,16 @@ export default {
 
         select(item) {
             this.$emit('selected', item)
-        }
+            this.show = false
+        },
+        getDeviceWidth() {
+            if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+                return this.$vuetify.breakpoint.width
+            }
+
+            return 370
+
+        },
     }
 }
 

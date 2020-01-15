@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="350" :right="isEntry">
+    <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="getDeviceWidth()" :right="isEntry">
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
                 <v-btn icon v-if="show" @click="show = false">
@@ -138,7 +138,12 @@ export default {
         ItemEdit,
         DiscountAdd,
     },
+    created() {
+
+    },
     mounted() {
+
+        if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) this.show = true
 
     },
     watch: {
@@ -176,7 +181,7 @@ export default {
                 item.properties.servicesBy = [] */
 
                 this.items.push(item)
-                 this.$emit('cart-toggle', true)
+                this.$emit('cart-toggle', true)
                 setTimeout(() => {
                     this.sumTotal()
                     let container = this.$el.querySelector(".v-navigation-drawer__content");
@@ -201,6 +206,7 @@ export default {
             const receipt = { customer, footer, items }
             this.isEntry = false
             this.$emit('payment', receipt)
+            this.show = false
         },
         updateDiscountFooter(discount) {
 
@@ -279,6 +285,14 @@ export default {
         },
         getItem(id) {
             return this.$store.getters['service/collection'].find(o => o.id === id)
+        },
+        getDeviceWidth() {
+            if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+                return this.$vuetify.breakpoint.width
+            }
+
+            return 370
+
         },
 
 

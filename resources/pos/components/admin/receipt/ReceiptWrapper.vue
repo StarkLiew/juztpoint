@@ -1,6 +1,6 @@
 <template>
     <div class="fill-height">
-        <receipt-list @selected="selected" :show="showList"> </receipt-list>
+        <receipt-list @list-toggle="listToggleUpdate" :show-list.sync="showList" @selected="selected" :show="showList"> </receipt-list>
         <receipt-tool @list-toggle="listToggle"></receipt-tool>
         <v-content style="margin-top: 5px;height: calc(100vh - 54px);">
             <receipt-view :selected="selectedItem"></receipt-view>
@@ -18,7 +18,7 @@ import ReceiptView from './ReceiptView'
 export default {
     data: () => ({
         overlay: false,
-        showList: true,
+        showList: false,
         selectedItem: null,
     }),
     components: {
@@ -28,11 +28,17 @@ export default {
     },
 
     methods: {
+        listToggle() {
+            this.showList = !this.showList
+        },
+        listToggleUpdate(val) {
+            this.showList = val
+        },
         overlayShow() {
             this.overlay = true
         },
         listToggle() {
-           this.showList =  !this.showList
+            this.showList = !this.showList
         },
         selected(item) {
 

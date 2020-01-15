@@ -40,7 +40,8 @@
                         <v-textarea filled auto-grow label="Note" rows="4" row-height="10" v-model="item.note" shaped></v-textarea>
                     </v-layout>
                     <v-layout px-10>
-                        <v-combobox v-model="item.saleBy" :items="users" :rules="saleByRules" chips required label="Sale Person">
+                        <v-select v-model="item.saleBy" :items="users" :rules="saleByRules" menu-props="auto" item-text="name" item-value="id" hide-details required label="Sale Person" single-line></v-select>
+                        <!-- <v-combobox v-model="item.saleBy" :items="users" :rules="saleByRules" chips required label="Sale Person">
                             <template v-slot:item="{ index, item }">
                                 <v-list-item-content>
                                     <v-chip>
@@ -59,7 +60,7 @@
                                     {{ data.item.name }}
                                 </v-chip>
                             </template>
-                        </v-combobox>
+                        </v-combobox> -->
                     </v-layout>
                 </v-form>
             </v-card>

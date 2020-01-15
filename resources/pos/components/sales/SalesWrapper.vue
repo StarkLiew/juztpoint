@@ -71,7 +71,6 @@ export default {
             this.showCart = !this.showCart
         },
         cartToggleUpdate(val) {
-                        console.log(val)
             this.showCart = val
         },
         customerToggle() {
@@ -119,6 +118,9 @@ export default {
         cancelPayment() {
             this.trxn = null
             this.panel = "product"
+            if(this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+                this.cartToggle()
+            }
         },
         newTrxn() {
             this.customer = null
