@@ -65,7 +65,7 @@ class ProductsQuery extends Query {
 				$query->where('id', $args['id']);
 			}
 			if (isset($args['name'])) {
-				$query->where('name', 'like', '@' . $args['name'] . '%');
+				$query->where('name', 'like', '%' . $args['name'] . '%');
 			}
 			if (isset($args['type'])) {
 				$query->where('type', 'like', $args['type']);
@@ -90,10 +90,16 @@ class ProductsQuery extends Query {
 
 		$selectedFields = $fields->getSelect();
 
-		$results = Product::with(array_keys($fields->getRelations()))
+		$q = Product::with(array_keys($fields->getRelations()))
 			->where($where)
-			->select($selectedFields)
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($selectedFields);
+
+		if ($args['limit'] > 0) {
+			$results = $q->paginate($args['limit'], ['*'], 'page', $args['page']);
+		} else {
+			$count = $q->count();
+			$results = $q->paginate($count, ['*'], 'page', 1);
+		}
 
 		return $results;
 	}

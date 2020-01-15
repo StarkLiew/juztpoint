@@ -2,6 +2,9 @@
 ## List all process
 $ docker-compose up -d
 
+## development
+$ docker-compose -f docker-compose-dev.yml up -d
+
 ## List all process
 $ docker ps 
 $ docker-compose exec app php artisan key:generate

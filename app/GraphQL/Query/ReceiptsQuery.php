@@ -90,11 +90,17 @@ class ReceiptsQuery extends Query {
 		$fields = $getSelectFields();
 		$selectFields = $fields->getSelect();
 
-		$results = Document::with(array_keys($fields->getRelations()))
+		$q = Document::with(array_keys($fields->getRelations()))
 			->where('type', 'receipt')
 			->where($where)
-			->select($selectFields)
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($selectFields);
+
+		if ($args['limit'] > 0) {
+			$results = $q->paginate($args['limit'], ['*'], 'page', $args['page']);
+		} else {
+			$count = $q->count();
+			$results = $q->paginate($count, ['*'], 'page', 1);
+		}
 
 		return $results;
 	}

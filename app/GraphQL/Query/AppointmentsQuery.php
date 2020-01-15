@@ -55,11 +55,18 @@ class AppointmentsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
-		$results = Item::with(array_keys($fields->getRelations()))
+		$q = Item::with(array_keys($fields->getRelations()))
 			->where('type', 'appointment')
 			->where($where)
-			->select($fields->getSelect())
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($fields->getSelect());
+
+		if ($args['limit'] > 0) {
+			$results = $q->paginate($args['limit'], ['*'], 'page', $args['page']);
+		} else {
+			$count = $q->count();
+			$results = $q->paginate($count, ['*'], 'page', 1);
+		}
+
 		return $results;
 	}
 }

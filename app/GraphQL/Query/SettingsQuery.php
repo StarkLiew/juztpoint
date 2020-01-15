@@ -72,10 +72,16 @@ class SettingsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
-		$results = Setting::with(array_keys($fields->getRelations()))
+		$q = Setting::with(array_keys($fields->getRelations()))
 			->where($where)
-			->select($fields->getSelect())
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->select($fields->getSelect());
+
+		if ($args['limit'] > 0) {
+			$results = $q->paginate($args['limit'], ['*'], 'page', $args['page']);
+		} else {
+			$count = $q->count();
+			$results = $q->paginate($count, ['*'], 'page', 1);
+		}
 		return $results;
 	}
 }

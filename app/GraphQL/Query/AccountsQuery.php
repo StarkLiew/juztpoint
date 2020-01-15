@@ -102,21 +102,26 @@ class AccountsQuery extends Query {
 		};
 
 		$fields = $getSelectFields();
-		$query = Account::with(array_keys($fields->getRelations()))
+		$q = Account::with(array_keys($fields->getRelations()))
 			->where($where)
 			->select($fields->getSelect());
 
 		if (isset($args['sort']) && isset($args['desc'])) {
 
 			if (isset($args['desc']) && $args['desc'] === 'desc') {
-				$query->orderBy($args['sort'], 'desc');
+				$q->orderBy($args['sort'], 'desc');
 			} else {
-				$query->orderBy($args['sort']);
+				$q->orderBy($args['sort']);
 			}
 
 		}
 
-		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
+		if ($args['limit'] > 0) {
+			$results = $q->paginate($args['limit'], ['*'], 'page', $args['page']);
+		} else {
+			$count = $q->count();
+			$results = $q->paginate($count, ['*'], 'page', 1);
+		}
 
 		return $results;
 	}
