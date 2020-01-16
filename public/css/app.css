@@ -14330,37 +14330,6 @@ html {
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-
-.sidemenu {
-  margin: 0 24px;
-  width: 200px;
-}
-
-.sidemenu .list__tile {
-  font-weight: 500;
-}
-
-.sidemenu .icon {
-  color: inherit;
-}
-
-@media only screen and (max-width: 599px) {
-  .sidemenu {
-    position: static !important;
-    margin: 0;
-    width: auto;
-  }
-}
-
 /* MaterialDesignIcons.com */
 
 @font-face {
@@ -30608,6 +30577,37 @@ html {
 
   100% {
     transform: rotate(359deg);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+.sidemenu {
+  margin: 0 24px;
+  width: 200px;
+}
+
+.sidemenu .list__tile {
+  font-weight: 500;
+}
+
+.sidemenu .icon {
+  color: inherit;
+}
+
+@media only screen and (max-width: 599px) {
+  .sidemenu {
+    position: static !important;
+    margin: 0;
+    width: auto;
   }
 }
 

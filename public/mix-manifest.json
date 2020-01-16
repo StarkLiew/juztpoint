@@ -1,6 +1,5 @@
 {
     "/backoffice/app.js": "/backoffice/app.js",
-    "/css/vue.css": "/css/vue.css",
     "/pos/app.js": "/pos/app.js",
     "/css/app.css": "/css/app.css",
     "/receipt/app-client.js": "/receipt/app-client.js",
