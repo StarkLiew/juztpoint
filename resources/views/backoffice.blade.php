@@ -10,7 +10,6 @@
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
-        <link href="{{ mix('/css/vue.css') }}" rel="stylesheet">
 
         <script>
             window.Laravel = {!! json_encode([

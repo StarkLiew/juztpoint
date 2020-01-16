@@ -1,5 +1,5 @@
 <template>
-    <div class="fill-height">
+    <div>
         <div v-if="shift && shift.status === 'open'">
             <carts @cart-toggle="cartToggleUpdate" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show-cart.sync="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
             <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
@@ -7,7 +7,7 @@
                 <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
                     <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
                     <item-add @close="showEdit = false" v-if="item" :product="item" :show="showEdit" @done="addedProduct"></item-add>
-                    <customers-list @close="showCustomerDialog = false" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
+                    <customers-list @close="closeCustomerDialog" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
                     <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'"></payment>
                 </v-sheet>
                 <v-overlay :value="overlay">
@@ -75,6 +75,17 @@ export default {
         },
         customerToggle() {
             this.panel = 'customer'
+
+        },
+        closeCustomerDialog() {
+            this.showCustomerDialog = false
+            setTimeout(() => {
+                if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+                    if (!this.showCart) this.cartToggle()
+                }
+            }, 10)
+
+
         },
         productToggle() {
             this.panel = 'product'
@@ -98,7 +109,8 @@ export default {
         },
         selectedCustomer(customer) {
             this.customer = customer
-            this.showCustomerDialog = false
+
+            this.closeCustomerDialog()
         },
         selectedProduct(item) {
             this.showEdit = true
@@ -118,7 +130,7 @@ export default {
         cancelPayment() {
             this.trxn = null
             this.panel = "product"
-            if(this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+            if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
                 this.cartToggle()
             }
         },

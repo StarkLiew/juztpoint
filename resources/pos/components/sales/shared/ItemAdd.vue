@@ -27,7 +27,7 @@
                     <v-toolbar v-if="item.variants" v-for="(variant, vindex) in item.variants" :key="vindex">
                         <v-select :rules="variantRules" required v-model="selectedVariant[variant.name]" :items="variant.value" :label="variant.name" class="mt-6" @change="resetPrice"></v-select>
                     </v-toolbar>
-                    <v-toolbar flat>
+                    <v-toolbar>
                         <v-spacer></v-spacer>
                         <v-flex class="subheader">
                             <v-icon>mdi-currency-usd</v-icon>Price
@@ -39,29 +39,10 @@
                     <v-layout>
                         <v-textarea filled auto-grow label="Note" rows="4" row-height="10" v-model="item.note" shaped></v-textarea>
                     </v-layout>
-                    <v-layout px-10>
-                        <v-select v-model="item.saleBy" :items="users" :rules="saleByRules" menu-props="auto" item-text="name" item-value="id" hide-details required label="Sale Person" single-line></v-select>
-                        <!-- <v-combobox v-model="item.saleBy" :items="users" :rules="saleByRules" chips required label="Sale Person">
-                            <template v-slot:item="{ index, item }">
-                                <v-list-item-content>
-                                    <v-chip>
-                                        <v-avatar class="accent white--text" left>
-                                            {{ item.name.slice(0, 1).toUpperCase() }}
-                                        </v-avatar>
-                                        {{ item.name }}
-                                    </v-chip>
-                                </v-list-item-content>
-                            </template>
-                            <template v-slot:selection="data">
-                                <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :input-value="data.selected" :disabled="data.disabled" @click.stop="data.parent.selectedIndex = data.index" @click:close="data.parent.selectItem(data.item)">
-                                    <v-avatar class="accent white--text" left>
-                                        {{ data.item.name.slice(0, 1).toUpperCase() }}
-                                    </v-avatar>
-                                    {{ data.item.name }}
-                                </v-chip>
-                            </template>
-                        </v-combobox> -->
-                    </v-layout>
+                    <v-toolbar>
+                        <v-select v-model="item.saleBy" :items="users" :rules="saleByRules" menu-props="auto" item-text="name" required label="Sale Person"  :return-object="true"></v-select>
+                    </v-toolbar>
+                     <v-spacer></v-spacer>
                 </v-form>
             </v-card>
         </v-dialog>

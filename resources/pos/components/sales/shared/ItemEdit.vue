@@ -43,56 +43,16 @@
         <v-layout>
             <v-textarea filled auto-grow label="Note" rows="2" v-model="note" row-height="10" shaped></v-textarea>
         </v-layout>
-            <v-toolbar v-if="item.composites && item.type !== 'composite-product'" v-for="(composite, index) in item.composites" :key="index">
-                <v-select return-object v-model="composite.performBy" :items="[{id:0, name: 'None'}].concat(users)" :label="composite.name" class="mt-6" item-value="id" item-text="name"></v-select>
-            </v-toolbar>
-        <v-layout>
-            <v-card tile class="pa-2">
-                <v-combobox v-model="saleBy" :items="users" :rules="saleByRules" chips required label="Sale Person">
-                    <template v-slot:item="{ index, item }">
-                        <v-list-item-content>
-                            <v-chip>
-                                <v-avatar class="accent white--text" left>
-                                    {{ item.name.slice(0, 1).toUpperCase() }}
-                                </v-avatar>
-                                {{ item.name }}
-                            </v-chip>
-                        </v-list-item-content>
-                    </template>
-                    <template v-slot:selection="data">
-                        <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :input-value="data.selected" :disabled="data.disabled" @click.stop="data.parent.selectedIndex = data.index" @click:close="data.parent.selectItem(data.item)">
-                            <v-avatar class="accent white--text" left>
-                                {{ data.item.name.slice(0, 1).toUpperCase() }}
-                            </v-avatar>
-                            {{ data.item.name }}
-                        </v-chip>
-                    </template>
-                </v-combobox>
-            </v-card>
-
-            <v-card v-if="item.allow_assistant === 1" tile class="pa-2">
-                <v-combobox v-model="shareWith" :items="[{id:0, name: 'None'}].concat(users)" chips required label="Share with">
-                    <template v-slot:item="{ index, item }">
-                        <v-list-item-content>
-                            <v-chip>
-                                <v-avatar class="accent white--text" left>
-                                    {{ item.name.slice(0, 1).toUpperCase() }}
-                                </v-avatar>
-                                {{ item.name }}
-                            </v-chip>
-                        </v-list-item-content>
-                    </template>
-                    <template v-slot:selection="data">
-                        <v-chip :key="JSON.stringify(data.item)" v-bind="data.attrs" :input-value="data.selected" :disabled="data.disabled" @click.stop="data.parent.selectedIndex = data.index" @click:close="data.parent.selectItem(data.item)">
-                            <v-avatar class="accent white--text" left>
-                                {{ data.item.name.slice(0, 1).toUpperCase() }}
-                            </v-avatar>
-                            {{ data.item.name }}
-                        </v-chip>
-                    </template>
-                </v-combobox>
-            </v-card>
-        </v-layout>
+        <v-toolbar>
+            <v-select class="mt-6" v-model="saleBy" :items="users" :rules="saleByRules" menu-props="auto" item-text="name" required label="Sale Person" :return-object="true"></v-select>
+            <v-divider vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-select class="mt-6" v-model="shareWith" :items="[{id:0, name: 'None'}].concat(users)" :rules="saleByRules" menu-props="auto" item-text="name" required label="Share with" :return-object="true"></v-select>
+        </v-toolbar>
+        <v-toolbar v-if="item.composites && item.type !== 'composite-product'" v-for="(composite, index) in item.composites" :key="index">
+            <v-select return-object v-model="composite.performBy" :items="[{id:0, name: 'None'}].concat(users)" :label="composite.name" class="mt-6" item-value="id" item-text="name"></v-select>
+        </v-toolbar>
+        <v-spacer></v-spacer>
         <keyboard @done="showKeyboard = false" @clear="discountRate = 0.0" @change="discountRateChange" @close="closedKeyboard" :label="inputLabel" :decimal="decimal" :show="showKeyboard">
         </keyboard>
     </v-card>
