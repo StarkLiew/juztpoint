@@ -21,7 +21,7 @@
                 <v-divider></v-divider>
             </v-card-text>
             <v-btn block color="primary" dark large @click="print()">
-                <v-icon>printer</v-icon>Print {{ getShiftLabel(shiftId) }} Report
+                <v-icon>mdi-printer</v-icon>Print {{ getShiftLabel(shiftId) }} Report
             </v-btn>
         </v-card>
         <v-overlay :value="overlay">
@@ -122,10 +122,12 @@ export default {
         computeSummary() {
             const id = this.shiftId
 
-            let receipts = this.$store.getters['receipt/receipts'].filter(r => r.shiftId === id)
+            let data = this.$store.getters['receipt/receipts'].filter(r => r.shiftId === id)
+            let receipts = data.filter(r => r.status === 'active')
             if (this.staffId > 0) {
                 receipts = receipts.filter(r => r.teller.id === this.staffId)
             }
+           
 
             if (!receipts) return {}
             return {
@@ -140,6 +142,7 @@ export default {
                 rounding: receipts.reduce((acc, curr) => acc + curr.rounding, 0),
                 footer_discount: receipts.reduce((acc, curr) => acc + curr.discount_amount, 0),
                 payment: this.payment(receipts),
+                void: data.filter(r => r.status === 'void').length,
 
             }
 

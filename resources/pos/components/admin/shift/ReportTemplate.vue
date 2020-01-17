@@ -75,6 +75,13 @@
                 <td>{{data.shift.close.amount - data.shift.open.amount| currency}}</td>
             </tr>
         </table>
+                <table>
+            <tr>
+                <td class="left">Void</td>
+                <td>{{ data.void }}</td>
+            </tr>
+ 
+        </table>
         <br />
         <br />
     </div>

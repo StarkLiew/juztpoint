@@ -27,7 +27,7 @@ export default {
         showPin: false,
     }),
     props: {
-        title: { default: 'JuxtPoint' },
+        title: { default: 'JuztPoint' },
     },
     methods: {
         hasToken() {

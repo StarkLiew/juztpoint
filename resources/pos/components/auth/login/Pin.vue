@@ -63,7 +63,7 @@ export default {
         terminal: 'auth/terminal',
     }),
     props: {
-        title: { default: 'JuxtPoint' },
+        title: { default: 'JuztPoint' },
         supervisor: { type: Boolean, default: false }
     },
 
