@@ -34,7 +34,7 @@
         </template>
         <div v-for="(item, index) in items" :key="index">
             <v-list-item two-line>
-                <v-menu absolute v-model="editItem[index]" :close-on-content-click="false" :close-on-click="true" :min-width="380" :max-width="getDeviceWidth()" :nudge-left="30" offset-x left>
+                <v-menu absolute v-model="editItem[index]" :close-on-content-click="false" :close-on-click="true" :max-width="340" :min-width="250" :nudge-left="30" offset-x left>
                     <template v-slot:activator="{ on }">
                         <v-btn @click="editItem = []" icon v-on="on">{{item.qty}}</v-btn>
                     </template>

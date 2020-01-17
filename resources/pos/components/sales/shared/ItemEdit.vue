@@ -28,7 +28,7 @@
             <v-flex class="subheader">
                 <v-icon>mdi-label</v-icon>Discount
             </v-flex>
-            <v-flex class="display-1" @click="showKeyboard = true; ; inputLabel = 'Discount'">
+            <v-flex class="title" @click="showKeyboard = true; ; inputLabel = 'Discount'">
                 {{discountRate | currency({fractionCount: decimal})}}
             </v-flex>
             <v-btn-toggle v-model="discountType" @change="(val) => { decimal = val + 1 }">
