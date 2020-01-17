@@ -20,7 +20,7 @@
                                 </v-card>
                             </v-col>
                             <v-col cols="8" sm="8" md="8" lg="8">
-                                <v-color-picker v-model="editedItem.properties.color" hide-mode-switch hide-inputs hide-canvas :swatches="swatches" show-swatches></v-color-picker>
+                                <v-color-picker v-model="editedItem.properties.color" hide-mode-switch hide-inputs hide-canvas :swatches="swatches" show-swatches disabled></v-color-picker>
                             </v-col>
                         </v-row>
                         <v-text-field v-model="editedItem.name" :rules="[v => !!v || 'Name is required',]" required label="Name"></v-text-field>
@@ -119,7 +119,7 @@
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
 import AvatarCropper from 'vue-avatar-cropper'
-import { durations } from '~~/config'
+import { durations, swatches } from '~~/config'
 
 export default {
     components: {
@@ -159,13 +159,7 @@ export default {
                 { text: 'Qty', value: 'qty' },
                 { text: 'Actions', value: 'action', sortable: false },
             ],
-            swatches: [
-                ['#FF0000', '#AA0000', '#550000'],
-                ['#FFFF00', '#AAAA00', '#555500'],
-                ['#00FF00', '#00AA00', '#005500'],
-                ['#00FFFF', '#00AAAA', '#005555'],
-                ['#0000FF', '#0000AA', '#000055'],
-            ],
+            swatches: swatches,
             type: '',
             loading: true,
             commissions: [],
@@ -188,7 +182,7 @@ export default {
                 properties: {
                     price: 0.00,
                     cost: 0.00,
-                    color: '',
+                    color: '#3F51B5',
                     opening: 0.00,
                 },
                 formData: null,
