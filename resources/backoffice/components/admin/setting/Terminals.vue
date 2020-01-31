@@ -125,7 +125,7 @@ export default {
 
         },
         async reset(item) {
-                item.properties.fingerprint = ''
+                delete item.properties['fingerprint']
                 await this.save(item)
         },
 

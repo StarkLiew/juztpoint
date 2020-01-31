@@ -47,8 +47,8 @@
                     </v-flex>
                     <v-flex v-if="show === 'product' && !filter" v-for="(product, index) in filterProducts(search)" :key="index" xs4 sm2 md2 d-flex child-flex @click="selected(product)" >
                         <v-card flat tile class="d-flex" :color="product.properties.color ? product.properties.color : 'blue'">
-                            <v-img :src="product.thumbnail ? product.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn">
-                                <v-layout pa-2 column fill-height class="lightbox white--text text-center">
+                            <v-img v-if="product.thumbnail" :src="product.thumbnail ? product.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn">
+                                <v-layout pa-2 style="background: rgba(0,0,0,0.5);" column fill-height class="lighttext lightbox white--text text-center">
                                     <v-spacer></v-spacer>
                                     <v-flex shrink>
                                         <div class="caption text-wrap">{{ product.name }}</div>
@@ -59,8 +59,8 @@
                     </v-flex>
                     <v-flex v-if="show === 'service' && !filter" v-for="(service, index) in filterServices(search)" :key="index" xs4 sm2 md2 d-flex child-flex @click="selected(service)">
                         <v-card flat tile class="d-flex" :color="service.properties.color ? service.properties.color : 'blue darken-3'">
-                            <v-img :src="service.thumbnail ? service.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn">
-                                <v-layout pa-2 column fill-height class="lightbox white--text text-center">
+                            <v-img v-if="service.thumbnail" :src="service.thumbnail ? service.thumbnail :  ``" aspect-ratio="1" v-ripple class="v-btn">
+                                <v-layout pa-2 column fill-height class="lighttext lightbox white--text text-center">
                                     <v-spacer></v-spacer>
                                     <v-flex shrink>
                                         <div class="caption text-wrap">{{ service.name  }}</div>
@@ -200,3 +200,10 @@ export default {
 }
 
 </script>
+
+<style>
+   .lighttext{
+       background: rgba(0,0,0,0.5);
+
+   }
+</style>
