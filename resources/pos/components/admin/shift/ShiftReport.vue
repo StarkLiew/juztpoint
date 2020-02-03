@@ -127,7 +127,8 @@ export default {
             if (this.staffId > 0) {
                 receipts = receipts.filter(r => r.teller.id === this.staffId)
             }
-           
+
+
 
             if (!receipts) return {}
             return {
@@ -150,13 +151,18 @@ export default {
         payment(receipts) {
             let p = {}
             let id = 1
+
+
             for (const [key, value] of Object.entries(this.paymentMethod)) {
 
                 if (value) {
-                    p[key] = parseFloat(receipts.reduce((acc, curr) => acc + curr.payments.filter(p => p.item_id === id).reduce((a, c) => a + c.total_amount, 0), 0))
+
+                    p[key] = parseFloat(receipts.reduce((acc, curr) => acc + curr.payments.filter(p => p.item_id === id).reduce((a, c) => a + parseFloat(c.total_amount), 0), 0))
+
                 } else {
                     p[key] = 0.00
                 }
+
                 id++
             }
 
