@@ -7,6 +7,13 @@
                 </v-btn>
             </template>
             <v-list>
+                 <v-list-item>
+                    <v-list-item-icon>
+                        <v-icon>mdi-account</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>{{ auth ? auth.name : ''}}</v-list-item-content>
+                </v-list-item>     
+                <v-divider></v-divider>
                 <v-list-item @click="resetDialog = true">
                     <v-list-item-icon>
                         <v-icon>mdi-plus</v-icon>
@@ -21,10 +28,8 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-text-field hide-details v-model="searchText" prepend-icon="mdi-magnify" @change="search()" single-line></v-text-field>
-        <span>
-            <v-icon>mdi-account</v-icon><span class="caption">{{ auth ? auth.name : ''}}</span>
-        </span>
+        <v-text-field hide-details v-model="searchText" prepend-icon="mdi-magnify" @change="search()" clear single-line clearable></v-text-field>
+
         <v-spacer></v-spacer>
         <v-dialog v-model="resetDialog" persistent max-width="290">
             <v-card>

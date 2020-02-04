@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { graphql } from '~/config'
 import * as types from '../mutation-types'
+import moment from 'moment'
 
 /**
  * Initial state
@@ -44,16 +45,42 @@ export const mutations = {
  * Actions
  */
 export const actions = {
-    async fetchAppointments({ commit }) {
-        try {
-            // const { data } = await axios.get(graphql.path('query'), {params: { query: '{accounts(type:"receipt"){ id, name, properties{email, mobile}}}'}})
 
-            commit(types.FILL_APPOINTMENTS, data.data)
+    async fetchAppointments({ commit }, { name, fields, filter, location, user, terminal, limit, page, sort, desc }) {
+
+        try {
+            let _from = ''
+            let _to = ''
+            let param = ''
+
+  
+ 
+
+            if (filter && filter.dates && filter.dates.length === 2) {
+                _from = moment(filter.dates[0]).format('YYYY-MM-DD')
+                _to = moment(filter.dates[1]).format('YYYY-MM-DD')
+                param += `from: "${_from}", to: "${_to}"`
+            }
+
+            if (filter && filter.store) {
+                if (param !== '') param += ','
+                param += `store: ${filter.store}`
+            }
+
+
+            const sorting = `sort: "${sort[0] ? sort[0] : 'name'}", desc: "${!desc[0] ? '' : 'desc'}"`
+            const { data } = await axios.get(graphql.path('query'), { params: { query: `{reports(name:"${name}", limit: ${limit}, page: ${page}, ${sorting}, ${param}){data{data{${fields}}, total, per_page}, summary{count, sum}}}` } })
+               
+            return data.data.reports
+
 
         } catch (e) {
             commit(types.FETCH_APPOINTMENT_FAILURE)
         }
     },
+
+
+
 
     async addReceipt({ commit, getters }, item) {
         try {

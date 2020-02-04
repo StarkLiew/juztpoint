@@ -2,7 +2,7 @@
     <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="getDeviceWidth()" :right="isEntry">
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
-                <v-btn icon v-if="show" @click="show = false">
+                <v-btn icon v-if="show && !$vuetify.breakpoint.mdAndUp" @click="show = false" >
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-tooltip bottom>

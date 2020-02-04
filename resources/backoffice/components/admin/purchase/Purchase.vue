@@ -399,7 +399,6 @@ export default {
 
         },
         appendNewItem(editedItem, items) {
-d
             if (items.length > 0) {
                 // const last = items[items.length - 1]
                 const last = items[0]
