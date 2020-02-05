@@ -28,7 +28,10 @@
                 </v-list-item>
             </v-list>
         </v-menu>
-        <v-text-field hide-details v-model="searchText" prepend-icon="mdi-magnify" @change="search()" clear single-line clearable></v-text-field>
+        <v-text-field hide-details @input="search()" v-model="searchText" prepend-icon="mdi-magnify" single-line clearable></v-text-field>
+        <v-btn icon>
+            <v-icon>mdi-barcode-scan</v-icon>
+        </v-btn>
 
         <v-spacer></v-spacer>
         <v-dialog v-model="resetDialog" persistent max-width="290">
