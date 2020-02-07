@@ -53,7 +53,14 @@ class HomeController extends Controller {
 	public function pos() {
 		return view('pos');
 	}
-
+	/**
+	 * Show the application dashboard.
+	 *
+	 * @return \Illuminate\Contracts\Support\Renderable
+	 */
+	public function noah() {
+		return view('noah');
+	}
 	/**
 	 * Show the application dashboard.
 	 *

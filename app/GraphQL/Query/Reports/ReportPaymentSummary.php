@@ -23,18 +23,17 @@ class ReportPaymentSummary {
 			}
 		};
 
-		$results = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+		$item = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
 			->where($items . '.type', 'payment')
-			->where($where)
-			->selectRaw('CASE WHEN item_id = 1 THEN "Cash"
+			->where($where);
+
+		$results = $item->selectRaw('CASE WHEN item_id = 1 THEN "Cash"
                                       WHEN item_id = 2 THEN "Card"
                                       WHEN item_id = 3 THEN "Transfer"
                                       WHEN item_id = 4 THEN "Boost"
-                                      ELSE "undefined" END as item_name, sum(total_amount) as total_amount, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount) - sum(refund_amount) as net')
-			->groupBy('item_id')
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+                                      ELSE "undefined" END as item_name, sum(total_amount) as total_amount, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount) - sum(refund_amount) as net')->groupBy('item_id')->paginate($args['limit'], ['*'], 'page', $args['page']);
 
-		return $results;
+		return ['summary' => ['count' => $item->count('item_id'), 'sum' => $item->sum('total_amount')], 'data' => $results];
 
 	}
 }

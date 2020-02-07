@@ -40,14 +40,27 @@ class ReportCommissionDailySummary {
 			->where($items . '.type', 'commission')
 			->where($where);
 
-		$results = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+		$query = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
 			->join('users', 'users.id', '=', $items . '.user_id')
 			->where($items . '.type', 'commission')
 			->where($where)
 			->selectRaw('DATE(' . $documents . '.date) as item_date, users.name as item_name, sum(total_amount) as total_amount')
 			->groupBy(DB::raw('DATE(' . $documents . '.date)'))
-			->groupBy('users.name')
-			->paginate($args['limit'], ['*'], 'page', $args['page']);
+			->groupBy('users.name');
+
+		if (isset($args['sort']) && isset($args['desc'])) {
+
+			if (isset($args['desc']) && $args['desc'] === 'desc') {
+				$query->orderBy($args['sort'], 'desc');
+			} else {
+				$query->orderBy($args['sort']);
+			}
+
+		} else {
+			$query->orderBy($documents . 'date', 'desc');
+		}
+
+		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return ['summary' => ['count' => $item->count('trxn_id'), 'sum' => $item->sum('total_amount')], 'data' => $results];
 

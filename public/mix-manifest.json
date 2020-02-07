@@ -1,5 +1,6 @@
 {
     "/backoffice/app.js": "/backoffice/app.js",
+    "/noah/app.js": "/noah/app.js",
     "/pos/app.js": "/pos/app.js",
     "/css/app.css": "/css/app.css",
     "/receipt/app-client.js": "/receipt/app-client.js",

@@ -32,7 +32,6 @@
 
 
 
-
         <script>
             window.Laravel = {!! json_encode([
                 'siteName' => config('app.name'),
@@ -43,6 +42,7 @@
     </head>
     <body>
         <div id="app"></div>
+
 
         <script src="{{ mix('/pos/app.js') }}"></script>
         <script src="/js/fingerprint2.min.js"></script>
