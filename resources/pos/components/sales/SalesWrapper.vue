@@ -2,7 +2,7 @@
     <div>
         <div v-if="shift && shift.status === 'open'">
             <carts @cart-toggle="cartToggleUpdate" @customer-toggle="showCustomerDialog = true" @customer-remove="customer = null" @item-added="itemAdded" @edit-item="editProductToggle" @payment="goPayment" @reset-done="resetDone" :reset="reset" :is-product-entry="panel === 'product'" :show-cart.sync="showCart" :customer="customer" :product.sync="product" :calmode="setAppointment"> </carts>
-            <top-menu @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
+            <top-menu @scanned="onScanned" @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
             <v-content style="margin-top: 5px">
                 <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
                     <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
@@ -64,9 +64,22 @@ export default {
 
     computed: mapGetters({
         shift: 'system/shift',
+        products: 'product/collection',
+        services: 'service/collection',
     }),
-
     methods: {
+        onScanned(value) {
+            let item = this.products.find(p => p.sku === value)
+
+            if (!item) this.services.find(p => p.sku === value)
+            if (!item) {
+                this.$toast.error('No product found')
+                return
+            }
+
+            this.item = item
+            this.showEdit = true
+        },
         cartToggle() {
             this.showCart = !this.showCart
         },

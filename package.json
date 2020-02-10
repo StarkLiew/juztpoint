@@ -48,6 +48,7 @@
     "v-money": "^0.8.1",
     "vue-apexcharts": "^1.5.1",
     "vue-avatar-cropper": "^1.0.5",
+    "vue-barcode-reader": "0.0.3",
     "vue-barcode-scanner": "^0.6.0",
     "vue-chartjs": "^3.5.0",
     "vue-cookies": "^1.5.13",

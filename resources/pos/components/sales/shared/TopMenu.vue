@@ -7,12 +7,12 @@
                 </v-btn>
             </template>
             <v-list>
-                 <v-list-item>
+                <v-list-item>
                     <v-list-item-icon>
                         <v-icon>mdi-account</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>{{ auth ? auth.name : ''}}</v-list-item-content>
-                </v-list-item>     
+                </v-list-item>
                 <v-divider></v-divider>
                 <v-list-item @click="resetDialog = true">
                     <v-list-item-icon>
@@ -29,17 +29,29 @@
             </v-list>
         </v-menu>
         <v-text-field hide-details @input="search()" v-model="searchText" prepend-icon="mdi-magnify" single-line clearable></v-text-field>
-        <v-btn icon>
-            <v-icon>mdi-barcode-scan</v-icon>
-        </v-btn>
-
+        <v-dialog v-model="scanDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+            <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on" :disabled="scanDialog">
+                    <v-icon>mdi-barcode-scan</v-icon>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-toolbar dark>
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark @click="scanDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>
+                <ImageBarcodeReader @decode="onDecode" @error="onError"></ImageBarcodeReader>
+            </v-card>
+        </v-dialog>
         <v-spacer></v-spacer>
         <v-dialog v-model="resetDialog" persistent max-width="290">
             <v-card>
                 <v-card-title class="headline">Proceed?</v-card-title>
-                <v-card-text>Are you sure to proceed with new transaction? Current entry will be lost.</v-card-text>
-                <v-card-actions>
-                    <div class="flex-grow-1"></div>
+                <v-card-text>
+                    Are you to proceed with new transaction? Current entry will be lost.</v-card-text>
+                <v-card-actions>ow-1"></div>
                     <v-btn color="green darken-1" text @click="resetDialog = false">No</v-btn>
                     <v-btn color="blue darken-1" text @click="resetData()">Yes</v-btn>
                 </v-card-actions>
@@ -51,6 +63,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { settings } from '~/config'
+import { ImageBarcodeReader } from "vue-barcode-reader"
 
 export default {
     data: () => ({
@@ -58,7 +71,11 @@ export default {
         overlay: false,
         resetDialog: false,
         searchText: '',
+        scanDialog: false,
     }),
+    components: {
+        ImageBarcodeReader,
+    },
     computed: mapGetters({
         auth: 'auth/user'
     }),
@@ -88,7 +105,21 @@ export default {
         },
         cartToggle() {
             this.$emit('cart-toggle')
-        }
+        },
+        closeScan() {
+            this.scanDialog = false
+        },
+        onDecode(result) {
+            if (result) {
+                this.$emit('scanned', result)
+                this.scanDialog = false
+            }
+        },
+        onError() {
+
+            this.scanDialog = false
+
+        },
     }
 }
 
