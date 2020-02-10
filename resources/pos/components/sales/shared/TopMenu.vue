@@ -42,7 +42,7 @@
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                 </v-toolbar>
-                <ImageBarcodeReader @decode="onDecode" @error="onError"></ImageBarcodeReader>
+                <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
             </v-card>
         </v-dialog>
         <v-spacer></v-spacer>
@@ -63,7 +63,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { settings } from '~/config'
-import { ImageBarcodeReader } from "vue-barcode-reader"
+import { StreamBarcodeReader  } from "vue-barcode-reader"
 
 export default {
     data: () => ({
@@ -74,7 +74,7 @@ export default {
         scanDialog: false,
     }),
     components: {
-        ImageBarcodeReader,
+        StreamBarcodeReader ,
     },
     computed: mapGetters({
         auth: 'auth/user'
