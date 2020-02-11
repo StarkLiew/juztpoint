@@ -20,12 +20,18 @@
                     </v-list-item-icon>
                     <v-list-item-content>New Sale</v-list-item-content>
                 </v-list-item>
-                <v-list-item to="{name: 'pos'}">
+                <v-list-item to="{name: 'pos'}" v-if="auth.properties.role === 'MGR'">
                     <v-list-item-icon>
                         <v-icon>mdi-close</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-content>Exit</v-list-item-content>
+                    <v-list-item-content>Exit </v-list-item-content>
                 </v-list-item>
+                 <v-list-item @click="logout()" v-if="auth.properties.role === 'CSH'">
+                    <v-list-item-icon>
+                        <v-icon>mdi-close</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>Logout</v-list-item-content>
+                </v-list-item>         
             </v-list>
         </v-menu>
         <v-text-field hide-details @input="search()" v-model="searchText" prepend-icon="mdi-magnify" single-line clearable></v-text-field>
@@ -110,6 +116,11 @@ export default {
         },
         closeScan() {
             this.scanDialog = false
+        },
+        async logout() {
+            await this.$store.dispatch('auth/logout')
+            this.$router.push({ name: 'pin' })
+            this.$toast.info('You are logged out.')
         },
         onDecode(result) {
             if (result) {
