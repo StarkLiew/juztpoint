@@ -21,6 +21,10 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::string(),
 				'description' => 'The id of the user',
 			],
+			'payment_date' => [
+				'type' => Type::string(),
+				'description' => 'The id of the user',
+			],
 			'year' => [
 				'type' => Type::int(),
 				'description' => 'The id of the user',
@@ -166,6 +170,26 @@ class ReportsPagination extends PaginationType {
 				'description' => 'Description of the setting',
 			],
 			'item_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'customer_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'terminal_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'store_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'payment_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'user_name' => [
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',
 			],

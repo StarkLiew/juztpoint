@@ -8,11 +8,14 @@ use DB;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 
-class ReportPaymentSummary {
+class ReportPaymentLog {
 
 	public function run($args, Closure $getSelectFields) {
 		$documents = TenantTable::parse('documents');
 		$items = TenantTable::parse('items');
+		$users = TenantTable::parse('users');
+		$accounts = TenantTable::parse('accounts');
+		$settings = TenantTable::parse('settings');
 
 		$where = function ($query) use ($args, $documents) {
 			if (isset($args['from']) && isset($args['to'])) {
@@ -35,16 +38,28 @@ class ReportPaymentSummary {
 		};
 
 		$item = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
+			->join($settings, DB::raw($settings . '.id as store'), '=', $documents . '.store_id')
+			->join($settings, DB::raw($settings . '.id as terminal'), '=', $documents . '.terminal_id')
+			->join($users, DB::raw($users . '.id'), '=', $documents . '.transact_by')
+			->leftJoin($accounts, $documents . '.account_id', '=', $accounts . '.uid')
 			->where($items . '.type', 'payment')
 			->where($where);
-		$sum = $item->sum(DB::raw('total_amount - IF(item_id=1,' . $documents . '.change, 0) - refund_amount'));
+
+		$sum = $item->sum(DB::raw('(total_amount - IF(item_id=1,' . $documents . '.change, 0)) - refund_amount'));
 		$count = $item->count('item_id');
 
-		$results = $item->selectRaw('CASE WHEN item_id = 1 THEN "Cash"
+		$results = $item->selectRaw($documents . '.date as payment_date,'
+			. $documents . '.reference as reference,'
+			. $documents . '.date as payment_date,'
+			. $accounts . '.name as customer_name,
+			                          store.name as store_name,
+			                          users.name as user_name,
+			                          terminal.name as terminal_name,
+			                          CASE WHEN item_id = 1 THEN "Cash"
                                       WHEN item_id = 2 THEN "Card"
                                       WHEN item_id = 3 THEN "Transfer"
                                       WHEN item_id = 4 THEN "Boost"
-                                      ELSE "undefined" END as item_name, sum(total_amount - IF(item_id=1,' . $documents . '.change, 0)) as total_amount, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount  - IF(item_id=1,' . $documents . '.change, 0)) - sum(refund_amount) as net')->groupBy('item_id')->paginate($args['limit'], ['*'], 'page', $args['page']);
+                                      ELSE "undefined" END as payment_name, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount  - IF(item_id=1,' . $documents . '.change, 0)) - sum(refund_amount) as total_amount')->groupBy('item_id')->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return ['summary' => ['count' => $count, 'sum' => $sum], 'data' => $results];
 
