@@ -29,20 +29,22 @@
             </v-list>
         </v-menu>
         <v-text-field hide-details @input="search()" v-model="searchText" prepend-icon="mdi-magnify" single-line clearable></v-text-field>
-        <v-dialog v-model="scanDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+        <v-dialog v-model="scanDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on" :disabled="scanDialog">
                     <v-icon>mdi-barcode-scan</v-icon>
                 </v-btn>
             </template>
             <v-card>
-                <v-toolbar dark>
+                <v-toolbar dark flat>
                     <v-spacer></v-spacer>
                     <v-btn icon dark @click="scanDialog = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                 </v-toolbar>
-                <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
+                <v-card-text>
+                     <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
+                </v-card-text>
             </v-card>
         </v-dialog>
         <v-spacer></v-spacer>

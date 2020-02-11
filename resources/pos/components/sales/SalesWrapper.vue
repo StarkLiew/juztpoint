@@ -5,7 +5,7 @@
             <top-menu @scanned="onScanned" @overlay="overlayShow" @search="search" @cart-toggle="cartToggle" @reset="newTrxn"></top-menu>
             <v-content style="margin-top: 5px">
                 <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="calc(100vh - 48px)" color="transparent">
-                    <products-list :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
+                    <products-list @scanned="onScanned" :search.sync="searchText" @calendar="goAppointment()" @selected="selectedProduct" v-if="panel === 'product'"></products-list>
                     <item-add @close="showEdit = false" v-if="item" :product="item" :show="showEdit" @done="addedProduct"></item-add>
                     <customers-list @close="closeCustomerDialog" @selected="selectedCustomer" :show="showCustomerDialog"></customers-list>
                     <payment :trxn="trxn" @done="newTrxn" @back="cancelPayment" v-if="panel === 'payment'"></payment>
@@ -70,15 +70,24 @@ export default {
     methods: {
         onScanned(value) {
             let item = this.products.find(p => p.sku === value)
-
             if (!item) this.services.find(p => p.sku === value)
             if (!item) {
                 this.$toast.error('No product found')
                 return
             }
 
-            this.item = item
-            this.showEdit = true
+            const defaultItem = {
+                qty: 1,
+                price: 0.00,
+                discount: 0.0,
+                saleBy: null,
+            }
+
+            item = JSON.parse(JSON.stringify(item))
+            item = { ...defaultItem, ...item }
+
+            this.selectedProduct(item)
+
         },
         cartToggle() {
             this.showCart = !this.showCart

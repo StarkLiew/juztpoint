@@ -3,6 +3,22 @@
         <v-container grid-list-sm fluid>
             <v-sheet height="100%" tile>
                 <v-layout wrap>
+
+        <v-flex xs4 sm2 md2 d-flex child-flex v-if="show !== 'appointments'">
+                        <v-card flat tile color="white">
+                            <v-img aspect-ratio="1">
+                                <v-layout pa-2 column fill-height class="lightbox white--text text-center">
+                                    <v-spacer></v-spacer>
+                                    <v-flex shrink>
+                                        <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
+                                    </v-flex>
+                                </v-layout>
+                                 
+                            </v-img>
+       
+                        </v-card>
+                    </v-flex>
+
                     <v-flex xs4 sm2 md2 d-flex child-flex v-if="show !== 'appointments'" @click="swap('appointments', 'service')" v-ripple>
                         <v-card flat tile color="pink darken-1">
                             <v-img aspect-ratio="1">
@@ -182,6 +198,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Calendar from './Calendar'
+import { StreamBarcodeReader  } from "vue-barcode-reader"
 export default {
 
 
@@ -193,7 +210,8 @@ export default {
         appointments: [],
     }),
     components: {
-        Calendar: Calendar
+        Calendar: Calendar,
+        StreamBarcodeReader: StreamBarcodeReader,
     },
     props: ['search'],
     computed: {
@@ -232,7 +250,9 @@ export default {
                 discount: 0.0,
                 saleBy: null,
             }
-            const item = { ...defaultItem, ...product }
+
+            const parsedProduct = JSON.parse(JSON.stringify(product))
+            const item = { ...defaultItem, ...parsedProduct }
             this.$emit('selected', item)
         },
         swap(panel, back = '') {
@@ -271,7 +291,18 @@ export default {
 
             return this.services.filter(p => p.name.toLowerCase().includes(text.toLowerCase()) || p.sku.toLowerCase().includes(text.toLowerCase()))
 
-        }
+        },
+        onDecode(result) {
+            if (result) {
+                this.$emit('scanned', result)
+                this.scanDialog = false
+            }
+        },
+        onError() {
+
+            this.scanDialog = false
+
+        },
 
 
     }
