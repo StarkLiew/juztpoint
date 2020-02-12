@@ -131,14 +131,16 @@ class UpdateProductMutation extends Mutation {
 			}
 
 			if ($data->type === 'product' && $data->stockable === 1) {
-				$this->open($data->id, $data->properties['opening'], $data->user_id);
+				$this->open($data->id, $data->properties['opening'], $data->properties['cost'], $data->user_id);
 			}
 			if ($data->type === 'product-variant' && $data->stockable === 1) {
 				$opening = 0;
+				$cost = 0;
 				foreach ($data['properties']['stocks'] as $key => $stock) {
 					$opening += $stock['qty'];
+					$cost += $stock['cost'];
 				}
-				$this->open($data->id, $opening, $data->user_id);
+				$this->open($data->id, $opening, $cost, $data->user_id);
 			}
 
 			DB::commit();
@@ -150,13 +152,14 @@ class UpdateProductMutation extends Mutation {
 		}
 
 	}
-	public function open($id, $qty, $user_id) {
+	public function open($id, $qty, $cost, $user_id) {
 		$open = Item::where('item_id', $id)->where('type', 'open')->first();
 		if (!$open) {
 			$open = new Item();
 		}
 		$open->line = 1;
 		$open->item_id = $id;
+		$open->price = $cost;
 		$open->qty = $qty;
 		$open->trxn_id = 1;
 		$open->tax_id = 1;

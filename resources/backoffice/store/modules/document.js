@@ -91,6 +91,7 @@ export const actions = {
 
                 const item_id = line.item.id
                 const user_id = line.user_id
+                const price = line.properties.price
                 const qty = line.qty
                 const tax_id = line.tax ? line.tax.id : 0
                 const discount_amount = line.discount_amount
@@ -107,7 +108,8 @@ export const actions = {
                          item_id: ${item_id},
                          discount: "${JSON.stringify(line.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
-                         tax_id: ${tax_id}, 
+                         tax_id: ${tax_id},
+                         price: ${price},
                          qty: ${qty},
                          refund_qty: 0,
                          refund_amount: 0.00,

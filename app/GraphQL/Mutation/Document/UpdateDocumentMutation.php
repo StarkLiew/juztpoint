@@ -139,6 +139,7 @@ class UpdateDocumentMutation extends Mutation {
 				foreach ($args['items'] as $item) {
 					$item['discount'] = json_decode($item['discount']);
 					$item['properties'] = json_decode($item['properties']);
+					$item['price'] = $item['properties']['price'];
 					$document->items()->create($item);
 				}
 				DB::commit();

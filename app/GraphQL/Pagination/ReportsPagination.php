@@ -110,10 +110,19 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::string(),
 				'description' => 'The type of setting',
 			],
+			'onhand' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
 			'discount' => [
 				'type' => GraphQL::type('discount'),
 				'description' => 'The type of setting',
 			],
+			'discount_rate' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+
 			'discount_amount' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',

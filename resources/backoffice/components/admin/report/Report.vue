@@ -87,8 +87,7 @@ export default {
             this.reports = [{
                     title: 'Accounts',
                     describe: 'Keep track on all cash flow, payments, taxes, and etc',
-                    items: [
-                        {
+                    items: [{
                             title: 'Account Summary',
                             name: 'ReportAccountSummary',
                             fields: 'item_name, total_amount, refund_amount, net, count',
@@ -112,9 +111,10 @@ export default {
                         {
                             title: 'Payments Summary',
                             name: 'ReportPaymentSummary',
-                            fields: 'item_name, total_amount, refund_amount, net, count',
+                            fields: 'item_name, customer_name, total_amount, refund_amount, net, count',
                             headers: [
                                 { text: 'Payment', value: 'item_name', sortable: false },
+                                { text: 'Customer', value: 'customer_name', sortable: false },
                                 { text: 'Transactions', value: 'count', sortable: false, align: 'end', },
                                 { text: 'Gross', value: 'total_amount', sortable: false, align: 'end', currency: true },
                                 { text: 'Refund', value: 'refund_amount', sortable: false, align: 'end', currency: true },
@@ -122,6 +122,7 @@ export default {
                             ],
                             exports: {
                                 'payment': 'item_name',
+                                'customer': 'customer_name',
                                 'transactions': 'count',
                                 'gross': 'total_amount',
                                 'refund': 'refund_amount',
@@ -130,34 +131,75 @@ export default {
                             disabled: false
                         },
 
-                   {
+                        {
                             title: 'Payment Log',
                             name: 'ReportPaymentLog',
-                            fields: 'item_name, total_amount, refund_amount, net, count',
+                            fields: 'date, store_name, terminal_name, reference, customer_name, user_name, payment_name, total_amount',
                             headers: [
-                                { text: 'Payment Date', value: 'count', sortable: false, align: 'end', },
-                                { text: 'Store', value: 'item_name', sortable: false },
-                                { text: 'Terminal', value: 'item_name', sortable: false },
-                                { text: 'Invoice', value: 'count', sortable: false, align: 'end', },
-                                { text: 'Customer', value: 'count', sortable: false, align: 'end', },
-                                { text: 'Cashier', value: 'count', sortable: false, align: 'end', },
-                                { text: 'Method', value: 'count', sortable: false, align: 'end', },
-                                { text: 'Amount', value: 'net', sortable: false, align: 'end', currency: true },
+                                { text: 'Payment Date', value: 'date', sortable: true },
+                                { text: 'Store', value: 'store_name', sortable: true },
+                                { text: 'Terminal', value: 'terminal_name', sortable: true },
+                                { text: 'Receipt', value: 'reference', sortable: true },
+                                { text: 'Customer', value: 'customer_name', sortable: true },
+                                { text: 'Cashier', value: 'user_name', sortable: true },
+                                { text: 'Method', value: 'payment_name', sortable: true },
+                                { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
                             ],
                             exports: {
-                                'payment': 'item_name',
-                                'transactions': 'count',
-                                'gross': 'total_amount',
-                                'refund': 'refund_amount',
-                                'net': 'net',
+                                'date': 'date',
+                                'store': 'store_name',
+                                'terminal': 'terminal_name',
+                                'receipt': 'reference',
+                                'customer': 'customer_name',
+                                'cashier': 'user_name',
+                                'method': 'payment_name',
+                                'amount': 'total_amount',
                             },
                             disabled: false
                         },
 
+                        {
+                            title: 'Taxes Summary',
+                            name: 'ReportTaxesSummary',
+                            fields: 'item_name, store_name, customer_name, count, total_amount',
+                            headers: [
+                                { text: 'Tax', value: 'item_name', sortable: true },
+                                { text: 'Store', value: 'store_name', sortable: true },
+                                { text: 'Customer', value: 'customer_name', sortable: true },
+                                { text: 'Transactions', value: 'count', sortable: false, align: 'end', },
+                                { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'tax': 'item_name',
+                                'store': 'store_name',
+                                'customer': 'customer_name',
+                                'transactions': 'count',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
 
-                        { title: 'Taxes Summary', disabled: true },
-                        { title: 'Discount Summary', disabled: true },
-                        { title: 'Outstanding Payments', disabled: true },
+                        {
+                            title: 'Discount Summary',
+                            name: 'ReportDiscountSummary',
+                            fields: 'item_name, store_name, customer_name, count, total_amount',
+                            headers: [
+                                { text: 'Discount', value: 'item_name', sortable: true },
+                                { text: 'Store', value: 'store_name', sortable: true },
+                                { text: 'Customer', value: 'customer_name', sortable: true },
+                                { text: 'Transactions', value: 'count', sortable: false, align: 'end', },
+                                { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'discount': 'item_name',
+                                'store': 'store_name',
+                                'customer': 'customer_name',
+                                'transactions': 'count',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+
                     ]
                 },
                 {
@@ -165,7 +207,21 @@ export default {
                     title: 'Inventory',
                     describe: 'Keep track on product stock level and etc',
                     items: [
-                        { title: 'Stock on Hand', disabled: true },
+             
+                        {
+                            title: 'Stock On Hand',
+                            name: 'ReportStockOnHand',
+                            fields: 'item_name, onhand',
+                            headers: [
+                                { text: 'Product', value: 'item_name', sortable: true },
+                                { text: 'On Hand', value: 'onhand', sortable: false, align: 'end', },
+                            ],
+                            exports: {
+                                'product': 'item_name',
+                                'on hand': 'onhand',
+                            },
+                            disabled: false
+                        },
                         { title: 'Product Sales Performance', disabled: true },
                         { title: 'Stock Movement Log', disabled: true },
                         { title: 'Stock Movement Summary', disabled: true },

@@ -53,11 +53,14 @@ class ReportCommissionDailySummary {
 			if (isset($args['desc']) && $args['desc'] === 'desc') {
 				$query->orderBy($args['sort'], 'desc');
 			} else {
-				$query->orderBy($args['sort']);
+				if ($args['sort'] !== '') {
+					$query->orderBy($args['sort']);
+				} else {
+					$query->orderBy($documents . '.date', 'desc');
+				}
+
 			}
 
-		} else {
-			$query->orderBy($documents . 'date', 'desc');
 		}
 
 		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);

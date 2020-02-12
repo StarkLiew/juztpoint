@@ -13,7 +13,6 @@ class ReportPaymentLog {
 	public function run($args, Closure $getSelectFields) {
 		$documents = TenantTable::parse('documents');
 		$items = TenantTable::parse('items');
-		$users = TenantTable::parse('users');
 		$accounts = TenantTable::parse('accounts');
 		$settings = TenantTable::parse('settings');
 
@@ -38,9 +37,9 @@ class ReportPaymentLog {
 		};
 
 		$item = Item::join($documents, $documents . '.id', '=', $items . '.trxn_id')
-			->join($settings, DB::raw($settings . '.id as store'), '=', $documents . '.store_id')
-			->join($settings, DB::raw($settings . '.id as terminal'), '=', $documents . '.terminal_id')
-			->join($users, DB::raw($users . '.id'), '=', $documents . '.transact_by')
+			->join(DB::raw($settings . ' as store'), 'store.id', '=', $documents . '.store_id')
+			->join(DB::raw($settings . ' as terminal'), 'terminal.id', '=', $documents . '.terminal_id')
+			->join('users', 'users.id', '=', $documents . '.transact_by')
 			->leftJoin($accounts, $documents . '.account_id', '=', $accounts . '.uid')
 			->where($items . '.type', 'payment')
 			->where($where);
@@ -48,18 +47,39 @@ class ReportPaymentLog {
 		$sum = $item->sum(DB::raw('(total_amount - IF(item_id=1,' . $documents . '.change, 0)) - refund_amount'));
 		$count = $item->count('item_id');
 
-		$results = $item->selectRaw($documents . '.date as payment_date,'
-			. $documents . '.reference as reference,'
-			. $documents . '.date as payment_date,'
-			. $accounts . '.name as customer_name,
-			                          store.name as store_name,
-			                          users.name as user_name,
-			                          terminal.name as terminal_name,
+		$query = $item->selectRaw($documents . '.date as date,' .
+			$documents . '.reference as reference,' .
+			'users.name as user_name,' .
+			$accounts . '.name as customer_name, store.name as store_name, terminal.name as terminal_name,
 			                          CASE WHEN item_id = 1 THEN "Cash"
                                       WHEN item_id = 2 THEN "Card"
                                       WHEN item_id = 3 THEN "Transfer"
                                       WHEN item_id = 4 THEN "Boost"
-                                      ELSE "undefined" END as payment_name, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount  - IF(item_id=1,' . $documents . '.change, 0)) - sum(refund_amount) as total_amount')->groupBy('item_id')->paginate($args['limit'], ['*'], 'page', $args['page']);
+                                      ELSE "undefined" END as payment_name, count(' . $items . '.id) as count, sum(refund_amount) as refund_amount, sum(total_amount  - IF(item_id=1,' . $documents . '.change, 0)) - sum(refund_amount) as total_amount')
+			->groupBy('item_id')
+			->groupBy($documents . '.date')
+			->groupBy($documents . '.reference')
+			->groupBy('users.name')
+			->groupBy($accounts . '.name')
+			->groupBy('store.name')
+			->groupBy('terminal.name');
+
+		if (isset($args['sort']) && isset($args['desc'])) {
+
+			if (isset($args['desc']) && $args['desc'] === 'desc') {
+				$query->orderBy($args['sort'], 'desc');
+			} else {
+				if ($args['sort'] !== '') {
+					$query->orderBy($args['sort']);
+				} else {
+					$query->orderBy($documents . '.reference', 'desc');
+				}
+
+			}
+
+		}
+
+		$results = $query->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		return ['summary' => ['count' => $count, 'sum' => $sum], 'data' => $results];
 

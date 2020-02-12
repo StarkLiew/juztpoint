@@ -164,6 +164,7 @@ export const actions = {
                          discount: "${JSON.stringify(item.discount).replace(/"/g, '\\"')}", 
                          discount_amount: ${parseFloat(discount_amount)}, 
                          tax_id: ${tax_id}, 
+                         price: ${item.properties.price}, 
                          qty: -${qty},
                          refund_qty: ${ item.refund ? parseFloat(item.qty) : 0.00},
                          refund_amount: ${ item.refund ? parseFloat(item.amount) : 0.00},
