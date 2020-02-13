@@ -34,7 +34,7 @@
                                 </template>
                                 <template v-slot:footer="{pagination}">
                                     <v-toolbar>
-                                        <v-dialog v-model="editItemDialog" fullscreen persistent max-width="600px">
+                                        <v-dialog v-model="editItemDialog" persistent min-width="100%">
                                             <template v-slot:activator="{ on }">
                                                 <v-btn text v-on="on" small color="primary">
                                                     <v-icon>mdi-plus-circle-outline</v-icon>
@@ -56,52 +56,59 @@
                 </v-container>
             </template>
             <template v-slot:item.receive="{item, header}">
-                <v-dialog v-model="updateDialog" fullscreen persistent max-width="600px">
-                    <template v-slot:activator="{ on }">
-                        <v-btn v-on="on" fab small dark color="deep-orange darken-1">
-                            <v-icon>mdi-truck-check</v-icon>
+                <v-btn @click="openReceiveDialog(item, header)" fab small dark color="deep-orange darken-1">
+                    <v-icon>mdi-truck-check</v-icon>
+                </v-btn>
+            </template>
+            <template v-slot:item.date="{item, header}">
+                <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY') }}</span>
+            </template>
+        </viewer>
+        <!--<vue-easy-print v-if="selectedItem" tableShow style="display: none" ref="receipt">
+            <template slot-scope="func">
+                <receipt v-model="selectedItem" :header="{company, store: selectedItem.store}"></receipt>
+            </template>
+        </vue-easy-print> -->
+        <v-dialog v-if="selectedItem" v-model="updateDialog" persistent min-width="100%">
+            <v-card>
+                <v-card-title primary-title>
+                    <v-toolbar dark color="primary">
+                        <v-btn icon @click="receiveDialogClose" :disabled="saving">
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title primary-title>
-                            <v-toolbar dark color="primary">
-                                <v-btn icon @click="receiveDialogClose" :disabled="saving">
-                                    <v-icon>mdi-close</v-icon>
-                                </v-btn>
-                                <v-toolbar-title>
-                                    {{ item.account.name }}
-                                </v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-toolbar-title>
-                                    {{ item.reference }}
-                                </v-toolbar-title>
-                                <v-toolbar-title>
-                                    ~ {{ item.date | moment('DD/MM/YYYY') }}
-                                </v-toolbar-title>
-                            </v-toolbar>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-container>
-                                <v-form ref="receiveForm" v-model="validReceive">
-                 
-                                    <v-expansion-panels accordion>
-                                        <v-expansion-panel v-for="(line,index) in item.items" :key="index">
-                                            <v-expansion-panel-header @click="receivedItemReset()">
-                                                <v-toolbar flat tile>
-                                                    <v-toolbar-title>{{ line.item.name }}</v-toolbar-title>
-                                                    <v-spacer></v-spacer>
-                                                    <v-toolbar-title>{{ line.qty }}</v-toolbar-title>
-                                                    <v-toolbar-title v-if="line.qty === line.refund_qty">
-                                                        <v-icon color="green darken-1">mdi-equal</v-icon>
-                                                    </v-toolbar-title>
-                                                    <v-toolbar-title v-if="line.qty !== line.refund_qty">
-                                                        <v-icon color="orange darken-1">mdi-not-equal-variant</v-icon>
-                                                    </v-toolbar-title>
-                                                    <v-toolbar-title>{{ line.refund_qty }}</v-toolbar-title>
-                                                </v-toolbar>
-                                            </v-expansion-panel-header>
-                                            <v-expansion-panel-content>
-                                           <v-row>
+                        <v-toolbar-title>
+                            {{ selectedItem.account.name }}
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title>
+                            {{ selectedItem.reference }}
+                        </v-toolbar-title>
+                        <v-toolbar-title>
+                            ~ {{ selectedItem.date | moment('DD/MM/YYYY') }}
+                        </v-toolbar-title>
+                    </v-toolbar>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-form ref="receiveForm" v-model="validReceive">
+                            <v-expansion-panels accordion>
+                                <v-expansion-panel v-for="(line,index) in selectedItem.items" :key="index">
+                                    <v-expansion-panel-header @click="receivedItemReset()">
+                                        <v-toolbar flat tile>
+                                            <v-toolbar-title>{{ line.item.name }}</v-toolbar-title>
+                                            <v-spacer></v-spacer>
+                                            <v-toolbar-title>{{ line.qty }}</v-toolbar-title>
+                                            <v-toolbar-title v-if="line.qty === line.refund_qty">
+                                                <v-icon color="green darken-1">mdi-equal</v-icon>
+                                            </v-toolbar-title>
+                                            <v-toolbar-title v-if="line.qty !== line.refund_qty">
+                                                <v-icon color="orange darken-1">mdi-not-equal-variant</v-icon>
+                                            </v-toolbar-title>
+                                            <v-toolbar-title>{{ line.refund_qty }}</v-toolbar-title>
+                                        </v-toolbar>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-row>
                                             <v-col cols="2" lg="2" md="2" sm="12">
                                                 <v-menu ref="menu" :close-on-content-click="true" transition="scale-transition" offset-y min-width="290px">
                                                     <template v-slot:activator="{ on }">
@@ -120,7 +127,7 @@
                                                 <v-autocomplete dense v-model="receivedItem.user" :items="users" :rules="[v => !!v || 'Received person is required',]" required :loading="loading" item-text="name" label="Received by" return-object placeholder="Choose"></v-autocomplete>
                                             </v-col>
                                             <v-col cols="1" lg="1" md="1" sm="12">
-                                                <v-text-field dense v-model="receivedItem.qty" :rules="[v => !!v.match(/^[0-9]+(\.[0-9]{1,2})?$/g) || 'Quantity is required',]" required label="Quantity"></v-text-field>
+                                                <v-text-field dense v-model="receivedItem.qty" :rules="[v => !!v && !!v.match(/^[0-9]+(\.[0-9]{1,2})?$/g) || 'Quantity is required',]" required label="Quantity"></v-text-field>
                                             </v-col>
                                             <v-col cols="1" lg="1" md="1" sm="12">
                                                 <v-btn :loading="saving" :disabled="!validReceive" icon small color="primary" @click="addReceiveItem(line)">
@@ -128,46 +135,36 @@
                                                 </v-btn>
                                             </v-col>
                                         </v-row>
-                                                <v-row v-for="(received, rIndex) in line.receives" :key="rIndex">
-                                                    <v-col cols="2" lg="2" md="2" sm="12">
-                                                        {{ received.properties.date | moment('YYYY-MM-DD') }}
-                                                    </v-col>
-                                                    <v-col cols="2" lg="2" md="2" sm="12">
-                                                        {{ received.properties.do }}
-                                                    </v-col>
-                                                    <v-col cols="3" lg="3" md="3" sm="12">
-                                                        {{ received.store.name }}
-                                                    </v-col>
-                                                    <v-col cols="3" lg="3" md="3" sm="12">
-                                                        {{ received.user.name }}
-                                                    </v-col>
-                                                    <v-col cols="1" lg="1" md="1" sm="12">
-                                                        {{ received.qty }}
-                                                    </v-col>
-                                                    <v-col cols="1" lg="1" md="1" sm="12">
-                                                        <v-btn icon small color="red darken-1" @click="removeReceiveItem(line, rIndex)" :disabled="saving">
-                                                            <v-icon>mdi-close</v-icon>
-                                                        </v-btn>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-expansion-panel-content>
-                                        </v-expansion-panel>
-                                    </v-expansion-panels>
-                                </v-form>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-            </template>
-            <template v-slot:item.date="{item, header}">
-                <span>{{ item[header.value] + 'Z' | moment('DD/MM/YYYY') }}</span>
-            </template>
-        </viewer>
-        <vue-easy-print v-if="selectedItem" tableShow style="display: none" ref="receipt">
-            <template slot-scope="func">
-                <receipt v-model="selectedItem" :header="{company, store: selectedItem.store}"></receipt>
-            </template>
-        </vue-easy-print>
+                                        <v-row v-for="(received, rIndex) in line.receives" :key="rIndex">
+                                            <v-col cols="2" lg="2" md="2" sm="12">
+                                                {{ received.properties.date | moment('YYYY-MM-DD') }}
+                                            </v-col>
+                                            <v-col cols="2" lg="2" md="2" sm="12">
+                                                {{ received.properties.do }}
+                                            </v-col>
+                                            <v-col cols="3" lg="3" md="3" sm="12">
+                                                {{ received.store.name }}
+                                            </v-col>
+                                            <v-col cols="3" lg="3" md="3" sm="12">
+                                                {{ received.user.name }}
+                                            </v-col>
+                                            <v-col cols="1" lg="1" md="1" sm="12">
+                                                {{ received.qty }}
+                                            </v-col>
+                                            <v-col cols="1" lg="1" md="1" sm="12">
+                                                <v-btn icon small color="red darken-1" @click="removeReceiveItem(line, rIndex)" :disabled="saving">
+                                                    <v-icon>mdi-close</v-icon>
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-form>
+                    </v-container>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
 <script>
@@ -317,6 +314,7 @@ export default {
             },
 
             selectedLine: null,
+            selectedHeader: null,
             supplierItems: [],
             itemHeaders: [
                 { text: 'Item', value: 'item.sku' },
@@ -628,12 +626,21 @@ export default {
         },
         receiveDialogClose() {
             this.receivedItemReset()
+            this.selectedItem = null
+            this.selectedHeader = null
             this.updateDialog = false
         },
         receiveDialogSave() {
             this.receivedItemReset()
+            this.selectedItem = null
+            this.selectedHeader = null
             this.updateDialog = false
         },
+        openReceiveDialog(item, header) {
+            this.selectedItem = item
+            this.selectedHeader = header
+            this.updateDialog = true
+        }
 
 
     }

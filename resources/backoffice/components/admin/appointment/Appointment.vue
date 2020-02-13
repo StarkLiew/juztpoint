@@ -63,7 +63,7 @@
                 </v-card>
             </v-menu>
         </v-sheet>
-        <v-dialog v-model="formDialog" scrollable fullscreen persistent max-width="500px" transition="dialog-transition">
+        <v-dialog v-model="formDialog" scrollable  persistent min-width="100%" transition="dialog-transition">
             <template v-slot:activator="{on}">
                 <v-fab-transition>
                     <v-btn v-on="on" color="pink" dark fixed bottom right large fab>
@@ -112,7 +112,7 @@
                                                 <template v-slot:activator="{ on }">
                                                     <v-text-field class="" v-model="form.startTime" :value="$moment(form.startTime).format('YYYY-MM-DD hh:mm')" label="Start Time" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
                                                 </template>
-                                                <v-time-picker :allowed-minutes="allowMinutes" @input="closeTimePicker" v-model="form.startTime" format="ampm" ampm-in-title full-width>
+                                                <v-time-picker @input="closeTimePicker" v-model="form.startTime" format="ampm" ampm-in-title full-width>
                                                 </v-time-picker>
                                             </v-menu>
                                         </v-col>
@@ -408,10 +408,17 @@ export default {
         estEndTime() {
             let est = 0
 
-            for (const item of this.form.items) {
 
-                est += parseInt(item.properties.duration)
+            if (!this.form.startDate) return
+            if (!this.form.startTime) return
+
+            for (const item of this.form.items) {
+                if (item.properties.duration) {
+                    est += parseInt(item.properties.duration)
+                }
+
             }
+
 
             const startDateTime = this.form.startDate + ' ' + this.form.startTime
 
@@ -419,6 +426,7 @@ export default {
 
             this.form.endDate = endDateTime.format('YYYY-MM-DD').toString()
             this.form.endTime = endDateTime.format('H:mm').toString()
+
 
 
         },
@@ -500,6 +508,7 @@ export default {
                 this.closeForm()
 
                 this.saving = false
+
             }
 
         },
@@ -523,8 +532,15 @@ export default {
             this.datePickerShow = false
         },
         closeTimePicker() {
-            this.estEndTime()
-            this.timePickerShow = false
+               
+
+            setTimeout(() => {
+           
+                this.timePickerShow = false
+            }, 5);
+              this.estEndTime()
+
+
         },
         generateUID() {
             // I generate the UID from two parts here 
