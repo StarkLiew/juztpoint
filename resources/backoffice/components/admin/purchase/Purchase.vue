@@ -8,9 +8,9 @@
                             <v-autocomplete v-model="editedItem.account" :items="vendors" :rules="[v => !!v || 'Account is required',]" required :loading="loading" item-text="name" label="Supplier" placeholder="Choose" prepend-icon="mdi-truck" return-object></v-autocomplete>
                             <v-menu ref="menu" v-model="showDatePicker" :close-on-content-click="false" transition="scale-transition" offset-y min-width="290px">
                                 <template v-slot:activator="{ on }">
-                                    <v-text-field class="" :value="$moment(editedItem.date).format('YYYY-MM-DD')" label="Date" prepend-icon="mdi-calendar" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
+                                    <v-text-field class="" v-model="editedItem.date" :value="$moment(editedItem.date).format('YYYY-MM-DD')" label="Date" prepend-icon="mdi-calendar" v-on="on" readonly :rules="[v => !!v || 'Date is required',]" required></v-text-field>
                                 </template>
-                                <v-date-picker @input="pickedDate(editedItem, ...arguments)" :value="$moment(editedItem.date).format('YYYY-MM-DD')"></v-date-picker>
+                                <v-date-picker v-model="editedItem.date" @input="pickedDate(editedItem, ...arguments)" :value="$moment(editedItem.date).format('YYYY-MM-DD')"></v-date-picker>
                             </v-menu>
                         </v-col>
                         <v-col cols="12" sm="12" md="4" lg="4">

@@ -17,7 +17,7 @@ class TrashDocumentMutation extends Mutation {
 		return [
 			'id' => [
 				'name' => 'id',
-				'type' => Type::string(),
+				'type' => Type::int(),
 				'rules' => ['required'],
 			],
 		];

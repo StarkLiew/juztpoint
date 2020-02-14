@@ -207,18 +207,22 @@ export default {
                     title: 'Inventory',
                     describe: 'Keep track on product stock level and etc',
                     items: [
-             
+
                         {
                             title: 'Stock On Hand',
                             name: 'ReportStockOnHand',
-                            fields: 'item_name, onhand',
+                            fields: 'item_name, onhand, cost, total_amount',
                             headers: [
                                 { text: 'Product', value: 'item_name', sortable: true },
                                 { text: 'On Hand', value: 'onhand', sortable: false, align: 'end', },
+                                { text: 'Cost', value: 'cost', sortable: false, align: 'end', currency: true },
+                                { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
                             ],
                             exports: {
                                 'product': 'item_name',
                                 'on hand': 'onhand',
+                                'cost': 'cost',
+                                'amount':'total_amount',
                             },
                             disabled: false
                         },

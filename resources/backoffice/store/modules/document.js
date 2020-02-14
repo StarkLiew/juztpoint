@@ -276,6 +276,7 @@ export const actions = {
                          discount_amount: 0, 
                          discount: "{}", 
                          tax_id: 0, 
+                         price: ${line.properties.price},
                          qty: ${receivedItem.qty},
                          refund_qty: 0,
                          refund_amount: 0.00,

@@ -44,14 +44,13 @@ class ReportStockOnHand {
 			})
 			->where('product.type', '=', 'product')
 			->where($where);
-		$sum = 0;
-		$count = 0;
 
-		$results = $item->selectRaw('product.name as item_name, sum(qty) as onhand,
-         (SELECT  FROM  ' . $items . ' as item WHERE item.type="open" OR item.type="ritem")
-			')->groupBy('product.name')->paginate($args['limit'], ['*'], 'page', $args['page']);
+		$sum = $item->selectRaw('SUM(qty * price) as amount')->first();
+		$count = $item->count('item_id');
 
-		return ['summary' => ['count' => $count, 'sum' => $sum], 'data' => $results];
+		$results = $item->selectRaw('product.name as item_name, sum(qty) as onhand, avg(price) as cost, sum(qty) * avg(price) as total_amount')->groupBy('product.name')->paginate($args['limit'], ['*'], 'page', $args['page']);
+
+		return ['summary' => ['count' => $count, 'sum' => $sum->amount], 'data' => $results];
 
 	}
 }
