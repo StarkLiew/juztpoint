@@ -222,7 +222,7 @@ export default {
                                 'product': 'item_name',
                                 'on hand': 'onhand',
                                 'cost': 'cost',
-                                'amount':'total_amount',
+                                'amount': 'total_amount',
                             },
                             disabled: false
                         },

@@ -35,22 +35,35 @@ class ReportStockOnHand {
 
 		};
 
-		$item = Item::join(DB::raw($products . ' as product'), 'product.id', '=', $items . '.item_id')
+		$item1 = Item::join(DB::raw($products . ' as product'), 'product.id', '=', $items . '.item_id')
 			->where(function ($query) use ($items) {
-				$query->where($items . '.type', 'item')
-					->orWhere($items . '.type', 'ritem')
+				$query->where($items . '.type', 'ritem')
 					->orWhere($items . '.type', 'open')
 					->orWhere($items . '.type', 'credit');
 			})
 			->where('product.type', '=', 'product')
-			->where($where);
+			->where($where)->selectRaw('product.name as name, sum(qty) as qty, avg(DISTINCT price) as price')->groupBy('product.name');
 
-		$sum = $item->selectRaw('SUM(qty * price) as amount')->first();
-		$count = $item->count('item_id');
+		$item2 = Item::join(DB::raw($products . ' as product'), 'product.id', '=', $items . '.item_id')
+			->where(function ($query) use ($items) {
+				$query->where($items . '.type', 'item');
+			})
+			->where('product.type', '=', 'product')
+			->where($where)->selectRaw('product.name as name, sum(qty) as qty, 0 as price')->groupBy('product.name');
 
-		$results = $item->selectRaw('product.name as item_name, sum(qty) as onhand, avg(price) as cost, sum(qty) * avg(price) as total_amount')->groupBy('product.name')->paginate($args['limit'], ['*'], 'page', $args['page']);
+		$union = $item1->union($item2);
 
-		return ['summary' => ['count' => $count, 'sum' => $sum->amount], 'data' => $results];
+		$sub = DB::table(DB::raw("({$union->toSql()}) as prod"))
+			->selectRaw('prod.name as name, SUM(prod.qty) as qty, AVG(DISTINCT price) as cost')->groupBy('prod.name');
+
+		$results = DB::table(DB::raw("({$sub->toSql()}) as mix"))
+			->mergeBindings($union->getQuery())
+			->selectRaw('IFNULL(mix.name, "Total") as item_name, SUM(mix.qty) as onhand, mix.cost as cost, SUM(mix.cost * mix.qty) as total_amount')->groupBy(DB::raw('mix.name'))->paginate($args['limit'], ['*'], 'page', $args['page']);
+
+		$count = 0;
+		$sum = DB::table(DB::raw("({$sub->toSql()}) as mix"))->mergeBindings($union->getQuery())->sum(DB::raw('mix.cost * mix.qty'));
+
+		return ['summary' => ['count' => $count, 'sum' => $sum], 'data' => $results];
 
 	}
 }
