@@ -3,22 +3,18 @@
         <v-container grid-list-sm fluid>
             <v-sheet height="100%" tile>
                 <v-layout wrap>
-
-        <v-flex xs4 sm2 md2 d-flex child-flex v-if="show !== 'appointments'">
+                    <v-flex xs4 sm2 md2 d-flex child-flex v-if="show !== 'appointments' && !!scannerAlwayOn">
                         <v-card flat tile color="white">
                             <v-img aspect-ratio="1">
                                 <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                                     <v-spacer></v-spacer>
                                     <v-flex shrink>
-                                        <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
+                                        <StreamBarcodeReader @decode="onDecode" @error="onError"></StreamBarcodeReader>
                                     </v-flex>
                                 </v-layout>
-                                 
                             </v-img>
-       
                         </v-card>
                     </v-flex>
-
                     <v-flex xs4 sm2 md2 d-flex child-flex v-if="show !== 'appointments'" @click="swap('appointments', 'service')" v-ripple>
                         <v-card flat tile color="pink darken-1">
                             <v-img aspect-ratio="1">
@@ -198,7 +194,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Calendar from './Calendar'
-import { StreamBarcodeReader  } from "vue-barcode-reader"
+import { StreamBarcodeReader } from "vue-barcode-reader"
 export default {
 
 
@@ -220,6 +216,7 @@ export default {
             services: 'service/collection',
             categories: 'system/categories',
             store: 'auth/store',
+            scannerAlwayOn: 'system/scannerAlwayOn',
         })
     },
     async created() {

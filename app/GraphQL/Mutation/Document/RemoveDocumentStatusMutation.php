@@ -49,7 +49,7 @@ class RemoveDocumentStatusMutation extends Mutation {
 			$received = Item::find($args['receive_id']);
 			$received->forceDelete();
 
-			$line = Item::find($received['trxn_id']);
+			$line = Item::find($received['line']);
 			$line->refund_qty = $args['qty'];
 			$line->save();
 

@@ -215,7 +215,7 @@ export default {
                             headers: [
                                 { text: 'Product', value: 'item_name', sortable: true },
                                 { text: 'On Hand', value: 'onhand', sortable: false, align: 'end', },
-                                { text: 'Cost', value: 'cost', sortable: false, align: 'end', currency: true },
+                                { text: 'Average Cost', value: 'cost', sortable: false, align: 'end', currency: true },
                                 { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
                             ],
                             exports: {
@@ -226,8 +226,46 @@ export default {
                             },
                             disabled: false
                         },
-                        { title: 'Product Sales Performance', disabled: true },
-                        { title: 'Stock Movement Log', disabled: true },
+                        {
+                            title: 'Product Sales Performance',
+                            name: 'ReportProductSalesPerformance',
+                            fields: 'item_name, cat_name, qty, total_amount',
+                            headers: [
+                                { text: 'Product', value: 'item_name', sortable: true },
+                                { text: 'Category', value: 'cat_name', sortable: false, align: 'end', },
+                                { text: 'Quantity', value: 'qty', sortable: false, align: 'end', currency: true },
+                                { text: 'Amount', value: 'total_amount', sortable: false, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'product': 'item_name',
+                                'category': 'cat_name',
+                                'quantity': 'qty',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Stock Movement Log',
+                            name: 'ReportStockMovementLog',
+                            fields: 'date, item_name, user_name, method, price, qty',
+                            headers: [
+                                { text: 'Date & Time', value: 'date', sortable: true },
+                                { text: 'Product', value: 'item_name', sortable: true },
+                                { text: 'Staff', value: 'user_name', sortable: true },
+                                { text: 'Action', value: 'method', sortable: false, align: 'end', },
+                                { text: 'Price', value: 'price', sortable: false, align: 'end', currency: true },
+                                { text: 'Quantity', value: 'qty', sortable: false, align: 'end' },
+                            ],
+                            exports: {
+                                'date & time': 'date',
+                                'product': 'item_name',
+                                'staff': 'user_name',
+                                'action': 'action',
+                                'cost': 'price',
+                                'quantity': 'qty',
+                            },
+                            disabled: false
+                        },
                         { title: 'Stock Movement Summary', disabled: true },
                         { title: 'Product Own Consumption', disabled: true },
                     ]
@@ -236,7 +274,7 @@ export default {
                     title: 'Employee',
                     describe: 'View on team performance and earnings',
                     items: [{
-                            title: 'Daily Commission Summary',
+                            title: 'Staff Daily Commission Summary',
                             name: 'ReportCommissionDailySummary',
                             fields: 'item_date, item_name, total_amount',
                             headers: [
@@ -251,10 +289,11 @@ export default {
                             },
                             disabled: false
                         },
-                        { title: 'Staff Shift Summary', disabled: true },
-                        { title: 'Staff Shift Detailed', disabled: true },
                         { title: 'Staff Commission Summary', disabled: true },
                         { title: 'Staff Commission Detailed', disabled: true },
+                        { title: 'Staff Shift Summary', disabled: true },
+                        { title: 'Staff Shift Detailed', disabled: true },
+
                     ]
                 },
                 {

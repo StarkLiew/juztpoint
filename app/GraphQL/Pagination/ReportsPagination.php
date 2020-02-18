@@ -106,6 +106,10 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::string(),
 				'description' => 'The type of setting',
 			],
+			'method' => [
+				'type' => Type::string(),
+				'description' => 'The type of setting',
+			],
 			'status' => [
 				'type' => Type::string(),
 				'description' => 'The type of setting',
@@ -115,6 +119,10 @@ class ReportsPagination extends PaginationType {
 				'description' => 'The type of setting',
 			],
 			'cost' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+			'price' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
@@ -203,6 +211,10 @@ class ReportsPagination extends PaginationType {
 				'description' => 'The name or value of the setting',
 			],
 			'user_name' => [
+				'type' => Type::string(),
+				'description' => 'The name or value of the setting',
+			],
+			'cat_name' => [
 				'type' => Type::string(),
 				'description' => 'The name or value of the setting',
 			],

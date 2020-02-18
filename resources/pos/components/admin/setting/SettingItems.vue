@@ -62,7 +62,7 @@
             <v-expansion-panel-content>
                 <v-list two-line subheader>
                     <v-list-item>
-                         {{ getPrinter() }}
+                        {{ getPrinter() }}
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item>
@@ -126,6 +126,7 @@ export default {
         offline: 'system/offline',
         payment_method: 'system/paymentMethod',
         shift: 'system/shift',
+        scannerAlwayOn: 'system/scannerAlwayOn',
     }),
     watch: {
 
@@ -135,6 +136,15 @@ export default {
         async setOffline() {
             const status = !this.offline
             await this.$store.dispatch('system/setOffline', { status })
+            if (!status) {
+                this.refresh()
+            }
+
+        },
+        async setScannerAlwayOn() {
+            const status = !this.scannerAlwayOn
+            await this.$store.dispatch('system/setScannerAlwayOn', { status })
+
             if (!status) {
                 this.refresh()
             }
@@ -174,6 +184,8 @@ export default {
 
         settings() {
             this.items = [
+                { icon: 'mdi-barcode-scan', iconClass: 'grey lighten-1 white--text', title: 'Barcode', subtitle: 'Barcode Scan Alway On', input: { type: 'switch', model: this.scannerAlwayOn, change: this.setScannerAlwayOn } },
+
                 { icon: 'mdi-wifi-off', iconClass: 'grey lighten-1 white--text', title: 'Offline', subtitle: 'Allow receive cash as payment', input: { type: 'switch', model: this.offline, change: this.setOffline } },
                 { icon: 'mdi-refresh', iconClass: 'primary lighten-1 white--text', title: 'Sync', subtitle: 'Sync to Backoffice', input: { type: 'button', click: this.refresh } },
             ]
@@ -204,7 +216,7 @@ export default {
 
         },
         getPrinter() {
-            if(!navigator.bluetooth) {
+            if (!navigator.bluetooth) {
                 return 'Bluetooth is offline'
             }
 

@@ -270,7 +270,7 @@ export const actions = {
 
 
             const receiveLine = `{
-                         line: 1, 
+                         line: ${line.id}, 
                          type: "ritem", 
                          item_id: ${line.item_id},
                          discount_amount: 0, 

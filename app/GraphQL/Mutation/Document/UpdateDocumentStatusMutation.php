@@ -48,7 +48,8 @@ class UpdateDocumentStatusMutation extends Mutation {
 
 			$line = Item::find($args['id']);
 			$args['receive']['properties'] = json_decode($args['receive']['properties']);
-			$args['receive']['trxn_id'] = $line['id'];
+			$args['receive']['line'] = $line['id'];
+			$args['receive']['trxn_id'] = $line['trxn_id'];
 			$args['receive']['price'] = $args['receive']['price'];
 			$received = Item::create($args['receive']);
 

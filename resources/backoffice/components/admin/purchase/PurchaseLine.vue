@@ -88,7 +88,7 @@ export default {
     watch: {
         line: {
             handler(val) {
-               console.log(val)
+            
                 if (!!val) {
 
                     this.editedLine = JSON.parse(JSON.stringify(val))
@@ -110,7 +110,7 @@ export default {
     props: ['line'],
     async created() {
         if (this.line) {
-            console.log(this.line)
+     
             this.editedLine = JSON.parse(JSON.stringify(this.line))
         }
         await this.initialize()

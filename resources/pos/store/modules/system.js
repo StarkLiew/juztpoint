@@ -20,6 +20,7 @@ export const state = {
     users: [],
     categories: [],
     offline: false,
+    scannerAlwayOn: false,
 }
 
 /**
@@ -69,8 +70,12 @@ export const mutations = {
     },
     [types.SHIFT_SYNC_STATUS](state, { id, success }) {
         const index = state.shifts.findIndex(s => s.id === id)
-        
+
         state.shifts[index].synced = success
+    },
+    [types.SCANNER_ALWAY_ON](state, { status }) {
+        state.scannerAlwayOn = status
+
     },
 }
 
@@ -131,14 +136,18 @@ export const actions = {
             const company = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "company", limit:-1, page:1){ data{id, name, properties{address, timezone, email, mobile}}}}' } })
             // const payments = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "payment"){ id, name, properties{email, mobile}}}'}})
             const categories = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "category", limit:-1, page:1){ data{id, name}}}' } })
-  
+
             const system = { company: company.data.data.settings.data[0], categories: categories.data.data.settings.data }
-             
+
             commit(types.FILL_SYSTEM, { system })
 
         } catch (e) {
             commit(types.FETCH_SYSTEM_FAILURE)
         }
+    },
+    async setScannerAlwayOn({ commit }, status) {
+
+        commit(types.SCANNER_ALWAY_ON, status)
     },
 }
 
@@ -154,4 +163,5 @@ export const getters = {
     categories: state => state.categories,
     offline: state => state.offline,
     paymentMethod: state => state.payment_method,
+    scannerAlwayOn: state => state.scannerAlwayOn,
 }

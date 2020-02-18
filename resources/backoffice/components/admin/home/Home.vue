@@ -114,9 +114,9 @@ export default {
         initialize() {
             this.items = [
                 { title: 'Recent Sales Performance', chart: 'bar', loading: false, refresh: this.chartSalesSix, data: [] },
-                { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
+               /* { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
                 { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
-                { title: 'Top Employee', chart: 'bar', loading: false, refresh: this.topEmployee, data: [] },
+                { title: 'Top Employee', chart: 'bar', loading: false, refresh: this.topEmployee, data: [] }, */
             ]
 
             const today = this.$moment()
