@@ -13,8 +13,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                    <qrcode-stream :track="repaint" @decode="onDecode" v-if="scannerShow">
-                    </qrcode-stream>
+                    <StreamBarcodeReader v-if="!!scannerShow" @decode="onDecode" @error="onError"></StreamBarcodeReader>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -30,14 +29,12 @@
 import axios from 'axios'
 import { api } from '~/config'
 import Form from '~/mixins/form'
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import { StreamBarcodeReader } from "vue-barcode-reader"
 
 export default {
     mixins: [Form],
     components: {
-        QrcodeStream,
-        QrcodeDropZone,
-        QrcodeCapture
+        StreamBarcodeReader,
     },
     data: () => ({
         passwordHidden: true,
@@ -116,6 +113,9 @@ export default {
         onDecode(decodedString) {
             this.form.device_id = decodedString
             this.scannerShow = false
+        },
+        onError() {
+   
         },
         closeScanner() {
             this.scannerShow = false

@@ -54,7 +54,7 @@ class ReportStockOnHand {
 		$union = $item1->union($item2);
 
 		$sub = DB::table(DB::raw("({$union->toSql()}) as prod"))
-			->selectRaw('prod.name as name, SUM(prod.qty) as qty, AVG(DISTINCT price) as cost')->groupBy('prod.name');
+			->selectRaw('prod.name as name, SUM(prod.qty) as qty, SUM(price) as cost')->groupBy('prod.name');
 
 		$results = DB::table(DB::raw("({$sub->toSql()}) as mix"))
 			->mergeBindings($union->getQuery())

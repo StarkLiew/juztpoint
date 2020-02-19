@@ -160,6 +160,23 @@ class ReportsPagination extends PaginationType {
 				'type' => Type::float(),
 				'description' => 'The type of setting',
 			],
+			'opening' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+			'sold' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+			'return' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+			'balance' => [
+				'type' => Type::float(),
+				'description' => 'The type of setting',
+			],
+
 			'received' => [
 				'type' => Type::float(),
 				'description' => 'The type of setting',

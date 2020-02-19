@@ -49,7 +49,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                     <StreamBarcodeReader  @decode="onDecode" @error="onError"></StreamBarcodeReader >
+                     <StreamBarcodeReader v-if="!!scanDialog"  @decode="onDecode" @error="onError"></StreamBarcodeReader >
                 </v-card-text>
             </v-card>
         </v-dialog>

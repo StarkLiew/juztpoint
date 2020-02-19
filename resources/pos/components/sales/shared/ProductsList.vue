@@ -97,7 +97,6 @@
                                 <v-layout pa-2 column fill-height class="lightbox white--text text-center">
                                     <v-spacer></v-spacer>
                                     <v-flex shrink>
-                                        <div class="caption text-wrap">{{ product.name }}</div>
                                     </v-flex>
                                 </v-layout>
                             </v-img>

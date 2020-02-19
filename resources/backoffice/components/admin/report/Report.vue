@@ -266,7 +266,30 @@ export default {
                             },
                             disabled: false
                         },
-                        { title: 'Stock Movement Summary', disabled: true },
+                        {
+                            title: 'Stock Movement Summary',
+                            name: 'ReportStockMovementSummary',
+                            fields: 'item_name, opening, received, sold, return, balance, total_amount',
+                            headers: [
+                                { text: 'Product', value: 'item_name', sortable: true },
+                                { text: 'Opening', value: 'opening', sortable: false, align: 'end', },
+                                { text: 'Received', value: 'received', sortable: false, align: 'end', },
+                                { text: 'Sold', value: 'sold', sortable: false, align: 'end', },
+                                { text: 'Return', value: 'return', sortable: false, align: 'end', },
+                                { text: 'Balance', value: 'balance', sortable: false, align: 'end', },
+                                { text: 'Value', value: 'total_amount', sortable: false, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'product': 'item_name',
+                                'opening': 'opening',
+                                'sold': 'sold',
+                                'cost': 'price',
+                                'return': 'return',
+                                'balance': 'balance',
+                                'value': 'total_amount',
+                            },
+                            disabled: false
+                        },
                         { title: 'Product Own Consumption', disabled: true },
                     ]
                 },
