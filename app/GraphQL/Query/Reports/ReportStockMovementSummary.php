@@ -70,7 +70,11 @@ class ReportStockMovementSummary {
 			->selectRaw('IFNULL(mix.name, "Total") as item_name, mix.type, SUM(if( mix.type="open", qty, 0 )) as opening, SUM(if( mix.type="ritem", qty, 0 )) as received, ABS(SUM(if( mix.type="item", qty, 0 ))) as sold, SUM(if( mix.type="credit", qty, 0 )) as "return", SUM(qty) as balance, SUM(qty) * SUM(mix.cost) as total_amount')->groupBy(DB::raw('mix.name'))->paginate($args['limit'], ['*'], 'page', $args['page']);
 
 		$count = 0;
-		$sum = DB::table(DB::raw("({$sub->toSql()}) as mix"))->mergeBindings($union->getQuery())->sum(DB::raw('mix.cost * mix.qty'));
+		$subSum = DB::table(DB::raw("({$sub->toSql()}) as mix"))->mergeBindings($union->getQuery())->selectRaw(DB::raw('SUM(mix.qty) * SUM(mix.cost) as aggregate'))->groupBy('mix.name');
+
+		$sum = DB::table(DB::raw("({$subSum->toSql()}) as sub"))
+			->mergeBindings($union->getQuery())
+			->sum('aggregate');
 
 		return ['summary' => ['count' => $count, 'sum' => $sum], 'data' => $results];
 

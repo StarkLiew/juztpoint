@@ -297,7 +297,7 @@ export default {
                     title: 'Employee',
                     describe: 'View on team performance and earnings',
                     items: [{
-                            title: 'Staff Daily Commission Summary',
+                            title: 'Staff Commission Summary By Day',
                             name: 'ReportCommissionDailySummary',
                             fields: 'item_date, item_name, total_amount',
                             headers: [
@@ -312,8 +312,39 @@ export default {
                             },
                             disabled: false
                         },
-                        { title: 'Staff Commission Summary', disabled: true },
-                        { title: 'Staff Commission Detailed', disabled: true },
+                        {
+                            title: 'Staff Commission Summary',
+                            name: 'ReportCommissionSummary',
+                            fields: 'item_name, total_amount',
+                            headers: [
+                                { text: 'Name', value: 'item_name', sortable: true },
+                                { text: 'Earn', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'name': 'item_name',
+                                'earn': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Staff Commission Detailed',
+                            name: 'ReportCommissionDetailed',
+                            fields: 'item_date, user_name, item_name, total_amount',
+                            headers: [
+                                { text: 'Date', value: 'item_date', sortable: true },
+                                { text: 'Staff', value: 'user_name', sortable: true },
+                                { text: 'Name', value: 'item_name', sortable: true },
+                                { text: 'Earn', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'date': 'item_date',
+                                'staff': 'user_name',
+                                'product': 'item_name',
+                                'earn': 'total_amount',
+                            },
+                            disabled: false
+                        },
+
                         { title: 'Staff Shift Summary', disabled: true },
                         { title: 'Staff Shift Detailed', disabled: true },
 
@@ -322,19 +353,208 @@ export default {
                 {
                     title: 'Sales',
                     describe: 'Intel about all sales related performance and activities',
-                    items: [
-                        { title: 'Sales by Item', disabled: true },
-                        { title: 'Sales by Type', disabled: true },
-                        { title: 'Sales by Service', disabled: true },
-                        { title: 'Sales by Product', disabled: true },
-                        { title: 'Sales by Store', disabled: true },
-                        { title: 'Sales by Terminal', disabled: true },
-                        { title: 'Sales by Customer', disabled: true },
-                        { title: 'Sales by Staff', disabled: true },
+                    items: [{
+                            title: 'Sales by Product',
+                            name: 'ReportSalesByProduct',
+                            fields: 'item_name, product_type, category_name, qty, total_amount',
+                            headers: [
+                                { text: 'Name', value: 'item_name', sortable: true },
+                                { text: 'Type', value: 'product_type', sortable: true },
+                                { text: 'Category', value: 'category_name', sortable: true },
+                                { text: 'Sold', value: 'qty', sortable: true, align: 'end' },
+                                { text: 'Amount', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'name': 'item_name',
+                                'type': 'product_type',
+                                'category': 'category_name',
+                                'sold': 'qty',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Service',
+                            name: 'ReportSalesByService',
+                            fields: 'item_name, product_type, category_name, qty, total_amount',
+                            headers: [
+                                { text: 'Name', value: 'item_name', sortable: true },
+                                { text: 'Type', value: 'product_type', sortable: true },
+                                { text: 'Category', value: 'category_name', sortable: true },
+                                { text: 'Sold', value: 'qty', sortable: true, align: 'end' },
+                                { text: 'Amount', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'name': 'item_name',
+                                'type': 'product_type',
+                                'category': 'category_name',
+                                'sold': 'qty',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Product Category',
+                            name: 'ReportSalesByProductCategory',
+                            fields: 'category_name, qty, total_amount',
+                            headers: [
+                                { text: 'Category', value: 'category_name', sortable: true },
+                                { text: 'Sold', value: 'qty', sortable: true, align: 'end' },
+                                { text: 'Amount', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'category': 'category_name',
+                                'sold': 'qty',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Service Category',
+                            name: 'ReportSalesByServiceCategory',
+                            fields: 'item_name, product_type, category_name, qty, total_amount',
+                            headers: [
+                                { text: 'Category', value: 'category_name', sortable: true },
+                                { text: 'Sold', value: 'qty', sortable: true, align: 'end' },
+                                { text: 'Amount', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'category': 'category_name',
+                                'sold': 'qty',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Store',
+                            name: 'ReportSalesByStore',
+                            fields: 'item_name, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Store', value: 'item_name', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'store': 'item_name',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Terminal',
+                            name: 'ReportSalesByTerminal',
+                            fields: 'item_name, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Store', value: 'item_name', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'store': 'item_name',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Customer',
+                            name: 'ReportSalesByCustomer',
+                            fields: 'item_name, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Customer', value: 'item_name', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'customer': 'item_name',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                        {
+                            title: 'Sales by Staff',
+                            name: 'ReportSalesByStaff',
+                            fields: 'item_name, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Staff', value: 'item_name', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'staff': 'item_name',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+
                         { title: 'Sales by Staff Breakdown', disabled: true },
-                        { title: 'Sales by Hour', disabled: true },
-                        { title: 'Sales by Month', disabled: true },
-                        { title: 'Sales by Year', disabled: true },
+                    {
+                            title: 'Sales by Day',
+                            name: 'ReportSalesByDay',
+                            fields: 'item_date, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Date', value: 'item_date', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'date': 'item_date',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                                        {
+                            title: 'Sales by Month',
+                            name: 'ReportSalesByMonth',
+                            fields: 'item_date, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Month', value: 'item_date', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'month': 'item_date',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+                                        {
+                            title: 'Sales by Year',
+                            name: 'ReportSalesByYear',
+                            fields: 'item_date, product_amount, service_amount, total_amount',
+                            headers: [
+                                { text: 'Year', value: 'item_date', sortable: true },
+                                { text: 'Product', value: 'product_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Service', value: 'service_amount', sortable: true, align: 'end', currency: true },
+                                { text: 'Total', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'year': 'item_date',
+                                'product': 'product_amount',
+                                'service': 'service_amount',
+                                'total': 'total_amount',
+                            },
+                            disabled: false
+                        },
+
+
                         { title: 'Sales Log', disabled: true },
                     ]
                 },
