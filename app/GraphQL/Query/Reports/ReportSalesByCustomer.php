@@ -39,7 +39,7 @@ class ReportSalesByCustomer {
 		$item = Item::join($documents . ' as documents', 'documents.id', '=', $items . '.trxn_id')
 			->join('users', 'users.id', '=', $items . '.user_id')
 			->join($products . ' as products', 'products.id', '=', $items . '.item_id')
-			->leftJoin($accounts . ' as customers', 'customers.id', '=', 'documents.account_id')
+			->leftJoin($accounts . ' as customers', 'customers.uid', 'documents.account_id')
 			->where($items . '.type', 'item')
 			->whereNull('documents.deleted_at')
 			->where($where);

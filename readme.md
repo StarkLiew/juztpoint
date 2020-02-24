@@ -1,92 +1,77 @@
+## About JuztPoint
+Am I crazy, release a project I working privately for past 6 months as opensource. JuztPoint is first full-fledged multi-tenant Point of Sale system release under opensource license in Malaysia. A Point of Sale (POS) build with Progressive Web App technology (PWA). Unlike other PWA point of sale, this PWA is built to feel like an native app. Currently this software is have been running under production testing at my own retail premise.
 
-## List all process
+
+## Release Plan based on Sector Support
+### Version 1:
+- Retail
+- Salon
+- Car Wash
+
+### Next Version Sector Support:
+- F&B sector
+- more...
+
+
+## Features to work on
+
+### Dockerise
+1. Run artisan during setup
+
+### Backend
+1. Broadcast Notification
+2. Strengthen api security
+
+### BackOffice
+1. Receive Notification
+2. More reports
+3. Internal Use (Issue Inventory)
+
+### Frontned
+1. Thermal Printing (Working on)
+2. Sync Open/Close Shift
+3. Receive Notification
+4. Software Update Refresh Notification
+4. Update Refresh Notification
+
+## Requirement
+- docker
+- docker-compose
+- linux, centos, window
+- frontend - any pc, mobile and tablet that support PWA browser
+
+## Installation
+- $ docker-compose exec app php artisan key:generate
+- $ docker-compose exec app php artisan config:cache
+- $ docker-compose exec app php artisan migrate
+- $ docker-compose exec app php artisan db:seed
+
+## Development
+- $ docker-compose -f docker-compose-dev.yml up -d
+- $ npm run dev / npm run watch
+
+## Production
 $ docker-compose up -d
 
-## development
-$ docker-compose -f docker-compose-dev.yml up -d
-
-## List all process
-$ docker ps 
-$ docker-compose exec app php artisan key:generate
-$ docker-compose exec app php artisan config:cache
-$ docker-compose exec app php artisan migrate
-$ docker-compose exec app php artisan db:seed
-
-
-## Incase need to edit environment file
+## Environment File
 $ docker-compose exec app nano .env
 
 
+## Documentation
 
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+Planing for a seperate github reposities for communities written user manual.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Sponsors
 
-## About Laravel
+I would like to extend my thanks to any future sponsors for funding JuztPoint development.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1400 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+The sponsors are:
+1. pending
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Thank you for considering contributing. 
 
 ## License
+Apache License 2.0
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).

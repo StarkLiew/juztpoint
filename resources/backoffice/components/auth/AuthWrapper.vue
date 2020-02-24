@@ -1,9 +1,7 @@
 <template>
     <v-content>
 
-        <v-container fluid fill-height justify-center align-center>
-
-        <v-app-bar absolute flat color="white">
+        <v-app-bar  flat color="white">
             <v-toolbar-title v-if="siteUrl">
                <a :href="siteUrl">{{ siteName }}</a>
             </v-toolbar-title>
@@ -12,6 +10,9 @@
                 SIGN UP
             </v-btn>
         </v-app-bar>
+        <v-container  fill-height justify-center align-center>
+
+
         	
             <transition name="fade" mode="out-in">
                 <router-view></router-view>
