@@ -1,9 +1,9 @@
 <?php
 
-use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class UserCreateProducts extends Migration {
@@ -17,7 +17,6 @@ class UserCreateProducts extends Migration {
 
 		Schema::create("user_{$id}_products", function (Blueprint $table) use ($id) {
 			$table->bigIncrements('id');
-			$table->binary('thumbnail')->nullable();
 			$table->string('name');
 			$table->string('type')->nullable()->index();
 			$table->string('status')->nullable()->index();
