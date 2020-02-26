@@ -7,13 +7,10 @@ use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Orchid\Attachment\Attachable;
-use Orchid\Filters\Filterable;
-use Orchid\Screen\AsSource;
 
 class Product extends Model {
 
-	use Attachable, Notifiable, Filterable, AsSource;
+	use Notifiable;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *

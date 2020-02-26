@@ -6,13 +6,11 @@ use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Orchid\Filters\Filterable;
-use Orchid\Screen\AsSource;
 use Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class Setting extends Model {
 
-	use Notifiable, Filterable, AsSource, HasJsonRelationships;
+	use Notifiable, HasJsonRelationships;
 
 	/**
 	 * The attributes that should be mutated to dates.

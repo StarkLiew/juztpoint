@@ -6,12 +6,10 @@ use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Orchid\Filters\Filterable;
-use Orchid\Screen\AsSource;
 
 class Item extends Model {
 
-	use Notifiable, Filterable, AsSource, SoftDeletes;
+	use Notifiable, SoftDeletes;
 	/**
 	 * The attributes that should be mutated to dates.
 	 *

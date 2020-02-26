@@ -180,8 +180,6 @@ return [
 
 		Rebing\GraphQL\GraphQLServiceProvider::class,
 
-		graphiql\GraphiqlServiceProvider::class,
-
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
 		Barryvdh\Cors\ServiceProvider::class,

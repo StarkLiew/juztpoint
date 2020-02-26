@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 
-class Industry {
+class Industries {
 
 	public static function collection() {
 		return [

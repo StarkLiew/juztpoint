@@ -1,12 +1,12 @@
 {
-    "name": "laravel/laravel",
+    "name": "starliew/juztpoint",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "PWA point of sale",
     "keywords": [
-        "framework",
-        "laravel"
+        "pointofsale",
+        "pos"
     ],
-    "license": "MIT",
+    "license": "APACHE2.0",
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-cors": "^0.11.4",
@@ -19,9 +19,7 @@
         "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
         "nesbot/carbon": "^2.0",
-        "noh4ck/graphiql": "^1.0",
         "orchestra/tenanti": "^3.8",
-        "orchid/platform": "^5.2",
         "rebing/graphql-laravel": "^2.0",
         "simplesoftwareio/simple-qrcode": "^2.0",
         "spatie/laravel-server-side-rendering": "^1.3",
