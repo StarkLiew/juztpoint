@@ -26,6 +26,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 1. Receive Notification
 2. More reports
 3. Internal Use (Issue Inventory)
+4. Plugin
 
 ### Frontned
 1. Thermal Printing (Working on)
@@ -33,6 +34,8 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 3. Receive Notification
 4. Software Update Refresh Notification
 4. Update Refresh Notification
+
+
 
 ## Requirement
 - docker
