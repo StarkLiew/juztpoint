@@ -48,6 +48,10 @@
           </li>
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+
+          </li>
+             <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="{{ env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com') }}">SIGN IN</a>
           </li>
         </ul>
       </div>
@@ -183,32 +187,39 @@
 
   <section class="contact bg-primary" id="contact">
     <div class="container">
-      <h2>We
+      <h2>Contributors!
         <i class="fas fa-heart"></i>
-        new friends!</h2>
+       </h2>
       <ul class="list-inline list-social">
-        <li class="list-inline-item social-twitter">
+        <li class="list-inline-item">
+          <a href="https://github.com/StarkLiew">
+
+            <img src="https://github.com/starkliew.png?size=80" alt="" class="rounded-circle">
+
+          </a>
+
+        </li>
+        <li class="list-inline-item">
           <a href="#">
-            <i class="fab fa-twitter"></i>
+            <img src="https://github.com/empty.png?size=80" alt="" class="rounded-circle">
           </a>
         </li>
-        <li class="list-inline-item social-facebook">
+        <li class="list-inline-item">
           <a href="#">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-        </li>
-        <li class="list-inline-item social-google-plus">
-          <a href="#">
-            <i class="fab fa-google-plus-g"></i>
+           <img src="https://github.com/empty.png?size=80" alt="" class="rounded-circle">
           </a>
         </li>
       </ul>
+
+        <h2>
+
+       </h2>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <p>&copy; Your Website 2019. All Rights Reserved.</p>
+      <p>JuztPoint, Apache License 2.0</p>
       <ul class="list-inline">
         <li class="list-inline-item">
           <a href="#">Privacy</a>
