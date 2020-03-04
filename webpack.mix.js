@@ -15,7 +15,6 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 
 mix.js('resources/pos/app.js', 'public/pos')
-    .js('resources/noah/app.js', 'public/noah')
     .js('resources/backoffice/app.js', 'public/backoffice')
     .js('resources/receipt/app-client.js', 'public/receipt')
     .js('resources/receipt/app-server.js', 'public/receipt')
@@ -27,9 +26,7 @@ mix.js('resources/pos/app.js', 'public/pos')
             alias: {
                 '~': path.join(__dirname, './resources/pos'),
                 '~~': path.join(__dirname, './resources/backoffice'),
-                '~~~~': path.join(__dirname, './resources/noah'),
                 '$pos': path.join(__dirname, './resources/pos/components'),
-                '$noah': path.join(__dirname, './resources/noah/components'),
                 '$backoffice': path.join(__dirname, './resources/backoffice/components'),
                 '~~~': path.join(__dirname, './resources/receipt'),
                 '$receipt': path.join(__dirname, './resources/receipt'),

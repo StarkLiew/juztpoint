@@ -58,14 +58,6 @@ class HomeController extends Controller {
 	 *
 	 * @return \Illuminate\Contracts\Support\Renderable
 	 */
-	public function noah() {
-		return view('noah');
-	}
-	/**
-	 * Show the application dashboard.
-	 *
-	 * @return \Illuminate\Contracts\Support\Renderable
-	 */
 	public function receipt() {
 		return view('mail.receipt');
 	}

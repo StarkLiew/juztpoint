@@ -19,12 +19,6 @@ Route::domain(env('POS_URL', 'pos.juztpoint.com'))->group(function ($router) {
 });
 
 // Static subdomain
-Route::domain(env('NOAH_URL', 'noah.juztpoint.com'))->group(function ($router) {
-	Route::get('/', 'HomeController@noah')->name('noah');
-	Route::get('/{any}', 'HomeController@noah')->name('noah');
-});
-
-// Static subdomain
 Route::domain(env('POS_BACKOFFICE_URL', 'backoffice.juztpoint.com'))->group(function ($router) {
 	Route::get('/', 'HomeController@backoffice')->name('backoffice');
 	Route::get('/{any}', 'HomeController@backoffice')->name('backoffice');
