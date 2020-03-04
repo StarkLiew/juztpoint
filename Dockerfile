@@ -4,7 +4,7 @@ ENV \
   APP_DIR="/var/www" \
   APP_PORT="80" 
 
-USER root
+# USER root
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -46,11 +46,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 COPY . $APP_DIR
 
-RUN chown -R www-data:www-data /var/www
+# RUN chown -R www-data:www-data /var/www
 RUN chmod -R 777 /var/www/storage
 RUN chmod -R 755 /var/www/bootstrap/cache
-
-USER www-data
+# USER www-data
 
 RUN cd $APP_DIR \
     && composer install \
