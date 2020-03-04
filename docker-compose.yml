@@ -29,7 +29,11 @@ services:
       - .env
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3306:3306
     volumes:
       - juzt-data:/var/lib/mysql/
     networks:
@@ -41,6 +45,14 @@ services:
       - .env
     container_name: juzt-adminer
     restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: maria
+      ADMINER_DEFAULT_DB_NAME: homestead
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    volumes:
+      - ./:/www
     ports:
       - ${ADMINER_PORT}:8080
     depends_on:
