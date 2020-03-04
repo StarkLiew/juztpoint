@@ -4,8 +4,6 @@ ENV \
   APP_DIR="/var/www" \
   APP_PORT="80" 
 
-# USER root
-
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -60,4 +58,5 @@ RUN cd $APP_DIR \
     && npm run production
 
 WORKDIR $APP_DIR
-CMD php artisan serve --host=0.0.0.0 --port=$APP_PORT
+
+# CMD php artisan serve --host=0.0.0.0 --port=$APP_PORT

@@ -7,24 +7,24 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
+    restart: always
     depends_on:
       - juzt-db
     env_file:
       - .env
+    working_dir: /var/www
+    command: "php artisan serve --host=0.0.0.0 --port=80"
     ports:
       - ${APP_PORT}:80
     volumes:
       - ./:/var/www
     environment:
       VIRTUAL_HOST: ${APP_DOMAIN_NAME}
-    networks:
-      - juzt-network
 
   juzt-db:
     image: mariadb:latest
     container_name: juzt-db
-    restart: unless-stopped
+    restart: always
     env_file:
       - .env
     environment:
@@ -33,19 +33,17 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - juzt-data:/var/lib/mysql/
-    networks:
-      - juzt-network
+      - juzt-database:/var/lib/mysql/
 
   juzt-adminer:
     image: adminer:latest
     env_file:
       - .env
     container_name: juzt-adminer
-    restart: unless-stopped
+    restart: always
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
-      ADMINER_DEFAULT_DB_HOST: maria
+      ADMINER_DEFAULT_DB_HOST: juzt-db
       ADMINER_DEFAULT_DB_NAME: homestead
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
@@ -55,14 +53,7 @@ services:
       - ${ADMINER_PORT}:8080
     depends_on:
       - juzt-db
-    networks:
-      - juzt-network
-
-
-networks:
-  juzt-network:
-    driver: bridge
 
 volumes:
-  juzt-data:
+  juzt-database:
     driver: local
