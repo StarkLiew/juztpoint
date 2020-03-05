@@ -9,13 +9,9 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		//    DB::table('users')->truncate();
-		//        DB::table('accounts')->truncate();
-		// DB::table('system_lockers')->truncate();
 
-		$this->call('Configuration');
-		$this->call('commission');
-		$this->call('accounts');
+		// $this->call('commission');
+		// $this->call('accounts');
 
 	}
 

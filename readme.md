@@ -7,9 +7,10 @@ $ docker-compose up -d
 $ docker-compose exec juzt-app composer install
 $ docker-compose exec juzt-app php artisan install
 $ docker-compose exec juzt-app php artisan migrate
-$ docker-compose exec juzt-app php artisan db:seed
 $ docker-compose exec juzt-app php artisan key:generate
-$ docker-compose exec juzt-app npm run production
+$ docker-compose exec juzt-app php artisan passport:install
+$ docker-compose exec juzt-app npm install
+$ docker-compose exec juzt-app npm run dev
 
 
 ### Development
@@ -19,9 +20,11 @@ $ docker-compose up -d (to fire up mariadb)
 $ composer install
 $ php artisan install
 $ php artisan migrate
-$ php artisan db:seed
 $ php artisan key:generate
 $ php artisan run serve
+$ php artisan passport:install
+$ npm install
+$ npm run watch
 
 #### Frontend
 $ npm run dev 
