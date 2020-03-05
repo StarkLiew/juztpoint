@@ -3,6 +3,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 
 ## Setup
 ### Production
+```
 $ docker-compose up -d
 $ docker-compose exec juzt-app composer install
 $ docker-compose exec juzt-app php artisan install
@@ -11,11 +12,12 @@ $ docker-compose exec juzt-app php artisan key:generate
 $ docker-compose exec juzt-app php artisan passport:install
 $ docker-compose exec juzt-app npm install
 $ docker-compose exec juzt-app npm run dev
-
+```
 
 ### Development
 
 #### Backend
+```
 $ docker-compose up -d (to fire up mariadb)
 $ composer install
 $ php artisan install
@@ -25,14 +27,15 @@ $ php artisan run serve
 $ php artisan passport:install
 $ npm install
 $ npm run watch
-
+```
 #### Frontend
+```
 $ npm run dev 
-
+```
 or (live)
-
+```
 $ npm run watch 
-
+```
 ### Optional
 Edit the host file as follow (for localhost)
 127.0.0.1  www.domain.com app.domain.com backoffice.domain.com
