@@ -1,95 +1,67 @@
 version: '3'
 services:
-
-  #PHP Service
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: php:7.3.7-fpm
-    container_name: app
-    restart: unless-stopped
-    tty: true
+  juzt-web:
+    image: nginx:latest
+    container_name: juzt-web
+    restart: always
     ports:
-      - "9000:9000"
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
-    depends_on:
-      - db
-    volumes:
-      - ./:/var/www
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    networks:
-      - app-network
-
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    depends_on:
-      - app
-    ports:
-      - "81:80"
-      - "442:443"
+      - ${APP_PORT}:${APP_PORT}
     volumes:
       - ./:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
-      - ./docker/nginx/ssl/:/etc/nginx/ssl/
-  #  - ./data/certbot/conf:/etc/letsencrypt
-  #  - ./data/certbot/www:/var/www/certbot
-  #  command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"  
     environment:
       - NGINX_HOST=${APP_DOMAIN_NAME}
-    networks:
-      - app-network
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  #Certbot Letsencrypt SSL Service 
-  certbot:
-    container_name: certbot
-    image: certbot/certbot
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-  #MySQL Service
-  db:
-    image: mariadb:10.4.6
-    container_name: db
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: homestead
-      MYSQL_ROOT_PASSWORD: Point@123@
-    volumes:
-      - dbdata:/var/lib/mysql/
-      - ./docker/mariadb/my.cnf:/etc/mariadb/my.cnf
-    networks:
-      - app-network
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    ports:
-      - 8080:8080
     depends_on:
-      - db
-    networks:
-      - app-network
-#Docker Networks
-networks:
-  app-network:
-    driver: bridge
-#Volumes
+      - juzt-app
+      - juzt-db
+    env_file:
+      - .env
+
+  juzt-app:
+    image: php:7.3.7-fpm
+    container_name: juzt-app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - juzt-db
+
+  juzt-db:
+    image: mariadb:latest
+    container_name: juzt-db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - juzt-data:/var/lib/mysql/
+
+  juzt-adminer:
+    image: adminer:latest
+    env_file:
+      - .env
+    container_name: juzt-adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: juzt-db
+      ADMINER_DEFAULT_DB_NAME: homestead
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    volumes:
+      - ./:/www
+    ports:
+      - ${ADMINER_PORT}:8080
+    depends_on:
+      - juzt-db
+
 volumes:
-  dbdata:
+  juzt-data:
     driver: local

@@ -1,6 +1,42 @@
 ## About JuztPoint
 Am I crazy, release a project I working privately for past 6 months as opensource. JuztPoint is first full-fledged multi-tenant Point of Sale system release under opensource license in Malaysia. A Point of Sale (POS) build with Progressive Web App technology (PWA). Unlike other PWA point of sale, this PWA is built to feel like an native app. Currently this software is have been running under production testing at my own retail premise.
 
+## Setup
+### Production
+$ docker-compose up -d
+$ docker-compose exec juzt-app composer install
+$ docker-compose exec juzt-app php artisan install
+$ docker-compose exec juzt-app php artisan migrate
+$ docker-compose exec juzt-app php artisan key:generate
+$ docker-compose exec juzt-app php artisan passport:install
+$ docker-compose exec juzt-app npm install
+$ docker-compose exec juzt-app npm run dev
+
+
+### Development
+
+#### Backend
+$ docker-compose up -d (to fire up mariadb)
+$ composer install
+$ php artisan install
+$ php artisan migrate
+$ php artisan key:generate
+$ php artisan run serve
+$ php artisan passport:install
+$ npm install
+$ npm run watch
+
+#### Frontend
+$ npm run dev 
+
+or (live)
+
+$ npm run watch 
+
+### Optional
+Edit the host file as follow (for localhost)
+127.0.0.1  www.domain.com app.domain.com backoffice.domain.com
+
 
 ## Release Plan based on Sector Support
 ### Version 1:
@@ -12,11 +48,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - F&B sector
 - more...
 
-
 ## Features to work on
-
-### Dockerise
-1. Run artisan during setup
 
 ### Backend
 1. Broadcast Notification
@@ -35,6 +67,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 4. Software Update Refresh Notification
 4. Update Refresh Notification
 
+... and many more bugs fix.
 
 
 ## Requirement
