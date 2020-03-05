@@ -9,6 +9,7 @@ $ docker-compose exec juzt-app php artisan install
 $ docker-compose exec juzt-app php artisan migrate
 $ docker-compose exec juzt-app php artisan db:seed
 $ docker-compose exec juzt-app php artisan key:generate
+$ docker-compose exec juzt-app npm run production
 
 
 ### Development
