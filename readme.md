@@ -37,9 +37,10 @@ or (live)
 $ npm run watch 
 ```
 ### Optional
-Edit the host file as follow (for localhost)
+Edit the host file as follow (for localhost):
+```
 127.0.0.1  www.domain.com app.domain.com backoffice.domain.com
-
+```
 
 ## Release Plan based on Sector Support
 ### Version 1:
