@@ -35,28 +35,29 @@ RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --wi
 
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_13.x  | bash -
-RUN apt-get -y install nodejs
-RUN npm install
+# RUN curl -sL https://deb.nodesource.com/setup_13.x  | bash -
+# RUN apt-get -y install nodejs
+# RUN npm install
 
-RUN curl -sS https://getcomposer.org/installer | php -- \
-  --install-dir=/usr/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 COPY . $APP_DIR
 
-# RUN chown -R www-data:www-data /var/www
 RUN chmod -R 777 /var/www/storage
 RUN chmod -R 755 /var/www/bootstrap/cache
-# USER www-data
-
-RUN cd $APP_DIR \
-    && composer install \
-    && npm install \
-    && php artisan migrate \
-    && php artisan db:seed \
-    && php artisan key:generate \
-    && npm run production
 
 WORKDIR $APP_DIR
+
+RUN cd $APP_DIR && composer install 
+
+# && npm install \
+# && npm run production
+
+# RUN cd $APP_DIR \
+#   && php artisan migrate \
+#   && php artisan db:seed \
+#   && php artisan key:generate \
+
+
 
 # CMD php artisan serve --host=0.0.0.0 --port=$APP_PORT

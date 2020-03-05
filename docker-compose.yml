@@ -1,5 +1,21 @@
 version: '3'
 services:
+  juzt-web:
+    image: nginx:latest
+    container_name: juzt-web
+    restart: always
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    environment:
+      - NGINX_HOST=${APP_DOMAIN_NAME}
+    depends_on:
+      - juzt-app
+      - juzt-db
+    env_file:
+      - .env
 
   juzt-app:
     image: php:7.3.7-fpm
@@ -8,18 +24,10 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    depends_on:
-      - juzt-db
-    env_file:
-      - .env
-    working_dir: /var/www
-    command: "php artisan serve --host=0.0.0.0 --port=80"
-    ports:
-      - ${APP_PORT}:80
     volumes:
       - ./:/var/www
-    environment:
-      VIRTUAL_HOST: ${APP_DOMAIN_NAME}
+    depends_on:
+      - juzt-db
 
   juzt-db:
     image: mariadb:latest
@@ -33,7 +41,7 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - juzt-database:/var/lib/mysql/
+      - juzt-data:/var/lib/mysql/
 
   juzt-adminer:
     image: adminer:latest
@@ -55,5 +63,5 @@ services:
       - juzt-db
 
 volumes:
-  juzt-database:
+  juzt-data:
     driver: local
