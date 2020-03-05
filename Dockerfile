@@ -45,5 +45,3 @@ COPY . $APP_DIR
 
 RUN chmod -R 777 /var/www/storage
 RUN chmod -R 755 /var/www/bootstrap/cache
-
-WORKDIR $APP_DIR

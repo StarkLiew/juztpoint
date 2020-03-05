@@ -4,6 +4,12 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 ## Setup
 ### Production
 $ docker-compose up -d
+$ docker-compose exec juzt-app composer install
+$ docker-compose exec juzt-app php artisan install
+$ docker-compose exec juzt-app php artisan migrate
+$ docker-compose exec juzt-app php artisan db:seed
+$ docker-compose exec juzt-app php artisan key:generate
+
 
 ### Development
 
