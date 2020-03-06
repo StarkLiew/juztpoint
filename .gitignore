@@ -6,6 +6,7 @@
 .env
 .phpunit.result.cache
 .sublime-project
+.sublime-workspace
 Homestead.json
 Homestead.yaml
 npm-debug.log
