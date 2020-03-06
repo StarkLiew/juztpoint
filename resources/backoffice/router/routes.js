@@ -107,7 +107,7 @@ export default [
                 path: '/setting',
                 component: require('$backoffice/admin/setting/SettingWrapper').default,
                 children: [
-                    { path: '', name: 'setting', component: require('$backoffice/admin/setting/setting').default },
+                    { path: '', name: 'setting', component: require('$backoffice/admin/setting/Setting').default },
                     { path: '/setting/stores', name: 'setting.stores', component: require('$backoffice/admin/setting/Stores').default },
                     { path: '/setting/terminals', name: 'setting.terminals', component: require('$backoffice/admin/setting/Terminals').default },
                     { path: '/setting/categories', name: 'setting.categories', component: require('$backoffice/admin/setting/Categories').default },
