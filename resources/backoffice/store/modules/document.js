@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Vue from 'Vue'
+import Vue from 'vue'
 import moment from 'moment'
 import { graphql } from '~~//config'
 import * as types from '../mutation-types'

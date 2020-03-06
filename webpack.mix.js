@@ -14,20 +14,20 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
  */
 
 
-mix.js('resources/pos/app.js', 'public/pos')
+mix.js('resources/backoffice/app.js', 'public/backoffice')
+    .js('resources/pos/app.js', 'public/pos')
     .js('resources/receipt/app-client.js', 'public/receipt')
     .js('resources/receipt/app-server.js', 'public/receipt')
-    .js('resources/backoffice/app.js', 'public/backoffice')
     .copy('node_modules/fingerprintjs2/dist/fingerprint2.min.js', 'public/js')
     .sass('resources/styles/app.sass', 'public/css')
     .webpackConfig({
         resolve: {
             extensions: ['.js', '.json', '.vue'],
             alias: {
-                '~': path.join(__dirname, './resources/pos'),
                 '~~': path.join(__dirname, './resources/backoffice'),
-                '$backoffice': path.join(__dirname, './resources/backoffice/components'),
+                '~': path.join(__dirname, './resources/pos'),
                 '$pos': path.join(__dirname, './resources/pos/components'),
+                '$backoffice': path.join(__dirname, './resources/backoffice/components'),
                 '~~~': path.join(__dirname, './resources/receipt'),
                 '$receipt': path.join(__dirname, './resources/receipt'),
             }
@@ -39,7 +39,7 @@ mix.js('resources/pos/app.js', 'public/pos')
                 filename: 'service-worker.js',
                 staticFileGlobs: ['public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}'],
                 minify: true,
-                stripPrefix: 'public',
+                stripPrefix: 'public/pos',
                 handleFetch: true,
                 dynamicUrlToDependencies: {
                     '/': ['resources/views/pos.blade.php'],
