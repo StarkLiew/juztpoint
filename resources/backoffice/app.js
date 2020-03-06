@@ -1,11 +1,11 @@
 import 'babel-polyfill'
 import Vue from 'vue'
 
-import router from '~~/router/index'
-import store from '~~/store/index'
+import router from '~~//router/index'
+import store from '~~//store/index'
 import App from '$backoffice/App'
-import '~~/plugins/index'
-import vuetify from '~~/plugins/vuetify'
+import '~~//plugins/index'
+import vuetify from '~~//plugins/vuetify'
 import VueLodash from 'vue-lodash'
 
 import {bus} from '$receipt/bus'

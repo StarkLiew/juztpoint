@@ -40,7 +40,7 @@ mix.js('resources/pos/app.js', 'public/pos')
                 filename: 'service-worker.js',
                 staticFileGlobs: ['public/**/*.{css,eot,svg,ttf,woff,woff2,js,html}'],
                 minify: true,
-                stripPrefix: 'public',
+                stripPrefix: 'public/pos',
                 handleFetch: true,
                 dynamicUrlToDependencies: {
                     '/': ['resources/views/pos.blade.php'],
