@@ -17,7 +17,6 @@ $ cp .env.example .env
 ```
 $ docker-compose up -d
 $ docker-compose exec juzt-app composer install
-$ docker-compose exec juzt-app php artisan install
 $ docker-compose exec juzt-app php artisan migrate
 $ docker-compose exec juzt-app php artisan key:generate
 $ docker-compose exec juzt-app php artisan passport:install
@@ -31,7 +30,6 @@ $ docker-compose exec juzt-app npm run prod
 ```
 $ docker-compose up -d (to fire up mariadb)
 $ composer install
-$ php artisan install
 $ php artisan migrate
 $ php artisan key:generate
 $ php artisan run serve
