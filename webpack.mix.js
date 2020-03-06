@@ -14,19 +14,18 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
  */
 
 
-mix.js('resources/pos/app.js', 'public/pos')
-    .js('resources/backoffice/app.js', 'public/backoffice')
+mix.js('resources/backoffice/app.js', 'public/backoffice')
+    .js('resources/pos/app.js', 'public/pos')
     .js('resources/receipt/app-client.js', 'public/receipt')
     .js('resources/receipt/app-server.js', 'public/receipt')
     .copy('node_modules/fingerprintjs2/dist/fingerprint2.min.js', 'public/js')
     .sass('resources/styles/app.sass', 'public/css')
     .webpackConfig({
         resolve: {
-            modules: [path.resolve('./node_modules')],
             extensions: ['.js', '.json', '.vue'],
             alias: {
-                '~': path.join(__dirname, './resources/pos'),
                 '~~': path.join(__dirname, './resources/backoffice'),
+                '~': path.join(__dirname, './resources/pos'),
                 '$pos': path.join(__dirname, './resources/pos/components'),
                 '$backoffice': path.join(__dirname, './resources/backoffice/components'),
                 '~~~': path.join(__dirname, './resources/receipt'),
