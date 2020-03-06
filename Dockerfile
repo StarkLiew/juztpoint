@@ -43,6 +43,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 
 COPY . $APP_DIR
 
+RUN mkdir /var/www/storage/logs
 RUN chmod -R 777 /var/www/storage
+RUN chmod -R 777 /var/www/storage/logs
 RUN chmod -R 777 /var/www/storage/logs
 RUN chmod -R 755 /var/www/bootstrap/cache
