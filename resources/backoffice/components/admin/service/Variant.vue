@@ -137,6 +137,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Crud from '../shared/Crud'
+import Vue from 'vue'
 import AvatarCropper from 'vue-avatar-cropper'
 import { durations, swatches } from '~~/config'
 
