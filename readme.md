@@ -22,7 +22,7 @@ $ docker-compose exec juzt-app php artisan migrate
 $ docker-compose exec juzt-app php artisan key:generate
 $ docker-compose exec juzt-app php artisan passport:install
 $ docker-compose exec juzt-app npm install
-$ docker-compose exec juzt-app npm run dev
+$ docker-compose exec juzt-app npm run prod
 ```
 
 ### Development
@@ -37,7 +37,7 @@ $ php artisan key:generate
 $ php artisan run serve
 $ php artisan passport:install
 $ npm install
-$ npm run watch
+$ npm run dev (or) watch
 ```
 #### Frontend
 ```
