@@ -26,6 +26,7 @@ services:
     restart: always
     volumes:
       - ./:/var/www
+    working_dir: /var/www
     depends_on:
       - juzt-db
 
