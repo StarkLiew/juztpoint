@@ -119,7 +119,7 @@
                     </v-list-item>
                     <v-list-item v-if="!!dataentry">
                         <v-row justify="center">
-                            <v-date-picker v-model="backdate" @change="setDataEntry"></v-date-picker>
+                            <v-date-picker v-model="backdate" @change="setDateEntry"></v-date-picker>
                         </v-row>
                     </v-list-item>
                 </v-list>
@@ -175,8 +175,11 @@ export default {
             }
 
         },
-        async setDataEntry() {
-            return await this.$store.dispatch('system/setDataEntry', { dataentry: this.dataentry, backdate: this.backdate })
+        async setDataEntry(dataentry) {
+            return await this.$store.dispatch('system/setDataEntry', { dataentry, backdate: this.backdate })
+        },
+        async setDateEntry(backdate) {
+            return await this.$store.dispatch('system/setDataEntry', { dataentry: this.dataentry, backdate })
         },
         async setPaymentMethod(option) {
             return await this.$store.dispatch('system/setPaymentMethod', { option })
