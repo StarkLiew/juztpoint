@@ -9,6 +9,8 @@ import moment from 'moment'
 export const state = {
     company: null,
     shiftId: 0,
+    dataentry: false,
+    backdate: null,
     payment_method: {
         cash: true,
         card: true,
@@ -77,6 +79,11 @@ export const mutations = {
         state.scannerAlwayOn = status
 
     },
+    [types.SET_DATAENTRY](statem, { status, backdate }) {
+          state.dataentry = status
+          if(state.dataentry) state.backdate = backdate
+          else state.backdate = null
+    }
 }
 
 /**
@@ -85,13 +92,16 @@ export const mutations = {
 export const actions = {
 
     async openShift({ commit, rootState, dispatch, state }, amount) {
-        const open = { amount, date: new Date(), user: rootState.auth.user }
+        let tdate = new Date()
+        if(state.dataentry) tdate = this.backdate
+        const open = { amount, date: tdate, user: rootState.auth.user }
         commit(types.OPEN_SHIFT, { open })
         if (!state.offline) dispatch('syncShift', state.shift)
     },
     async closeShift({ commit, rootState, dispatch, state }, amount) {
-        const close = { amount, date: new Date(), user: rootState.auth.user }
-
+        let tdate = new Date()
+        if(state.dataentry) tdate = this.backdate
+        const close = { amount, date: tdate, user: rootState.auth.user }
         commit(types.CLOSE_SHIFT, { close })
         if (!state.offline) dispatch('syncShift', state.shifts[state.shifts.length - 1])
     },
@@ -131,6 +141,9 @@ export const actions = {
     async setOffline({ commit }, status) {
         commit(types.SET_OFFLINE, status)
     },
+    async setDataEntry({ commit }, status, backdate) {
+        commit(types.SET_DATAENTRY, status, backdate)
+    },
     async fetchSystem({ commit }) {
         try {
             const company = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "company", limit:-1, page:1){ data{id, name, properties{address, timezone, email, mobile}}}}' } })
@@ -162,6 +175,8 @@ export const getters = {
     lastShift: state => state.shifts[state.shifts.length - 1],
     categories: state => state.categories,
     offline: state => state.offline,
+    dataentry: state => state.dataentry,
+    backdate: state => state.backdate,
     paymentMethod: state => state.payment_method,
     scannerAlwayOn: state => state.scannerAlwayOn,
 }

@@ -210,7 +210,7 @@
         </v-overlay>
         <v-overlay :value="inprogress">
             <v-progress-circular :size="70" :width="7" color="amber" indeterminate></v-progress-circular>
-         </v-overlay>   
+        </v-overlay>
     </div>
 </template>
 </v-overlay>
@@ -254,6 +254,8 @@ export default {
         store: 'auth/store',
         shift: 'system/shift',
         offline: 'system/offline',
+        dataentry: 'system/dataentry',
+        backdate: 'system/backdate',
         terminal: 'auth/terminal',
         payementMethod: 'system/paymentMethod',
     }),
@@ -341,7 +343,12 @@ export default {
                 payments.push({ item_id: 4, name: 'Boost', note: this.card.ref, total_amount: this.boost.amount })
             }
 
-            const dateObj = new Date()
+            let dateObj = new Date()
+            
+            if (this.dataentry) {
+                dateObj = this.backdate
+            }
+
             let month = dateObj.getUTCMonth() + 1 //months from 1-12
             let day = dateObj.getUTCDate()
             let year = dateObj.getUTCFullYear()
@@ -370,6 +377,8 @@ export default {
             seconds = seconds.substr(seconds.length - 2)
 
             let now = `${sqlYear}-${month}-${day} ${hours}:${minutes}:${seconds}`
+
+
             let end = ''
 
             if (type === 'appointment') {
@@ -378,8 +387,13 @@ export default {
 
             }
 
-    
+
             const reference = cast_user_id + year + month + day + hours + minutes + seconds
+
+
+
+            const { pin, ...teller } = this.auth
+
 
             let receipt = {
                 account_id: customer ? customer.uid : '',
@@ -390,7 +404,7 @@ export default {
                 date: now,
                 type: type,
                 reference: reference,
-                teller: this.auth,
+                teller: teller,
                 discount: { rate: footer.discount.rate, type: footer.discount.type },
                 discount_amount: footer.discount.amount,
                 tax_total: footer.tax,

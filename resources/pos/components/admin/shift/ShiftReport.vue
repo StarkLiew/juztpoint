@@ -52,6 +52,7 @@ export default {
         company: 'system/company',
         paymentMethod: 'system/paymentMethod',
         store: 'auth/store',
+
     }),
     mounted() {
         this.shiftId = this.shift ? this.shift.id : this.last.id

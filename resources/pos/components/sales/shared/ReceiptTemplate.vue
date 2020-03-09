@@ -154,11 +154,13 @@ export default {
         height: auto;
         padding: 0;
         margin: 0;
-        list-style-type: none;
-        font-family: "arial";
-        font-size: 8px;
     }
-
+    
+    body {
+      list-style-type: none;
+      font-family: "arial";
+      font-size: 8px;
+    }
     .stamp {
 
         font-weight: bold;

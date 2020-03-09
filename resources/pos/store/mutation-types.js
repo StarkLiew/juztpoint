@@ -57,6 +57,7 @@ export const OPEN_SHIFT = 'OPEN_SHIFT'
 export const CLOSE_SHIFT = 'CLOSE_SHIFT'
 export const SHIFT_SYNC_STATUS = 'SHIFT_SYNC_FAIL'
 export const SCANNER_ALWAY_ON = 'SCANNER_ALWAY_ON'
+export const SET_DATAENTRY = 'SET_DATAENTRY'
 
 /**
  * appointment.js

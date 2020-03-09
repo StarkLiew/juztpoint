@@ -277,7 +277,7 @@ __webpack_require__.r(__webpack_exports__);
 
 exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, "\n@page {\r\n    size: 80mm auto;\r\n    margin: 5mm;\n}\n@media screen and print {\n* {\r\n        width: 70mm;\r\n        height: auto;\r\n        padding: 0;\r\n        margin: 0;\r\n        list-style-type: none;\r\n        font-family: \"arial\";\r\n        font-size: 8px;\n}\n.stamp {\r\n\r\n        font-weight: bold;\r\n        font-size: 30px;\r\n        position: fixed;\r\n        left: -12px;\r\n        top: -12px;\r\n        text-transform: uppercase;\r\n        transform: rotate(-45deg);\n}\n.title {\r\n        text-align: center;\r\n        font-weight: bold;\n}\n.caption {\r\n        font-weight: bold;\n}\ntable th {\r\n        border: none;\r\n        border-bottom: 1px dashed #000;\r\n        padding: 1px;\r\n        text-align: right;\n}\ntable tr td {\r\n        border: none;\r\n        border-bottom: none;\r\n        border-right: none;\r\n        padding: 1px;\r\n        text-align: right;\n}\ntd.left,\r\n    th.left {\r\n        text-align: left;\n}\ntd.line {\r\n        border-top: 1px dashed #000;\n}\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n@page {\r\n    size: 80mm auto;\r\n    margin: 5mm;\n}\n@media screen and print {\n* {\r\n        width: 70mm;\r\n        height: auto;\r\n        padding: 0;\r\n        margin: 0;\n}\nbody {\r\n      list-style-type: none;\r\n      font-family: \"arial\";\r\n      font-size: 8px;\n}\n.stamp {\r\n\r\n        font-weight: bold;\r\n        font-size: 30px;\r\n        position: fixed;\r\n        left: -12px;\r\n        top: -12px;\r\n        text-transform: uppercase;\r\n        transform: rotate(-45deg);\n}\n.title {\r\n        text-align: center;\r\n        font-weight: bold;\n}\n.caption {\r\n        font-weight: bold;\n}\ntable th {\r\n        border: none;\r\n        border-bottom: 1px dashed #000;\r\n        padding: 1px;\r\n        text-align: right;\n}\ntable tr td {\r\n        border: none;\r\n        border-bottom: none;\r\n        border-right: none;\r\n        padding: 1px;\r\n        text-align: right;\n}\ntd.left,\r\n    th.left {\r\n        text-align: left;\n}\ntd.line {\r\n        border-top: 1px dashed #000;\n}\n}\r\n\r\n", ""]);
 
 
 /***/ }),
@@ -38227,7 +38227,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/resources/receipt/app-client.js */"./resources/receipt/app-client.js");
+module.exports = __webpack_require__(/*! C:\dev\juxtpoint\resources\receipt\app-client.js */"./resources/receipt/app-client.js");
 
 
 /***/ })

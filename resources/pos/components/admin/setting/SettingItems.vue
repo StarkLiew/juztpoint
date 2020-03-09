@@ -62,7 +62,6 @@
             <v-expansion-panel-content>
                 <v-list two-line subheader>
                     <v-list-item>
-                        {{ getPrinter() }}
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item>
@@ -102,6 +101,30 @@
                 </v-list>
             </v-expansion-panel-content>
         </v-expansion-panel>
+        <v-expansion-panel>
+            <v-expansion-panel-header>Backdate data entry</v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-list two-line subheader>
+                    <v-divider></v-divider>
+                    <v-list-item>
+                        <v-list-item-avatar>
+                            <v-icon>mdi-printer</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title>Allow data entry</v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                            <v-switch v-model="dataentry" @change="setDataEntry"></v-switch>
+                        </v-list-item-action>
+                    </v-list-item>
+                    <v-list-item v-if="!!dataentry">
+                        <v-row justify="center">
+                            <v-date-picker v-model="backdate" @change="setDataEntry"></v-date-picker>
+                        </v-row>
+                    </v-list-item>
+                </v-list>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
     </v-expansion-panels>
 </template>
 <script>
@@ -127,6 +150,8 @@ export default {
         payment_method: 'system/paymentMethod',
         shift: 'system/shift',
         scannerAlwayOn: 'system/scannerAlwayOn',
+        dataentry: 'system/dataentry',
+        backdate: 'system/backdate',
     }),
     watch: {
 
@@ -149,6 +174,9 @@ export default {
                 this.refresh()
             }
 
+        },
+        async setDataEntry() {
+            return await this.$store.dispatch('system/setDataEntry', { dataentry: this.dataentry, backdate: this.backdate })
         },
         async setPaymentMethod(option) {
             return await this.$store.dispatch('system/setPaymentMethod', { option })
