@@ -9,7 +9,6 @@ import moment from 'moment'
 export const state = {
     company: null,
     shiftId: 0,
-    dataentry: false,
     backdate: null,
     payment_method: {
         cash: true,
@@ -79,10 +78,9 @@ export const mutations = {
         state.scannerAlwayOn = status
 
     },
-    [types.SET_DATAENTRY](statem, { status, backdate }) {
-          state.dataentry = status
-          if(state.dataentry) state.backdate = backdate
-          else state.backdate = null
+    [types.SET_BACKDATE](state, { backdate }) {
+         state.backdate = backdate
+
     }
 }
 
@@ -93,14 +91,16 @@ export const actions = {
 
     async openShift({ commit, rootState, dispatch, state }, amount) {
         let tdate = new Date()
-        if(state.dataentry) tdate = this.backdate
+
+        if(!!state.backdate) tdate = new Date(state.backdate)
+            
         const open = { amount, date: tdate, user: rootState.auth.user }
         commit(types.OPEN_SHIFT, { open })
         if (!state.offline) dispatch('syncShift', state.shift)
     },
     async closeShift({ commit, rootState, dispatch, state }, amount) {
         let tdate = new Date()
-        if(state.dataentry) tdate = this.backdate
+        if(!!state.backdate) tdate = new Date(state.backdate)
         const close = { amount, date: tdate, user: rootState.auth.user }
         commit(types.CLOSE_SHIFT, { close })
         if (!state.offline) dispatch('syncShift', state.shifts[state.shifts.length - 1])
@@ -141,8 +141,9 @@ export const actions = {
     async setOffline({ commit }, status) {
         commit(types.SET_OFFLINE, status)
     },
-    async setDataEntry({ commit }, status, backdate) {
-        commit(types.SET_DATAENTRY, status, backdate)
+    async setBackdate({ commit }, backdate) {
+
+        commit(types.SET_BACKDATE,  backdate)
     },
     async fetchSystem({ commit }) {
         try {

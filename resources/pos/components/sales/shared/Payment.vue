@@ -345,8 +345,8 @@ export default {
 
             let dateObj = new Date()
             
-            if (this.dataentry) {
-                dateObj = this.backdate
+            if (!!this.backdate) {
+                dateObj = new Date(this.backdate)
             }
 
             let month = dateObj.getUTCMonth() + 1 //months from 1-12

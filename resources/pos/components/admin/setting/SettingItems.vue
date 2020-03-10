@@ -102,25 +102,23 @@
             </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
-            <v-expansion-panel-header>Backdate data entry</v-expansion-panel-header>
+            <v-expansion-panel-header>Backdate Entry</v-expansion-panel-header>
             <v-expansion-panel-content>
                 <v-list two-line subheader>
-                    <v-divider></v-divider>
                     <v-list-item>
                         <v-list-item-avatar>
-                            <v-icon>mdi-printer</v-icon>
+                            <v-icon>mdi-calendar</v-icon>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title>Allow data entry</v-list-item-title>
+                            <v-list-item-title>Back dated</v-list-item-title>
+                            <v-list-item-subtitle>Allow back dated entry</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
-                            <v-switch v-model="dataentry" @change="setDataEntry"></v-switch>
+                            <v-switch v-model="allowBackDate" @change="setWhenAllowBackdate"></v-switch>
                         </v-list-item-action>
                     </v-list-item>
-                    <v-list-item v-if="!!dataentry">
-                        <v-row justify="center">
-                            <v-date-picker v-model="backdate" @change="setDateEntry"></v-date-picker>
-                        </v-row>
+                    <v-list-item v-if="!!allowBackDate">
+                        <v-date-picker :value="backdated" @change="setBackdate"></v-date-picker>
                     </v-list-item>
                 </v-list>
             </v-expansion-panel-content>
@@ -135,8 +133,9 @@ export default {
     data: () => ({
         items: [],
         payments: [],
+        backdatemenus: [],
         logoutDialogShow: false,
-
+        allowBackDate: false,
     }),
     props: [],
     components: {
@@ -144,19 +143,20 @@ export default {
     },
     mounted() {
         this.settings()
+        if(!!this.backdated) this.allowBackDate = true
+        
+      
     },
-    computed: mapGetters({
-        offline: 'system/offline',
-        payment_method: 'system/paymentMethod',
-        shift: 'system/shift',
-        scannerAlwayOn: 'system/scannerAlwayOn',
-        dataentry: 'system/dataentry',
-        backdate: 'system/backdate',
-    }),
-    watch: {
-
-
+    computed: { 
+        ...mapGetters({
+            offline: 'system/offline',
+            payment_method: 'system/paymentMethod',
+            shift: 'system/shift',
+            scannerAlwayOn: 'system/scannerAlwayOn',
+            backdated: 'system/backdate',
+        }),
     },
+
     methods: {
         async setOffline() {
             const status = !this.offline
@@ -175,11 +175,21 @@ export default {
             }
 
         },
-        async setDataEntry(dataentry) {
-            return await this.$store.dispatch('system/setDataEntry', { dataentry, backdate: this.backdate })
+        async setWhenAllowBackdate(allow) {
+            if(allow){
+                 const now = Date()
+
+                 return await this.$store.dispatch('system/setBackdate', { backdate: now.toISOString() })
+             } else {
+                 return await this.$store.dispatch('system/setBackdate', { backdate: null })
+             }
+
+           
         },
-        async setDateEntry(backdate) {
-            return await this.$store.dispatch('system/setDataEntry', { dataentry: this.dataentry, backdate })
+
+        async setBackdate(selectedDate) {
+
+            return await this.$store.dispatch('system/setBackdate', { backdate: selectedDate })
         },
         async setPaymentMethod(option) {
             return await this.$store.dispatch('system/setPaymentMethod', { option })
@@ -229,6 +239,13 @@ export default {
 
 
             ]
+
+            this.backdatemenus = [
+                { icon: 'mdi-calendar', iconClass: 'grey lighten-1 white--text', title: 'Back date', subtitle: 'Allow back date', input: { type: 'switch', model: this.dataentry, change: this.setDataEntry } },
+                { icon: 'mdi-calendar', iconClass: 'grey lighten-1 white--text', title: 'Set back date', subtitle: '', input: { type: 'calendar', model: this.backdate, change: this.setBackDate } },
+            ]
+
+
 
         },
         async refresh() {
