@@ -91,7 +91,7 @@ export const actions = {
             commit(types.VOID_RECEIPT, { receipt })
         }
     },
-    async addReceipt({ commit, getters, rootState }, receipt) {
+    async addReceipt({ commit, getters, context, rootState }, receipt) {
         try {
 
             if (!receipt.id && !receipt.status && receipt.type == 'receipt') {
@@ -99,6 +99,7 @@ export const actions = {
                 number = number.substr(number.length - 6)
                 receipt.reference = receipt.reference + number
             }
+      
 
             const { reference, account_id, terminal_id, store_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
 

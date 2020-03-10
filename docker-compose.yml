@@ -26,6 +26,7 @@ services:
     restart: always
     volumes:
       - ./:/var/www
+    working_dir: /var/www
     depends_on:
       - juzt-db
 
@@ -40,6 +41,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 3380:3306
     volumes:
       - juzt-data:/var/lib/mysql/
 
