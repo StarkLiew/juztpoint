@@ -270,7 +270,8 @@ export default {
         async allItems() {
 
             const options = Object.assign({ ...this.mutateOptions }, { itemsPerPage: 0, page: 1 })
-            const results = await this.refresh(this.filter.dates, options, true)
+
+            const results = await this.refresh(this.filter, options, true)
 
             return results.data.data
         },
