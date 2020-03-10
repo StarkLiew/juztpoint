@@ -55,7 +55,7 @@
                     </tr>
                     <tr v-for="composite in item.composites">
                         <td colspan="5" class="left">
-                            <span>[{{composite.name}}: {{composite.performBy.name }}]</span>
+                            <span v-if="composite.performBy">[{{composite.name}}: {{composite.performBy.name }}]</span>
                         </td>
                     </tr>
                 </div>

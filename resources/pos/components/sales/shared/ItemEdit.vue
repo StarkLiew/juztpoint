@@ -23,7 +23,7 @@
             </v-btn>
         </v-toolbar>
         <v-divider></v-divider>
-        <v-toolbar flat>
+        <v-toolbar flat v-if="!refund">
             <v-spacer></v-spacer>
             <v-flex class="subheader">
                 <v-icon>mdi-label</v-icon>Discount
@@ -40,7 +40,7 @@
                 </v-btn>
             </v-btn-toggle>
         </v-toolbar>
-        <v-layout>
+        <v-layout  v-if="!refund">
             <v-textarea filled auto-grow label="Note" rows="2" v-model="note" row-height="10" shaped></v-textarea>
         </v-layout>
         <v-toolbar>
@@ -88,7 +88,7 @@ export default {
     computed: mapGetters({
         users: 'user/users',
     }),
-    props: ['item', 'index', 'show'],
+    props: ['item', 'index', 'show', 'refund'],
     mounted() {
         this.update()
     },
@@ -128,7 +128,14 @@ export default {
         },
         inc(neg, prop) {
             let val = parseFloat(this.qty) + neg
-            if (val > 0) this.qty = val
+            if(this.refund) {
+                if (val > -1) this.qty = val
+            } else {
+               if (val > 0) this.qty = val
+            }
+      
+
+
         },
         done() {
             const { qty, discountRate, discountType, note, servicesBy, shareWith, saleBy } = this

@@ -19803,15 +19803,17 @@ var render = function() {
                 _vm._l(item.composites, function(composite) {
                   return _c("tr", [
                     _c("td", { staticClass: "left", attrs: { colspan: "5" } }, [
-                      _c("span", [
-                        _vm._v(
-                          "[" +
-                            _vm._s(composite.name) +
-                            ": " +
-                            _vm._s(composite.performBy.name) +
-                            "]"
-                        )
-                      ])
+                      composite.performBy
+                        ? _c("span", [
+                            _vm._v(
+                              "[" +
+                                _vm._s(composite.name) +
+                                ": " +
+                                _vm._s(composite.performBy.name) +
+                                "]"
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ])
                 })

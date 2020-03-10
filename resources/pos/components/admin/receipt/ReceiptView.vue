@@ -14,7 +14,9 @@
                                 <template v-slot:activator="{ on }">
                                     <v-btn @click="editItem = []" icon v-on="on">{{item.qty}}</v-btn>
                                 </template>
-                                <item-qty :item="item" :show="editItem[index]" :index="index" @done="editedItem" @cancel="editItem = []"></item-qty>
+                                <item-edit :refund="true" :item="item" :show="editItem[index]" :index="index" @done="editedItem" @cancel="editItem = []"></item-edit>
+                               
+
                             </v-menu>
                             <v-list-item-content>
                                 <v-tooltip bottom>
@@ -163,6 +165,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ItemQty from '../../sales/shared/ItemQty'
+import ItemEdit from '../../sales/shared/ItemEdit'
 import vueEasyPrint from 'vue-easy-print'
 import receipt from "../../sales/shared/ReceiptTemplate"
 import pin from "../../auth/login/Pin"
@@ -180,6 +183,7 @@ export default {
     components: {
         vueEasyPrint,
         receipt,
+        ItemEdit,
         pin,
         ItemQty,
         Carts,
@@ -218,6 +222,7 @@ export default {
 
             if (this.selected.charge !== this.value.charge) this.refundDisabled = false
             else this.refundDisabled = true
+            this.editItem = []
 
         },
         async proceedVoid() {
