@@ -5,7 +5,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - docker
 - docker-compose
 - linux, centos, window
-- frontend - any pc, mobile and tablet that support PWA browser
+- frontend - any pc, mobile and tablet which browser support PWA
 
 ## Setup
 ### Enviroment
