@@ -55,7 +55,7 @@
                     </tr>
                     <tr v-for="composite in item.composites">
                         <td colspan="5" class="left">
-                            <span>[{{composite.name}}: {{composite.performBy.name }}]</span>
+                            <span v-if="composite.performBy">[{{composite.name}}: {{composite.performBy.name }}]</span>
                         </td>
                     </tr>
                 </div>
@@ -134,79 +134,8 @@ export default {
     data() {
         return {}
     },
-    components: {
-   
-    },
+
     props: ['value', 'header'],
 }
 
 </script>
-<style>
-@page {
-    size: 80mm auto;
-    margin: 5mm;
-}
-
-@media screen and print {
-
-    * {
-        width: 70mm;
-        height: auto;
-        padding: 0;
-        margin: 0;
-    }
-    
-    body {
-      list-style-type: none;
-      font-family: "arial";
-      font-size: 8px;
-    }
-    .stamp {
-
-        font-weight: bold;
-        font-size: 30px;
-        position: fixed;
-        left: -12px;
-        top: -12px;
-        text-transform: uppercase;
-        transform: rotate(-45deg);
-
-    }
-
-    .title {
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .caption {
-        font-weight: bold;
-    }
-
-    table th {
-        border: none;
-        border-bottom: 1px dashed #000;
-        padding: 1px;
-        text-align: right;
-
-    }
-
-    table tr td {
-        border: none;
-        border-bottom: none;
-        border-right: none;
-        padding: 1px;
-        text-align: right;
-
-    }
-
-    td.left,
-    th.left {
-        text-align: left;
-    }
-
-    td.line {
-        border-top: 1px dashed #000;
-    }
-}
-
-</style>

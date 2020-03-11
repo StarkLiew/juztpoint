@@ -1,7 +1,6 @@
 <template>
     <div>
-        <receipt v-model="selected.item" :header="{company: selected.company, store: selected.item.store}"></receipt> 
-    
+        <receipt v-model="selected.item" :header="{company: selected.company, store:  selected.store ? selected.store : selected.item.store}"></receipt> 
 
     </div>
 </template>
@@ -21,7 +20,7 @@ export default {
     },
     created() {
 
-      this.selected = context.data 
+        this.selected = context.data 
     },
 
 

@@ -70,6 +70,10 @@ export const actions = {
             commit(types.FETCH_RECEIPT_FAILURE)
         }
     },
+    async updateReceipt({ commit, dispatch }, receipt) {
+
+        dispatch('addReceipt', receipt)
+    },
     async refundReceipt({ commit, dispatch }, receipt) {
 
         dispatch('addReceipt', receipt)
