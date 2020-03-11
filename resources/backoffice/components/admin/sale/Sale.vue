@@ -297,3 +297,68 @@ export default {
 }
 
 </script>
+<style>
+
+@page {
+    size: 80mm auto;
+    margin: 5mm;
+}
+
+@media print {
+
+    * {
+        width: 70mm;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        font-family: "arial";
+        font-size: 8px;
+    }
+}
+
+
+.title, .subtitle-2 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.caption {
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+}
+
+table th {
+    border: none;
+    border-bottom: 1px dashed #000;
+    padding: 1px;
+    text-align: right;
+
+}
+
+table tr td {
+    border: none;
+    border-bottom: none;
+    border-right: none;
+    padding: 1px;
+    text-align: right;
+
+}
+
+td.left,
+th.left {
+    text-align: left;
+}
+
+td.line {
+    border-top: 1px dashed #000;
+}
+td.center {
+      text-align: center;
+
+}
+
+</style>

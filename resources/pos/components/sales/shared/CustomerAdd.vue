@@ -50,7 +50,7 @@ export default {
         save() {
             const { name, email, mobile } = this
 
-            this.$emit('save', { name, email, properties: { mobile } })
+            this.$emit('save', { name, properties: { mobile, email } })
             this.reset()
         },
         reset() {

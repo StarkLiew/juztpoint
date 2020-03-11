@@ -46,7 +46,7 @@ export const api = Object.assign(new URL(apiUrl), {
         url: 'auth/pos/register',
         refresh: 'refresh'
     },
-
+    receipt: 'receipt',
     logout: 'auth/logout',
 
     register: 'register',

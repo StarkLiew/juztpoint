@@ -187,9 +187,10 @@
                     <v-divider></v-divider>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-text-field label="Email" prepend-inner-icon="mdi-email"></v-text-field>
+                            <v-text-field label="Email" z-model="tempEmail" :value="!!trxn.customer ? trxn.customer.properties.email : ''" prepend-inner-icon="mdi-email"></v-text-field>
+                      
                         </v-list-item-content>
-                        <v-btn>
+                        <v-btn @click="sendEmail()">
                             <v-icon>mdi-send</v-icon>
                         </v-btn>
                     </v-list-item>
@@ -221,6 +222,8 @@ import { mapGetters } from 'vuex'
 import Keyboard from '../../ui/Keyboard'
 import vueEasyPrint from 'vue-easy-print'
 import receipt from "./ReceiptTemplate"
+import axios from 'axios'
+import { api } from '~~/config'
 
 export default {
 
@@ -240,6 +243,7 @@ export default {
         endEvent: null,
         appStep: 1,
         modalDateTime: false,
+        tempEmail: '',
 
     }),
     components: {
@@ -490,6 +494,33 @@ export default {
         print() {
             this.$refs.easyPrint.print()
         },
+        async sendEmail() {
+                const item = this.trxn
+                this.inprogress = true
+
+                const form = {
+                    id: item.id,
+                    to: this.tempEmail,
+                    name: item.customer ? item.customer.name : 'Valuable customer',
+                    data: { item: this.receipt, company: this.company, store: this.store }
+                }
+
+                await axios.post(api.path('receipt'), form)
+                    .then(res => {
+                        this.$toast.success('You have been successfully registered!')
+                        this.$emit('success')
+                    })
+                    .catch(err => {
+                               this.inprogress = false
+                        this.handleErrors(err.response.data.errors)
+                    })
+                    .then(() => {
+                        this.inprogress = false
+                    })
+
+        },
+
+
 
     }
 }

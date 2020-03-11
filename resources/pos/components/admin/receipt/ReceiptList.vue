@@ -14,12 +14,12 @@
                             <v-icon>mdi-calendar</v-icon>
                         </v-btn>
                     </template>
-                    <v-date-picker v-model="filterDate" @change="filterData">
+                    <v-date-picker v-model="filterDate">
                     </v-date-picker>
                 </v-menu>
             </v-toolbar>
         </template>
-        <div v-for="(items, key) in filterData()" :key="key">
+        <div v-for="(items, key) in filtered" :key="key">
             <v-subheader>{{ key | moment('timezone', store.properties.timezone.replace(/\\/g, ''),'DD/MM/YYYY') }}</v-subheader>
             <v-list-item two-line @click="select(item)" v-for="(item, index) in items" :key="index" :disabled="item.status === 'void' ||  item.status === 'void offline' ? true : false">
                 <v-list-item-content>
@@ -44,28 +44,39 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import vue from 'vue'
 
 export default {
     data: () => ({
         show: false,
         filterDate: null,
-        datemenu: false
+        datemenu: false,
     }),
     props: ['showList'],
     components: {
 
     },
+
     mounted() {
+        if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) this.show = true
         this.filterDate = this.$moment(new Date()).format('Y-M-D')
 
-        if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) this.show = true
-
     },
-    computed: mapGetters({
 
-        company: 'system/company',
-        store: 'auth/store',
-    }),
+    computed: { ...mapGetters({
+            receipts: 'receipt/groupDates',
+            company: 'system/company',
+            store: 'auth/store',
+        }),
+        filtered() {
+            this.$emit('selected', null)
+
+            return Object.keys(this.receipts).filter(key => key === this.filterDate).reduce((obj, key) => {
+                obj[key] = this.receipts[key]
+                return obj
+            }, {})
+        }
+    },
     watch: {
         showList(val) {
             this.show = val
@@ -76,23 +87,10 @@ export default {
         },
     },
     methods: {
+
         isSameDate(item, index) {
 
         },
-        filterData() {
-
-            const receipts = this.$store.getters['receipt/groupDates']
-
-            const filtered = Object.keys(receipts).filter(key => key === this.filterDate).reduce((obj, key) => {
-                obj[key] = receipts[key];
-                return obj;
-            }, {});
-
-            this.$emit('selected', null)
-
-            return filtered
-        },
-
         select(item) {
             this.$emit('selected', item)
             this.show = false
