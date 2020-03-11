@@ -2,10 +2,10 @@
 Am I crazy, release a project I working privately for past 6 months as opensource. JuztPoint is first full-fledged multi-tenant Point of Sale system release under opensource license in Malaysia. A Point of Sale (POS) build with Progressive Web App technology (PWA). Unlike other PWA point of sale, this PWA is built to feel like an native app. Currently this software is have been running under production testing at my own retail premise.
 
 ## Requirement
-- docker
-- docker-compose
-- linux, centos, window
-- frontend - any pc, mobile and tablet which browser support PWA
+- Docker
+- Docker-compose
+- OS tested on: linux, centos, window, osx
+- Frontend: - any pc, mobile and tablet which browser support PWA
 
 ## Setup
 ### Enviroment
