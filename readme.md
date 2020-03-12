@@ -22,6 +22,8 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - [x] Salon POS
 - [x] Refund Management
 - [ ] eCommerce Integration
+- [ ] E-wallet Payment Integration
+- [ ] Card Payment Integration
 
 ## Demo
 ```
