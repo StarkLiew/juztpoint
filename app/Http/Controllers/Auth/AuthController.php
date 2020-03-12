@@ -26,6 +26,11 @@ class AuthController extends Controller {
 	 * @return [string] message
 	 */
 	public function register(Request $request) {
+		if (!env('REGISTER_NEW_ACCOUNT', true)) {
+			return response()->json([
+				'message' => 'Register new account have been lock.',
+			], 401);
+		}
 
 		$request->validate([
 			'name' => 'required|string',
