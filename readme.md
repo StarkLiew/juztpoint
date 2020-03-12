@@ -117,7 +117,7 @@ Edit the host file as follow (for localhost):
 - F&B sector
 - more...
 
-## Features to work on
+## Working on for next release
 
 ### Backend
 1. Broadcast Notification
@@ -129,7 +129,7 @@ Edit the host file as follow (for localhost):
 3. Internal Use (Issue Inventory)
 4. Plugin
 
-### Frontned
+### Frontend
 1. Thermal Printing (Working on)
 2. Sync Open/Close Shift
 3. Receive Notification
