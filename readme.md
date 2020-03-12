@@ -31,6 +31,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 Homepage: https://www.juztpoint.com
 Backoffice: https://backoffice.juztpoint.com
 PWA POS: https://app.juztpoint.com 
+!Demo does not have mail server configured. Any attempt to send email will fail.
 ```
 ```
 Email: demo@demo.com   
