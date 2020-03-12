@@ -6,7 +6,6 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - [x] Barcode Scanning
 - [x] Commission Management (Percentage, Fixed, and Sharing)
 - [x] Customer Account Profile
-- [ ] Vendor Account
 - [x] Vendor Account
 - [x] Purchase Management
 - [x] Receipt email
