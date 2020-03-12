@@ -22,6 +22,17 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - [x] Refund Management
 - [ ] eCommerce Integration
 
+## Demo
+```
+Homepage: https://www.juztpoint.com
+Backoffice: https://backoffice.juztpoint.com
+PWA POS: https://app.juztpoint.com
+```
+```
+Email: demo@demo.com   
+Password: demo1234
+```
+
 
 ## Requirement
 - Docker
