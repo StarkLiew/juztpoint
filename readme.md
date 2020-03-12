@@ -38,7 +38,7 @@ Email: demo@demo.com
 Password: demo1234
 Pin: 0000
 ```
-## Testing POS https://app.juztpoint.com Setup on mobile device
+#### Testing POS https://app.juztpoint.com Setup on mobile device
 ```
    1. Login to Backoffice
    2. Goto Setting->(Operation) Terminal
