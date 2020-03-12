@@ -1,6 +1,29 @@
 ## About JuztPoint
 Am I crazy, release a project I working privately for past 6 months as opensource. JuztPoint is first full-fledged multi-tenant Point of Sale system release under opensource license in Malaysia. A Point of Sale (POS) build with Progressive Web App technology (PWA). Unlike other PWA point of sale, this PWA is built to feel like an native app. Currently this software is have been running under production testing at my own retail premise.
 
+## Features
+
+- [x] Barcode Scanning
+- [x] Commission Management (Percentage, Fixed, and Sharing)
+- [x] Customer Account Profile
+- [ ] Vendor Account
+- [x] Vendor Account
+- [x] Purchase Management
+- [x] Receipt email
+- [x] Receipt Printing
+- [ ] Electronic Signature
+- [ ] Gift Card Management
+- [ ] Loyalty Program
+- [x] Multi-Store
+- [x] Multi-Terminal
+- [x] Tax Ready
+- [ ] Restaurant POS
+- [x] Retail POS
+- [x] Salon POS
+- [x] Refund Management
+- [ ] eCommerce Integration
+
+
 ## Requirement
 - Docker
 - Docker-compose
