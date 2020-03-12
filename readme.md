@@ -27,13 +27,31 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 ```
 Homepage: https://www.juztpoint.com
 Backoffice: https://backoffice.juztpoint.com
-PWA POS: https://app.juztpoint.com
+PWA POS: https://app.juztpoint.com 
 ```
 ```
 Email: demo@demo.com   
 Password: demo1234
+Pin: 0000
 ```
-
+## Testing POS https://app.juztpoint.com Setup
+```
+   1. Login to Backoffice
+   2. Goto Setting->(Operation) Terminal
+   3. Add a Terminal and Save
+   4. Browse https://app.juztpoint.com
+   5. Install PWA when prompt or Add to Home screen
+   6. Fill in the email and password & device id*, then login
+   7. Enter pin 0000 as demo user to begin
+   
+```
+```
+   *note:
+      Device Id can be found in:
+          Setting->(Operation) Terminal->Identifier
+          (To show QR code, click edit)
+      
+```
 
 ## Requirement
 - Docker
