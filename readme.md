@@ -10,7 +10,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - [x] Purchase Management
 - [x] Receipt email
 - [x] Receipt Printing
-- [x] Appointment Management (Backoffice only, POS still working on it)
+- [-] Appointment Management (Backoffice only, POS still working on it)
 - [ ] Electronic Signature
 - [ ] Gift Card Management
 - [ ] Loyalty Program
@@ -24,6 +24,7 @@ Am I crazy, release a project I working privately for past 6 months as opensourc
 - [ ] eCommerce Integration
 - [ ] E-wallet Payment Integration
 - [ ] Card Payment Integration
+- [-] Bluetooth Thermal Printer (Working on it)
 
 ## Demo
 ```
