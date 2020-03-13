@@ -9,6 +9,7 @@ const categoryFields = "id, name, description, type, properties{name}"
 const storeFields = "id, name, description, type,  properties{currency, timezone}"
 const companyFields = "id, name, description, type, properties{address, currency, timezone}"
 const terminalFields = "id, name, description, type, properties{store_id, active, device_id}"
+const serviceFields = "id,  name, description, type, properties{rate, type}"
 
 /**
  * Initial state
@@ -76,6 +77,7 @@ export const actions = {
             if (type === 'store') fields = storeFields
             if (type === 'terminal') fields = terminalFields
             if (type === 'company') fields = companyFields
+            if (type === 'service') fields = serviceFields
 
             const { data } = await axios.get(graphql.path('query'), { params: { query: `{settings(type:"${type}",limit: ${limit}, page: ${page}, ${filter}, ${sorting}){data{${fields}}, total,per_page}}` } })
 

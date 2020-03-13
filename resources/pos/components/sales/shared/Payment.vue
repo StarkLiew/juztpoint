@@ -412,7 +412,7 @@ export default {
                 discount: { rate: footer.discount.rate, type: footer.discount.type },
                 discount_amount: footer.discount.amount,
                 tax_total: footer.tax,
-                service_charge: 0,
+                service_charge: footer.service.amount,
                 charge: rounded,
                 received: amount_received,
                 change: amount_change,
