@@ -172,6 +172,9 @@ export const actions = {
                 const { data } = await axios.get(graphql.path('query'), { params: { query: mutation } })
                 item = data.data.updateProduct
 
+
+
+
             } else {
 
 
@@ -193,6 +196,7 @@ export const actions = {
 
                 const { data } = await axios.post(graphql.path('query'), formData, { 'Content-Type': 'multipart/form-data' })
                 item = data.data.updateProduct
+
             }
 
 

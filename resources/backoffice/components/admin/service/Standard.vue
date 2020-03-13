@@ -178,7 +178,7 @@ export default {
             this.loading = true
             const avatar = this.$refs.cropper
 
-            const croppedCanvas = await avatar.cropper.getCroppedCanvas()
+            const croppedCanvas = await avatar.cropper.getCroppedCanvas({width: 120})
             editedItem.thumbnail = await croppedCanvas.toDataURL('image/jpeg')
             await croppedCanvas.toBlob((blob) => {
                 editedItem.formData = new FormData()
