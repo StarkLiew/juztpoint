@@ -155,13 +155,13 @@ export default {
         },
         async save(item) {
             this.loading = true
-
-            if (!item.id) {
-                item.type = 'product'
-                await this.$store.dispatch('product/add', item)
-            } else {
-                await this.$store.dispatch('product/update', item)
-            }
+     
+                if (!item.id) {
+                    item.type = 'product'
+                    await this.$store.dispatch('product/add', item)
+                } else {
+                    await this.$store.dispatch('product/update', item)
+                }
 
             this.loading = false
         },
@@ -179,8 +179,8 @@ export default {
         async handleSubmitted(editedItem) {
             this.loading = true
             const avatar = this.$refs.cropper
-
-            const croppedCanvas = await avatar.cropper.getCroppedCanvas()
+console.log(avatar.cropper)
+            const croppedCanvas = await avatar.cropper.getCroppedCanvas({width: 120})
             editedItem.thumbnail = await croppedCanvas.toDataURL('image/jpeg')
             await croppedCanvas.toBlob((blob) => {
                 editedItem.formData = new FormData()
