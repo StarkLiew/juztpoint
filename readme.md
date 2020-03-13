@@ -32,7 +32,6 @@ Homepage: https://www.juztpoint.com
 Backoffice: https://backoffice.juztpoint.com
 PWA POS: https://app.juztpoint.com 
 !!Demo does not have mail server configured. Any attempt to send email will fail.
-!!!Demo upload image file limit to 1MB only
 ```
 ```
 Email: demo@demo.com   
