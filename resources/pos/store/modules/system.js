@@ -8,6 +8,7 @@ import moment from 'moment'
  */
 export const state = {
     company: null,
+    serviceCharge: null,
     shiftId: 0,
     backdate: null,
     payment_method: {
@@ -33,6 +34,7 @@ export const mutations = {
 
         state.company = system.company
         state.categories = system.categories
+        state.serviceCharge = system.serviceCharge
         state.users = system.users
     },
     [types.AUTO_INCREMENT](state, { system }) {
@@ -150,8 +152,9 @@ export const actions = {
             const company = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "company", limit:-1, page:1){ data{id, name, properties{address, timezone, email, mobile}}}}' } })
             // const payments = await axios.get(graphql.path('query'), {params: { query: '{settings(type: "payment"){ id, name, properties{email, mobile}}}'}})
             const categories = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "category", limit:-1, page:1){ data{id, name}}}' } })
+            const service = await axios.get(graphql.path('query'), { params: { query: '{settings(type: "service", limit:-1, page:1){ data{id, name, properties{rate, type}}}}' } })
 
-            const system = { company: company.data.data.settings.data[0], categories: categories.data.data.settings.data }
+            const system = { company: company.data.data.settings.data[0], categories: categories.data.data.settings.data, serviceCharge: service.data.data.settings.data[0] }
 
             commit(types.FILL_SYSTEM, { system })
 
@@ -170,6 +173,7 @@ export const actions = {
  */
 export const getters = {
     company: state => state.company,
+    serviceCharge: state => state.serviceCharge,
     users: state => state.users,
     shift: state => state.shift,
     shifts: state => state.shifts.slice().reverse(),

@@ -2,7 +2,7 @@
     <v-navigation-drawer fixed app :permanent="$vuetify.breakpoint.mdAndUp" light :clipped="$vuetify.breakpoint.mdAndUp" v-model="show" :width="getDeviceWidth()" :right="isEntry">
         <template v-slot:prepend>
             <v-toolbar dark dense flat color="secondary">
-                <v-btn icon v-if="show && !$vuetify.breakpoint.mdAndUp" @click="show = false" >
+                <v-btn icon v-if="show && !$vuetify.breakpoint.mdAndUp" @click="show = false">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-tooltip bottom>
@@ -142,7 +142,6 @@ export default {
 
     },
     mounted() {
-
         if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) this.show = true
 
     },
@@ -197,6 +196,9 @@ export default {
         },
         offline() {
             return this.$store.getters['system/offline']
+        },
+        serviceCharge() {
+            return this.$store.getters['system/serviceCharge']
         }
 
     },
@@ -277,9 +279,19 @@ export default {
                 if (this.footer.discount.type == "fix") {
                     this.footer.discount.amount = this.footer.discount.rate
                 }
+
+            }
+            if (this.serviceCharge) {
+                if (this.serviceCharge.properties.type === 1) {
+                    this.footer.service.amount = this.serviceCharge.properties.rate
+                } else {
+                    const gross = total - this.footer.discount.amount
+                    this.footer.service.amount = gross * this.serviceCharge.properties.rate / 100
+                }
+
             }
 
-            this.footer.charge = (total - this.footer.discount.amount) + taxTotal
+            this.footer.charge = (total - this.footer.discount.amount) + taxTotal + this.footer.service.amount 
             this.footer.tax = taxTotal
 
         },

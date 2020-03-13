@@ -1,6 +1,5 @@
 <template>
     <v-container>
-
         <h1 class="display-1">Dashboard</h1>
         <v-row>
             <v-col cols="12" lg="4" md="4" sm="12">
@@ -22,7 +21,7 @@
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions>
-                        <v-btn text>View Schedule</v-btn>
+                        <v-btn text :to="{ name: 'appointments'}">View Schedule</v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="mx-auto" max-width="400">
@@ -33,29 +32,28 @@
                     </v-list-item>
                     <v-list flat>
                         <v-list-item-group color="primary">
-                            <v-list-item>
+                            <v-list-item :to=" { name: 'products' }">
                                 <v-list-item-content>
                                     <v-list-item-title>Add a Product</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item :to="{ name: 'services.standard'}">
                                 <v-list-item-content>
                                     <v-list-item-title>Add a Service</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item :to=" { name: 'customers' }">
                                 <v-list-item-content>
                                     <v-list-item-title>Add a Customer</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item>
-                                <v-list-item-content>
-                                    <v-list-item-title>Add a Supplier</v-list-item-title>
+                            <v-list-item :to=" { name: 'vendors' }">
+                                <v-list-item-title>Add a Supplier</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-                            <v-list-item>
+                            <v-list-item :to=" { name: 'reports' }">
                                 <v-list-item-content>
-                                    <v-list-item-title>Add a Customer</v-list-item-title>
+                                    <v-list-item-title>View Report</v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list-item-group>
@@ -114,9 +112,9 @@ export default {
         initialize() {
             this.items = [
                 { title: 'Recent Sales Performance', chart: 'bar', loading: false, refresh: this.chartSalesSix, data: [] },
-               /* { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
-                { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
-                { title: 'Top Employee', chart: 'bar', loading: false, refresh: this.topEmployee, data: [] }, */
+                /* { title: 'Top Products', chart: 'bar', loading: false, refresh: this.topProduct, data: [] },
+                 { title: 'Top Services', chart: 'bar', loading: false, refresh: this.topService, data: [] },
+                 { title: 'Top Employee', chart: 'bar', loading: false, refresh: this.topEmployee, data: [] }, */
             ]
 
             const today = this.$moment()
@@ -237,7 +235,6 @@ export default {
 
                         }
                     },
-
                     series: [{
                         name: 'Quantity',
                         data: results.data.data.map(r => r.qty)

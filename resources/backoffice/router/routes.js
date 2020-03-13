@@ -112,6 +112,7 @@ export default [
                     { path: '/setting/terminals', name: 'setting.terminals', component: require('$backoffice/admin/setting/Terminals').default },
                     { path: '/setting/categories', name: 'setting.categories', component: require('$backoffice/admin/setting/Categories').default },
                     { path: '/setting/taxes', name: 'setting.taxes', component: require('$backoffice/admin/setting/Taxes').default },
+                    { path: '/setting/service', name: 'setting.service', component: require('$backoffice/admin/setting/Service').default },
                     { path: '/setting/commissions', name: 'setting.commissions', component: require('$backoffice/admin/setting/Commissions').default },
                     { path: '/setting/company', name: 'setting.company', component: require('$backoffice/admin/setting/Company').default },
                 ]

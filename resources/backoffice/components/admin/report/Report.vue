@@ -344,7 +344,20 @@ export default {
                             },
                             disabled: false
                         },
-
+                        {
+                            title: 'Service Charge Summary',
+                            name: 'ReportServiceChargeSummary',
+                            fields: 'item_date, total_amount',
+                            headers: [
+                                { text: 'Date', value: 'item_date', sortable: true },
+                                { text: 'Amount', value: 'total_amount', sortable: true, align: 'end', currency: true },
+                            ],
+                            exports: {
+                                'date': 'item_date',
+                                'amount': 'total_amount',
+                            },
+                            disabled: false
+                        },
                         { title: 'Staff Shift Summary', disabled: true },
                         { title: 'Staff Shift Detailed', disabled: true },
 

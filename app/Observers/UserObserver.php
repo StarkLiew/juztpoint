@@ -86,6 +86,13 @@ class UserObserver extends Observer {
 			'properties' => json_encode(Array("rate" => 10.00, "type" => 0)),
 			'user_id' => $id,
 		);
+		$service = Array(
+			'name' => 'Default',
+			'description' => 'Default 10% service charge',
+			'type' => 'service',
+			'properties' => json_encode(Array("rate" => 10.00, "type" => 0)),
+			'user_id' => $id,
+		);
 
 		$category = Array(
 			'name' => 'Default',
@@ -122,7 +129,7 @@ class UserObserver extends Observer {
 			'type' => "store",
 			'properties' => json_encode($storeInfo),
 			'user_id' => $id,
-		], $tax1, $tax2, $tax3, $tax4, $payment1, $payment2, $category, $commission,
+		], $tax1, $tax2, $tax3, $tax4, $payment1, $payment2, $category, $commission, $service,
 		);
 
 		DB::table("user_{$id}_settings")->insert($settings);

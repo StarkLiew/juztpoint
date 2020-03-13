@@ -74,6 +74,7 @@ export default {
                     describe: '',
                     items: [
                         { title: 'Taxation', to: 'taxes' },
+                        { title: 'Service Charge', to: 'service' },
                     ]
                 },
                 {

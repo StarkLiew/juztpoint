@@ -174,7 +174,7 @@ export default {
         timePickerShow: false,
         selectedDate: null,
         selectedTime: null,
-        type: '4day',
+        type: 'day',
         typeToLabel: {
             month: 'Month',
             week: 'Week',
