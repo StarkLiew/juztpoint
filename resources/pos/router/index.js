@@ -14,7 +14,7 @@ const router = new VueRouter({
 
 
 
-/* router.beforeEach(async (to, from, next) => {
+ router.beforeEach(async (to, from, next) => {
     await store.restored
     if (store.getters['auth/token'] && !store.getters['auth/registered']) {
        try {
@@ -30,7 +30,7 @@ const router = new VueRouter({
     } else {
         next()
     }
-})  */
+}) 
 
 
 
