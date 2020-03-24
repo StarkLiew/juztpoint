@@ -44,6 +44,7 @@ export const FILL_RECEIPTS = 'FILL_RECEIPTS'
 export const VOID_RECEIPT = 'VOID_RECEIPT'
 export const REFUND_RECEIPT = 'REFUND_RECEIPT'
 export const FETCH_RECEIPT_FAILURE = 'FETCH_RECEIPT_FAILURE'
+export const MARK_OFFLINE = 'MARK_OFFLINE'
 
 /**
  * system.js

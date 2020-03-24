@@ -18,7 +18,7 @@ router.beforeEach(async (to, from, next) => {
     await store.restored
     if (store.getters['auth/token'] && !store.getters['auth/registered']) {
        try {
-           // await store.dispatch('auth/register')
+   
        } catch (e) {}
      } 
 
@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
         next()
     }
-})
+})  */
 
 
 

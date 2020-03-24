@@ -51,6 +51,12 @@ export const mutations = {
         state.receipts[index] = receipt
         Vue.set(state.receipts, index, receipt)
     },
+    [types.MARK_OFFLINE](state, { receipt }) {
+        const index = state.receipts.findIndex(r => r.reference === receipt.reference)
+        state.receipts[index] = receipt
+        Vue.set(state.receipts, index, receipt)
+    },
+
     [types.FETCH_RECEIPT_FAILURE](state) {
 
     },
@@ -78,6 +84,11 @@ export const actions = {
 
         dispatch('addReceipt', receipt)
     },
+    async markOffline({ commit, dispatch }, receipt) {
+        receipt.status = 'offline'
+        commit(types.MARK_OFFLINE,{ receipt })
+
+    },
     async voidReceipt({ commit, rootState }, receipt) {
         receipt.status = 'void'
         const { reference } = receipt
@@ -103,7 +114,7 @@ export const actions = {
                 number = number.substr(number.length - 6)
                 receipt.reference = receipt.reference + number
             }
-      
+
 
             const { reference, account_id, terminal_id, store_id, shiftId, type, teller, date, discount, discount_amount, tax_total, service_charge, rounding, charge, received, change, note, refund, items, payments } = receipt
 
@@ -133,7 +144,7 @@ export const actions = {
 
 
                 let variant = ''
-    
+
                 if (item.properties.variant) {
                     variant = ',\\"variant\\":' + JSON.stringify(item.properties.variant).replace(/"/g, '\\"')
                 }

@@ -186,6 +186,29 @@
                         </v-card-text>
                     </v-card>
                 </v-dialog>
+                            <v-dialog v-model="resyncDialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+                    <template v-slot:activator="{ on }">
+                        <v-btn dark v-on="on">
+                            <span>Resync</span>
+                            <v-icon>mdi-sync</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-card tile>
+                        <v-toolbar flat dark>
+                            <v-toolbar-title>Confirm to resyncing this receipt?</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn @click="resyncDialog=false">
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar>
+                        <v-card-text class="text-center">
+                            <h2>Manager Pin require to proceed.</h2>
+                            <v-layout justify-center>
+                                <pin title="" :supervisor="true" @verified="proceedResync"></pin>
+                            </v-layout>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
             </v-bottom-navigation>
         </v-container>
         <v-card v-if="!value">
@@ -212,6 +235,7 @@ export default {
         voidDialog: false,
         refundDisabled: true,
         refundDialog: false,
+        resyncDialog: false,
         sendDialog: false,
         value: null,
         loading: false,
@@ -272,8 +296,13 @@ export default {
 
         },
         async proceedVoid() {
-            await this.$store.dispatch('receipt/voidReceipt', this.value)
+            await this.$store.dispatch('receipt/refundReceipt', this.value)
             this.voidDialog = false
+        },
+        async proceedResync() {
+            this.value.status = 'offline'
+            await this.$store.dispatch('receipt/refundReceipt', this.value)
+            this.resyncDialog = false
         },
         closeDialog() {
             this.sendDialog = false
