@@ -43,7 +43,7 @@
     "js-cookie": "^2.2.1",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
-    "moment-timezone": "^0.5.27",
+    "moment-timezone": "^0.5.35",
     "node-thermal-printer": "^4.1.0",
     "v-money": "^0.8.1",
     "vue-apexcharts": "^1.5.1",
